@@ -1,9 +1,18 @@
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 
 const app = require("./app");
+const { connectDatabase } = require("./config/db");
+const { getEnv } = require("./config/env");
 
-const port = process.env.PORT || 5000;
+const { port, mongodbUri } = getEnv();
 
-app.listen(port, () => {
-  console.log("server started on port: ", port);
-});
+connectDatabase(mongodbUri)
+  .then(() => {
+    app.listen(port, () => {
+      console.log("server started on port: ", port);
+    });
+  })
+  .catch((error) => {
+    console.error("failed to start server", error);
+    process.exit(1);
+  });
