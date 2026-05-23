@@ -42,8 +42,12 @@ describe('KareBraids pages', () => {
   })
 
   it('renders the gallery page', () => {
-    renderRoute('/gallery')
+    const { container } = renderRoute('/gallery')
 
     expect(screen.getByRole('heading', { name: /braid gallery/i })).toBeInTheDocument()
+    expect(container.querySelectorAll('.gallery-card')).toHaveLength(9)
+    expect(screen.getByRole('region', { name: /gallery image wall/i })).toHaveClass(
+      'gallery-grid',
+    )
   })
 })

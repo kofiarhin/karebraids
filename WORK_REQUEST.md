@@ -8,7 +8,11 @@ The workflow will invoke the grill-me skill at `.agents/skills/grill-me/SKILL.md
 
 ## Request
 
+<<<<<<< HEAD
 Redesign the KareBraids homepage while keeping the same existing sections. Use a premium African braiding salon direction with tasteful text and image entrance animations plus scroll-based reveal/parallax motion. Do not change the booking or gallery flows.
+=======
+`workflow redesign the Gallery page into a responsive masonry/asymmetric image gallery with roughly 9 images, preserve the existing modal behavior, and ensure mobile collapses to a clean single-column flow.`
+>>>>>>> redesign-gallery
 
 ## Question Preference
 
@@ -31,6 +35,7 @@ Default: `complete-workflow`
 
 ## Optional Context
 
+<<<<<<< HEAD
 - User or business goal: Make the homepage feel more premium, editorial, and brand-appropriate for an African hair braiding service.
 - Target users: Prospective KareBraids clients browsing services, visual work, trust cues, testimonials, and booking calls to action.
 - Expected behavior: The homepage keeps the current sections and navigation destinations while presenting them with richer layout, spacing, image treatment, and motion.
@@ -51,3 +56,24 @@ Default: `complete-workflow`
 - Backend/API/database changes.
 - Adding Framer Motion, GSAP, or other new animation dependencies.
 - Full-site redesign outside the homepage.
+=======
+- User or business goal: Improve the Gallery page so visitors can browse more braid examples in a richer, less repetitive layout.
+- Target users: Prospective KareBraids clients reviewing braid styles before booking.
+- Expected behavior: The Gallery page shows about 9 image cards in a responsive masonry/asymmetric arrangement and still opens the existing modal when an image is selected.
+- UI expectations: No two-column desktop layout; mobile collapses to a clean single-column flow; preserve accessible modal focus behavior.
+- API expectations: Not applicable; frontend-only static content update.
+- Data model expectations: Not applicable; static `galleryItems` content only.
+- Edge cases: External images may fail or load slowly; modal tests depend on stable item titles; shared CSS selectors may affect home preview.
+- Constraints: Do not change backend, booking flow, deployment, or unrelated pages except where shared gallery content is already consumed.
+- Success criteria: About 9 gallery images render, desktop is not two columns, mobile is single column, modal behavior still works, relevant frontend checks pass or gaps are documented.
+- Preferred verification: `cd client && npm test`, `cd client && npm run build`, and targeted manual/browser review if available.
+- Dirty worktree notes: Initial `git status --short` was clean before workflow artifact edits.
+- Release notes expectations: User-facing gallery redesign; no new APIs, env vars, dependencies, or schema changes expected.
+
+## Out Of Scope
+
+- Backend/API changes.
+- Booking flow changes.
+- Deployment configuration changes.
+- Full site redesign outside gallery-related shared styles.
+>>>>>>> redesign-gallery

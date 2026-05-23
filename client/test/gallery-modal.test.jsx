@@ -40,4 +40,13 @@ describe('gallery modal', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     await waitFor(() => expect(galleryItem).toHaveFocus())
   })
+
+  it('opens a newly added gallery image from a concise card label', async () => {
+    const user = userEvent.setup()
+    renderGallery()
+
+    await user.click(screen.getByRole('button', { name: 'Outdoor Braid Profile' }))
+
+    expect(screen.getByRole('dialog', { name: /outdoor braid profile/i })).toBeInTheDocument()
+  })
 })

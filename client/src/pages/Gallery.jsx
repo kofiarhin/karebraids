@@ -28,9 +28,10 @@ export function Gallery() {
           and appointment location.
         </p>
       </div>
-      <div className="gallery-grid">
+      <div aria-label="Gallery image wall" className="gallery-grid" role="region">
         {galleryItems.map((item, index) => (
           <button
+            aria-label={item.title}
             className={`gallery-card ${item.aspect}`}
             key={item.id}
             onClick={(event) => openModal(item, event.currentTarget)}

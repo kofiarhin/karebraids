@@ -39,7 +39,7 @@ export const galleryItems = [
     image:
       'https://images.pexels.com/photos/11515382/pexels-photo-11515382.jpeg?auto=compress&cs=tinysrgb&w=1200',
     source: 'https://www.pexels.com/photo/an-african-woman-with-braids-17463802/',
-    aspect: 'tall',
+    aspect: 'feature',
   },
   {
     id: 'precision-cornrows',
@@ -67,6 +67,51 @@ export const galleryItems = [
       'https://images.pexels.com/photos/15576674/pexels-photo-15576674.jpeg?auto=compress&cs=tinysrgb&w=1200',
     source: 'https://www.pexels.com/photo/a-young-woman-having-her-hair-braided-15576674/',
     aspect: 'medium',
+  },
+  {
+    id: 'studio-cornrow-portrait',
+    title: 'Studio Cornrow Portrait',
+    description: 'Close cornrow work with a polished studio finish and clean hairline detail.',
+    image:
+      'https://images.pexels.com/photos/36742666/pexels-photo-36742666.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    source: 'https://www.pexels.com/photo/portrait-of-woman-with-cornrow-braids-36742666/',
+    aspect: 'wide',
+  },
+  {
+    id: 'long-braid-finish',
+    title: 'Long Braid Finish',
+    description: 'Soft long braids styled for movement, shine, and everyday wear.',
+    image:
+      'https://images.pexels.com/photos/6976266/pexels-photo-6976266.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    source: 'https://www.pexels.com/photo/a-woman-with-braids-6976266/',
+    aspect: 'tall',
+  },
+  {
+    id: 'process-detail',
+    title: 'Process Detail',
+    description: 'A quiet styling moment showing careful hand placement and even braid tension.',
+    image:
+      'https://images.pexels.com/photos/9385074/pexels-photo-9385074.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    source: 'https://www.pexels.com/photo/woman-getting-her-hair-braided-9385074/',
+    aspect: 'medium',
+  },
+  {
+    id: 'braided-pair',
+    title: 'Braided Pair',
+    description: 'Two finished braid looks photographed together to show texture and length range.',
+    image:
+      'https://images.pexels.com/photos/8511174/pexels-photo-8511174.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    source: 'https://www.pexels.com/photo/women-with-braids-8511174/',
+    aspect: 'compact',
+  },
+  {
+    id: 'outdoor-braid-profile',
+    title: 'Outdoor Braid Profile',
+    description: 'Warm outdoor portrait with braid detail framed by natural light.',
+    image:
+      'https://images.pexels.com/photos/17218456/pexels-photo-17218456.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    source: 'https://www.pexels.com/photo/woman-with-braids-17218456/',
+    aspect: 'wide',
   },
 ]
 

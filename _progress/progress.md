@@ -77,6 +77,7 @@ Do not stop after `TASK-001` unless execution mode is explicitly `single-task` o
 
 After appending each task entry, update `_handoff/current.md` with the latest current state.
 
+<<<<<<< HEAD
 ### 2026-05-23 14:51 - TASK-001
 
 - Status: `Done`
@@ -166,3 +167,37 @@ After appending each task entry, update `_handoff/current.md` with the latest cu
 - Review result: Reviewed; no issues found.
 - Blockers: None.
 - Next step: Final response.
+=======
+### `2026-05-23 15:08` - `TASK-001`
+
+- Status: `Done`
+- Lifecycle transition reached: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`
+- Files changed: `client/src/constants/content.js`, `client/src/index.css`, `client/src/pages/Gallery.jsx`, `client/test/site-pages.test.jsx`, `client/test/gallery-modal.test.jsx`, `_task/2026-05-23-redesign-gallery-page.md`, `_handoff/current.md`
+- Dirty worktree protection: Initial `git status --short` was clean before workflow artifact edits. Planned files matched spec. No user dirty-file overlap was present.
+- Parallel metadata: `Priority=P0; Parallel safe=no; Depends on=none; Blocks=final review/release/summary; File locks=client/src/constants/content.js, client/src/index.css, client/src/pages/Gallery.jsx, client/test/site-pages.test.jsx, client/test/gallery-modal.test.jsx, _progress/progress.md, _handoff/current.md; Claim status=done; Claimed by=Codex; Agent role=sequential implementer; Merge risk=medium`
+- Parallel claim/lock status: Not applicable for sequential mode.
+- Worker status: Not applicable.
+- Merge review status: Not applicable.
+- Test plan: Update frontend tests first for expanded gallery count, named gallery region, and concise gallery card labels; run targeted tests, full client tests, build, lint, and source/manual responsive CSS review.
+- Red phase evidence: Iteration 1 count test failed with expected 9 and received 4 after setup/path recovery. Iteration 2 named region test failed because no `Gallery image wall` region existed. Iteration 3 concise label test failed because `Outdoor Braid Profile` button name included duplicated title/description content.
+- Green phase evidence: Iteration 1 targeted page test passed after expanding content and replacing the grid. Iteration 2 targeted page test passed after adding the named region. Iteration 3 targeted modal test passed after adding `aria-label={item.title}` to gallery card buttons.
+- Refactor phase evidence: Iteration 1 targeted page test rerun passed. Iteration 2 targeted page and modal tests passed. Iteration 3 full tests, build, and lint passed after final review.
+- Test commands run: `npm install`; `npm test -- test/site-pages.test.jsx`; `npm test -- test/gallery-modal.test.jsx`; `npm test`; `npm run build`; `npm run lint`
+- Iteration evidence:
+  - Iteration 1 - Build: Goal: add failing gallery count test and implement minimum content/layout change. Changes made: added count assertion, expanded `galleryItems` to 9, changed `.gallery-grid` to `repeat(4, minmax(0, 1fr))`, added dense row spans and mobile reset. Test plan: targeted page test. Red phase evidence: first run needed setup recovery (`vitest` missing, fixed by `npm install`; wrong relative path produced no files, corrected to `test/site-pages.test.jsx`); corrected Red failed with 4 cards vs 9 expected. Green phase evidence: targeted page test passed. Refactor phase evidence: targeted page test rerun passed. Test commands run: `npm install`; `npm test -- test/site-pages.test.jsx`. Verification command/result: passed, 3 tests. Review findings: title-regex count matcher was brittle and replaced with `.gallery-card` count. Acceptance status: partial criteria met. Remaining issues: region and card label polish. Next action: Iteration 2.
+  - Iteration 2 - Refine: Goal: add stable gallery wall accessibility/layout hook and verify modal regression. Changes made: added `role="region"` and `aria-label="Gallery image wall"` to `.gallery-grid`. Test plan: targeted page and modal tests. Red phase evidence: named region test failed before implementation. Green phase evidence: targeted page test passed. Refactor phase evidence: targeted page and modal tests passed. Test commands run: `npm test -- test/site-pages.test.jsx`; `npm test -- test/gallery-modal.test.jsx`. Verification command/result: passed. Review findings: modal behavior remained stable. Acceptance status: all but final full verification met. Remaining issues: verbose button names. Next action: Iteration 3.
+  - Iteration 3 - Polish: Goal: polish accessible card labels and run full verification. Changes made: added exact-label modal test for new `Outdoor Braid Profile` item and `aria-label={item.title}` on gallery buttons. Test plan: targeted modal test, full tests, build, lint. Red phase evidence: exact button label test failed before implementation. Green phase evidence: targeted modal test passed. Refactor phase evidence: `npm test`, `npm run build`, and `npm run lint` passed. Test commands run: `npm test -- test/gallery-modal.test.jsx`; `npm test`; `npm run build`; `npm run lint`. Verification command/result: passed. Review findings: source CSS confirms desktop grid is 4 columns and mobile grid is 1 column with spans reset. Acceptance status: all criteria met. Remaining issues: in-app Browser plugin visual check unavailable because required Node browser-control tool was not exposed; local Vite `/gallery` returned HTTP 200. Final verdict: Done.
+- Acceptance result:
+  - [x] The Gallery page renders roughly 9 gallery image cards.
+  - [x] The desktop/tablet gallery layout no longer uses a two-column grid.
+  - [x] The mobile gallery layout collapses to a clean single-column flow.
+  - [x] Clicking a gallery image still opens the modal with the selected item.
+  - [x] Closing the modal still works with the close button and Escape key, with focus returning to the triggering gallery item.
+  - [x] Relevant frontend tests and build checks pass.
+  - [x] Workflow artifacts are updated according to the repository workflow.
+- Verification result: `npm test` passed, 3 files / 10 tests. `npm run build` passed. `npm run lint` passed. `Invoke-WebRequest http://127.0.0.1:5173/gallery` returned HTTP 200. Source review confirmed responsive CSS rules.
+- Failure recovery notes: Red setup needed dependency install because `client/node_modules` was absent; initial command used the wrong test path from the client working directory and was rerun with `test/site-pages.test.jsx`. No implementation verification failures remained.
+- Review result: Reviewed; no in-scope defects remain.
+- Blockers: None.
+- Next step: Final diff audit, review, release notes, summary, and health check.
+>>>>>>> redesign-gallery
