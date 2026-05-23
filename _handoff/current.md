@@ -4,23 +4,15 @@ This file is the live resume state for the active workflow. Keep it current afte
 
 ## Current Request
 
-<<<<<<< HEAD
-Redesign the KareBraids homepage while keeping the same existing sections. Add a premium African braiding salon feel with tasteful text/image entrance animations and scroll-based reveal/parallax motion. Do not change booking or gallery flows.
+Merge all linked worktree branches into `main` and push `main` to `origin`.
 
 ## Request ID
 
-`redesign-homepage-motion`
-=======
-`workflow redesign the Gallery page into a responsive masonry/asymmetric image gallery with roughly 9 images, preserve the existing modal behavior, and ensure mobile collapses to a clean single-column flow.`
-
-## Request ID
-
-`redesign-gallery-page`
->>>>>>> redesign-gallery
+`merge-worktrees-to-main`
 
 ## Current Phase
 
-`Complete`
+`Merging`
 
 ## Execution Mode
 
@@ -28,119 +20,67 @@ Redesign the KareBraids homepage while keeping the same existing sections. Add a
 
 ## Current Spec File
 
-<<<<<<< HEAD
-`_spec/2026-05-23-redesign-homepage-motion.md`
+`not applicable`
 
 ## Current Task Plan File
 
-`_task/2026-05-23-redesign-homepage-motion.md`
+`not applicable`
 
 ## Spec Approval Status
 
-`approved on 2026-05-23 by user message: approve spec`
+`not applicable; direct git operation requested by user`
 
 ## Current Review File
 
-`_review/2026-05-23-redesign-homepage-motion.md`
+`not applicable`
 
 ## Current Release Notes File
 
-`_release/redesign-homepage-motion.md`
+`not applicable`
 
 ## Current Summary File
 
-`_summary/2026-05-23-redesign-homepage-motion.md`
+`not applicable`
 
 ## Last Completed Task
 
-`TASK-003: Verify responsive motion polish and complete workflow artifacts`
-=======
-`_spec/2026-05-23-redesign-gallery-page.md`
-
-## Current Task Plan File
-
-`_task/2026-05-23-redesign-gallery-page.md`
-
-## Spec Approval Status
-
-`approved with user phrase: "i approve the spec"`
-
-## Current Review File
-
-`_review/2026-05-23-redesign-gallery-page.md`
-
-## Current Release Notes File
-
-`_release/redesign-gallery-page.md`
-
-## Current Summary File
-
-`_summary/2026-05-23-redesign-gallery-page.md`
-
-## Last Completed Task
-
-`TASK-001: Expand and redesign gallery image wall`
->>>>>>> redesign-gallery
+`Resolved workflow artifact conflicts while merging redesign-boooking into main`
 
 ## Current Task
 
-`none`
+`Verify merged main and push`
 
 ## Current Iteration
 
-<<<<<<< HEAD
-`complete`
+`merge`
 
 ## Current TDD Phase
 
-`complete`
+`verification`
 
 ## Red Phase Status
 
-`complete`
+`not applicable`
 
 ## Green Phase Status
 
-`complete`
+`not applicable`
 
 ## Refactor Phase Status
 
-`complete`
-=======
-`none`
-
-## Current TDD Phase
-
-`none`
-
-## Red Phase Status
-
-`complete; Red evidence recorded for Iterations 1, 2, and 3`
-
-## Green Phase Status
-
-`complete; Green evidence recorded for Iterations 1, 2, and 3`
-
-## Refactor Phase Status
-
-`complete; post-cleanup verification recorded for Iterations 1, 2, and 3`
->>>>>>> redesign-gallery
+`not applicable`
 
 ## Missing-Test Exception
 
-`none`
+`Merge-only request; verification commands will be run before push.`
 
 ## Next Task
 
-`none`
+`Run verification and push main`
 
 ## Dirty Worktree Status
 
-<<<<<<< HEAD
-`Initial git status --short before spec was clean. Planned files after approval: client/src/pages/Home.jsx, client/src/index.css, client/test/site-pages.test.jsx, possible reveal helper under client/src, and workflow artifacts. Overlap risk: low. Current dirty files are expected workflow artifact edits from this spec phase.`
-=======
-`Initial git status --short was clean before workflow artifact edits. Planned implementation files after approval: client/src/constants/content.js, client/src/index.css, client/test/site-pages.test.jsx, client/test/gallery-modal.test.jsx. No overlap risk at intake.`
->>>>>>> redesign-gallery
+Expected merge result files are staged or pending after resolving conflicts from `redesign-boooking` into `main`.
 
 ## Parallel Queue Status
 
@@ -168,19 +108,11 @@ Redesign the KareBraids homepage while keeping the same existing sections. Add a
 
 ## Acceptance Status
 
-<<<<<<< HEAD
-`All acceptance criteria met.`
+`pending final verification and push`
 
 ## Iteration Evidence Status
 
-`All tasks complete with Build, Refine, and Polish evidence.`
-=======
-`all required criteria met`
-
-## Iteration Evidence Status
-
-`TASK-001 Build / Refine / Polish evidence recorded in _progress/progress.md`
->>>>>>> redesign-gallery
+`homepage, gallery, and booking workflow entries preserved in _progress/progress.md`
 
 ## Blockers
 
@@ -188,53 +120,19 @@ Redesign the KareBraids homepage while keeping the same existing sections. Add a
 
 ## Verification Status
 
-<<<<<<< HEAD
-`npm test --prefix client, npm run lint --prefix client, and npm run build --prefix client passed. Final diff audit completed.`
-=======
-`passed: npm test, npm run build, npm run lint; local /gallery returned HTTP 200`
->>>>>>> redesign-gallery
+`pending`
 
 ## Workflow Health Status
 
-`Passed`
+`pending`
 
 ## Suggested Next Prompt
 
-`Review the completed homepage redesign at http://127.0.0.1:5173/`
+`review merged main`
 
 ## Notes For Continuation
 
-<<<<<<< HEAD
-- Shared Understanding Handoff:
-  - Original Request: Redesign the homepage, keep the same sections, add text/image and scrolling animation.
-  - Confirmed Understanding: Premium African braiding salon homepage redesign only; keep current sections and booking/gallery flows.
-  - Decisions Made: Use CSS transitions/keyframes plus IntersectionObserver reveal helper; do not add Framer Motion or GSAP.
-  - Assumptions: Existing content and imagery remain acceptable; no backend/API/data/deployment changes.
-  - In Scope: Homepage markup/style refresh, entrance animations, scroll reveal/parallax, reduced-motion support, relevant frontend tests.
-  - Out Of Scope: Booking/gallery flow changes, backend changes, new animation dependencies, full-site redesign.
-  - Acceptance Criteria: Same homepage sections, premium visual update, tasteful dependency-free motion, reduced-motion support, preserved CTAs, clean mobile, passing frontend verification.
-  - Risks And Edge Cases: Observer/jsdom compatibility, motion jank, mobile overlap, CSS leakage to other pages.
-  - Remaining Open Questions: None blocking.
-  - Normalized Workflow Request: workflow redesign-homepage-motion in complete-workflow mode.
-=======
-- Workflow completed for `redesign-gallery-page`.
-- In-app Browser visual inspection was unavailable because the required Node browser-control tool was not exposed; automated checks and local route HTTP verification passed.
->>>>>>> redesign-gallery
-- Default execution mode is `complete-workflow`.
-- If a spec exists but no task plan exists, resume at the spec approval gate, show the spec path and summary, and wait for approval. Do not generate tasks automatically.
-- Do not create `_task/` until the saved spec has explicit user approval.
-- If the next task is not `Done`, continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached.
-- Use `single-task` only when the user explicitly requested one-task execution.
-- For `parallel-workflow`, orchestrator owns intake/spec/task plan, queue, claims, locks, worker assignment, merge review, final verification, review, release notes, summary, handoff, and health check.
-- For `parallel-worker`, worker claims exactly one eligible task, records claim and file locks before editing, completes Build -> Refine -> Polish, records final status, releases locks, and stops.
-- For `parallel-orchestrator`, validate claims/locks/worker outputs, resolve conflicts or create follow-up tasks, run final verification, and complete final artifacts.
-- Resume from the current task, current iteration, and current TDD phase.
-- Every executable task must complete Build -> Refine -> Polish with documented goal, changes made, verification command/result, review findings, acceptance status, remaining issues, and next action before `Done`.
-- For code-changing tasks, resume at the recorded TDD phase: Red writes or updates the failing test first and records the expected failure when possible; Green implements the smallest passing change and records passing verification; Refactor cleans up without behavior change and records post-cleanup verification.
-- Do not advance a code-changing task to `Done` unless Red, Green, and Refactor evidence is complete for the current iteration or the missing-test exception is explicitly justified.
-- Preserve dirty worktree protection: stop before editing if dirty files overlap with planned files.
-- Preserve acceptance results: no task is `Done` unless every required criterion is checked `[x]`.
-- If verification fails, follow the failure recovery protocol inside the current iteration and record the result in progress, review, and summary.
-- Before final review and summary, run or document the final diff audit.
-- Completed workflows must include `_release/<request-id>.md`.
-- `<what the next agent/session needs to know>`
+- Continue the active merge in `C:\Users\laura.bolas\projects\karebraids\main`.
+- The source conflicts were limited to workflow markdown files.
+- Frontend source from the booking branch merged alongside the existing homepage/gallery work.
+- Run client verification before committing and pushing.
