@@ -8,7 +8,7 @@ The workflow will invoke the grill-me skill at `.agents/skills/grill-me/SKILL.md
 
 ## Request
 
-`<Auto-synced from latest direct prompt, e.g. Add dark theme to the app.>`
+`workflow redesign the Gallery page into a responsive masonry/asymmetric image gallery with roughly 9 images, preserve the existing modal behavior, and ensure mobile collapses to a clean single-column flow.`
 
 ## Question Preference
 
@@ -31,19 +31,22 @@ Default: `complete-workflow`
 
 ## Optional Context
 
-- User or business goal: `<Why this matters>`
-- Target users: `<Who uses this>`
-- Expected behavior: `<What should happen>`
-- UI expectations: `<Screens, components, states, accessibility, responsive behavior>`
-- API expectations: `<Endpoints, payloads, errors, auth, permissions>`
-- Data model expectations: `<Fields, relationships, migrations, defaults>`
-- Edge cases: `<Failure states, empty states, permissions, limits>`
-- Constraints: `<Do not change X / must use Y / no new dependencies>`
-- Success criteria: `<How we know this is done>`
-- Preferred verification: `<Test command, manual check, build command>`
-- Dirty worktree notes: `<Existing dirty files, planned files, overlap risk>`
-- Release notes expectations: `<User-facing changes, developer changes, known limitations>`
+- User or business goal: Improve the Gallery page so visitors can browse more braid examples in a richer, less repetitive layout.
+- Target users: Prospective KareBraids clients reviewing braid styles before booking.
+- Expected behavior: The Gallery page shows about 9 image cards in a responsive masonry/asymmetric arrangement and still opens the existing modal when an image is selected.
+- UI expectations: No two-column desktop layout; mobile collapses to a clean single-column flow; preserve accessible modal focus behavior.
+- API expectations: Not applicable; frontend-only static content update.
+- Data model expectations: Not applicable; static `galleryItems` content only.
+- Edge cases: External images may fail or load slowly; modal tests depend on stable item titles; shared CSS selectors may affect home preview.
+- Constraints: Do not change backend, booking flow, deployment, or unrelated pages except where shared gallery content is already consumed.
+- Success criteria: About 9 gallery images render, desktop is not two columns, mobile is single column, modal behavior still works, relevant frontend checks pass or gaps are documented.
+- Preferred verification: `cd client && npm test`, `cd client && npm run build`, and targeted manual/browser review if available.
+- Dirty worktree notes: Initial `git status --short` was clean before workflow artifact edits.
+- Release notes expectations: User-facing gallery redesign; no new APIs, env vars, dependencies, or schema changes expected.
 
 ## Out Of Scope
 
-- `<File, feature, API, behavior, or area that should stay untouched>`
+- Backend/API changes.
+- Booking flow changes.
+- Deployment configuration changes.
+- Full site redesign outside gallery-related shared styles.
