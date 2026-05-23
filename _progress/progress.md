@@ -76,3 +76,93 @@ Do not stop after `TASK-001` unless execution mode is explicitly `single-task` o
 - Next step: `<next task, review, summary, or stop reason>`
 
 After appending each task entry, update `_handoff/current.md` with the latest current state.
+
+### 2026-05-23 14:51 - TASK-001
+
+- Status: `Done`
+- Lifecycle transition reached: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`
+- Files changed: `client/test/site-pages.test.jsx`, `_task/2026-05-23-redesign-homepage-motion.md`
+- Dirty worktree protection: Initial dirty files were workflow artifacts only (`WORK_REQUEST.md`, `_handoff/current.md`, `_spec/2026-05-23-redesign-homepage-motion.md`). Planned implementation files included the homepage test file. Overlap risk remained low.
+- Parallel metadata: `Priority=P0; Parallel safe=no; Depends on=none; Blocks=TASK-002; File locks=client/test/site-pages.test.jsx; Claim status=done; Claimed by=Codex; Agent role=sequential implementer; Merge risk=low`
+- Parallel claim/lock status: Not applicable for sequential mode.
+- Worker status: Not applicable.
+- Merge review status: Not applicable.
+- Test plan: Add frontend regression assertions first, then run `npm test --prefix client`.
+- Red phase evidence: Added stricter homepage section assertions first. `npm test --prefix client` failed as expected because the initial "Featured services" assertion incorrectly expected that label to be an accessible heading.
+- Green phase evidence: Refined section assertions to use visible section labels instead of heading role for eyebrow labels. `npm test --prefix client` passed with 3 test files and 10 tests.
+- Refactor phase evidence: No production code refactor was needed. Reran `npm test --prefix client`; it passed with 3 test files and 10 tests.
+- Test commands run: `npm test --prefix client` for Red, Green, and Refactor verification.
+- Iteration evidence:
+  - Iteration 1 - Build: Goal was to lock homepage sections and CTA routes with tests. Added assertions for hero, trust strip, featured services, why choose, gallery preview, testimonials, CTA, `/booking`, and `/gallery`. Red failed on over-specific heading assertion. Green passed after assertion correction. Refactor verification passed. Review found assertions are behavior-focused. Acceptance status accepted. Remaining issues none. Next action TASK-002.
+  - Iteration 2 - Refine: Goal was to avoid coupling tests to decorative markup. Missing-test exception: no new behavior beyond refining already-added assertions. `npm test --prefix client` passed. Review found no brittle decorative class checks. Acceptance status accepted. Remaining issues none. Next action polish verification.
+  - Iteration 3 - Polish: Goal was final test-only verification. Missing-test exception: verification-only polish after the regression test was finalized. `npm test --prefix client` passed. Review found task scope stayed test-only. Acceptance status accepted. Remaining issues none. Final verdict Done.
+- Acceptance result:
+  - [x] Tests verify all preserved homepage sections.
+  - [x] Tests verify homepage booking/gallery CTAs still point to expected routes.
+  - [x] Frontend tests pass.
+- Verification result: `npm test --prefix client` passed.
+- Failure recovery notes: Red failure was in-scope and corrected by making the test match visible user-facing labels instead of requiring those labels to be headings.
+- Review result: Reviewed; no issues found.
+- Blockers: None.
+- Next step: Start `TASK-002: Redesign homepage markup and add scroll reveal helper`.
+
+### 2026-05-23 15:10 - TASK-002
+
+- Status: `Done`
+- Lifecycle transition reached: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`
+- Files changed: `client/src/hooks/useRevealOnScroll.js`, `client/src/pages/Home.jsx`, `client/src/index.css`, `client/test/site-pages.test.jsx`, `_task/2026-05-23-redesign-homepage-motion.md`
+- Dirty worktree protection: Existing dirty files were expected workflow/test artifacts from TASK-001 and spec approval. Planned files overlapped with the active task only. Overlap risk remained low.
+- Parallel metadata: `Priority=P0; Parallel safe=no; Depends on=TASK-001; Blocks=TASK-003; File locks=client/src/hooks/useRevealOnScroll.js, client/src/pages/Home.jsx, client/src/index.css, client/test/site-pages.test.jsx; Claim status=done; Claimed by=Codex; Agent role=sequential implementer; Merge risk=medium`
+- Parallel claim/lock status: Not applicable for sequential mode.
+- Worker status: Not applicable.
+- Merge review status: Not applicable.
+- Test plan: Add reveal/parallax expectations first, then implement hook/markup/styles and run frontend test, lint, build, plus browser screenshot checks.
+- Red phase evidence: Updated the homepage test first to require more than 6 `[data-reveal]` elements and one `[data-parallax]` element. `npm test --prefix client` failed with `expected 0 to be greater than 6`.
+- Green phase evidence: Added `useRevealOnScroll`, reveal/parallax attributes, homepage markup refresh, and CSS motion/visual styling. `npm test --prefix client` passed with 3 test files and 10 tests.
+- Refactor phase evidence: Ran `npm run lint --prefix client` and `npm run build --prefix client`; both passed. Adjusted hero height and small-screen header CTA after screenshot review, then reran test/lint/build successfully.
+- Test commands run: `npm test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`.
+- Iteration evidence:
+  - Iteration 1 - Build: Goal was to implement the motion foundation and homepage redesign. Red failed on missing reveal markers. Green passed after adding observer helper, reveal/parallax markers, refreshed homepage copy/layout, and CSS motion. Refactor verification with lint/build passed. Review found observer cleanup and fallback were present. Acceptance status accepted. Remaining issue was responsive polish. Next action refine.
+  - Iteration 2 - Refine: Goal was to improve screenshot-visible responsive and section rhythm issues. Missing-test exception: visual CSS refinements were covered by existing regression tests and browser screenshots. Adjusted desktop hero height so the next section is hinted and hid the duplicate header CTA on narrow screens. `npm test --prefix client`, `npm run lint --prefix client`, and `npm run build --prefix client` passed. Review found no overlapping mobile content. Acceptance status accepted. Remaining issues none. Next action polish.
+  - Iteration 3 - Polish: Goal was to verify reduced-motion and motion implementation. Missing-test exception: CSS-only reduced-motion and visual polish were not practical to Red/Green through RTL. Confirmed `prefers-reduced-motion` CSS, transform/opacity reveal states, and no new dependencies. Automated verification passed. Review found task scope remained homepage-only. Acceptance status accepted. Remaining issues none. Final verdict Done.
+- Acceptance result:
+  - [x] Same homepage sections render.
+  - [x] Homepage uses a premium African braiding salon visual direction.
+  - [x] Text/image entrance and scroll reveal/parallax behavior are implemented without new dependencies.
+  - [x] Booking/gallery links remain unchanged.
+  - [x] Frontend tests pass.
+- Verification result: `npm test --prefix client`, `npm run lint --prefix client`, and `npm run build --prefix client` passed. Playwright CLI screenshots captured at `output/playwright/homepage-desktop.png` and `output/playwright/homepage-mobile.png`.
+- Failure recovery notes: Initial Playwright CLI eval quoting failed; verification continued with screenshots and DOM snapshot. CSS refinements were in scope and verified.
+- Review result: Reviewed; no issues found.
+- Blockers: None.
+- Next step: Start `TASK-003: Verify responsive motion polish and complete workflow artifacts`.
+
+### 2026-05-23 15:14 - TASK-003
+
+- Status: `Done`
+- Lifecycle transition reached: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`
+- Files changed: `_task/2026-05-23-redesign-homepage-motion.md`, `_progress/progress.md`, `_handoff/current.md`, `_review/2026-05-23-redesign-homepage-motion.md`, `_release/redesign-homepage-motion.md`, `_summary/2026-05-23-redesign-homepage-motion.md`
+- Dirty worktree protection: Temporary Playwright artifacts (`.playwright-cli/`, `output/`, `document.documentElement.clientWidth`) were created during verification and then removed after confirming they were inside the workspace and generated by this run. Remaining dirty files are intended source/test/workflow files.
+- Parallel metadata: `Priority=P1; Parallel safe=no; Depends on=TASK-002; Blocks=final response; File locks=workflow artifacts; Claim status=done; Claimed by=Codex; Agent role=sequential implementer; Merge risk=low`
+- Parallel claim/lock status: Not applicable for sequential mode.
+- Worker status: Not applicable.
+- Merge review status: Not applicable.
+- Test plan: Rerun final `npm test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, inspect screenshots/snapshot, run diff audit.
+- Red phase evidence: Missing-test exception: TASK-003 was verification and documentation only, with no new user-facing behavior.
+- Green phase evidence: Final test, lint, and build all passed.
+- Refactor phase evidence: Temporary browser artifacts were removed and final diff/status were reviewed.
+- Test commands run: `npm test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, `git diff --stat`, `git diff`, `git status --short`.
+- Iteration evidence:
+  - Iteration 1 - Build: Goal was responsive/reduced-motion verification. Missing-test exception for visual verification. Browser screenshots were inspected at desktop and mobile sizes; mobile duplicate header CTA was already corrected during TASK-002. Final test passed. Review found no overlapping content in inspected viewports. Acceptance accepted. Remaining issues none. Next action broader verification.
+  - Iteration 2 - Refine: Goal was final automated verification and diff audit. Missing-test exception for verification-only pass. `npm test --prefix client`, `npm run lint --prefix client`, and `npm run build --prefix client` passed. `git diff --stat`, implementation diff, and `git status --short` reviewed. Acceptance accepted. Remaining issues none. Next action artifacts.
+  - Iteration 3 - Polish: Goal was final workflow artifact completion. Missing-test exception for documentation-only work. Review, release notes, summary, and handoff were completed. Final verdict Done.
+- Acceptance result:
+  - [x] Mobile layout has no intentional horizontal scrolling or overlapping content.
+  - [x] Reduced-motion handling is present.
+  - [x] Final test/build/lint results are recorded.
+  - [x] Final workflow artifacts are complete.
+- Verification result: `npm test --prefix client`, `npm run lint --prefix client`, and `npm run build --prefix client` passed. Final diff audit completed.
+- Failure recovery notes: Removed temporary generated browser files from the workspace before final status. No verification failures remained.
+- Review result: Reviewed; no issues found.
+- Blockers: None.
+- Next step: Final response.

@@ -4,134 +4,145 @@ This file is the live resume state for the active workflow. Keep it current afte
 
 ## Current Request
 
-`<CURRENT_REQUEST>`
+Redesign the KareBraids homepage while keeping the same existing sections. Add a premium African braiding salon feel with tasteful text/image entrance animations and scroll-based reveal/parallax motion. Do not change booking or gallery flows.
 
 ## Request ID
 
-`<REQUEST_ID>`
+`redesign-homepage-motion`
 
 ## Current Phase
 
-`<Intake / Spec / Planning / Execution / Review / Summary / Complete / Blocked>`
+`Complete`
 
 ## Execution Mode
 
-`<complete-workflow by default / plan-only / single-task / parallel-workflow / parallel-worker / parallel-orchestrator>`
+`complete-workflow`
 
 ## Current Spec File
 
-`<path or none>`
+`_spec/2026-05-23-redesign-homepage-motion.md`
 
 ## Current Task Plan File
 
-`<path or none>`
+`_task/2026-05-23-redesign-homepage-motion.md`
 
 ## Spec Approval Status
 
-`<not required yet / pending approval / approved with user phrase / revision requested / cancelled>`
+`approved on 2026-05-23 by user message: approve spec`
 
 ## Current Review File
 
-`<path or none>`
+`_review/2026-05-23-redesign-homepage-motion.md`
 
 ## Current Release Notes File
 
-`<path or none>`
+`_release/redesign-homepage-motion.md`
 
 ## Current Summary File
 
-`<path or none>`
+`_summary/2026-05-23-redesign-homepage-motion.md`
 
 ## Last Completed Task
 
-`<task id and title, or none>`
+`TASK-003: Verify responsive motion polish and complete workflow artifacts`
 
 ## Current Task
 
-`<task id and title, or none>`
+`none`
 
 ## Current Iteration
 
-`<Iteration 1 - Build / Iteration 2 - Refine / Iteration 3 - Polish / none>`
+`complete`
 
 ## Current TDD Phase
 
-`<Red / Green / Refactor / none>`
+`complete`
 
 ## Red Phase Status
 
-`<not started / failing test written or updated / expected failure observed / blocked / not applicable, with command summary>`
+`complete`
 
 ## Green Phase Status
 
-`<not started / implementation in progress / passing verification recorded / blocked / not applicable, with command summary>`
+`complete`
 
 ## Refactor Phase Status
 
-`<not started / cleanup in progress / post-cleanup verification recorded / blocked / not applicable, with command summary>`
+`complete`
 
 ## Missing-Test Exception
 
-`<none / explicitly justified exception with reason and best available verification>`
+`none`
 
 ## Next Task
 
-`<task id and title, review, summary, health check, or none>`
+`none`
 
 ## Dirty Worktree Status
 
-`<git status --short result, existing dirty files, planned files, overlap risk>`
+`Initial git status --short before spec was clean. Planned files after approval: client/src/pages/Home.jsx, client/src/index.css, client/test/site-pages.test.jsx, possible reveal helper under client/src, and workflow artifacts. Overlap risk: low. Current dirty files are expected workflow artifact edits from this spec phase.`
 
 ## Parallel Queue Status
 
-`<not applicable / queue pending / queue ready / workers active / merge review / complete>`
+`not applicable`
 
 ## Parallel Worker Count
 
-`<default 3 / minimum 2 when 2+ safe tasks exist / maximum 5 / fallback 1, with actual active count>`
+`not applicable`
 
 ## Parallel Claims Status
 
-`<not applicable / path to _parallel/claims.md and summary of unclaimed, claimed, in-progress, done, blocked, needs-review tasks>`
+`not applicable`
 
 ## Parallel Locks Status
 
-`<not applicable / path to _parallel/locks.md, active locks, released locks, overlap risk>`
+`not applicable`
 
 ## Parallel Agent Status
 
-`<not applicable / path to _parallel/agent-status.md, orchestrator status, worker statuses>`
+`not applicable`
 
 ## Parallel Merge Review Status
 
-`<not applicable / pending / passed / needs-review / failed, with final verification status>`
+`not applicable`
 
 ## Acceptance Status
 
-`<not started / all required criteria met / partial / blocked>`
+`All acceptance criteria met.`
 
 ## Iteration Evidence Status
 
-`<per-task Build / Refine / Polish evidence status and any missing evidence>`
+`All tasks complete with Build, Refine, and Polish evidence.`
 
 ## Blockers
 
-`<none or details>`
+`none`
 
 ## Verification Status
 
-`<not run / passed / failed / blocked / partial, with command summary>`
+`npm test --prefix client, npm run lint --prefix client, and npm run build --prefix client passed. Final diff audit completed.`
 
 ## Workflow Health Status
 
-`<Pending / Passed / Partial / Failed>`
+`Passed`
 
 ## Suggested Next Prompt
 
-`continue workflow`
+`Review the completed homepage redesign at http://127.0.0.1:5173/`
 
 ## Notes For Continuation
 
+- Shared Understanding Handoff:
+  - Original Request: Redesign the homepage, keep the same sections, add text/image and scrolling animation.
+  - Confirmed Understanding: Premium African braiding salon homepage redesign only; keep current sections and booking/gallery flows.
+  - Decisions Made: Use CSS transitions/keyframes plus IntersectionObserver reveal helper; do not add Framer Motion or GSAP.
+  - Assumptions: Existing content and imagery remain acceptable; no backend/API/data/deployment changes.
+  - In Scope: Homepage markup/style refresh, entrance animations, scroll reveal/parallax, reduced-motion support, relevant frontend tests.
+  - Out Of Scope: Booking/gallery flow changes, backend changes, new animation dependencies, full-site redesign.
+  - Acceptance Criteria: Same homepage sections, premium visual update, tasteful dependency-free motion, reduced-motion support, preserved CTAs, clean mobile, passing frontend verification.
+  - Risks And Edge Cases: Observer/jsdom compatibility, motion jank, mobile overlap, CSS leakage to other pages.
+  - Remaining Open Questions: None blocking.
+  - Normalized Workflow Request: workflow redesign-homepage-motion in complete-workflow mode.
 - Default execution mode is `complete-workflow`.
 - If a spec exists but no task plan exists, resume at the spec approval gate, show the spec path and summary, and wait for approval. Do not generate tasks automatically.
 - Do not create `_task/` until the saved spec has explicit user approval.
