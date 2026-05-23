@@ -2,20 +2,20 @@
 
 Store vertical task plans in this folder.
 
-Agents must create a saved task plan here before implementation. Use filenames that match the related detailed spec when practical, for example:
+Agents must create a saved task plan here before implementation, but only after the related detailed spec has explicit user approval. Use filenames that match the related detailed spec when practical, for example:
 
 ```txt
 _task/2026-05-10-add-dark-theme.md
 ```
 
-Default execution mode is `complete-workflow`: after the task plan is created, execute all generated tasks sequentially until the request/spec is complete or a stop condition is reached.
+Default execution mode is `complete-workflow`: after the approved-spec task plan is created, execute all generated tasks sequentially until the request/spec is complete or a stop condition is reached.
 
 Execution modes:
 
-- `plan-only`: ask questions, write the detailed spec, write the task plan derived from it, then stop.
-- `single-task`: execute only the next ready task through the full 3-pass hardening loop, update artifacts, then stop.
-- `complete-workflow`: execute all generated tasks sequentially until the request/spec is complete or a stop condition is reached.
-- `parallel-workflow`: orchestrator plans tasks, creates queue/claims/locks, assigns safe tasks to worker agents, then performs merge review and final artifacts.
+- `plan-only`: ask questions, write the detailed spec, wait for approval, write the task plan derived from it, then stop.
+- `single-task`: ask questions, write the detailed spec, wait for approval, write the task plan derived from it, execute only the next ready task through the full 3-pass hardening loop, update artifacts, then stop.
+- `complete-workflow`: ask questions, write the detailed spec, wait for approval, write the task plan derived from it, execute all generated tasks sequentially until the request/spec is complete or a stop condition is reached.
+- `parallel-workflow`: orchestrator runs intake, writes the detailed spec, waits for approval, writes the task plan, creates queue/claims/locks, assigns safe tasks to worker agents, then performs merge review and final artifacts.
 - `parallel-worker`: worker claims and executes exactly one eligible parallel-safe task, records final status, releases locks, and stops.
 - `parallel-orchestrator`: orchestrator manages queue, validates claims/locks, reviews worker outputs, runs final verification, and completes final artifacts.
 
@@ -23,7 +23,7 @@ Use `single-task` only when the user explicitly asks for controlled one-task exe
 
 Sequential `complete-workflow` remains the fallback. Use parallel modes only when dependencies and file locks show tasks can run safely.
 
-Task plans must be derived from the saved detailed spec, not from the raw request alone. Each task plan must cite or reference the detailed spec sections used to derive the plan, especially:
+Task plans must be derived from the saved and approved detailed spec, not from the raw request alone. Generating `_task/` before explicit approval is a workflow violation and makes workflow health `Partial` or `Failed`. Each task plan must cite or reference the detailed spec sections used to derive the plan, especially:
 
 - Current State Analysis.
 - Affected Surfaces.

@@ -2,13 +2,13 @@
 
 Store generated workflow specs in this folder.
 
-Agents must create a saved detailed spec here before task planning or implementation. Use timestamped or slugged filenames, for example:
+Agents must create a saved detailed spec here before task planning or implementation. After saving the spec, agents must stop, show the spec path and summary, and wait for explicit user approval before creating `_task/`. Use timestamped or slugged filenames, for example:
 
 ```txt
 _spec/2026-05-10-add-dark-theme.md
 ```
 
-The spec is a detailed, implementation-aware execution blueprint, not a lightweight brief. It must be saved before task planning and based on the active request, intake answers, repo intake, dirty worktree status, handoff/progress context, latest relevant summary, and durable project docs.
+The spec is a detailed, implementation-aware execution blueprint, not a lightweight brief. It must be saved and approved before task planning and based on the active request, intake answers, repo intake, dirty worktree status, handoff/progress context, latest relevant summary, and durable project docs.
 
 Use `Not applicable` for irrelevant sections. Do not delete required sections.
 
@@ -168,6 +168,6 @@ Use `Not applicable` for irrelevant sections. Do not delete required sections.
 - Areas that should not become separate tasks:
 - How the 3-pass Build -> Refine -> Polish loop should apply:
 
-Task plans in `_task/` must be derived from this detailed spec and must cite or reference the detailed spec sections they use, especially affected surfaces, dependency and integration map, data and state impact, UX/API/workflow expectations, execution strategy, verification strategy, acceptance criteria, edge cases and failure modes, risks and mitigations, assumptions, open questions, and task extraction notes.
+After saving a spec, display the approval prompt from `RUN_WORKFLOW.md` and stop. If the user requests changes, revise the spec and show the prompt again. If the user approves, task plans in `_task/` must be derived from this approved detailed spec and must cite or reference the detailed spec sections they use, especially affected surfaces, dependency and integration map, data and state impact, UX/API/workflow expectations, execution strategy, verification strategy, acceptance criteria, edge cases and failure modes, risks and mitigations, assumptions, open questions, and task extraction notes.
 
-Workflow health must be `Partial` or `Failed` if a required detailed spec section is missing and was not repaired before planning.
+Workflow health must be `Partial` or `Failed` if a required detailed spec section is missing and was not repaired before planning, if `_task/` was generated before explicit spec approval, or if workflow execution continued without user confirmation.

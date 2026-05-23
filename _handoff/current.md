@@ -1,130 +1,152 @@
 # Current Workflow Handoff
 
+This file is the live resume state for the active workflow. Keep it current after each task and after the final summary. If this file conflicts with `_progress/progress.md`, trust `_progress/progress.md` for completed task history and update this file.
+
 ## Current Request
 
-Implement KareBraids MVP from `project-brief.md` with persisted booking API and premium multi-page frontend.
+`<CURRENT_REQUEST>`
 
 ## Request ID
 
-`implement-karebraids-mvp`
+`<REQUEST_ID>`
 
 ## Current Phase
 
-`Complete`
+`<Intake / Spec / Planning / Execution / Review / Summary / Complete / Blocked>`
 
 ## Execution Mode
 
-`complete-workflow`
+`<complete-workflow by default / plan-only / single-task / parallel-workflow / parallel-worker / parallel-orchestrator>`
 
 ## Current Spec File
 
-`_spec/2026-05-22-implement-karebraids-mvp.md`
+`<path or none>`
 
 ## Current Task Plan File
 
-`_task/2026-05-22-implement-karebraids-mvp.md`
+`<path or none>`
+
+## Spec Approval Status
+
+`<not required yet / pending approval / approved with user phrase / revision requested / cancelled>`
 
 ## Current Review File
 
-`_review/2026-05-22-implement-karebraids-mvp.md`
+`<path or none>`
 
 ## Current Release Notes File
 
-`_release/implement-karebraids-mvp.md`
+`<path or none>`
 
 ## Current Summary File
 
-`_summary/2026-05-22-implement-karebraids-mvp.md`
+`<path or none>`
 
 ## Last Completed Task
 
-`TASK-004: Wire booking flow to the API`
+`<task id and title, or none>`
 
 ## Current Task
 
-`none`
+`<task id and title, or none>`
 
 ## Current Iteration
 
-`none`
+`<Iteration 1 - Build / Iteration 2 - Refine / Iteration 3 - Polish / none>`
 
 ## Current TDD Phase
 
-`none`
+`<Red / Green / Refactor / none>`
 
 ## Red Phase Status
 
-`TASK-001 through TASK-004 recorded in _progress/progress.md`
+`<not started / failing test written or updated / expected failure observed / blocked / not applicable, with command summary>`
 
 ## Green Phase Status
 
-`TASK-001 through TASK-004 recorded in _progress/progress.md`
+`<not started / implementation in progress / passing verification recorded / blocked / not applicable, with command summary>`
 
 ## Refactor Phase Status
 
-`TASK-001 through TASK-004 recorded in _progress/progress.md`
+`<not started / cleanup in progress / post-cleanup verification recorded / blocked / not applicable, with command summary>`
 
 ## Missing-Test Exception
 
-`none`
+`<none / explicitly justified exception with reason and best available verification>`
 
 ## Next Task
 
-`none`
+`<task id and title, review, summary, health check, or none>`
 
 ## Dirty Worktree Status
 
-Dirty files are expected implementation and workflow artifact changes for this completed request. Final status checked after implementation.
+`<git status --short result, existing dirty files, planned files, overlap risk>`
 
 ## Parallel Queue Status
 
-`not applicable`
+`<not applicable / queue pending / queue ready / workers active / merge review / complete>`
 
 ## Parallel Worker Count
 
-`not applicable`
+`<default 3 / minimum 2 when 2+ safe tasks exist / maximum 5 / fallback 1, with actual active count>`
 
 ## Parallel Claims Status
 
-`not applicable`
+`<not applicable / path to _parallel/claims.md and summary of unclaimed, claimed, in-progress, done, blocked, needs-review tasks>`
 
 ## Parallel Locks Status
 
-`not applicable`
+`<not applicable / path to _parallel/locks.md, active locks, released locks, overlap risk>`
 
 ## Parallel Agent Status
 
-`not applicable`
+`<not applicable / path to _parallel/agent-status.md, orchestrator status, worker statuses>`
 
 ## Parallel Merge Review Status
 
-`not applicable`
+`<not applicable / pending / passed / needs-review / failed, with final verification status>`
 
 ## Acceptance Status
 
-`all required criteria met`
+`<not started / all required criteria met / partial / blocked>`
 
 ## Iteration Evidence Status
 
-`TASK-001 through TASK-004 Build/Refine/Polish evidence recorded`
+`<per-task Build / Refine / Polish evidence status and any missing evidence>`
 
 ## Blockers
 
-`none`
+`<none or details>`
 
 ## Verification Status
 
-`Passed: npm test; npm test --prefix client; npm run build --prefix client; npm run lint --prefix client; hard-coded API URL scan`
+`<not run / passed / failed / blocked / partial, with command summary>`
 
 ## Workflow Health Status
 
-`Passed`
+`<Pending / Passed / Partial / Failed>`
 
 ## Suggested Next Prompt
 
-`review follow-up tasks`
+`continue workflow`
 
 ## Notes For Continuation
 
-- MVP implementation is complete.
-- Follow-ups: replace placeholder Pexels imagery, add endpoint rate limiting, add real MongoDB integration tests, and build admin booking review workflow.
+- Default execution mode is `complete-workflow`.
+- If a spec exists but no task plan exists, resume at the spec approval gate, show the spec path and summary, and wait for approval. Do not generate tasks automatically.
+- Do not create `_task/` until the saved spec has explicit user approval.
+- If the next task is not `Done`, continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached.
+- Use `single-task` only when the user explicitly requested one-task execution.
+- For `parallel-workflow`, orchestrator owns intake/spec/task plan, queue, claims, locks, worker assignment, merge review, final verification, review, release notes, summary, handoff, and health check.
+- For `parallel-worker`, worker claims exactly one eligible task, records claim and file locks before editing, completes Build -> Refine -> Polish, records final status, releases locks, and stops.
+- For `parallel-orchestrator`, validate claims/locks/worker outputs, resolve conflicts or create follow-up tasks, run final verification, and complete final artifacts.
+- Resume from the current task, current iteration, and current TDD phase.
+- Every executable task must complete Build -> Refine -> Polish with documented goal, changes made, verification command/result, review findings, acceptance status, remaining issues, and next action before `Done`.
+- For code-changing tasks, resume at the recorded TDD phase: Red writes or updates the failing test first and records the expected failure when possible; Green implements the smallest passing change and records passing verification; Refactor cleans up without behavior change and records post-cleanup verification.
+- Do not advance a code-changing task to `Done` unless Red, Green, and Refactor evidence is complete for the current iteration or the missing-test exception is explicitly justified.
+- Preserve dirty worktree protection: stop before editing if dirty files overlap with planned files.
+- Preserve acceptance results: no task is `Done` unless every required criterion is checked `[x]`.
+- If verification fails, follow the failure recovery protocol inside the current iteration and record the result in progress, review, and summary.
+- Before final review and summary, run or document the final diff audit.
+- Completed workflows must include `_release/<request-id>.md`.
+- `<what the next agent/session needs to know>`

@@ -9,7 +9,7 @@ Read RUN_WORKFLOW.md and execute it using WORK_REQUEST.md.
 
 Follow AGENTS.md.
 Ask clarifying questions until about 90% understanding before touching code unless the request says "skip questions".
-Generate a saved detailed spec in _spec/, generate a vertical task plan in _task/ from that spec with an Iteration plan, execute one Ralph Wiggum-style task at a time through Build -> Refine -> Polish, record iteration evidence in _progress/progress.md, write a final summary in _summary/, then provide a final response and suggested commit message.
+Generate a saved detailed spec in _spec/, stop for explicit spec approval, generate a vertical task plan in _task/ from the approved spec with an Iteration plan, execute one Ralph Wiggum-style task at a time through Build -> Refine -> Polish, record iteration evidence in _progress/progress.md, write a final summary in _summary/, then provide a final response and suggested commit message.
 ```
 
 ## Direct Request With Questions
@@ -20,7 +20,7 @@ Use this as the active request:
 
 Follow RUN_WORKFLOW.md.
 First ask focused clarifying questions about goal, users, exact behavior, edge cases, UI/API expectations, data model, constraints, success criteria, and out-of-scope work.
-Do not touch code until questions are answered, a detailed spec is saved in _spec/, and a task plan derived from it is saved in _task/.
+Do not touch code until questions are answered, a detailed spec is saved in _spec/, the user explicitly approves that spec, and a task plan derived from the approved spec is saved in _task/.
 ```
 
 ## Direct Request That Skips Questions
@@ -33,7 +33,8 @@ skip questions
 
 Follow RUN_WORKFLOW.md.
 Generate a best-effort detailed spec in _spec/ and clearly list assumptions.
-Generate a vertical task plan in _task/ from that spec.
+Stop and wait for explicit spec approval before generating _task/.
+Generate a vertical task plan in _task/ from the approved spec.
 Before implementation, read _progress/progress.md and the latest relevant _summary/ entry.
 Then execute tasks one at a time through the full Build -> Refine -> Polish hardening loop only if safe.
 ```
@@ -207,6 +208,30 @@ Include these required sections:
 If the user said skip questions, generate the best possible detailed spec and clearly record assumptions and open questions.
 
 Do not implement code.
+
+After saving the spec, display this exact approval prompt and stop before task planning:
+
+```txt
+Spec saved at _spec/<file>.md
+
+Spec summary:
+- Goal:
+- In scope:
+- Out of scope:
+- Affected surfaces:
+- Acceptance criteria:
+- Risks/open questions:
+
+Review the spec here:
+_spec/<file>.md
+
+Reply with one of:
+- approve spec
+- change: <what to change>
+- cancel workflow
+```
+
+Do not generate _task/ until the user explicitly approves the spec.
 ```
 
 ## Spec Quality Review
@@ -224,8 +249,8 @@ Confirm:
 7. Task Extraction Notes identify likely vertical task boundaries, suggested first task, ordering, areas not to split out, and how Build -> Refine -> Polish applies.
 8. No open question blocks safe planning.
 
-If required sections are missing or too vague, repair the spec before generating _task/.
-If planning proceeds with missing required sections, workflow health must be Partial or Failed depending on severity.
+If required sections are missing or too vague, repair the spec and repeat the spec approval gate before generating _task/.
+If planning proceeds with missing required sections, without explicit spec approval, or before the approval gate, workflow health must be Partial or Failed depending on severity.
 ```
 
 ## Request Classification
@@ -247,7 +272,7 @@ Classify the request as one primary type:
 Also identify:
 1. Scope: small, medium, or large.
 2. Risk: low, medium, or high.
-3. Whether implementation is allowed after the saved spec and task plan.
+3. Whether implementation is allowed after the saved spec is approved and the task plan exists.
 4. Whether any open question blocks implementation.
 5. The safest first vertical task.
 
@@ -275,7 +300,9 @@ Do not implement the request yet.
 ## Vertical Task Generation
 
 ```txt
-Using WORK_REQUEST.md, the saved detailed _spec/ file, _progress/progress.md, the latest relevant _summary/ entry, _handoff/current.md, and durable docs, generate a vertical task plan in _task/.
+Using WORK_REQUEST.md, the saved and explicitly approved detailed _spec/ file, _progress/progress.md, the latest relevant _summary/ entry, _handoff/current.md, and durable docs, generate a vertical task plan in _task/.
+
+Do not run this prompt if the spec approval gate is still pending. If a spec exists but no task plan exists, show the spec approval prompt again and wait for user approval instead of generating tasks automatically.
 
 Before writing tasks, extract task boundaries from the detailed spec, especially:
 1. Affected Surfaces.
@@ -290,7 +317,7 @@ Before writing tasks, extract task boundaries from the detailed spec, especially
 10. Assumptions and Open Questions.
 11. Task Extraction Notes.
 
-Do not plan from the raw request alone. If the detailed spec is missing required sections or is not complete enough to plan from, repair the spec or stop before task planning.
+Do not plan from the raw request alone. If the detailed spec is missing required sections, is not complete enough to plan from, or has not been explicitly approved, repair the spec or stop at the approval gate before task planning.
 
 Each task must include:
 - Task ID
@@ -478,15 +505,16 @@ Act as the orchestrator. Own intake, the detailed spec, and the task plan.
 Before assigning workers:
 1. Read WORK_REQUEST.md, AGENTS.md, RUN_WORKFLOW.md, _handoff/current.md, _progress/progress.md, the latest relevant _summary/ entry, and durable docs.
 2. Save or verify the detailed spec in _spec/.
-3. Save or verify the task plan in _task/.
-4. Add required metadata to every task: Priority, Parallel safe, Depends on, Blocks, File locks, Claim status, Claimed by, Agent role, Merge risk.
-5. Rank P0 before P1 before P2.
-6. Mark tasks parallel-safe only when dependencies and file locks do not conflict.
-7. Create or update _parallel/claims.md, _parallel/locks.md, and _parallel/agent-status.md.
-8. Use default worker agents: 3.
-9. Use minimum parallel workers: 2 when 2 or more parallel-safe unblocked tasks exist.
-10. Use maximum worker agents: 5.
-11. Fall back to 1 worker only when dependency or file-lock safety requires sequential execution.
+3. Stop for explicit spec approval before task planning.
+4. Save or verify the task plan in _task/ only after approval.
+5. Add required metadata to every task: Priority, Parallel safe, Depends on, Blocks, File locks, Claim status, Claimed by, Agent role, Merge risk.
+6. Rank P0 before P1 before P2.
+7. Mark tasks parallel-safe only when dependencies and file locks do not conflict.
+8. Create or update _parallel/claims.md, _parallel/locks.md, and _parallel/agent-status.md.
+9. Use default worker agents: 3.
+10. Use minimum parallel workers: 2 when 2 or more parallel-safe unblocked tasks exist.
+11. Use maximum worker agents: 5.
+12. Fall back to 1 worker only when dependency or file-lock safety requires sequential execution.
 
 Do not assign two workers to overlapping file locks.
 Update _handoff/current.md with queue, claim, lock, worker, and merge-review status.

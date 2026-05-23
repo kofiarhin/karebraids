@@ -12,10 +12,10 @@ Default execution mode is `complete-workflow`. Do not stop after `TASK-001` unle
 
 Execution modes:
 
-- `plan-only`: run grill-me intake, write spec, write task plan, then stop.
-- `single-task`: execute only the next ready task through the full 3-pass hardening loop, update artifacts, then stop.
-- `complete-workflow`: execute all generated tasks sequentially until the request/spec is complete or a stop condition is reached; each executable task must complete the full 3-pass hardening loop before the next task starts.
-- `parallel-workflow`: orchestrator plans tasks, marks parallel safety, creates queue/claims/locks, assigns worker agents when safe, then performs merge review, final verification, review, release notes, summary, handoff, and health check.
+- `plan-only`: run grill-me intake, write spec, stop for spec approval, write task plan only after approval, then stop.
+- `single-task`: run grill-me intake, write spec, stop for spec approval, write task plan only after approval, execute only the next ready task through the full 3-pass hardening loop, update artifacts, then stop.
+- `complete-workflow`: run grill-me intake, write spec, stop for spec approval, write task plan only after approval, then execute all generated tasks sequentially until the request/spec is complete or a stop condition is reached; each executable task must complete the full 3-pass hardening loop before the next task starts.
+- `parallel-workflow`: orchestrator runs intake, writes spec, stops for spec approval, writes task plan only after approval, marks parallel safety, creates queue/claims/locks, assigns worker agents when safe, then performs merge review, final verification, review, release notes, summary, handoff, and health check.
 - `parallel-worker`: worker reads the saved workflow context, claims exactly one eligible parallel-safe task, records claims and file locks before editing, completes Build -> Refine -> Polish for that task, records final task status, releases locks, and stops.
 - `parallel-orchestrator`: orchestrator manages the task queue, validates claims and locks, reviews worker outputs, resolves conflicts or creates follow-up tasks, runs final verification, and completes final artifacts.
 
@@ -24,13 +24,14 @@ Sequential `complete-workflow` remains the fallback. Use 1 worker only when depe
 Do not implement without:
 
 1. A saved detailed spec in `_spec/`.
-2. A saved vertical task plan in `_task/`.
-3. A current read of `_handoff/current.md`.
-4. A current read of `_progress/progress.md`.
-5. A current read of the latest relevant `_summary/` entry.
-6. Task status transitions that follow `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`.
-7. Documented iteration evidence for Iteration 1 Build, Iteration 2 Refine, and Iteration 3 Polish for each executable task.
-8. For every code-changing task, documented TDD-first evidence inside each iteration: Red, Green, and Refactor, or an explicit missing-test exception.
+2. Explicit user approval of the saved spec before generating `_task/`.
+3. A saved vertical task plan in `_task/`.
+4. A current read of `_handoff/current.md`.
+5. A current read of `_progress/progress.md`.
+6. A current read of the latest relevant `_summary/` entry.
+7. Task status transitions that follow `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`.
+8. Documented iteration evidence for Iteration 1 Build, Iteration 2 Refine, and Iteration 3 Polish for each executable task.
+9. For every code-changing task, documented TDD-first evidence inside each iteration: Red, Green, and Refactor, or an explicit missing-test exception.
 
 ## Pipeline
 
@@ -41,9 +42,11 @@ direct user prompt or WORK_REQUEST
 -> sync WORK_REQUEST
 -> dirty worktree check
 -> spec in _spec
--> read _progress and _summary
--> read or create _handoff/current.md
--> vertical plan in _task
+-> display spec summary and spec path
+-> STOP and wait for explicit user approval or requested changes
+-> after approval only, read _progress and _summary
+-> after approval only, read or create _handoff/current.md
+-> after approval only, vertical plan in _task
 -> execute every task in order by default, or prepare _parallel queue/claims/locks when parallel mode is selected and safe
 -> run each executable task through Iteration 1 Build, Iteration 2 Refine, and Iteration 3 Polish
 -> for every code-changing task, run Red -> Green -> Refactor inside each iteration
@@ -94,14 +97,15 @@ If the active user prompt is exactly or primarily `continue workflow`, resume in
 3. Read `_progress/progress.md` to verify completed task history.
 4. If `_handoff/current.md` conflicts with `_progress/progress.md`, trust `_progress/progress.md` for completed task history and update handoff accordingly.
 5. Read the latest relevant file in `_summary/`, if any.
-6. Read the task plan referenced by `_handoff/current.md`, or the latest file in `_task/` if handoff has no task plan.
-7. Read the spec referenced by that task plan.
-8. Find the next task whose status is not `Done` and the current iteration recorded in `_handoff/current.md`.
-9. Continue from that task and iteration.
-10. Do not ask the original intake questions again unless a current ambiguity blocks safe continuation.
-11. Do not regenerate the entire spec unless the request changed.
-12. Continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached, preserving the Build -> Refine -> Polish loop for each executable task.
-13. If all tasks are `Done`, complete any missing `_review/`, `_summary/`, handoff update, workflow health check, or final response step.
+6. If a spec exists but no task plan exists for the active request, resume at the spec approval gate: read the saved spec, show the approval prompt from section 5A, and stop for explicit user approval. Do not generate tasks automatically.
+7. If a task plan exists, read the task plan referenced by `_handoff/current.md`, or the latest file in `_task/` if handoff has no task plan.
+8. Read the spec referenced by that task plan.
+9. Find the next task whose status is not `Done` and the current iteration recorded in `_handoff/current.md`.
+10. Continue from that task and iteration.
+11. Do not ask the original intake questions again unless a current ambiguity blocks safe continuation.
+12. Do not regenerate the entire spec unless the request changed.
+13. Continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached, preserving the Build -> Refine -> Polish loop for each executable task.
+14. If all tasks are `Done`, complete any missing `_review/`, `_summary/`, handoff update, workflow health check, or final response step.
 
 ## 2. Intake And Questioning
 
@@ -340,7 +344,58 @@ Detailed spec required sections:
 
 No implementation may happen until this file exists.
 
+## 5A. Spec Approval Gate
+
+After saving `_spec/<file>.md`, stop before task planning. Do not generate `_task/`. Do not start implementation. Display the spec path, a short reviewable summary, and the exact approval prompt below, then wait for the user's response.
+
+```txt
+Spec saved at _spec/<file>.md
+
+Spec summary:
+- Goal:
+- In scope:
+- Out of scope:
+- Affected surfaces:
+- Acceptance criteria:
+- Risks/open questions:
+
+Review the spec here:
+_spec/<file>.md
+
+Reply with one of:
+- approve spec
+- change: <what to change>
+- cancel workflow
+```
+
+Valid approval phrases are:
+
+- `approve spec`
+- `approved`
+- `looks good`
+- `proceed to planning`
+- `proceed`
+
+Valid revision phrase prefixes are:
+
+- `change:`
+- `update:`
+- `revise:`
+- `add:`
+- `remove:`
+
+Approval behavior:
+
+- If approved, update `_handoff/current.md` with the approval status, then continue to the Planning Phase.
+- If revisions are requested, update the same spec or create a revised spec, re-display the updated spec summary and approval prompt, and stop again for approval.
+- If canceled, stop the workflow, update `_handoff/current.md`, and mark the workflow paused/cancelled.
+- If the response is ambiguous, keep the workflow paused and ask the user to reply with one of the listed options.
+
+The user must be able to review the spec directly in chat without manually hunting for files. Always show the spec path, short summary, clear approval options, and wait state.
+
 ## 6. Planning Phase
+
+Do not run this phase until the saved spec has explicit user approval. Generating `_task/` before approval is a workflow violation and makes workflow health `Partial` or `Failed`.
 
 Before planning, read:
 
@@ -440,9 +495,9 @@ Use Ralph Wiggum-style task phrasing: small, literal, concrete steps with simple
 
 No implementation may happen until this file exists.
 
-After task plan creation:
+After spec approval and task plan creation:
 
-- If execution mode is `plan-only`, stop after saving the spec and task plan.
+- If execution mode is `plan-only`, stop after saving the approved spec-derived task plan.
 - If execution mode is `single-task`, execute only the next ready task through the full 3-pass hardening loop, update artifacts, then stop.
 - If execution mode is omitted, use `complete-workflow`.
 - In `complete-workflow`, execute every task in order by default; each task must complete the full 3-pass hardening loop before the next task starts.
@@ -827,6 +882,8 @@ Before the final response, check:
 - Did `_handoff/current.md` exist and reflect the latest live resume state?
 - Did the spec file exist?
 - Did the spec include every required detailed spec section, or was any missing section repaired before planning?
+- Was the spec approval gate shown after saving the spec and before task planning?
+- Was explicit user approval recorded before `_task/` generation?
 - Did the task plan exist?
 - Was progress updated?
 - Was the review created?
@@ -851,11 +908,11 @@ Before the final response, check:
 
 Final health status:
 
-- `Passed`: all required artifacts exist, the detailed spec exists with all required sections, all executable tasks are complete, all required iteration evidence is present, code-changing tasks include required TDD-first evidence or justified missing-test exceptions, release notes exist, final diff audit is complete or documented, dirty worktree protection was checked, acceptance results are complete, verification was run or documented, scope was respected, and decisions were handled correctly.
-- `Partial`: artifacts exist, but some tasks remain because of a documented blocker, human-review need, verification gap, TDD evidence gap with justified stop state, follow-up risk, missing parallel merge review, or incomplete claim/lock evidence.
-- `Failed`: any required artifact is missing, the detailed spec is missing required sections and planning proceeded anyway, scope was not respected, required TDD-first evidence for code-changing tasks is absent without justified exception, required verification/review/summary documentation is absent, or parallel execution proceeded with overlapping active file locks.
+- `Passed`: all required artifacts exist, the detailed spec exists with all required sections, the spec approval gate was completed before task planning, all executable tasks are complete, all required iteration evidence is present, code-changing tasks include required TDD-first evidence or justified missing-test exceptions, release notes exist, final diff audit is complete or documented, dirty worktree protection was checked, acceptance results are complete, verification was run or documented, scope was respected, and decisions were handled correctly.
+- `Partial`: artifacts exist, but some tasks remain because of a documented blocker, human-review need, verification gap, TDD evidence gap with justified stop state, follow-up risk, missing parallel merge review, incomplete claim/lock evidence, or a documented approval-gate irregularity that did not lead to implementation.
+- `Failed`: any required artifact is missing, the detailed spec is missing required sections and planning proceeded anyway, `_task/` was generated before explicit spec approval, workflow execution continued without user confirmation, scope was not respected, required TDD-first evidence for code-changing tasks is absent without justified exception, required verification/review/summary documentation is absent, or parallel execution proceeded with overlapping active file locks.
 
-If release notes, final diff audit, dirty worktree check, required detailed spec sections, iteration evidence, TDD-first evidence for code-changing tasks, acceptance results, claims, locks, worker status, or parallel merge review are missing when required, health should be `Partial` or `Failed` depending on severity. If any required artifact is missing, mark workflow health as `Failed`.
+If release notes, final diff audit, dirty worktree check, required detailed spec sections, explicit spec approval before task planning, iteration evidence, TDD-first evidence for code-changing tasks, acceptance results, claims, locks, worker status, or parallel merge review are missing when required, health should be `Partial` or `Failed` depending on severity. If any required artifact is missing, mark workflow health as `Failed`.
 
 ## 17. Final Response
 
