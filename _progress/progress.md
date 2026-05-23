@@ -76,3 +76,36 @@ Do not stop after `TASK-001` unless execution mode is explicitly `single-task` o
 - Next step: `<next task, review, summary, or stop reason>`
 
 After appending each task entry, update `_handoff/current.md` with the latest current state.
+
+### `2026-05-23 15:14` - `TASK-001`
+
+- Status: `Done`
+- Lifecycle transition reached: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`
+- Files changed: `client/src/pages/Booking.jsx`, `client/src/index.css`, `client/test/booking-flow.test.jsx`, `WORK_REQUEST.md`, `_spec/2026-05-23-redesign-booking-page-calendar.md`, `_task/2026-05-23-redesign-booking-page-calendar.md`, `_progress/progress.md`, `_handoff/current.md`, `_review/2026-05-23-redesign-booking-page-calendar.md`, `_release/redesign-booking-page-calendar.md`, `_summary/2026-05-23-redesign-booking-page-calendar.md`
+- Dirty worktree protection: Initial status before spec was clean. Before implementation, dirty files were workflow artifacts only: `WORK_REQUEST.md`, `_handoff/current.md`, `_spec/2026-05-23-redesign-booking-page-calendar.md`, `_task/2026-05-23-redesign-booking-page-calendar.md`. Planned implementation files did not overlap with user changes. Final dirty files match workflow and implementation scope.
+- Parallel metadata: `Priority=P0; Parallel safe=no; Depends on=none; Blocks=none; File locks=client/src/pages/Booking.jsx, client/src/index.css, client/test/booking-flow.test.jsx; Claim status=done; Claimed by=Codex; Agent role=sequential executor; Merge risk=low`
+- Parallel claim/lock status: Not applicable for sequential mode.
+- Worker status: Not applicable.
+- Merge review status: Not applicable.
+- Test plan: Update booking tests first for click-only calendar interaction, then run targeted booking tests, full frontend tests, build, lint, and Playwright screenshot checks.
+- Red phase evidence: After updating `client/test/booking-flow.test.jsx`, `npm test -- test/booking-flow.test.jsx` failed because the native date input was still present and calendar day buttons were missing. Tooling setup notes: the first command could not start before `npm install`; the next filter path was corrected from `client/test/...` to `test/...`.
+- Green phase evidence: Implemented calendar helpers/UI and concierge structure; `npm test -- test/booking-flow.test.jsx` passed.
+- Refactor phase evidence: Added local display-date parsing and explicit API payload assertions; fixed assertion shape for TanStack mutation context; targeted tests passed again.
+- Test commands run: `npm install`; `npm test -- test/booking-flow.test.jsx`; `npm test`; `npm run build`; `npm run lint`; `npx playwright screenshot --wait-for-timeout=1000 http://127.0.0.1:5180/booking ...`; `npx playwright screenshot --viewport-size=390,844 --wait-for-timeout=1000 http://127.0.0.1:5180/booking ...`
+- Iteration evidence:
+  - Iteration 1 - Build: Goal was click-only calendar behavior. Changes made: tests updated first, native date input replaced with calendar buttons, month navigation, disabled past/Sunday dates, selected date stored as `YYYY-MM-DD`. Test plan: targeted booking-flow tests. Red phase evidence: expected 4-test failure on missing calendar/native date input. Green phase evidence: targeted tests passed. Refactor phase evidence: date formatting/API payload assertion cleanup passed. Verification command/result: `npm test -- test/booking-flow.test.jsx` passed, 4 tests. Review findings: payload remains compatible with existing availability/booking services. Acceptance status: date/API criteria met. Remaining issues: visual polish. Next action: refine layout.
+  - Iteration 2 - Refine: Goal was premium concierge layout and responsive state presentation. Changes made: progress/summary rail, hero note, panel styling, calendar styling, touch targets, focus/active states, mobile collapse. Test plan: targeted booking-flow tests. Red phase evidence: no new behavioral Red; missing-test exception recorded because changes were CSS/layout/accessibility refinements guarded by existing behavior tests. Green phase evidence: targeted tests passed. Refactor phase evidence: copy and `aria-current` adjustments kept behavior stable. Verification command/result: `npm test -- test/booking-flow.test.jsx` passed, 4 tests. Review findings: no API/state regression. Acceptance status: layout/state criteria met. Remaining issues: full verification. Next action: polish/final checks.
+  - Iteration 3 - Polish: Goal was final verification and visual QA. Changes made: full tests/build/lint; strict Vite server on 5180; desktop and mobile Playwright screenshots; final diff audit. Red phase evidence: no new behavioral Red; missing-test exception recorded because no new implementation behavior was introduced. Green phase evidence: `npm test`, `npm run build`, and `npm run lint` passed. Refactor phase evidence: detected old server on 5173, reran screenshot checks against fresh strict server on 5180. Verification command/result: all checks passed; screenshots rendered coherently. Review findings: scope matched spec and no secrets/API/schema/deployment changes found. Acceptance status: all criteria met. Final verdict: Done.
+- Acceptance result:
+  - [x] Booking date selection uses a click-only calendar grid with no manually typed/native date input.
+  - [x] Selected dates are stored/submitted as `YYYY-MM-DD` and existing availability/booking API calls continue unchanged.
+  - [x] Past dates and Sundays are disabled or blocked before appointment times are fetched.
+  - [x] Booking page uses a premium salon concierge layout with clearer steps, live summary, larger touch targets, and preserved brand palette.
+  - [x] Loading, empty, API error, validation error, and confirmation states remain visible and accessible.
+  - [x] Existing booking flow tests are updated for calendar interaction and pass.
+  - [x] Frontend build passes.
+- Verification result: `npm test` passed, 3 files and 9 tests. `npm run build` passed. `npm run lint` passed. Playwright desktop and mobile screenshots against `http://127.0.0.1:5180/booking` rendered coherently.
+- Failure recovery notes: Red-phase tooling was corrected by running `npm install` and using the correct client-relative Vitest path. One payload assertion failed because TanStack passes a second context argument; the assertion was corrected and rerun passed. First screenshot hit an older Vite process on 5173; a strict new server on 5180 was used and screenshots passed.
+- Review result: Reviewed; no blocking issues found.
+- Blockers: None.
+- Next step: Final review, release notes, summary, and complete handoff.

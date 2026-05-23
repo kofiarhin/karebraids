@@ -2,48 +2,39 @@
 
 This file is auto-managed by the workflow. It stores the latest active work request, usually copied from the user's direct Codex prompt.
 
-Users do not need to edit this file manually. You may edit it when you want to stage a request before asking the agent to run the workflow.
-
-The workflow will invoke the grill-me skill at `.agents/skills/grill-me/SKILL.md` to build shared understanding, run dirty worktree protection, generate a saved spec in `_spec/`, stop for explicit user approval, create a vertical task plan in `_task/` only after approval, execute tasks one by one until the request is complete or stopped, record acceptance results, update `_progress/progress.md` and `_handoff/current.md` after each task, run a final diff audit, write a workflow review in `_review/`, create release notes in `_release/`, and write a final summary in `_summary/`.
+Users do not need to edit this file manually.
 
 ## Request
 
-`<Auto-synced from latest direct prompt, e.g. Add dark theme to the app.>`
+Redesign the KareBraids booking page into a premium "salon concierge" booking experience while preserving the existing brand palette and backend availability flow. Replace the manually typed/native date input with a polished in-page selectable calendar grid. Users must choose dates by clicking calendar dates only; the stored and submitted date value must remain `YYYY-MM-DD`.
 
 ## Question Preference
 
-Choose one:
-
-- `grill-me intake`: default. Use the grill-me skill at `.agents/skills/grill-me/SKILL.md` to create shared understanding before writing the spec.
-- `skip questions`: do not ask questions; generate a best-effort spec and record assumptions.
-
-Default: `grill-me intake`
+`grill-me intake`
 
 ## Optional Execution Preference
 
-Choose one:
-
-- `plan-only`: run grill-me intake, write spec, wait for approval, write task plan, then stop.
-- `single-task`: run grill-me intake, write spec, wait for approval, write task plan, execute only the next ready task, verify and review it, update artifacts, then stop.
-- `complete-workflow`: run grill-me intake, write spec, wait for approval, write task plan, then execute all generated tasks sequentially until the request/spec is complete or a stop condition is reached.
-
-Default: `complete-workflow`
+`complete-workflow`
 
 ## Optional Context
 
-- User or business goal: `<Why this matters>`
-- Target users: `<Who uses this>`
-- Expected behavior: `<What should happen>`
-- UI expectations: `<Screens, components, states, accessibility, responsive behavior>`
-- API expectations: `<Endpoints, payloads, errors, auth, permissions>`
-- Data model expectations: `<Fields, relationships, migrations, defaults>`
-- Edge cases: `<Failure states, empty states, permissions, limits>`
-- Constraints: `<Do not change X / must use Y / no new dependencies>`
-- Success criteria: `<How we know this is done>`
-- Preferred verification: `<Test command, manual check, build command>`
-- Dirty worktree notes: `<Existing dirty files, planned files, overlap risk>`
-- Release notes expectations: `<User-facing changes, developer changes, known limitations>`
+- User or business goal: Make the booking page feel more guided, premium, and trustworthy while preventing manually typed date entry.
+- Target users: KareBraids customers booking braid appointments.
+- Expected behavior: Customers select a service, choose a non-past Monday-Saturday date from a calendar grid, select an available time returned by the existing availability API, enter details, and submit a booking request.
+- UI expectations: Premium salon concierge layout, stronger live summary panel, clearer step states, larger touch targets, responsive behavior, accessible labels/focus states, polished loading/empty/error states.
+- API expectations: Preserve the existing availability and booking API flow; keep payload shape and date format unchanged.
+- Data model expectations: No database or schema changes expected.
+- Edge cases: Past dates disabled, Sundays disabled, invalid or missing date blocked, no available slots shown cleanly, API errors remain visible, mobile layout remains usable.
+- Constraints: Do not hard-code API URLs, do not change deployment setup, do not add dependencies unless justified, use existing React/Vite/CSS conventions, preserve brand palette.
+- Success criteria: Date cannot be manually typed; booking tests cover calendar selection and Sunday prevention; page remains responsive and build/tests pass.
+- Preferred verification: `cd client && npm test`, `cd client && npm run build`, and manual browser check if implementation proceeds.
+- Dirty worktree notes: Initial `git status --short` was clean before spec generation.
+- Release notes expectations: User-facing booking redesign and developer/test changes; no new API/env/schema changes unless implementation discovers otherwise.
 
 ## Out Of Scope
 
-- `<File, feature, API, behavior, or area that should stay untouched>`
+- Backend booking API changes.
+- Database/schema changes.
+- Deployment changes.
+- Full-site redesign outside the booking page and shared styles required by the booking page.
+- Payment, auth, admin scheduling, or real-time availability changes.

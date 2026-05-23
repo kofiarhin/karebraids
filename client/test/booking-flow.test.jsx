@@ -28,6 +28,14 @@ function renderBooking() {
   )
 }
 
+async function chooseService(user) {
+  await user.click(screen.getByRole('button', { name: /knotless braids/i }))
+}
+
+async function chooseMondayMay252026(user) {
+  await user.click(screen.getByRole('button', { name: /select monday, may 25, 2026/i }))
+}
+
 describe('booking flow', () => {
   beforeEach(() => {
     bookingService.getAvailability.mockResolvedValue({
@@ -52,11 +60,13 @@ describe('booking flow', () => {
     const user = userEvent.setup()
     renderBooking()
 
-    await user.click(screen.getByRole('button', { name: /knotless braids/i }))
-    await user.type(screen.getByLabelText(/appointment date/i), '2030-01-06')
+    await chooseService(user)
+
+    expect(screen.queryByLabelText(/appointment date/i)).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /sunday, may 24, 2026 unavailable/i })).toBeDisabled()
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
 
-    expect(screen.getByRole('alert')).toHaveTextContent(/monday to saturday/i)
+    expect(screen.getByRole('alert')).toHaveTextContent(/choose a valid appointment date/i)
     expect(bookingService.getAvailability).not.toHaveBeenCalled()
   })
 
@@ -64,11 +74,15 @@ describe('booking flow', () => {
     const user = userEvent.setup()
     renderBooking()
 
-    await user.click(screen.getByRole('button', { name: /knotless braids/i }))
-    await user.type(screen.getByLabelText(/appointment date/i), '2030-01-07')
+    await chooseService(user)
+    await chooseMondayMay252026(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
 
     await screen.findByRole('button', { name: /10:00/i })
+    expect(bookingService.getAvailability).toHaveBeenCalledWith({
+      service: 'Knotless Braids',
+      date: '2026-05-25',
+    })
     await user.click(screen.getByRole('button', { name: /10:00/i }))
     await user.type(screen.getByLabelText(/full name/i), 'Amara Okafor')
     await user.type(screen.getByLabelText(/email/i), 'amara@example.com')
@@ -77,6 +91,14 @@ describe('booking flow', () => {
     await user.click(screen.getByRole('button', { name: /confirm booking/i }))
 
     await waitFor(() => expect(bookingService.createBooking).toHaveBeenCalled())
+    expect(bookingService.createBooking).toHaveBeenCalledWith(
+      expect.objectContaining({
+        service: 'Knotless Braids',
+        date: '2026-05-25',
+        time: '10:00',
+      }),
+      expect.any(Object),
+    )
     expect(screen.getByRole('heading', { name: /booking request received/i })).toBeInTheDocument()
   })
 
@@ -91,8 +113,8 @@ describe('booking flow', () => {
     })
     renderBooking()
 
-    await user.click(screen.getByRole('button', { name: /knotless braids/i }))
-    await user.type(screen.getByLabelText(/appointment date/i), '2030-01-07')
+    await chooseService(user)
+    await chooseMondayMay252026(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
     await user.click(await screen.findByRole('button', { name: /10:00/i }))
     await user.type(screen.getByLabelText(/full name/i), 'Amara Okafor')
@@ -112,8 +134,8 @@ describe('booking flow', () => {
     })
     renderBooking()
 
-    await user.click(screen.getByRole('button', { name: /knotless braids/i }))
-    await user.type(screen.getByLabelText(/appointment date/i), '2030-01-07')
+    await chooseService(user)
+    await chooseMondayMay252026(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
 
     expect(await screen.findByText(/no appointments are available/i)).toBeInTheDocument()
