@@ -1,0 +1,27 @@
+# Release Notes: Homepage Redesign With Motion
+
+- Request: Redesign the KareBraids homepage while preserving sections and booking/gallery flows.
+- User-facing changes:
+  - Refreshed homepage hero, services, why choose, gallery preview, testimonials, and CTA with a more premium African braiding salon presentation.
+  - Added text/image reveal animation and scroll-enhanced parallax behavior without adding animation dependencies.
+  - Added reduced-motion handling.
+  - Improved mobile CTA behavior and responsive layout.
+- Developer changes:
+  - Added `client/src/hooks/useRevealOnScroll.js`.
+  - Added homepage reveal/parallax attributes and updated homepage CSS.
+  - Expanded homepage tests for preserved sections and CTA routes.
+- New routes/APIs: none.
+- New env vars: none.
+- Database/schema changes: none.
+- Dependencies added/removed: none.
+- Test commands run:
+  - `npm test --prefix client` passed.
+  - `npm run lint --prefix client` passed.
+  - `npm run build --prefix client` passed.
+- Known limitations:
+  - Visual animation behavior is not covered by automated browser visual regression tests.
+  - Current imagery remains the existing remote stock imagery.
+- Follow-up work:
+  - Replace stock imagery with owned brand photography when available.
+  - Consider matching visual polish for About/Gallery in a separate workflow.
+- Suggested commit message: `feat: redesign homepage with scroll reveal motion`

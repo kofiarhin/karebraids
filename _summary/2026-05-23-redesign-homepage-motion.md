@@ -1,0 +1,66 @@
+# Summary: Homepage Redesign With Motion
+
+- Request: Redesign the KareBraids homepage while keeping the same sections, adding premium African braiding salon visual polish, text/image animations, and scroll animation without changing booking/gallery flows.
+- Spec file used: `_spec/2026-05-23-redesign-homepage-motion.md`
+- Detailed spec completeness: Complete. All required detailed spec sections were present before planning.
+- Task plan used: `_task/2026-05-23-redesign-homepage-motion.md`
+- Review file used: `_review/2026-05-23-redesign-homepage-motion.md`
+- Release notes file used: `_release/redesign-homepage-motion.md`
+- Tasks completed:
+  - `TASK-001: Lock homepage sections and CTA routes with tests`
+  - `TASK-002: Redesign homepage markup and add scroll reveal helper`
+  - `TASK-003: Verify responsive motion polish and complete workflow artifacts`
+- Iteration evidence summary:
+  - Every task completed Build, Refine, and Polish evidence.
+  - Code-changing tasks recorded Red, Green, and Refactor evidence or a justified missing-test exception for CSS-only/verification-only polish.
+- TDD-first evidence summary:
+  - TASK-001 added tests first; Red failed on an over-specific heading assertion, Green passed after refining to visible labels, Refactor verification passed.
+  - TASK-002 added reveal/parallax expectations first; Red failed because hooks did not exist, Green passed after implementation, Refactor verification passed.
+  - TASK-003 was verification/documentation only and recorded a missing-test exception.
+- Files changed:
+  - `WORK_REQUEST.md`
+  - `_spec/2026-05-23-redesign-homepage-motion.md`
+  - `_task/2026-05-23-redesign-homepage-motion.md`
+  - `_progress/progress.md`
+  - `_handoff/current.md`
+  - `_review/2026-05-23-redesign-homepage-motion.md`
+  - `_release/redesign-homepage-motion.md`
+  - `_summary/2026-05-23-redesign-homepage-motion.md`
+  - `client/src/hooks/useRevealOnScroll.js`
+  - `client/src/pages/Home.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+- Acceptance results:
+  - [x] Homepage still contains the same sections.
+  - [x] Homepage visual design is updated toward a premium African braiding salon feel.
+  - [x] Text and images have tasteful entrance animations and scroll-triggered reveal/parallax behavior without new dependencies.
+  - [x] Motion respects `prefers-reduced-motion` and uses transform/opacity-based animation.
+  - [x] Booking and gallery navigation flows remain unchanged.
+  - [x] Mobile layout was inspected and corrected for overlap/CTA issues.
+  - [x] Relevant frontend tests were added/updated first and final verification passed.
+- Verification run:
+  - `npm test --prefix client` passed.
+  - `npm run lint --prefix client` passed.
+  - `npm run build --prefix client` passed.
+  - Browser screenshots/snapshot were used for desktop and mobile inspection.
+- Failure recovery notes:
+  - Corrected TASK-001 over-specific heading assertion.
+  - Removed temporary Playwright CLI artifacts from the workspace.
+- Final diff audit:
+  - `git diff --stat`, implementation diff, and `git status --short` were reviewed.
+  - Diff matched saved spec; no unrelated implementation files or secrets were found.
+- Workflow health status: `Passed`
+- Final artifact checklist:
+  - Work request: `WORK_REQUEST.md`
+  - Handoff: `_handoff/current.md`
+  - Spec: `_spec/2026-05-23-redesign-homepage-motion.md`
+  - Task plan: `_task/2026-05-23-redesign-homepage-motion.md`
+  - Progress: `_progress/progress.md`
+  - Review: `_review/2026-05-23-redesign-homepage-motion.md`
+  - Release notes: `_release/redesign-homepage-motion.md`
+  - Summary: `_summary/2026-05-23-redesign-homepage-motion.md`
+  - Decisions: none
+- Unresolved issues:
+  - None blocking.
+- Next recommended work:
+  - Replace stock imagery with owned salon photography when available.
