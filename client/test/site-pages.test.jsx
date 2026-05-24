@@ -1,8 +1,21 @@
-import { render, screen, within } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
+import { galleryItems } from '../src/constants/content.js'
+
+const originalMatchMedia = window.matchMedia
+
+afterEach(() => {
+  vi.useRealTimers()
+
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    writable: true,
+    value: originalMatchMedia,
+  })
+})
 
 function renderRoute(route = '/') {
   return render(
@@ -34,6 +47,86 @@ describe('KareBraids pages', () => {
     expect(screen.getByRole('heading', { name: /choose your service, date/i })).toBeInTheDocument()
     expect(container.querySelectorAll('[data-reveal]').length).toBeGreaterThan(6)
     expect(container.querySelector('[data-parallax]')).toBeInTheDocument()
+  })
+
+  it('renders clickable hero carousel dots for the first five gallery images', async () => {
+    const user = userEvent.setup()
+    renderRoute('/')
+
+    const heroSlides = galleryItems.slice(0, 5)
+    const carousel = screen.getByRole('region', { name: /featured braid styles carousel/i })
+    const dotGroup = within(carousel).getByRole('group', { name: /hero image slides/i })
+    const firstDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[0].title}` })
+    const fifthDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[4].title}` })
+
+    expect(within(dotGroup).getAllByRole('button', { name: /^show /i })).toHaveLength(5)
+    expect(carousel.querySelectorAll('.hero-slide')).toHaveLength(5)
+    expect(firstDot).toHaveAttribute('aria-current', 'true')
+    expect(fifthDot).not.toHaveAttribute('aria-current')
+
+    await user.click(fifthDot)
+
+    expect(firstDot).not.toHaveAttribute('aria-current')
+    expect(fifthDot).toHaveAttribute('aria-current', 'true')
+  })
+
+  it('auto-rotates hero slides on a 4.5 second interval', () => {
+    vi.useFakeTimers()
+    renderRoute('/')
+
+    const heroSlides = galleryItems.slice(0, 5)
+    const carousel = screen.getByRole('region', { name: /featured braid styles carousel/i })
+    const firstDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[0].title}` })
+    const secondDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[1].title}` })
+
+    expect(firstDot).toHaveAttribute('aria-current', 'true')
+
+    act(() => {
+      vi.advanceTimersByTime(4500)
+    })
+
+    expect(firstDot).not.toHaveAttribute('aria-current')
+    expect(secondDot).toHaveAttribute('aria-current', 'true')
+  })
+
+  it('stops hero auto-rotation when reduced motion becomes preferred', () => {
+    vi.useFakeTimers()
+    let motionChangeHandler
+    const mediaQuery = {
+      matches: false,
+      addEventListener: vi.fn((eventName, handler) => {
+        if (eventName === 'change') motionChangeHandler = handler
+      }),
+      removeEventListener: vi.fn(),
+    }
+
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: vi.fn(() => mediaQuery),
+    })
+
+    renderRoute('/')
+
+    const heroSlides = galleryItems.slice(0, 5)
+    const carousel = screen.getByRole('region', { name: /featured braid styles carousel/i })
+    const secondDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[1].title}` })
+    const thirdDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[2].title}` })
+
+    act(() => {
+      vi.advanceTimersByTime(4500)
+    })
+
+    expect(secondDot).toHaveAttribute('aria-current', 'true')
+
+    mediaQuery.matches = true
+    act(() => {
+      motionChangeHandler({ matches: true })
+      vi.advanceTimersByTime(4500)
+    })
+
+    expect(secondDot).toHaveAttribute('aria-current', 'true')
+    expect(thirdDot).not.toHaveAttribute('aria-current')
   })
 
   it('renders the about page', () => {

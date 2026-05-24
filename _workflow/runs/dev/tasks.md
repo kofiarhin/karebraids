@@ -1,14 +1,13 @@
-# Task Plan
+# Task Plan: Homepage Hero Image Carousel
 
 - Spec file used: `_workflow/runs/dev/spec.md`
 - Planning date: 2026-05-24
+- User approval: Explicit approval received: `approve spec`
 - Progress and summary files read:
   - `_workflow/runs/dev/progress.md`
-  - `_workflow/runs/dev/summary.md` was absent/empty during planning
-- Handoff file read: `_workflow/runs/dev/handoff.md`
-- Explicit spec approval: user replied `approve spec`
+  - `_workflow/runs/dev/summary.md`
+  - `_workflow/runs/dev/handoff.md`
 - Detailed spec sections used:
-  - Section 5 Current State Analysis
   - Section 6 Desired End State
   - Section 7 Scope
   - Section 9 Functional Requirements
@@ -26,86 +25,152 @@
 
 ## Task List
 
-### TASK-001: Add mobile hamburger drawer navigation
+### TASK-001: Add homepage hero carousel with clickable dots
 
 - Status: Done
-- Objective: Replace the mobile horizontal navigation row with a hamburger button that opens a polished right-side drawer containing Home, About, Gallery, and Booking links while preserving desktop/tablet navigation.
-- Files likely affected:
-  - `client/src/components/Layout.jsx`
+- Objective: Replace the homepage hero's static image with a lightweight carousel using the first five `galleryItems`, preserving the existing hero frame and controls while adding accessible clickable dot indicators.
+- Files affected:
+  - `client/src/pages/Home.jsx`
   - `client/src/index.css`
   - `client/test/site-pages.test.jsx`
   - `_workflow/runs/dev/progress.md`
   - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
 - Checklist:
-  - [x] Add or update a failing React Testing Library test for opening/closing the drawer.
-  - [x] Add local state and drawer markup to `Layout.jsx`.
-  - [x] Add Escape key and body scroll lock cleanup.
-  - [x] Add responsive CSS for hamburger, drawer, backdrop, and mobile nav behavior.
-  - [x] Preserve desktop/tablet nav behavior.
-  - [x] Run focused tests, lint, build, and browser/manual responsive verification when feasible.
-- Iteration plan:
-  - Iteration 1 Build:
-    - Goal: Prove and implement core drawer open/close behavior.
-    - Changes made: Added failing drawer interaction test, added local mobile nav state, hamburger button, drawer/backdrop markup, body scroll lock, Escape handler, close button, drawer links, and base responsive CSS.
-    - Test plan: Add drawer interaction test; observe expected Red; implement smallest passing change.
-    - Red phase evidence: `npm test -- site-pages.test.jsx` failed because the expected `Open mobile navigation` button did not exist.
-    - Green phase evidence: `npm test -- site-pages.test.jsx` passed after implementation; 5 tests passed.
-    - Refactor phase evidence: Backdrop label was separated from close-button label and the focused test still passed.
-    - Test commands run: `npm test -- site-pages.test.jsx`.
-    - Verification command/result: Passed.
-    - Review findings: Core drawer behavior worked; label overlap was corrected.
-    - Acceptance status: Partially met; further close paths and polish remained for later iterations.
-    - Remaining issues: Add broader close behavior and visual polish.
-    - Next action: Iteration 2 Refine.
-  - Iteration 2 Refine:
-    - Goal: Tighten accessibility and cleanup behavior.
-    - Changes made: Added tests for Escape, backdrop, link selection, body scroll cleanup, and focus behavior. Added refs so opening the drawer focuses the close button and closing returns focus to the trigger.
-    - Test plan: Add or update Escape/link-close/body-class expectations as needed.
-    - Red phase evidence: `npm test -- site-pages.test.jsx` failed after adding a focus-transfer expectation; focus stayed on the hamburger instead of moving to the drawer close button.
-    - Green phase evidence: `npm test -- site-pages.test.jsx` passed after adding focus refs; 6 tests passed.
-    - Refactor phase evidence: Scoped the duplicated Gallery link query to the mobile navigation region and reran the focused test successfully.
-    - Test commands run: `npm test -- site-pages.test.jsx`.
-    - Verification command/result: Passed.
-    - Review findings: Escape, backdrop, and drawer link selection all close the drawer; body scroll class cleans up.
-    - Acceptance status: Partially met; final visual distinction and broader checks remained.
-    - Remaining issues: Polish the Booking drawer action and run full verification.
-    - Next action: Iteration 3 Polish.
-  - Iteration 3 Polish:
-    - Goal: Polish responsive styling and verify full frontend health.
-    - Changes made: Added a primary visual treatment for the Booking drawer link and verified mobile/desktop header behavior in a real browser viewport.
-    - Test plan: Add or update static/DOM expectations only if needed; run broader verification.
-    - Red phase evidence: `npm test -- site-pages.test.jsx` failed after adding an expectation that the Booking drawer link has `primary`.
-    - Green phase evidence: `npm test -- site-pages.test.jsx` passed after adding the primary class and CSS.
-    - Refactor phase evidence: Full verification passed after final CSS/markup review.
-    - Test commands run: `npm test -- site-pages.test.jsx`, `npm test`, `npm run lint`, `npm run build`, Playwright CLI responsive checks.
-    - Verification command/result: Passed.
-    - Review findings: Desktop nav is preserved; mobile snapshot shows only hamburger in header; opened drawer exposes four links and focuses close button; no console errors.
-    - Acceptance status: Complete.
-    - Remaining issues: None.
-    - Next action: Final review and summary.
+  - [x] Add failing test for carousel rendering and clickable dot selection.
+  - [x] Create `heroSlides` from `galleryItems.slice(0, 5)`.
+  - [x] Add local active-slide state and 4.5 second auto-rotation.
+  - [x] Respect `prefers-reduced-motion` by avoiding auto-rotation for reduced-motion users.
+  - [x] Replace the static hero image with stacked carousel slides.
+  - [x] Add accessible clickable dot buttons with active state.
+  - [x] Add CSS for fade, subtle scale, dot styling, mobile behavior, and reduced-motion override.
+  - [x] Verify focused tests, full tests, lint, build, and responsive browser behavior.
+
+#### Iteration 1 Build
+
+- Goal: Prove and implement the core carousel markup and clickable dot behavior.
+- Changes made:
+  - Added focused test coverage for five hero dot buttons, five hero slide elements, and click-to-select active state.
+  - Added `heroSlides`, local `activeHeroSlide` state, interval setup, slide markup, and dot buttons.
+  - Added initial carousel and dot CSS while preserving the existing frame shape and badge.
 - Test plan:
-  - `npm test -- site-pages.test.jsx` from `client`
-  - `npm test` from `client`
-  - `npm run lint` from `client`
-  - `npm run build` from `client`
-  - Browser/manual responsive check of mobile and desktop header if feasible
-- Red phase evidence: Recorded in each iteration above.
-- Green phase evidence: Recorded in each iteration above.
-- Refactor phase evidence: Recorded in each iteration above.
-- Test commands run: `npm test -- site-pages.test.jsx`; `npm test`; `npm run lint`; `npm run build`; Playwright CLI responsive snapshots.
-- Acceptance criteria:
-  - [x] Desktop/tablet header still shows brand, nav links, and "Book Now" CTA.
-  - [x] Mobile header uses a hamburger button instead of showing the horizontal nav row.
-  - [x] Hamburger opens a right-side drawer with Home, About, Gallery, and Booking links.
-  - [x] Drawer closes via close button, backdrop, Escape key, and drawer link selection.
-  - [x] Navigation controls have accessible labels and visible focus states.
-  - [x] Existing routes and page tests continue to pass.
-  - [x] Relevant frontend test, lint, and build verification are attempted and documented.
-- Acceptance result: Complete.
-- Verification commands: Passed.
-- Stop condition: Stop if existing dirty implementation files overlap unexpectedly, if tests fail for unrelated reasons that require broad changes, or if browser verification exposes a layout defect that cannot be fixed in scope.
-- Out-of-scope items:
-  - Desktop redesign.
-  - Route/API/backend/database/deployment changes.
-  - New dependencies.
-  - Styling system migration.
+  - `cd client && npm test -- site-pages.test.jsx`
+- Red phase evidence:
+  - Focused test failed because the static hero had no accessible `Show Copper Knotless Braids` button.
+- Green phase evidence:
+  - Initial implementation exposed a `matchMedia` guard bug in jsdom. Fixed the guard to require `typeof window.matchMedia === 'function'`.
+  - Inactive slides are intentionally `aria-hidden`, so the test was refined to count `.hero-slide` elements structurally.
+  - Focused test then passed.
+- Refactor phase evidence:
+  - Scoped the image-count assertion to the carousel structure instead of accessible image roles so hidden inactive slides remain appropriate for assistive tech.
+  - Reran focused test successfully.
+- Test commands run:
+  - `npm test -- site-pages.test.jsx`: failed as expected for missing dot button.
+  - `npm test -- site-pages.test.jsx`: failed for `window.matchMedia is not a function`.
+  - `npm test -- site-pages.test.jsx`: failed for inaccessible hidden inactive images.
+  - `npm test -- site-pages.test.jsx`: passed, 7 tests.
+- Verification command/result:
+  - Focused verification passed.
+- Review findings:
+  - Core carousel render and clickable dot behavior matched the approved scope.
+- Acceptance status:
+  - Partially met; timer and reduced-motion hardening remained for later iterations.
+- Remaining issues:
+  - Needed timer and live reduced-motion coverage.
+- Next action:
+  - Continue to Iteration 2 Refine.
+
+#### Iteration 2 Refine
+
+- Goal: Prove timer and reduced-motion behavior while keeping the implementation lightweight.
+- Changes made:
+  - Added fake-timer test for 4.5 second auto-rotation.
+  - Added reduced-motion media query change test.
+  - Refined the carousel effect to start, stop, and clean up the interval when `prefers-reduced-motion` changes.
+- Test plan:
+  - `cd client && npm test -- site-pages.test.jsx`
+- Red phase evidence:
+  - Focused test failed because no `matchMedia` change handler was registered; `motionChangeHandler` was not a function.
+- Green phase evidence:
+  - Added `motionQuery.addEventListener('change', syncRotation)` and matching cleanup.
+  - Focused test passed, 9 tests.
+- Refactor phase evidence:
+  - Reviewed the effect for interval cleanup and duplicate timer prevention through `clearRotation()` before `startRotation()`.
+  - Reran focused test successfully.
+- Test commands run:
+  - `npm test -- site-pages.test.jsx`: failed as expected for missing media query change handling.
+  - `npm test -- site-pages.test.jsx`: passed, 9 tests.
+- Verification command/result:
+  - Focused verification passed.
+- Review findings:
+  - Auto-rotation is 4500ms and reduced-motion users do not receive ongoing automatic slide changes.
+- Acceptance status:
+  - Partially met; final semantic and visual polish remained.
+- Remaining issues:
+  - Dot controls needed grouped semantics and mobile visual inspection.
+- Next action:
+  - Continue to Iteration 3 Polish.
+
+#### Iteration 3 Polish
+
+- Goal: Polish visual CSS, mobile responsiveness, and parallax interaction; run full verification.
+- Changes made:
+  - Added a test requiring the dot buttons to live in a named `group`.
+  - Added `role="group"` to the dot wrapper.
+  - Added keyboard focus outline styling for dot buttons.
+  - Moved mobile dots above the appointment badge after visual inspection showed overlap on narrow screens.
+  - Scoped the existing parallax selector to direct images so it does not fight carousel slide transforms.
+- Test plan:
+  - Focused page test, full frontend tests, lint, build, and browser checks at desktop and mobile sizes.
+- Red phase evidence:
+  - Focused test failed because the dot wrapper had `aria-label` but no semantic `group` role.
+- Green phase evidence:
+  - Added `role="group"` and focus-visible styling.
+  - Focused test passed.
+- Refactor phase evidence:
+  - Browser screenshot showed mobile badge/dot overlap.
+  - Adjusted mobile dot position to `bottom: 6.75rem`.
+  - Focused test, full tests, lint, build, and browser screenshot checks passed afterward.
+- Test commands run:
+  - `npm test -- site-pages.test.jsx`: failed as expected for missing dot group role.
+  - `npm test -- site-pages.test.jsx`: passed, 9 tests.
+  - `npm test`: passed, 3 test files / 16 tests.
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Playwright CLI screenshots at `1280x800` and `390x844`: passed selector wait for `.hero-carousel-dot[aria-current='true']`; visual inspection confirmed desktop and mobile hero layout, image, dots, badge, and CTAs were intact.
+- Verification command/result:
+  - Passed.
+- Review findings:
+  - Scope respected; no new dependencies; no API, backend, env, deployment, or data changes.
+- Acceptance status:
+  - Complete.
+- Remaining issues:
+  - None.
+- Next action:
+  - Complete final review, release notes, summary, and handoff.
+
+#### Acceptance Result
+
+- [x] Homepage hero uses `heroSlides` from the first five `galleryItems`.
+- [x] Static hero image is replaced by a carousel in the existing hero media frame.
+- [x] Carousel auto-rotates every 4 to 5 seconds.
+- [x] Slide transition uses smooth fade with subtle scale/zoom.
+- [x] Existing hero layout, luxury frame shape, CTA buttons, and "Salon and mobile appointments" badge remain intact.
+- [x] Small elegant dot indicators appear over or near the bottom of the hero image.
+- [x] Dot indicators are clickable accessible buttons and show the active slide.
+- [x] Clicking a dot jumps to the selected slide.
+- [x] Mobile responsiveness is preserved.
+- [x] `prefers-reduced-motion` is respected.
+- [x] No new dependencies are added.
+- [x] Changes are minimal and localized to the homepage hero, CSS, focused tests, and workflow artifacts.
+
+#### Stop Condition
+
+- Not triggered.
+
+#### Out-of-Scope Items
+
+- Arrows, swipe/drag gestures, thumbnails, gallery data changes, backend/API changes, dependency additions, full hero redesign, deployment changes.

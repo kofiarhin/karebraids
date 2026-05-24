@@ -42,3 +42,50 @@
   - No secrets added.
 - Unresolved issues: none.
 - Next recommended work: User review, then commit with `feature: add mobile navigation drawer`.
+
+## 2026-05-24 - Homepage Hero Image Carousel
+
+- Request: Implement a rotating hero image carousel on the KareBraids homepage.
+- Spec file used: `_workflow/runs/dev/spec.md`
+- Detailed spec completeness: Complete; all 22 required sections were present before planning.
+- Task plan used: `_workflow/runs/dev/tasks.md`
+- Review file used: `_workflow/runs/dev/review.md`
+- Release notes file used: `_workflow/runs/dev/release-notes.md`
+- Tasks completed:
+  - TASK-001: Add homepage hero carousel with clickable dots
+- Iteration evidence summary:
+  - Iteration 1 Build: Red failure for missing hero dot button, Green carousel markup/state/CSS, Refactor test scoping for hidden inactive slides.
+  - Iteration 2 Refine: Red failure for missing media query change handler, Green reduced-motion-aware interval lifecycle, Refactor cleanup review.
+  - Iteration 3 Polish: Red failure for missing dot group role, Green semantic group/focus styling, Refactor mobile dot position after screenshot review.
+- Files changed:
+  - `client/src/pages/Home.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+  - `_workflow/runs/dev/*`
+- Verification run:
+  - `npm test -- site-pages.test.jsx`: passed.
+  - `npm test`: passed, 3 test files / 16 tests.
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Playwright CLI desktop and mobile screenshot checks: passed.
+- Acceptance results:
+  - [x] Homepage hero uses `heroSlides` from the first five `galleryItems`.
+  - [x] Static hero image is replaced by a carousel in the existing hero media frame.
+  - [x] Carousel auto-rotates every 4 to 5 seconds.
+  - [x] Slide transition uses smooth fade with subtle scale/zoom.
+  - [x] Existing hero layout, luxury frame shape, CTA buttons, and appointment badge remain intact.
+  - [x] Small elegant dot indicators appear over or near the bottom of the hero image.
+  - [x] Dot indicators are clickable accessible buttons and show the active slide.
+  - [x] Clicking a dot jumps to the selected slide.
+  - [x] Mobile responsiveness is preserved.
+  - [x] `prefers-reduced-motion` is respected.
+  - [x] No new dependencies are added.
+  - [x] Changes are minimal and localized.
+- Failure recovery notes:
+  - Fixed jsdom `matchMedia` guard, refined hidden-slide test assertion, added dot group role, adjusted mobile dot positioning, and removed generated junk from a failed shell command.
+- Final diff audit:
+  - Implementation diff matches approved spec.
+  - Only expected implementation files and run-scoped workflow artifacts were touched.
+  - No generated temporary files, secrets, env changes, dependency changes, API changes, or deployment changes remain.
+- Unresolved issues: none.
+- Next recommended work: User review, then commit with `feature: add homepage hero carousel`.

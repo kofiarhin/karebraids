@@ -1,11 +1,11 @@
-# Mobile Navigation Drawer Spec
+# Detailed Spec: Homepage Hero Image Carousel
 
 ## 1. Metadata
 
 - Spec filename: `_workflow/runs/dev/spec.md`
 - Date: 2026-05-24
-- Request ID / slug: mobile-navigation-drawer
-- Request source: latest direct user prompt and clarification answer
+- Request ID / slug: homepage-hero-image-carousel
+- Request source: Latest direct user prompt plus follow-up answer in conversation; synced to `_workflow/runs/dev/request.md`
 - Execution mode: complete-workflow
 - Request classification: feature
 - Scope level: small
@@ -13,314 +13,329 @@
 
 ## 2. Original Request
 
-- Raw user request: "lets work on the navitation. it does not look professional. i want a hamburger menu and a side navigation with links for mobile."
-- Normalized request: Improve the KareBraids mobile navigation by keeping the current desktop/tablet header links and "Book Now" CTA, then replacing the mobile horizontal/scrolled navigation with a polished hamburger button that opens a right-side side navigation drawer containing Home, About, Gallery, and Booking links.
+- Raw user request: Implement a rotating hero image carousel on the KareBraids homepage. Use existing `galleryItems`; create `heroSlides` from the first 5 gallery images; replace the single static hero `<img>` with a lightweight auto-rotating carousel; preserve existing hero layout, luxury frame, CTA buttons, and appointment badge; add elegant dot indicators; use 4 to 5 second timing; smooth fade and subtle scale/zoom; mobile responsive; respect `prefers-reduced-motion`; no new dependencies; keep API/data logic out of UI components; make minimal changes.
+- Normalized request: Update only the KareBraids homepage hero media area so it uses a lightweight carousel built from the first five `galleryItems` images. Replace the current static image with auto-rotating slides every 4 to 5 seconds, using smooth fade and subtle scale transitions, while preserving the existing hero layout, luxury frame, CTA buttons, and "Salon and mobile appointments" badge. Add small elegant clickable dot buttons over or near the bottom of the hero image with accessible labels and active state. Respect `prefers-reduced-motion`, keep the implementation mobile responsive, avoid new dependencies, and make minimal changes primarily in `client/src/pages/Home.jsx`, `client/src/index.css`, and focused frontend tests if needed.
 - Source prompt / `<artifact-root>/request.md` reference: `_workflow/runs/dev/request.md`
 
 ## 3. Questions And Answers
 
 - Questions asked:
-  - Should the hamburger side navigation be mobile-only, with the existing desktop nav kept visible on larger screens?
+  - Should the dot indicators be clickable controls for selecting a specific hero image, or should they be passive indicators only?
 - Answers received:
-  - Yes. Keep desktop header links and "Book Now" for tablet/desktop, then switch at mobile widths to a polished hamburger button that opens a right-side drawer with Home, About, Gallery, and Booking links.
-- Questions skipped: None.
-- Remaining open questions: None blocking.
+  - Make them clickable, accessible buttons that show the active slide and let users jump to a slide.
+- Questions skipped:
+  - No additional questions. The remaining details can be inferred from existing hero code and styling.
+- Remaining open questions:
+  - None blocking.
 
 ## 4. Problem Definition
 
-- Problem being solved: The current mobile navigation appears unprofessional because it exposes the full navigation row on small screens, creating a less intentional mobile experience.
-- Why it matters: Mobile visitors need a clean first impression and direct access to core pages without awkward horizontal navigation.
-- Current pain point: At `max-width: 840px`, `.site-nav` moves onto its own row and scrolls horizontally; at smaller sizes the brand text and header CTA hide, but the full nav remains visible.
-- Expected value: A more polished, expected mobile header pattern with a compact hamburger trigger and dedicated drawer links.
+- Problem being solved: The homepage hero currently displays only one static image, limiting the immediate visual representation of KareBraids work.
+- Why it matters: The hero is the first major brand impression; rotating through real gallery images better showcases braid style range without requiring a layout redesign.
+- Current pain point: `Home.jsx` renders a single `<img>` using `galleryItems[0].image`.
+- Expected value: A richer hero experience that still feels consistent with the existing premium KareBraids visual system.
 
 ## 5. Current State Analysis
 
-- Existing behavior:
-  - `client/src/components/Layout.jsx` renders a sticky header with brand, centered nav links, and `Book Now` CTA.
-  - `client/src/index.css` converts the header to two columns at mobile widths and moves `.site-nav` into a horizontally scrollable row.
-- Existing architecture/components:
-  - React with Vite.
-  - React Router `NavLink` for navigation.
-  - `@phosphor-icons/react` is installed and already used.
-  - Styling is primarily in `client/src/index.css`, with Tailwind v4 imported but the current app uses custom CSS classes.
+- Existing behavior: The homepage hero has text, two CTA buttons, and a right-side media frame using `hero-media editorial-media`. The static image uses `galleryItems[0].image` and the alt text `Woman with copper knotless braids`.
+- Existing architecture/components: React + Vite frontend. Homepage is a single React component in `client/src/pages/Home.jsx`. Styling is centralized in `client/src/index.css`.
 - Existing files/modules likely involved:
-  - `client/src/components/Layout.jsx`
+  - `client/src/pages/Home.jsx`
   - `client/src/index.css`
   - `client/test/site-pages.test.jsx`
-- Existing data flow: Local UI state only; no server data.
-- Existing API/UI/CLI/workflow behavior: UI-only header behavior; no API routes involved.
-- Existing tests or verification coverage:
-  - `client/test/site-pages.test.jsx` renders site pages and checks primary links.
-  - Existing tests do not cover mobile drawer open/close behavior.
+- Existing data flow: Static content comes from `client/src/constants/content.js`. `galleryItems` is imported directly into the homepage.
+- Existing API/UI/CLI/workflow behavior: No API is involved. Existing UI uses CSS variables, class-based styling, `data-reveal`, and `data-parallax`.
+- Existing tests or verification coverage: `client/test/site-pages.test.jsx` verifies homepage content and `data-parallax` existence. Client scripts include `npm test`, `npm run lint`, and `npm run build`.
 
 ## 6. Desired End State
 
-- Expected final behavior:
-  - Desktop/tablet header remains a brand link, visible nav links, and visible `Book Now` CTA.
-  - Mobile header shows brand and a hamburger menu button.
-  - Hamburger opens a right-side navigation drawer with Home, About, Gallery, and Booking links.
-  - Drawer closes via close button, backdrop, Escape key, and selecting a drawer link.
-- User-facing outcome: Mobile navigation feels intentional, polished, and easy to use.
-- Developer-facing outcome: Navigation remains centralized in `Layout.jsx` with focused CSS and tests.
-- System/workflow outcome: No backend, routing, env, database, or deployment changes.
-- Backward compatibility expectations: Existing routes and desktop navigation continue to work.
+- Expected final behavior: The hero image area displays a carousel of the first five `galleryItems` images. Slides auto-advance every 4 to 5 seconds unless reduced motion is preferred. Users can select a slide with accessible dot buttons.
+- User-facing outcome: Visitors see multiple braid images in the same premium hero frame, with small active dot indicators near the bottom of the image.
+- Developer-facing outcome: The carousel is lightweight, dependency-free, and localized to the homepage and CSS.
+- System/workflow outcome: No backend, API, environment, dependency, or deployment changes.
+- Backward compatibility expectations: Existing hero copy, CTA links, frame shape, appointment badge, routes, and page sections continue to behave as before.
 
 ## 7. Scope
 
 - In scope:
-  - Add mobile menu state and drawer markup.
-  - Add hamburger/close icons using installed Phosphor icons.
-  - Style the mobile drawer, backdrop, active links, and transitions in the existing CSS system.
-  - Add/update frontend tests for drawer behavior.
-  - Attempt frontend test, lint, and build verification.
+  - Derive `heroSlides` from `galleryItems.slice(0, 5)`.
+  - Replace the static hero image markup with slide markup.
+  - Add local state/effect for active slide and auto-rotation.
+  - Add clickable accessible dot buttons.
+  - Add CSS for layered slides, fade/scale transition, active dots, mobile responsiveness, and reduced-motion behavior.
+  - Add or update focused frontend tests.
 - Out of scope:
-  - Desktop header redesign.
-  - New routes or content changes.
-  - Backend/API/database changes.
+  - Hero copy redesign.
+  - CTA, navigation, trust strip, services, gallery preview, testimonial, or booking CTA changes.
+  - Gallery data changes.
+  - Backend/API changes.
+  - New dependencies.
   - Deployment changes.
-  - Full typography/color system redesign.
 - Non-goals:
-  - Adding Redux or global state for local menu state.
-  - Adding new dependencies.
-  - Migrating all CSS to Tailwind utility classes.
+  - Full carousel library behavior such as swiping, arrows, thumbnails, or drag gestures.
+  - Reworking site-wide motion.
 - Explicit boundaries:
-  - Touch only navigation-related component/CSS/test files and run-scoped workflow artifacts unless verification reveals an in-scope issue.
+  - Update the homepage hero only and keep changes minimal.
 
 ## 8. Users And Use Cases
 
-- Primary users: Mobile visitors browsing KareBraids services and booking.
-- Secondary users: Tablet/desktop visitors who should see no functional regression.
+- Primary users: KareBraids website visitors evaluating braid styles and booking options.
+- Secondary users: Site owner or developer maintaining the static content.
 - Main use cases:
-  - Open mobile menu.
-  - Navigate to Home, About, Gallery, or Booking.
-  - Close menu without navigating.
+  - Visitor lands on homepage and sees hero imagery rotate automatically.
+  - Visitor clicks a dot to inspect another hero image.
+  - Visitor uses keyboard/screen reader to understand and operate carousel dots.
 - Edge use cases:
-  - Press Escape while drawer is open.
-  - Tap backdrop.
-  - Move between routes from inside the drawer.
-  - Use reduced-motion preferences.
+  - User prefers reduced motion.
+  - Mobile visitor sees the hero image below the hero copy.
+  - JavaScript timers must clean up when the component unmounts.
 
 ## 9. Functional Requirements
 
 - Required behaviors:
-  - Render a hamburger button only for mobile viewports through CSS.
-  - Open a right-side drawer when the hamburger is activated.
-  - Render Home, About, Gallery, and Booking links in the drawer.
-  - Preserve active route styling for drawer links.
-  - Close the drawer by close button, backdrop, Escape key, and link click.
-  - Prevent background page scroll while drawer is open.
+  - `heroSlides` is created from the first five `galleryItems`.
+  - The first slide is active initially.
+  - Active slide changes automatically every 4 to 5 seconds.
+  - Clicking a dot changes the active slide immediately.
+  - Dots expose clear accessible names and active state.
+  - Reduced-motion preference disables or neutralizes auto-motion.
 - Inputs:
-  - User clicks/taps hamburger button, backdrop, close button, nav links, or presses Escape.
+  - Existing `galleryItems` static array.
+  - User clicks on dot buttons.
+  - Browser `prefers-reduced-motion` media query.
 - Outputs:
-  - Drawer open/closed visual state and navigation route changes when a link is selected.
+  - Hero carousel image stack and dot buttons.
+  - Visible active slide and active indicator state.
 - State changes:
-  - Local `isMobileNavOpen` state in `Layout.jsx`.
-  - Temporary `body` class while open if needed for scroll lock.
-- Error states: Not applicable.
-- Permissions/auth expectations: Not applicable.
+  - Local `activeHeroSlide` index changes by interval and dot click.
+- Error states:
+  - Not applicable for remote image load failures beyond normal browser broken-image behavior.
+- Permissions/auth expectations:
+  - Not applicable.
 
 ## 10. Non-Functional Requirements
 
-- Performance expectations: CSS transitions should animate `transform` and `opacity`; avoid layout-heavy animation.
-- Reliability expectations: Menu state should clean up on unmount and route/link selection.
-- Security/privacy expectations: No sensitive data or secrets involved.
-- Accessibility expectations:
-  - Hamburger has a clear accessible name.
-  - Drawer has a navigation label.
-  - Close control has a clear accessible name.
-  - Escape key closes the drawer.
-  - Focus outlines remain visible.
-  - Backdrop is not announced as navigation.
-- Maintainability expectations: Keep nav items defined once and reused.
-- DX expectations: Tests should prove the drawer can be operated through user-level interactions.
+- Performance expectations: Lightweight local state and CSS transitions only; no dependencies; interval cleanup on unmount.
+- Reliability expectations: Interval must not multiply across renders; dot clicks must not break auto-rotation.
+- Security/privacy expectations: No secrets, no new data exposure, no API calls.
+- Accessibility expectations: Dot buttons must be keyboard reachable, labelled, and indicate the current slide with `aria-current` or equivalent active state.
+- Maintainability expectations: Use existing constants and CSS variables; keep component logic easy to read.
+- DX expectations: Existing test/lint/build commands should continue to pass.
 
 ## 11. Affected Surfaces
 
 - Files likely affected:
-  - `client/src/components/Layout.jsx`
+  - `client/src/pages/Home.jsx`
   - `client/src/index.css`
   - `client/test/site-pages.test.jsx`
 - Directories likely affected:
-  - `client/src/components/`
+  - `client/src/pages/`
   - `client/src/`
   - `client/test/`
   - `_workflow/runs/dev/`
 - UI surfaces:
-  - Site header.
-  - Mobile navigation drawer.
-- API routes: Not applicable.
+  - Homepage hero media area only.
+- API routes:
+  - None.
 - Components:
-  - `Layout`
-  - Existing `Button` component remains unchanged unless tests reveal a direct issue.
-- Services: Not applicable.
-- Database/schema: Not applicable.
-- Config/env vars: Not applicable.
+  - `Home` page component.
+- Services:
+  - None.
+- Database/schema:
+  - None.
+- Config/env vars:
+  - None.
 - Tests:
-  - Frontend component tests in `client/test/`.
+  - Focused React Testing Library coverage for carousel rendering and dot selection.
 - Docs:
-  - Workflow artifacts only; durable docs likely unchanged.
+  - Run-scoped workflow artifacts only.
 - Workflow artifacts:
   - `_workflow/runs/dev/request.md`
   - `_workflow/runs/dev/spec.md`
-  - `_workflow/runs/dev/tasks.md` after approval only
+  - `_workflow/runs/dev/tasks.md` after approval
   - `_workflow/runs/dev/progress.md`
   - `_workflow/runs/dev/handoff.md`
-  - final review/release/summary artifacts after implementation
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
 
 ## 12. Dependency And Integration Map
 
 - Internal dependencies:
-  - React Router `NavLink`.
-  - Existing `Button` component.
-  - Existing CSS variables and header classes.
+  - `galleryItems` from `client/src/constants/content.js`.
+  - Existing CSS custom properties in `client/src/index.css`.
+  - Existing `useRevealOnScroll` behavior and `data-parallax` hero attribute.
 - External packages/services:
-  - `@phosphor-icons/react` for hamburger/close icons. Already installed.
-  - `@testing-library/react` and `@testing-library/user-event` for interaction tests. Already installed.
+  - No new packages.
+  - Existing React and testing libraries only.
 - Integration points:
-  - Header navigation routes: `/`, `/about`, `/gallery`, `/booking`.
+  - Homepage imports from `content.js`.
+  - Existing hero CSS selectors such as `.hero-media img` must be adapted carefully.
 - Ordering constraints:
-  - Add tests first, observe expected failure when possible, then implement.
-  - Update CSS after markup/state changes.
-- Migration/setup requirements: None.
+  - Update tests first for TDD evidence.
+  - Then implement markup/state.
+  - Then style and verify responsive/reduced motion behavior.
+- Migration/setup requirements:
+  - None.
 
 ## 13. Data And State Impact
 
-- Data models: Not applicable.
-- Database changes: None.
+- Data models:
+  - No data model changes.
+- Database changes:
+  - None.
 - State management changes:
-  - Add local React state only for the mobile drawer.
-- Cache/session/local storage impact: None.
-- Backward compatibility impact: Existing links and routes stay the same.
+  - Add isolated local React state for the active hero slide only.
+- Cache/session/local storage impact:
+  - None.
+- Backward compatibility impact:
+  - Existing `galleryItems` consumers remain compatible.
 
 ## 14. UX / API / Workflow Expectations
 
 - UX expectations:
-  - Header remains compact on mobile.
-  - Drawer slides in from the right over a muted backdrop.
-  - Drawer uses the existing KareBraids palette, restrained shadows, clear spacing, and no gimmicky effects.
-  - Controls have tactile hover/active/focus states.
-- API contract expectations: Not applicable.
-- CLI/workflow behavior: Follow saved spec approval before planning and implementation.
-- Error handling expectations: Not applicable.
-- Empty/loading/success/failure states: Not applicable for this local UI control.
+  - Carousel should feel like the current static framed portrait has become gently alive, not like a redesigned hero.
+  - Dots should be small, elegant, and brand-colored.
+  - The appointment badge remains readable above the image.
+  - Mobile image height and rounded corners remain consistent with existing breakpoints.
+- API contract expectations:
+  - Not applicable.
+- CLI/workflow behavior:
+  - Follow spec approval gate before task plan and implementation.
+- Error handling expectations:
+  - Not applicable beyond normal image loading.
+- Empty/loading/success/failure states:
+  - Not applicable; static gallery data is present. If fewer than five images ever exist, slicing should still render available images safely.
 
 ## 15. Execution Strategy
 
 - Recommended implementation approach:
-  - Add a focused test that opens and closes the mobile menu with user interactions.
-  - Update `Layout.jsx` with local drawer state, hamburger and close buttons, backdrop, and drawer nav.
-  - Add `useEffect` handlers for Escape key and body scroll lock with cleanup.
-  - Update `index.css` to hide desktop nav on mobile and show the mobile menu trigger/drawer behavior.
-  - Run focused frontend tests, then broader lint/build as feasible.
+  - In `Home.jsx`, define `const heroSlides = galleryItems.slice(0, 5)` outside or inside the component near imports.
+  - Add `useEffect` and `useState` for active slide auto-rotation.
+  - Respect reduced motion by checking `window.matchMedia('(prefers-reduced-motion: reduce)')` in the effect and skipping the interval when matched.
+  - Render all slides in a contained stack so CSS can fade and scale between them.
+  - Use dot buttons with accessible labels and `aria-current` for the active slide.
+  - In CSS, scope carousel image styles so the existing frame dimensions and border radii remain intact.
 - Suggested sequencing:
-  - One vertical task: make mobile drawer navigation work and look polished.
-- Safe rollout/migration approach: CSS keeps desktop navigation unchanged above the mobile breakpoint.
+  1. Add failing test for hero carousel slides/dots.
+  2. Implement hero slide markup and local state.
+  3. Add CSS for active/inactive slides, dots, transition, mobile, and reduced motion.
+  4. Verify focused tests, full tests, lint, and build.
+- Safe rollout/migration approach:
+  - No migration. Single small UI change.
 - Files to inspect before editing:
-  - `client/src/components/Layout.jsx`
+  - `client/src/pages/Home.jsx`
   - `client/src/index.css`
   - `client/test/site-pages.test.jsx`
-  - `client/package.json`
+  - `client/src/constants/content.js`
 - Decisions to avoid until more evidence exists:
-  - Do not add a focus-trap library unless accessibility testing proves it is necessary.
-  - Do not migrate the header to a new styling system.
+  - Do not add arrow controls, swipe gestures, new libraries, or redesign the hero layout.
 
 ## 16. Verification Strategy
 
 - Required automated checks:
-  - Focused Vitest command for updated site page/navigation tests.
-  - `npm test` in `client` if feasible.
-  - `npm run lint` in `client`.
-  - `npm run build` in `client`.
+  - `cd client && npm test -- site-pages.test.jsx`
+  - `cd client && npm test`
+  - `cd client && npm run lint`
+  - `cd client && npm run build`
 - Required manual checks:
-  - Inspect desktop and mobile layouts in browser if a dev server is started during implementation.
-  - Confirm no overlapping text or duplicate visible nav on mobile.
+  - Inspect homepage at mobile and desktop sizes if a dev server/browser check is feasible.
+  - Confirm hero layout, frame, badge, and CTA buttons remain visually intact.
 - Test types needed:
-  - React Testing Library interaction test for opening and closing the drawer.
-  - Existing page render tests should continue passing.
+  - React Testing Library test for rendered slide images/dots and click-to-select behavior.
+  - Timer behavior may be covered with fake timers if low-risk and stable.
 - Build/lint/typecheck expectations:
-  - No new lint errors.
-  - Vite build succeeds.
+  - Existing scripts should pass.
 - Acceptance evidence required:
-  - Test output and/or documented manual/browser checks.
+  - Tests show first five slides/dots are present and active state changes when a dot is clicked.
+  - CSS review shows 4 to 5 second rotation, fade/scale transition, and reduced-motion override.
 - Proof of completion:
-  - Updated component/CSS/tests and workflow progress/review/summary artifacts.
+  - Passing verification commands and final diff audit documented in workflow artifacts.
 
 ## 17. Acceptance Criteria
 
-- [ ] Desktop/tablet header still shows brand, nav links, and "Book Now" CTA.
-- [ ] Mobile header uses a hamburger button instead of showing the horizontal nav row.
-- [ ] Hamburger opens a right-side drawer with Home, About, Gallery, and Booking links.
-- [ ] Drawer closes via close button, backdrop, Escape key, and drawer link selection.
-- [ ] Navigation controls have accessible labels and visible focus states.
-- [ ] Existing routes and page tests continue to pass.
-- [ ] Relevant frontend test, lint, and build verification are attempted and documented.
+- [ ] Homepage hero uses `heroSlides` from the first five `galleryItems`.
+- [ ] Static hero image is replaced by a carousel in the existing hero media frame.
+- [ ] Carousel auto-rotates every 4 to 5 seconds.
+- [ ] Slide transition uses smooth fade with subtle scale/zoom.
+- [ ] Existing hero layout, luxury frame shape, CTA buttons, and "Salon and mobile appointments" badge remain intact.
+- [ ] Small elegant dot indicators appear over or near the bottom of the hero image.
+- [ ] Dot indicators are clickable accessible buttons and show the active slide.
+- [ ] Clicking a dot jumps to the selected slide.
+- [ ] Mobile responsiveness is preserved.
+- [ ] `prefers-reduced-motion` is respected.
+- [ ] No new dependencies are added.
+- [ ] Changes are minimal and localized to the homepage hero, CSS, focused tests, and workflow artifacts.
 
 ## 18. Edge Cases And Failure Modes
 
 - Edge cases:
-  - User opens drawer then changes route.
-  - User presses Escape when drawer is open.
-  - User taps outside the drawer.
-  - Viewport changes while drawer is open.
+  - Reduced-motion users.
+  - Gallery data has fewer than five images in the future.
+  - Dot click occurs shortly before interval tick.
+  - Component unmounts while interval is active.
 - Failure modes:
-  - Body remains scroll-locked after drawer closes.
-  - Mobile drawer appears alongside desktop nav.
-  - Drawer cannot be closed by keyboard.
-  - CSS breakpoint accidentally hides desktop navigation too early.
+  - Interval leak causing rapid rotation.
+  - Inactive slides still visible or clickable.
+  - Image stack collapses height.
+  - Parallax animation conflicts with carousel transitions.
 - Regression risks:
-  - Existing tests expecting two `Book Now` links may need careful handling if mobile CTA markup changes visibility but remains in DOM.
-  - Shared `.nav-link` styles could affect drawer links unexpectedly.
+  - Hero image dimensions change unexpectedly.
+  - Mobile hero loses rounded frame treatment.
+  - Appointment badge overlaps dots poorly.
 - Recovery expectations:
-  - Keep changes scoped and rerun the focused failing command after each fix.
+  - Keep fixes scoped to hero carousel CSS/markup.
 
 ## 19. Risks And Mitigations
 
 - Technical risks:
-  - JSDOM does not evaluate CSS breakpoints, so tests cannot fully prove responsive visibility.
-  - Mitigation: Test DOM behavior and use browser/manual responsive inspection if implementation proceeds.
+  - Timer and `matchMedia` behavior in tests. Mitigation: write narrow tests and mock only if needed.
+  - Existing `@supports (animation-timeline: view()) [data-parallax] img` selector may affect all slide images. Mitigation: scope or override carousel slide transforms carefully.
 - Product/UX risks:
-  - Drawer could feel too generic or too heavy.
-  - Mitigation: Use existing brand palette, tight hierarchy, and minimal motion.
+  - Dots could clutter the appointment badge. Mitigation: position dots near bottom center/left inside media, away from the badge.
 - Security risks:
-  - None identified.
+  - None expected.
 - Scope risks:
-  - Header redesign could expand into broader brand changes.
-  - Mitigation: Preserve desktop header and only change mobile navigation behavior.
+  - Carousel feature could expand to arrows/swipes. Mitigation: keep to requested dots and auto-rotation only.
 - Mitigation plan:
-  - One narrow task with focused acceptance criteria and verification.
+  - Use minimal local state, CSS variables, focused selectors, and verification.
 
 ## 20. Assumptions
 
 - Explicit assumptions:
-  - Mobile breakpoint can follow the existing `840px` and `560px` CSS structure unless implementation evidence suggests a cleaner single breakpoint.
-  - Existing custom CSS classes remain the right styling approach for this feature.
-  - The drawer should include a Booking link, but the separate desktop `Book Now` CTA can remain hidden on narrow mobile as it is today.
-- Confidence level: High.
+  - Local React state is appropriate for isolated carousel UI.
+  - The first gallery item remains the initial hero image.
+  - `galleryItems` titles are acceptable image alt text.
+  - Reduced-motion should skip auto-rotation and transition-heavy animation.
+  - No manual image preloading is required for this small carousel.
+- Confidence level:
+  - High for scope and implementation approach.
 - What to revisit if assumptions are wrong:
-  - Breakpoint choice if the drawer looks cramped on tablets.
-  - Whether Booking should be visually emphasized inside the drawer.
+  - If reduced-motion should still allow manual fade transitions, adjust CSS only.
+  - If the owner wants different images, update the source slice or content data only after explicit request.
 
 ## 21. Open Questions
 
-- Blocking questions: None.
+- Blocking questions:
+  - None.
 - Non-blocking questions:
-  - Should Booking be styled as the primary drawer action?
+  - None currently.
 - Execution impact:
-  - Treat Booking as a slightly stronger drawer link if it fits existing design, but do not block on this.
+  - Implementation can proceed after explicit spec approval.
 
 ## 22. Task Extraction Notes
 
 - Suggested vertical task boundaries:
-  - `TASK-001: Add mobile hamburger drawer navigation`
+  - `TASK-001: Add homepage hero carousel with clickable dots`
 - Suggested first task:
-  - Add tests and implement the mobile drawer in `Layout.jsx` and `index.css`.
+  - Add the carousel behavior, styling, and tests as one small vertical slice because the feature is localized and user-visible only when all pieces work together.
 - Suggested task ordering:
-  - Single vertical task should be sufficient.
+  - Single task is sufficient.
 - Areas that should not become separate tasks:
-  - Backend/API work.
-  - Deployment changes.
-  - Global styling migration.
+  - Do not split CSS, React state, and tests into separate layer tasks.
+  - Do not create a separate data or service task because no API/data logic is involved.
 - How the 3-pass Build -> Refine -> Polish loop should apply:
-  - Iteration 1 Build: Add failing test for drawer interactions, implement basic drawer behavior, pass focused test.
-  - Iteration 2 Refine: Improve accessibility and close behaviors, rerun focused tests and lint.
-  - Iteration 3 Polish: Tighten visual polish/responsive CSS, run broader frontend verification and manual/browser checks if feasible.
+  - Iteration 1 Build: Add failing test for carousel presence/clickable dots, implement basic carousel markup/state/CSS, verify.
+  - Iteration 2 Refine: Add or tighten reduced-motion/timer/accessibility coverage, fix issues, verify.
+  - Iteration 3 Polish: Review mobile/responsive styling and parallax interaction, run full verification, document acceptance.

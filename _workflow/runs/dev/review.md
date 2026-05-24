@@ -1,73 +1,74 @@
-# Review
+# Review: Homepage Hero Image Carousel
 
-## Request
-
-Improve the mobile navigation with a hamburger menu and right-side drawer links.
-
-## Spec File Used
-
-`_workflow/runs/dev/spec.md`
-
-## Task Plan Used
-
-`_workflow/runs/dev/tasks.md`
-
-## Tasks Reviewed
-
-- TASK-001: Add mobile hamburger drawer navigation
-
-## Iteration Evidence Reviewed
-
-- Iteration 1 Build: Red/Green/Refactor evidence recorded.
-- Iteration 2 Refine: Red/Green/Refactor evidence recorded.
-- Iteration 3 Polish: Red/Green/Refactor evidence recorded.
-
-## TDD-First Evidence Reviewed
-
-- Tests were added before implementation changes.
-- Expected failures were observed before implementation/refinement/polish changes.
-- Passing verification was recorded after implementation and after final refinement.
-- Missing-test exceptions: none.
+- Request: Implement a rotating hero image carousel on the KareBraids homepage.
+- Spec file used: `_workflow/runs/dev/spec.md`
+- Task plan used: `_workflow/runs/dev/tasks.md`
+- Tasks reviewed:
+  - TASK-001: Add homepage hero carousel with clickable dots
 
 ## Bugs Found
 
-- Ambiguous close-button query because the backdrop and close icon shared matching accessible text. Fixed by changing the backdrop label to `Dismiss mobile navigation`.
-- Gallery link test matched desktop and mobile links. Fixed by scoping the query to the mobile navigation region.
+- Fixed during implementation:
+  - `window.matchMedia` guard crashed in jsdom when `matchMedia` existed but was not callable.
+  - Initial test counted only accessible images, but inactive slides are intentionally `aria-hidden`; test was corrected to assert slide structure.
+  - Dot wrapper had an accessible label but no semantic group role.
+  - Mobile dot indicators overlapped with the appointment badge; CSS moved dots above the badge on mobile.
 
 ## Scope Creep Check
 
-No scope creep found. Changes are limited to navigation component, CSS, tests, and run-scoped workflow artifacts.
+- Scope respected.
+- Homepage hero media area was updated.
+- Existing hero copy, CTAs, frame shape, and appointment badge were preserved.
+- No backend, API, routing, data model, env, deployment, or dependency changes were made.
 
 ## Final Diff Audit
 
-- `git diff --stat` ran.
-- `git diff` ran for implementation files and run-scoped artifacts.
-- Diff matches the saved spec.
-- Unrelated pre-existing dirty files remain outside implementation scope: `AGENTS.md`, `RUN_WORKFLOW.md`, `WORK_REQUEST.md`, `docs/PROMPTS.md`.
-- Tests were added for changed behavior.
-- No generated temporary Playwright artifacts remain; `.playwright-cli` was removed after verification.
-- No secrets or sensitive values were added.
+- `git diff --stat` completed.
+- `git diff -- client/src/pages/Home.jsx client/src/index.css client/test/site-pages.test.jsx` completed.
+- Diff matches the saved and approved spec.
+- Expected implementation files changed:
+  - `client/src/pages/Home.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+- Expected workflow artifacts changed:
+  - `_workflow/runs/dev/request.md`
+  - `_workflow/runs/dev/spec.md`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
+- No generated screenshots, logs, accidental temp files, secrets, or credentials remain in the repo.
+- Git reported CRLF normalization warnings for modified files; no behavior impact identified.
 
 ## Failure Recovery Notes
 
-See bugs found. Both issues were in-scope and resolved with targeted changes.
+- Recovered from expected TDD red failures in each iteration.
+- Removed one accidental untracked file from a failed shell quoting attempt during browser verification.
+- Used Playwright CLI fallback because the in-app browser Node control tool was not exposed by tool discovery.
 
 ## Missing Tests
 
-No missing automated tests identified for the implemented behavior. CSS breakpoint visibility was additionally checked with Playwright CLI because JSDOM does not evaluate responsive CSS.
+- No required test gap identified for the requested behavior.
+- The test suite covers dot rendering, click-to-select, 4.5 second auto-rotation, and reduced-motion change handling.
 
 ## Security Concerns
 
-None identified.
+- None identified.
+- No secrets, credentials, API URLs, or sensitive data were added.
 
 ## Architecture Concerns
 
-None. Local UI state is appropriate for an isolated drawer.
+- None identified.
+- Carousel state is local UI state and does not use Redux or duplicate server data.
+- No API/data logic was added to UI components.
 
 ## Follow-Up Tasks
 
-None required.
+- None required for this request.
 
 ## Final Review Verdict
 
-Passed.
+- Passed. The implementation satisfies the approved spec and acceptance criteria.
