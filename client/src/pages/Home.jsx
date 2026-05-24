@@ -1,10 +1,57 @@
+import { useEffect, useState } from 'react'
 import { CalendarCheck, MapPin, Scissors, ShieldCheck } from '@phosphor-icons/react'
 import { Button } from '../components/Button.jsx'
 import { galleryItems, services, testimonials } from '../constants/content.js'
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll.js'
 
+const heroSlides = galleryItems.slice(0, 5)
+const heroRotationMs = 4500
+
 export function Home() {
+  const [activeHeroSlide, setActiveHeroSlide] = useState(0)
+
   useRevealOnScroll()
+
+  useEffect(() => {
+    if (heroSlides.length < 2) return undefined
+
+    const motionQuery =
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia('(prefers-reduced-motion: reduce)')
+        : null
+    let rotationId
+
+    const clearRotation = () => {
+      if (!rotationId) return
+      window.clearInterval(rotationId)
+      rotationId = undefined
+    }
+
+    const startRotation = () => {
+      clearRotation()
+      rotationId = window.setInterval(() => {
+        setActiveHeroSlide((currentSlide) => (currentSlide + 1) % heroSlides.length)
+      }, heroRotationMs)
+    }
+
+    const syncRotation = () => {
+      if (motionQuery?.matches) {
+        clearRotation()
+        return
+      }
+
+      startRotation()
+    }
+
+    syncRotation()
+
+    motionQuery?.addEventListener?.('change', syncRotation)
+
+    return () => {
+      clearRotation()
+      motionQuery?.removeEventListener?.('change', syncRotation)
+    }
+  }, [])
 
   return (
     <>
@@ -23,8 +70,30 @@ export function Home() {
             </Button>
           </div>
         </div>
-        <div className="hero-media editorial-media" aria-label="Featured braid style" data-parallax data-reveal>
-          <img alt="Woman with copper knotless braids" src={galleryItems[0].image} />
+        <div className="hero-media editorial-media" aria-label="Featured braid styles" data-parallax data-reveal>
+          <div className="hero-carousel" role="region" aria-label="Featured braid styles carousel">
+            {heroSlides.map((slide, index) => (
+              <img
+                alt={slide.title}
+                aria-hidden={activeHeroSlide === index ? undefined : 'true'}
+                className={`hero-slide${activeHeroSlide === index ? ' is-active' : ''}`}
+                key={slide.id}
+                src={slide.image}
+              />
+            ))}
+            <div className="hero-carousel-dots" aria-label="Hero image slides" role="group">
+              {heroSlides.map((slide, index) => (
+                <button
+                  aria-current={activeHeroSlide === index ? 'true' : undefined}
+                  aria-label={`Show ${slide.title}`}
+                  className={`hero-carousel-dot${activeHeroSlide === index ? ' is-active' : ''}`}
+                  key={slide.id}
+                  onClick={() => setActiveHeroSlide(index)}
+                  type="button"
+                />
+              ))}
+            </div>
+          </div>
           <div className="hero-note">
             <Scissors aria-hidden="true" size={22} weight="duotone" />
             <span>Salon and mobile appointments</span>

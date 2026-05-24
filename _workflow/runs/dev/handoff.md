@@ -6,7 +6,7 @@
 - Current worktree path: `C:/Users/laura.bolas/projects/karebraids/dev`.
 - Run id: dev.
 - Artifact root: `_workflow/runs/dev/`.
-- Request: Improve mobile navigation with hamburger menu and right-side mobile drawer.
+- Request: Implement a rotating hero image carousel on the KareBraids homepage.
 - Request classification: feature.
 - Scope: small.
 - Risk: medium-low.
@@ -15,7 +15,7 @@
 - Task plan file: `_workflow/runs/dev/tasks.md`.
 - Spec approval: Approved by user response `approve spec`.
 - Implementation status: Complete.
-- Last completed task: TASK-001 Add mobile hamburger drawer navigation.
+- Last completed task: TASK-001 Add homepage hero carousel with clickable dots.
 - Current task: None.
 - Next step: User review or commit.
 
@@ -23,87 +23,99 @@
 
 ### Original Request
 
-The mobile navigation does not look professional. Add a hamburger menu and side navigation with links for mobile.
+Implement a rotating hero image carousel on the KareBraids homepage using the first five images from `galleryItems`, preserving the existing hero layout and styling.
 
 ### Confirmed Understanding
 
-Keep the current desktop/tablet header links and "Book Now" CTA. At mobile widths, replace the current horizontal mobile navigation with a polished hamburger button that opens a right-side drawer containing Home, About, Gallery, and Booking links.
+The homepage hero now replaces the previous static image with a lightweight carousel using the first five gallery images. It auto-rotates every 4.5 seconds, uses a smooth fade and subtle scale transition, preserves the surrounding hero copy, CTA buttons, luxury frame shape, decorative treatment, and "Salon and mobile appointments" badge, and includes accessible clickable dot controls.
 
 ### Decisions Made
 
-- Mobile drawer is mobile-only.
-- Desktop/tablet navigation remains visible and functionally unchanged.
-- Side navigation opens from the right.
-- Drawer links are Home, About, Gallery, and Booking.
+- `heroSlides` is created from `galleryItems.slice(0, 5)`.
+- Carousel state is local React state.
+- Dot indicators are accessible clickable buttons in a named group.
+- Clicking a dot jumps directly to that slide.
+- Auto-rotation is 4500ms.
+- `prefers-reduced-motion` disables ongoing auto-rotation and CSS transition duration.
+- No new dependencies were added.
 
 ### Assumptions
 
-- Existing route structure remains unchanged.
-- No new dependencies are needed because `@phosphor-icons/react` is already installed.
-- Drawer should close when a link is selected, when the backdrop is clicked, or when Escape is pressed.
-- Drawer should be accessible with labeled controls, focusable links, and body scroll lock while open.
+- `galleryItems` titles are acceptable hero image alt text.
+- Existing remote image URLs remain the source of truth for gallery imagery.
+- No arrows, swipe, drag, or thumbnails are needed for this request.
 
-### In Scope
+### In Scope Completed
 
-- Update mobile header/navigation UI.
-- Add hamburger open button and close button.
-- Add mobile right-side drawer and backdrop.
-- Preserve active route styling.
-- Add or update focused frontend tests.
-- Run relevant frontend verification.
+- Updated homepage hero rendering in `client/src/pages/Home.jsx`.
+- Added hero carousel CSS in `client/src/index.css`.
+- Added focused frontend tests in `client/test/site-pages.test.jsx`.
+- Verified focused tests, full tests, lint, build, and responsive browser screenshots.
 
 ### Out Of Scope
 
-- Desktop navigation redesign.
-- Route changes.
-- Backend/API/database changes.
-- Deployment changes.
-- Full brand redesign.
+- Redesigning the hero layout or typography.
+- Changing CTA buttons, hero text, trust strip, services, gallery preview, testimonials, or booking CTA.
+- Changing gallery data or adding API/data fetching logic.
+- Adding dependencies.
+- Backend, database, env, deployment, or routing changes.
 
 ### Acceptance Criteria
 
-- Desktop/tablet header still shows brand, nav links, and "Book Now" CTA.
-- Mobile header shows brand and hamburger button instead of horizontal nav links.
-- Hamburger opens a right-side drawer with Home, About, Gallery, and Booking links.
-- Drawer can be closed via close button, backdrop, Escape key, and link selection.
-- Navigation controls are accessible with usable labels and focus styles.
-- Relevant frontend tests and build/lint verification are attempted and documented.
+- [x] Homepage hero uses the first five `galleryItems` images as slides.
+- [x] Static single hero image is replaced by an auto-rotating carousel.
+- [x] Rotation timing is between 4 and 5 seconds per image.
+- [x] Slide transition is a smooth fade with subtle scale/zoom.
+- [x] Existing hero layout, luxury frame shape, CTA buttons, and appointment badge remain intact.
+- [x] Dot indicators are small, visually consistent with the brand, and positioned over or near the hero image bottom.
+- [x] Dot indicators are accessible clickable buttons with active-slide state.
+- [x] Clicking a dot jumps to the selected slide.
+- [x] Mobile layout remains responsive.
+- [x] `prefers-reduced-motion` is respected.
+- [x] No new dependencies are added.
+- [x] Changes are minimal and localized.
 
 ### Risks And Edge Cases
 
-- Avoid body scroll leaks when drawer is open.
-- Avoid duplicate visible nav links on mobile.
-- Avoid focus/keyboard traps that make the drawer hard to close.
-- Avoid desktop regressions from shared header markup.
+- Existing remote gallery image URLs must remain reachable for images to display.
+- Full-page screenshots can show blank reveal-on-scroll sections until the page is scrolled; this was pre-existing behavior and not changed.
 
 ### Remaining Open Questions
 
-- None blocking. Visual details can follow existing KareBraids palette and spacing.
+- None.
 
 ## Dirty Worktree
 
-Existing dirty files before implementation:
+Current dirty files are expected for this completed request:
 
-- `M AGENTS.md`
-- `M RUN_WORKFLOW.md`
-- `M WORK_REQUEST.md`
-- `M docs/PROMPTS.md`
-- `?? _workflow/`
+- `_workflow/runs/dev/handoff.md`
+- `_workflow/runs/dev/progress.md`
+- `_workflow/runs/dev/request.md`
+- `_workflow/runs/dev/spec.md`
+- `_workflow/runs/dev/tasks.md`
+- `_workflow/runs/dev/verification.md`
+- `_workflow/runs/dev/review.md`
+- `_workflow/runs/dev/release-notes.md`
+- `_workflow/runs/dev/summary.md`
+- `client/src/index.css`
+- `client/src/pages/Home.jsx`
+- `client/test/site-pages.test.jsx`
 
-No known overlap with planned frontend implementation files yet.
+No unexpected untracked files remain after cleanup.
 
 ## Verification Status
 
 - `npm test -- site-pages.test.jsx`: passed.
-- `npm test`: passed.
+- `npm test`: passed, 3 test files / 16 tests.
 - `npm run lint`: passed.
 - `npm run build`: passed.
-- Playwright CLI responsive checks passed for mobile `390x844` and desktop `1280x800`; no console errors.
+- Playwright CLI responsive screenshot checks passed for desktop `1280x800` and mobile `390x844`.
+- Vite dev server is running for review at `http://127.0.0.1:5177/`.
 
 ## Workflow Health
 
 - Current status: Passed.
-- Notes: Spec was approved before task planning; task completed with three iterations and TDD-first evidence; final review, verification, release notes, and summary are saved.
+- Notes: Request synced, spec approved before task planning, task completed with three iterations and TDD-first evidence, final verification/review/release notes/summary saved, final diff audit completed, and acceptance criteria met.
 
 ## Final Artifacts
 

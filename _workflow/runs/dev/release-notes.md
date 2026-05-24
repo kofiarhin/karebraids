@@ -1,55 +1,57 @@
-# Release Notes
+# Release Notes: Homepage Hero Image Carousel
 
-## Request
-
-Improve mobile navigation with a hamburger menu and side navigation links for mobile.
+- Request: Implement a rotating hero image carousel on the KareBraids homepage.
 
 ## User-Facing Changes
 
-- Mobile header now uses a hamburger button instead of the horizontal nav row.
-- Tapping the hamburger opens a right-side drawer with Home, About, Gallery, and Booking links.
-- Drawer closes from the close button, backdrop, Escape key, or selecting a drawer link.
-- Booking is visually emphasized as the primary drawer action.
-- Desktop/tablet navigation remains unchanged.
+- Homepage hero now rotates through the first five gallery images.
+- Added small clickable dot controls over the hero image.
+- Dot controls show the active slide and let users jump directly to another slide.
+- The existing hero layout, CTA buttons, luxury frame, and "Salon and mobile appointments" badge remain in place.
+- Mobile styling keeps the dots visible above the appointment badge.
+- Reduced-motion users do not receive ongoing automatic carousel motion.
 
 ## Developer Changes
 
-- Added local drawer state and focus management in `Layout.jsx`.
-- Added mobile drawer/backdrop responsive styles in `index.css`.
-- Added React Testing Library coverage for drawer open/close behavior and accessibility behavior.
+- Added local hero carousel state and timer cleanup in `client/src/pages/Home.jsx`.
+- Added carousel slide, dot, focus, mobile, and reduced-motion CSS in `client/src/index.css`.
+- Added React Testing Library coverage for carousel rendering, click behavior, auto-rotation, and reduced-motion behavior.
 
 ## New Routes/APIs
 
-none
+- none
 
 ## New Env Vars
 
-none
+- none
 
 ## Database/Schema Changes
 
-none
+- none
 
 ## Dependencies Added/Removed
 
-none
+- none
 
 ## Test Commands Run
 
-- `npm test -- site-pages.test.jsx`
-- `npm test`
-- `npm run lint`
-- `npm run build`
-- Playwright CLI responsive checks
+- `cd client && npm test -- site-pages.test.jsx`
+- `cd client && npm test`
+- `cd client && npm run lint`
+- `cd client && npm run build`
+- Playwright CLI screenshot checks for desktop and mobile homepage hero.
 
 ## Known Limitations
 
-JSDOM cannot prove CSS breakpoint visibility; responsive behavior was verified with Playwright CLI.
+- Carousel uses existing remote gallery image URLs, so image display still depends on those external images loading.
+- No swipe, arrows, or drag controls were added because they were out of scope.
 
 ## Follow-Up Work
 
-none
+- none
 
 ## Suggested Commit Message
 
-`feature: add mobile navigation drawer`
+```txt
+feature: add homepage hero carousel
+```
