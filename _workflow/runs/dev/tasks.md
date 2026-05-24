@@ -1,0 +1,111 @@
+# Task Plan
+
+- Spec file used: `_workflow/runs/dev/spec.md`
+- Planning date: 2026-05-24
+- Progress and summary files read:
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/summary.md` was absent/empty during planning
+- Handoff file read: `_workflow/runs/dev/handoff.md`
+- Explicit spec approval: user replied `approve spec`
+- Detailed spec sections used:
+  - Section 5 Current State Analysis
+  - Section 6 Desired End State
+  - Section 7 Scope
+  - Section 9 Functional Requirements
+  - Section 10 Non-Functional Requirements
+  - Section 11 Affected Surfaces
+  - Section 12 Dependency And Integration Map
+  - Section 14 UX / API / Workflow Expectations
+  - Section 15 Execution Strategy
+  - Section 16 Verification Strategy
+  - Section 17 Acceptance Criteria
+  - Section 18 Edge Cases And Failure Modes
+  - Section 19 Risks And Mitigations
+  - Section 20 Assumptions
+  - Section 22 Task Extraction Notes
+
+## Task List
+
+### TASK-001: Add mobile hamburger drawer navigation
+
+- Status: Done
+- Objective: Replace the mobile horizontal navigation row with a hamburger button that opens a polished right-side drawer containing Home, About, Gallery, and Booking links while preserving desktop/tablet navigation.
+- Files likely affected:
+  - `client/src/components/Layout.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+- Checklist:
+  - [x] Add or update a failing React Testing Library test for opening/closing the drawer.
+  - [x] Add local state and drawer markup to `Layout.jsx`.
+  - [x] Add Escape key and body scroll lock cleanup.
+  - [x] Add responsive CSS for hamburger, drawer, backdrop, and mobile nav behavior.
+  - [x] Preserve desktop/tablet nav behavior.
+  - [x] Run focused tests, lint, build, and browser/manual responsive verification when feasible.
+- Iteration plan:
+  - Iteration 1 Build:
+    - Goal: Prove and implement core drawer open/close behavior.
+    - Changes made: Added failing drawer interaction test, added local mobile nav state, hamburger button, drawer/backdrop markup, body scroll lock, Escape handler, close button, drawer links, and base responsive CSS.
+    - Test plan: Add drawer interaction test; observe expected Red; implement smallest passing change.
+    - Red phase evidence: `npm test -- site-pages.test.jsx` failed because the expected `Open mobile navigation` button did not exist.
+    - Green phase evidence: `npm test -- site-pages.test.jsx` passed after implementation; 5 tests passed.
+    - Refactor phase evidence: Backdrop label was separated from close-button label and the focused test still passed.
+    - Test commands run: `npm test -- site-pages.test.jsx`.
+    - Verification command/result: Passed.
+    - Review findings: Core drawer behavior worked; label overlap was corrected.
+    - Acceptance status: Partially met; further close paths and polish remained for later iterations.
+    - Remaining issues: Add broader close behavior and visual polish.
+    - Next action: Iteration 2 Refine.
+  - Iteration 2 Refine:
+    - Goal: Tighten accessibility and cleanup behavior.
+    - Changes made: Added tests for Escape, backdrop, link selection, body scroll cleanup, and focus behavior. Added refs so opening the drawer focuses the close button and closing returns focus to the trigger.
+    - Test plan: Add or update Escape/link-close/body-class expectations as needed.
+    - Red phase evidence: `npm test -- site-pages.test.jsx` failed after adding a focus-transfer expectation; focus stayed on the hamburger instead of moving to the drawer close button.
+    - Green phase evidence: `npm test -- site-pages.test.jsx` passed after adding focus refs; 6 tests passed.
+    - Refactor phase evidence: Scoped the duplicated Gallery link query to the mobile navigation region and reran the focused test successfully.
+    - Test commands run: `npm test -- site-pages.test.jsx`.
+    - Verification command/result: Passed.
+    - Review findings: Escape, backdrop, and drawer link selection all close the drawer; body scroll class cleans up.
+    - Acceptance status: Partially met; final visual distinction and broader checks remained.
+    - Remaining issues: Polish the Booking drawer action and run full verification.
+    - Next action: Iteration 3 Polish.
+  - Iteration 3 Polish:
+    - Goal: Polish responsive styling and verify full frontend health.
+    - Changes made: Added a primary visual treatment for the Booking drawer link and verified mobile/desktop header behavior in a real browser viewport.
+    - Test plan: Add or update static/DOM expectations only if needed; run broader verification.
+    - Red phase evidence: `npm test -- site-pages.test.jsx` failed after adding an expectation that the Booking drawer link has `primary`.
+    - Green phase evidence: `npm test -- site-pages.test.jsx` passed after adding the primary class and CSS.
+    - Refactor phase evidence: Full verification passed after final CSS/markup review.
+    - Test commands run: `npm test -- site-pages.test.jsx`, `npm test`, `npm run lint`, `npm run build`, Playwright CLI responsive checks.
+    - Verification command/result: Passed.
+    - Review findings: Desktop nav is preserved; mobile snapshot shows only hamburger in header; opened drawer exposes four links and focuses close button; no console errors.
+    - Acceptance status: Complete.
+    - Remaining issues: None.
+    - Next action: Final review and summary.
+- Test plan:
+  - `npm test -- site-pages.test.jsx` from `client`
+  - `npm test` from `client`
+  - `npm run lint` from `client`
+  - `npm run build` from `client`
+  - Browser/manual responsive check of mobile and desktop header if feasible
+- Red phase evidence: Recorded in each iteration above.
+- Green phase evidence: Recorded in each iteration above.
+- Refactor phase evidence: Recorded in each iteration above.
+- Test commands run: `npm test -- site-pages.test.jsx`; `npm test`; `npm run lint`; `npm run build`; Playwright CLI responsive snapshots.
+- Acceptance criteria:
+  - [x] Desktop/tablet header still shows brand, nav links, and "Book Now" CTA.
+  - [x] Mobile header uses a hamburger button instead of showing the horizontal nav row.
+  - [x] Hamburger opens a right-side drawer with Home, About, Gallery, and Booking links.
+  - [x] Drawer closes via close button, backdrop, Escape key, and drawer link selection.
+  - [x] Navigation controls have accessible labels and visible focus states.
+  - [x] Existing routes and page tests continue to pass.
+  - [x] Relevant frontend test, lint, and build verification are attempted and documented.
+- Acceptance result: Complete.
+- Verification commands: Passed.
+- Stop condition: Stop if existing dirty implementation files overlap unexpectedly, if tests fail for unrelated reasons that require broad changes, or if browser verification exposes a layout defect that cannot be fixed in scope.
+- Out-of-scope items:
+  - Desktop redesign.
+  - Route/API/backend/database/deployment changes.
+  - New dependencies.
+  - Styling system migration.

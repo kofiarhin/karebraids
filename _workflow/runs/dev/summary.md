@@ -1,0 +1,44 @@
+# Summary
+
+## 2026-05-24 - Mobile Navigation Drawer
+
+- Request: Improve mobile navigation with hamburger menu and side navigation links for mobile.
+- Spec file used: `_workflow/runs/dev/spec.md`
+- Detailed spec completeness: Complete; all required sections were present before planning.
+- Task plan used: `_workflow/runs/dev/tasks.md`
+- Review file used: `_workflow/runs/dev/review.md`
+- Release notes file used: `_workflow/runs/dev/release-notes.md`
+- Tasks completed:
+  - TASK-001: Add mobile hamburger drawer navigation
+- Iteration evidence summary:
+  - Iteration 1 Build: Red failure for missing hamburger, Green implementation, Refactor label cleanup.
+  - Iteration 2 Refine: Red failure for focus transfer, Green focus management, Refactor scoped duplicated link query.
+  - Iteration 3 Polish: Red failure for missing primary Booking class, Green primary action styling, final verification.
+- Files changed:
+  - `client/src/components/Layout.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+  - `_workflow/runs/dev/*`
+- Verification run:
+  - `npm test -- site-pages.test.jsx`: passed.
+  - `npm test`: passed.
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Playwright CLI responsive checks: passed for mobile and desktop.
+- Acceptance results:
+  - [x] Desktop/tablet header still shows brand, nav links, and "Book Now" CTA.
+  - [x] Mobile header uses a hamburger button instead of showing the horizontal nav row.
+  - [x] Hamburger opens a right-side drawer with Home, About, Gallery, and Booking links.
+  - [x] Drawer closes via close button, backdrop, Escape key, and drawer link selection.
+  - [x] Navigation controls have accessible labels and visible focus states.
+  - [x] Existing routes and page tests continue to pass.
+  - [x] Relevant frontend test, lint, and build verification are attempted and documented.
+- Failure recovery notes:
+  - Fixed ambiguous close labels and scoped mobile Gallery link test.
+- Final diff audit:
+  - Implementation diff matches approved spec.
+  - Pre-existing unrelated dirty docs/workflow files remain untouched.
+  - No generated temporary files remain.
+  - No secrets added.
+- Unresolved issues: none.
+- Next recommended work: User review, then commit with `feature: add mobile navigation drawer`.
