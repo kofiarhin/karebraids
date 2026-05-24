@@ -5,11 +5,12 @@ Use these prompts with OpenAI Codex, Claude Code, Cursor, or similar coding agen
 ## Universal Work Request
 
 ```txt
-Read RUN_WORKFLOW.md and execute it using WORK_REQUEST.md.
+Read RUN_WORKFLOW.md and execute it using the direct request or <artifact-root>/request.md.
 
 Follow AGENTS.md.
+Before writing any generated workflow artifact, detect current branch, current worktree path, run id, and artifact root. Use `CODEX_WORKFLOW_RUN_ID` when set; otherwise derive the run id from `git branch --show-current`, sanitize slashes to `__`, and use `_workflow/runs/<run-id>/`.
 Ask clarifying questions until about 90% understanding before touching code unless the request says "skip questions".
-Generate a saved detailed spec in _spec/, stop for explicit spec approval, generate a vertical task plan in _task/ from the approved spec with an Iteration plan, execute one Ralph Wiggum-style task at a time through Build -> Refine -> Polish, record iteration evidence in _progress/progress.md, write a final summary in _summary/, then provide a final response and suggested commit message.
+Generate a saved detailed spec in <artifact-root>/spec.md, stop for explicit spec approval, generate a vertical task plan in <artifact-root>/tasks.md from the approved spec with an Iteration plan, execute one Ralph Wiggum-style task at a time through Build -> Refine -> Polish, record iteration evidence in <artifact-root>/progress.md, write a final summary in <artifact-root>/summary.md, then provide a final response and suggested commit message.
 ```
 
 ## Direct Request With Questions
@@ -20,7 +21,7 @@ Use this as the active request:
 
 Follow RUN_WORKFLOW.md.
 First ask focused clarifying questions about goal, users, exact behavior, edge cases, UI/API expectations, data model, constraints, success criteria, and out-of-scope work.
-Do not touch code until questions are answered, a detailed spec is saved in _spec/, the user explicitly approves that spec, and a task plan derived from the approved spec is saved in _task/.
+Do not touch code until questions are answered, a detailed spec is saved in <artifact-root>/spec.md, the user explicitly approves that spec, and a task plan derived from the approved spec is saved in <artifact-root>/tasks.md.
 ```
 
 ## Direct Request That Skips Questions
@@ -32,17 +33,17 @@ Use this as the active request:
 skip questions
 
 Follow RUN_WORKFLOW.md.
-Generate a best-effort detailed spec in _spec/ and clearly list assumptions.
-Stop and wait for explicit spec approval before generating _task/.
-Generate a vertical task plan in _task/ from the approved spec.
-Before implementation, read _progress/progress.md and the latest relevant _summary/ entry.
+Generate a best-effort detailed spec in <artifact-root>/spec.md and clearly list assumptions.
+Stop and wait for explicit spec approval before generating <artifact-root>/tasks.md.
+Generate a vertical task plan in <artifact-root>/tasks.md from the approved spec.
+Before implementation, read <artifact-root>/progress.md and the latest relevant <artifact-root>/summary.md entry.
 Then execute tasks one at a time through the full Build -> Refine -> Polish hardening loop only if safe.
 ```
 
 ## Intake Questions
 
 ```txt
-Read WORK_REQUEST.md and AGENTS.md.
+Read <artifact-root>/request.md and AGENTS.md. Use root WORK_REQUEST.md only as manual legacy input if the run-scoped request is missing.
 
 Ask the fewest focused questions needed to reach about 90% understanding.
 
@@ -64,10 +65,10 @@ Do not inspect or edit implementation code yet.
 ## Spec Generation
 
 ```txt
-Using the active request, intake answers, repo intake, dirty worktree status, _handoff/current.md, _progress/progress.md, the latest relevant _summary/ entry, and durable project docs, generate a detailed, implementation-aware execution blueprint.
+Using the active request, intake answers, repo intake, dirty worktree status, <artifact-root>/handoff.md, <artifact-root>/progress.md, the latest relevant <artifact-root>/summary.md entry, and durable project docs, generate a detailed, implementation-aware execution blueprint.
 
-Save it in _spec/ with a timestamped or slugged filename, for example:
-_spec/2026-05-10-add-dark-theme.md
+Save it in <artifact-root>/spec.md with a timestamped or slugged filename, for example:
+<artifact-root>/spec.md
 
 The spec must be detailed but not padded. Use "Not applicable" for irrelevant sections instead of deleting them.
 
@@ -84,7 +85,7 @@ Include these required sections:
 2. Original Request
    - Raw user request
    - Normalized request
-   - Source prompt / WORK_REQUEST reference
+   - Source prompt / <artifact-root>/request.md reference
 3. Questions And Answers
    - Questions asked
    - Answers received
@@ -212,7 +213,7 @@ Do not implement code.
 After saving the spec, display this exact approval prompt and stop before task planning:
 
 ```txt
-Spec saved at _spec/<file>.md
+Spec saved at <artifact-root>/spec.md
 
 Spec summary:
 - Goal:
@@ -223,7 +224,7 @@ Spec summary:
 - Risks/open questions:
 
 Review the spec here:
-_spec/<file>.md
+<artifact-root>/spec.md
 
 Reply with one of:
 - approve spec
@@ -231,13 +232,13 @@ Reply with one of:
 - cancel workflow
 ```
 
-Do not generate _task/ until the user explicitly approves the spec.
+Do not generate <artifact-root>/tasks.md until the user explicitly approves the spec.
 ```
 
 ## Spec Quality Review
 
 ```txt
-Review the saved _spec/ file before task planning.
+Review the saved <artifact-root>/spec.md file before task planning.
 
 Confirm:
 1. All 22 required detailed spec sections are present.
@@ -249,14 +250,14 @@ Confirm:
 7. Task Extraction Notes identify likely vertical task boundaries, suggested first task, ordering, areas not to split out, and how Build -> Refine -> Polish applies.
 8. No open question blocks safe planning.
 
-If required sections are missing or too vague, repair the spec and repeat the spec approval gate before generating _task/.
+If required sections are missing or too vague, repair the spec and repeat the spec approval gate before generating <artifact-root>/tasks.md.
 If planning proceeds with missing required sections, without explicit spec approval, or before the approval gate, workflow health must be Partial or Failed depending on severity.
 ```
 
 ## Request Classification
 
 ```txt
-Read WORK_REQUEST.md and the saved _spec/ file.
+Read <artifact-root>/request.md and the saved <artifact-root>/spec.md file.
 
 Classify the request as one primary type:
 - feature
@@ -282,7 +283,7 @@ Do not edit implementation files.
 ## Repo Intake
 
 ```txt
-Inspect the repository for the saved spec in _spec/.
+Inspect the repository for the saved spec in <artifact-root>/spec.md.
 
 Find:
 1. Stack and major frameworks.
@@ -300,7 +301,7 @@ Do not implement the request yet.
 ## Vertical Task Generation
 
 ```txt
-Using WORK_REQUEST.md, the saved and explicitly approved detailed _spec/ file, _progress/progress.md, the latest relevant _summary/ entry, _handoff/current.md, and durable docs, generate a vertical task plan in _task/.
+Using <artifact-root>/request.md, the saved and explicitly approved detailed <artifact-root>/spec.md file, <artifact-root>/progress.md, the latest relevant <artifact-root>/summary.md entry, <artifact-root>/handoff.md, and durable docs, generate a vertical task plan in <artifact-root>/tasks.md.
 
 Do not run this prompt if the spec approval gate is still pending. If a spec exists but no task plan exists, show the spec approval prompt again and wait for user approval instead of generating tasks automatically.
 
@@ -474,10 +475,10 @@ Execute exactly one task through the full 3-pass hardening loop:
 <TASK-ID> - <TASK_TITLE>
 
 Before editing:
-- Read _progress/progress.md.
-- Read the latest relevant _summary/ entry.
-- Read the saved _spec/ file.
-- Read the saved _task/ plan.
+- Read <artifact-root>/progress.md.
+- Read the latest relevant <artifact-root>/summary.md entry.
+- Read the saved <artifact-root>/spec.md file.
+- Read the saved <artifact-root>/tasks.md plan.
 - Check git status.
 - Inspect only relevant files.
 
@@ -486,8 +487,8 @@ After editing:
 - Run or recommend verification commands in each iteration.
 - Critique the result in each iteration.
 - Fix only in-scope defects.
-- Append to _progress/progress.md with task ID, status, files changed, iteration evidence, verification result, blockers, and next step.
-- Create or append the relevant _summary/ entry if the workflow stops here.
+- Append to <artifact-root>/progress.md with task ID, status, files changed, iteration evidence, verification result, blockers, and next step.
+- Create or append the relevant <artifact-root>/summary.md entry if the workflow stops here.
 - Check git status again.
 
 Do not implement any other task.
@@ -503,21 +504,21 @@ Execution mode: parallel-workflow.
 Act as the orchestrator. Own intake, the detailed spec, and the task plan.
 
 Before assigning workers:
-1. Read WORK_REQUEST.md, AGENTS.md, RUN_WORKFLOW.md, _handoff/current.md, _progress/progress.md, the latest relevant _summary/ entry, and durable docs.
-2. Save or verify the detailed spec in _spec/.
+1. Read <artifact-root>/request.md, AGENTS.md, RUN_WORKFLOW.md, <artifact-root>/handoff.md, <artifact-root>/progress.md, the latest relevant <artifact-root>/summary.md entry, and durable docs.
+2. Save or verify the detailed spec in <artifact-root>/spec.md.
 3. Stop for explicit spec approval before task planning.
-4. Save or verify the task plan in _task/ only after approval.
+4. Save or verify the task plan in <artifact-root>/tasks.md only after approval.
 5. Add required metadata to every task: Priority, Parallel safe, Depends on, Blocks, File locks, Claim status, Claimed by, Agent role, Merge risk.
 6. Rank P0 before P1 before P2.
 7. Mark tasks parallel-safe only when dependencies and file locks do not conflict.
-8. Create or update _parallel/claims.md, _parallel/locks.md, and _parallel/agent-status.md.
+8. Create or update <artifact-root>/parallel/claims.md, <artifact-root>/parallel/locks.md, and <artifact-root>/parallel/agent-status.md.
 9. Use default worker agents: 3.
 10. Use minimum parallel workers: 2 when 2 or more parallel-safe unblocked tasks exist.
 11. Use maximum worker agents: 5.
 12. Fall back to 1 worker only when dependency or file-lock safety requires sequential execution.
 
 Do not assign two workers to overlapping file locks.
-Update _handoff/current.md with queue, claim, lock, worker, and merge-review status.
+Update <artifact-root>/handoff.md with queue, claim, lock, worker, and merge-review status.
 ```
 
 ## Parallel Worker Claim Task
@@ -527,15 +528,15 @@ Follow AGENTS.md and RUN_WORKFLOW.md.
 
 Execution mode: parallel-worker.
 
-Read AGENTS.md, RUN_WORKFLOW.md, the saved spec, the saved task plan, _parallel/claims.md, _parallel/locks.md, _parallel/agent-status.md, _progress/progress.md, and _handoff/current.md.
+Read AGENTS.md, RUN_WORKFLOW.md, the saved spec, the saved task plan, <artifact-root>/parallel/claims.md, <artifact-root>/parallel/locks.md, <artifact-root>/parallel/agent-status.md, <artifact-root>/progress.md, and <artifact-root>/handoff.md.
 
 Claim exactly one task:
 1. Select the highest-priority unclaimed task where Parallel safe is yes and dependencies are unblocked.
 2. Prefer P0 before P1 before P2.
 3. Among same-priority tasks, pick the lowest dependency risk and lowest merge risk.
-4. Confirm the task's file locks do not overlap active locks in _parallel/locks.md.
+4. Confirm the task's file locks do not overlap active locks in <artifact-root>/parallel/locks.md.
 5. Record Claim status=claimed, Claimed by=<agent-id>, Agent role=parallel-worker, and file locks before editing.
-6. Update _parallel/agent-status.md and _handoff/current.md.
+6. Update <artifact-root>/parallel/agent-status.md and <artifact-root>/handoff.md.
 
 If no safe task exists, do not edit files. Record the reason and stop.
 ```
@@ -554,7 +555,7 @@ Required loop:
 2. Run Iteration 1 - Build, verify, review, and record evidence.
 3. Run Iteration 2 - Refine, verify, review, and record evidence.
 4. Run Iteration 3 - Polish, verify, review, and record final verdict.
-5. Append _progress/progress.md with claim status, file locks, worker status, iteration evidence, acceptance results, verification, and final task status.
+5. Append <artifact-root>/progress.md with claim status, file locks, worker status, iteration evidence, acceptance results, verification, and final task status.
 6. Mark the claim done, blocked, or needs-review.
 7. Release locks only after final task status is recorded.
 8. Stop after this one task.
@@ -569,7 +570,7 @@ Follow AGENTS.md and RUN_WORKFLOW.md.
 
 Review a parallel lock conflict.
 
-Read _parallel/claims.md, _parallel/locks.md, _parallel/agent-status.md, _progress/progress.md, _handoff/current.md, the saved task plan, and the current diff.
+Read <artifact-root>/parallel/claims.md, <artifact-root>/parallel/locks.md, <artifact-root>/parallel/agent-status.md, <artifact-root>/progress.md, <artifact-root>/handoff.md, the saved task plan, and the current diff.
 
 Report:
 1. Tasks involved.
@@ -590,14 +591,14 @@ Execution mode: parallel-orchestrator.
 
 After workers finish, perform merge review:
 1. Read all worker progress entries.
-2. Read _parallel/claims.md, _parallel/locks.md, and _parallel/agent-status.md.
+2. Read <artifact-root>/parallel/claims.md, <artifact-root>/parallel/locks.md, and <artifact-root>/parallel/agent-status.md.
 3. Confirm every worker task has Build -> Refine -> Polish evidence.
 4. Confirm every claimed task is done, blocked, or needs-review.
 5. Confirm no overlapping active file locks remain.
 6. Run git diff --stat and git diff.
 7. Resolve safe in-scope conflicts or create follow-up tasks.
 8. Run final verification.
-9. Write _review/, _release/, _summary/, update _handoff/current.md, and complete the health check.
+9. Write <artifact-root>/review.md, <artifact-root>/release-notes.md, <artifact-root>/summary.md, update <artifact-root>/handoff.md, and complete the health check.
 
 Health must be Partial or Failed if claims, locks, worker status, iteration evidence, merge review, or final verification are missing.
 ```
@@ -611,9 +612,9 @@ Run the parallel workflow health check.
 
 Validate:
 1. Every task has Priority, Parallel safe, Depends on, Blocks, File locks, Claim status, Claimed by, Agent role, and Merge risk.
-2. _parallel/claims.md exists and reflects all worker tasks.
-3. _parallel/locks.md exists and has no overlapping active file locks.
-4. _parallel/agent-status.md exists and reflects all active or completed workers.
+2. <artifact-root>/parallel/claims.md exists and reflects all worker tasks.
+3. <artifact-root>/parallel/locks.md exists and has no overlapping active file locks.
+4. <artifact-root>/parallel/agent-status.md exists and reflects all active or completed workers.
 5. Every worker task has Build -> Refine -> Polish evidence.
 6. Claims are done, blocked, or needs-review before locks are released.
 7. Orchestrator merge review exists.
@@ -633,7 +634,7 @@ For each checklist item:
 3. Stop if the next action would expand scope.
 4. Verify the task acceptance criteria inside the current iteration.
 5. Record iteration evidence before moving on.
-6. Update _progress/progress.md before moving on.
+6. Update <artifact-root>/progress.md before moving on.
 
 No bundled refactors.
 No second task until this task completes Build -> Refine -> Polish and the iteration evidence is logged.
@@ -644,7 +645,7 @@ No second task until this task completes Build -> Refine -> Polish and the itera
 ```txt
 Review the active task result and iteration evidence as a senior engineer.
 
-Use the saved _spec/ file, saved _task/ plan, _progress/progress.md, and the current diff.
+Use the saved <artifact-root>/spec.md file, saved <artifact-root>/tasks.md plan, <artifact-root>/progress.md, and the current diff.
 
 Prioritize:
 1. Bugs or regressions.
@@ -677,15 +678,15 @@ Do not refactor unrelated code.
 After the fix:
 - Re-run the failing command if possible.
 - Run directly related tests.
-- Append the result to the current iteration evidence and _progress/progress.md.
-- Update the final _summary/ entry if the workflow is complete.
+- Append the result to the current iteration evidence and <artifact-root>/progress.md.
+- Update the final <artifact-root>/summary.md entry if the workflow is complete.
 - Summarize the root cause and fix.
 ```
 
 ## Final Summary
 
 ```txt
-Produce the final workflow summary and create or append it in _summary/.
+Produce the final workflow summary and create or append it in <artifact-root>/summary.md.
 
 Include:
 1. Original work request.
@@ -706,7 +707,7 @@ Do not claim a commit was made unless one was actually created.
 ## Architecture Review
 
 ```txt
-Review the saved _spec/ file, docs/PROJECT_CONTEXT.md, and docs/ARCHITECTURE.md for consistency.
+Review the saved <artifact-root>/spec.md file, docs/PROJECT_CONTEXT.md, and docs/ARCHITECTURE.md for consistency.
 
 Identify:
 1. Architecture decisions that are clear.

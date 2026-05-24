@@ -14,17 +14,27 @@ Customize placeholders before using this in a production project. MERN is the de
   - Testing: Vitest/React Testing Library for frontend, Jest/Supertest for backend
 - Deployment: `<DEPLOYMENT_TARGETS>`
 - Workflow entrypoints:
-  - `WORK_REQUEST.md`
+  - `<artifact-root>/request.md` (active run-scoped request state)
+  - `WORK_REQUEST.md` (optional/manual compatibility input)
   - `RUN_WORKFLOW.md`
   - `.agents/skills/grill-me/SKILL.md`
+- Workflow artifact scope:
+  - First detect current branch with `git branch --show-current`.
+  - First detect current worktree path with `git rev-parse --show-toplevel`.
+  - Run id defaults to current branch and may be overridden with `CODEX_WORKFLOW_RUN_ID`.
+  - Sanitize `/` and `\` in run ids to `__`.
+  - Active artifact root is `_workflow/runs/<run-id>/`.
+  - Agents must update only their own run directory.
+  - Shared `_workflow/index.md` and `_workflow/runs/README.md` are optional index/guidance files only.
 - Main workflow memory:
-  - `_handoff/current.md`
-  - `_spec/`
-  - `_task/`
-  - `_progress/progress.md`
-  - `_review/`
-  - `_summary/`
-  - `_release/`
+  - `<artifact-root>/request.md`
+  - `<artifact-root>/handoff.md`
+  - `<artifact-root>/spec.md`
+  - `<artifact-root>/tasks.md`
+  - `<artifact-root>/progress.md`
+  - `<artifact-root>/review.md`
+  - `<artifact-root>/summary.md`
+  - `<artifact-root>/release-notes.md`
   - `_decisions/`
 - Supporting docs:
   - `docs/PROJECT_CONTEXT.md`
@@ -37,7 +47,7 @@ Customize placeholders before using this in a production project. MERN is the de
 
 1. If the latest user prompt looks like project work, treat it as the active work request and route it through `RUN_WORKFLOW.md`.
 2. Project work includes requests such as `implement`, `fix`, `create`, `generate`, `audit`, `refactor`, `test`, `document`, `deploy`, `review`, or similar software changes.
-3. Automatically sync the active user prompt into `WORK_REQUEST.md` only after grill-me has produced the Shared Understanding Handoff, unless `skip questions` is set (in which case sync immediately). Do not ask the user to manually edit workflow docs first.
+3. Automatically sync the active user prompt into `<artifact-root>/request.md` only after grill-me has produced the Shared Understanding Handoff, unless `skip questions` is set (in which case sync immediately). Do not auto-update root `WORK_REQUEST.md`; it is optional/manual compatibility input only. Do not ask the user to manually edit workflow docs first.
 4. Default execution mode is `complete-workflow`.
 5. Execution modes:
    - `plan-only`: run grill-me intake, write spec, stop for spec approval, write task plan only after approval, then stop.
@@ -48,20 +58,20 @@ Customize placeholders before using this in a production project. MERN is the de
 8. Workflow requests must use the grill-me skill at `.agents/skills/grill-me/SKILL.md` as the default intake engine before any spec, task plan, or implementation work.
 9. Grill-me asks one focused question at a time and includes a recommended answer with every question.
 10. Grill-me inspects the repo (code, docs, workflow files) instead of asking when an answer can be discovered locally.
-11. The normal workflow starts only after grill-me has produced the Shared Understanding Handoff and the normalized request has been synced into `WORK_REQUEST.md`.
-12. Do not touch code, create `_spec/`, or create `_task/` during the grill-me intake phase.
+11. The normal workflow starts only after grill-me has produced the Shared Understanding Handoff and the normalized request has been synced into `<artifact-root>/request.md`.
+12. Do not touch code, create `<artifact-root>/spec.md`, or create `<artifact-root>/tasks.md` during the grill-me intake phase.
 13. If the user says `skip questions`, bypass grill-me, generate a best-effort spec, and clearly record assumptions.
-14. If the user says `continue workflow`, do not invoke grill-me; resume from `_handoff/current.md`.
-15. No implementation is allowed without a saved spec in `_spec/`.
+14. If the user says `continue workflow`, do not invoke grill-me; resume from `<artifact-root>/handoff.md`.
+15. No implementation is allowed without a saved spec in `<artifact-root>/spec.md`.
 16. No task plan may be generated until the saved spec has explicit user approval.
-17. No implementation is allowed without a saved task plan in `_task/`.
-18. Before planning, read `_handoff/current.md` if it exists, `_progress/progress.md`, and the latest relevant file in `_summary/`.
-19. Before touching code for any task, read `_handoff/current.md`, `_progress/progress.md`, and the latest relevant file in `_summary/`.
+17. No implementation is allowed without a saved task plan in `<artifact-root>/tasks.md`.
+18. Before planning, read `<artifact-root>/handoff.md` if it exists, `<artifact-root>/progress.md`, and the latest relevant file in `<artifact-root>/summary.md`.
+19. Before touching code for any task, read `<artifact-root>/handoff.md`, `<artifact-root>/progress.md`, and the latest relevant file in `<artifact-root>/summary.md`.
 20. Read `RUN_WORKFLOW.md` before planning or editing.
 21. Read `docs/PROJECT_CONTEXT.md` and relevant supporting docs before implementation, updating them only when durable project facts change.
-22. Generate a timestamped or slugged spec file in `_spec/`, for example `_spec/2026-05-10-add-dark-theme.md`.
+22. Generate the active spec at `<artifact-root>/spec.md`.
 23. Display the spec summary and path, then stop for explicit approval using the approval gate in `RUN_WORKFLOW.md`.
-24. Generate a vertical task plan in `_task/` from the approved saved spec.
+24. Generate a vertical task plan in `<artifact-root>/tasks.md` from the approved saved spec.
 25. Tasks must be vertical slices of user-visible or independently verifiable value, not vague frontend/backend/database layers.
 26. Break work into Ralph Wiggum-style tasks: small, literal, safe, sequential steps that are easy to follow and hard to misinterpret.
 27. Implement tasks sequentially, one task at a time.
@@ -79,16 +89,16 @@ Customize placeholders before using this in a production project. MERN is the de
 39. Never skip verification. If verification cannot run, document the reason and the best available manual check.
 40. Record acceptance results for every task. A task cannot be `Done` unless every required acceptance criterion is checked `[x]`; `[ ]` or `[~]` means `Blocked` or `Needs Human Review`.
 41. If verification fails during any iteration, follow the failure recovery protocol inside that iteration: identify the failing command, capture the error, classify the failure, fix only in-scope issues, rerun the exact failing command, and stop with `Needs Human Review` if targeted recovery does not prove the task.
-42. After each task, append progress to `_progress/progress.md`, including separate iteration evidence, TDD-first evidence for code-changing tasks, acceptance results, and any failure recovery notes.
-43. After each task, update `_handoff/current.md` so it reflects the latest completed task, current task, current iteration, current phase, blockers, dirty worktree status, verification status, acceptance status, iteration evidence status, and next step.
-44. Always keep `_handoff/current.md` current; do not leave handoff stale after task execution.
+42. After each task, append progress to `<artifact-root>/progress.md`, including separate iteration evidence, TDD-first evidence for code-changing tasks, acceptance results, and any failure recovery notes.
+43. After each task, update `<artifact-root>/handoff.md` so it reflects the latest completed task, current task, current iteration, current phase, blockers, dirty worktree status, verification status, acceptance status, iteration evidence status, and next step.
+44. Always keep `<artifact-root>/handoff.md` current; do not leave handoff stale after task execution.
 45. The handoff file should allow another agent/session to resume without rereading the entire conversation.
-46. `continue workflow` must start from `_handoff/current.md`.
-47. If `_handoff/current.md` conflicts with `_progress/progress.md`, trust `_progress/progress.md` for completed task history and update handoff accordingly.
+46. `continue workflow` must start from `<artifact-root>/handoff.md`.
+47. If `<artifact-root>/handoff.md` conflicts with `<artifact-root>/progress.md`, trust `<artifact-root>/progress.md` for completed task history and update handoff accordingly.
 48. Before final review and summary, run or document the final diff audit with `git diff --stat` and `git diff` when available.
-49. After all executable tasks are complete or a stop condition is reached, create a review file in `_review/`.
-50. After review, create release notes in `_release/<request-id>.md`.
-51. After release notes are complete, create or append a summary in `_summary/` and update `_handoff/current.md`.
+49. After all executable tasks are complete or a stop condition is reached, create a review file in `<artifact-root>/review.md`.
+50. After review, create release notes in `<artifact-root>/release-notes.md`.
+51. After release notes are complete, create or append a summary in `<artifact-root>/summary.md` and update `<artifact-root>/handoff.md`.
 52. Record meaningful architecture or product decisions in `_decisions/`; do not create decision files for routine edits.
 53. Before the final response, run the workflow health check.
 54. Continue to the next task only when the current task completed Build -> Refine -> Polish, is verified, reviewed, documented, all required TDD evidence for code-changing tasks is documented or explicitly excepted, all required acceptance criteria are met, and safe to continue.
@@ -99,11 +109,11 @@ Customize placeholders before using this in a production project. MERN is the de
 
 For a work request:
 
-1. Use the latest direct user prompt as the active request when it looks like project work; otherwise read `WORK_REQUEST.md`.
+1. Use the latest direct user prompt as the active request when it looks like project work; otherwise read `<artifact-root>/request.md`, falling back to root `WORK_REQUEST.md` only as manual legacy input.
 2. Invoke the grill-me skill at `.agents/skills/grill-me/SKILL.md` to produce a Shared Understanding Handoff, unless the prompt explicitly says `skip questions` or `continue workflow`.
-3. Sync the normalized active request into `WORK_REQUEST.md`.
+3. Sync the normalized active request into `<artifact-root>/request.md`; do not auto-update root `WORK_REQUEST.md`.
 4. Read `RUN_WORKFLOW.md`.
-5. If questions are skipped, bypass grill-me and write assumptions into the spec. If the prompt is `continue workflow`, skip grill-me and resume from `_handoff/current.md`.
+5. If questions are skipped, bypass grill-me and write assumptions into the spec. If the prompt is `continue workflow`, skip grill-me and resume from `<artifact-root>/handoff.md`.
 6. Check repository status for dirty worktree protection:
 
    ```bash
@@ -111,24 +121,24 @@ For a work request:
    ```
 
    Document existing dirty files, files planned for this workflow, and overlap risk. If dirty files overlap with planned files, stop and ask before editing. If dirty files are unrelated, continue but document them. Never overwrite user changes and never clean/reset files unless explicitly instructed.
-7. Read `_handoff/current.md` if it exists, `_progress/progress.md`, the latest relevant `_summary/` entry, and durable supporting docs.
-8. Generate a detailed spec in `_spec/` using the required detailed spec template.
+7. Read `<artifact-root>/handoff.md` if it exists, `<artifact-root>/progress.md`, the latest relevant `<artifact-root>/summary.md` entry, and durable supporting docs.
+8. Generate a detailed spec in `<artifact-root>/spec.md` using the required detailed spec template.
 9. Display the spec summary and path, then stop for explicit approval using the approval gate in `RUN_WORKFLOW.md`.
-10. Generate a vertical task plan in `_task/` from the approved saved detailed spec only after approval.
+10. Generate a vertical task plan in `<artifact-root>/tasks.md` from the approved saved detailed spec only after approval.
 11. If execution mode is `plan-only`, stop after saving the approved spec-derived task plan.
 12. If execution mode is `single-task`, execute only the next ready task through the full 3-pass hardening loop, update artifacts, then stop.
 13. If execution mode is omitted, use `complete-workflow`.
 14. In `complete-workflow`, execute every task in order until all tasks are complete or a stop condition is reached; each executable task must complete Build -> Refine -> Polish before the next task starts.
 15. For each task:
-    - read latest `_progress/progress.md`
-    - read relevant `_summary/`
+    - read latest `<artifact-root>/progress.md`
+    - read relevant `<artifact-root>/summary.md`
     - inspect the codebase for the current task
     - implement only the current task through Iteration 1 Build, using Red -> Green -> Refactor for code-changing work
     - refine only in-scope issues through Iteration 2 Refine, using Red -> Green -> Refactor for code-changing work
     - polish and harden through Iteration 3 Polish, using Red -> Green -> Refactor for code-changing work
     - verify, critique, and record evidence inside each iteration
-    - append progress to `_progress/progress.md`
-    - update `_handoff/current.md`
+    - append progress to `<artifact-root>/progress.md`
+    - update `<artifact-root>/handoff.md`
     - continue to the next task automatically only when the current task is `Done` and safe
 16. Before final review/summary, run the final diff audit:
 
@@ -138,9 +148,9 @@ For a work request:
     ```
 
     Document whether the diff matches the saved spec, unrelated files were touched, workflow artifacts were updated correctly, tests were added or updated for changed behavior, scope creep occurred, generated junk or temporary files appeared, and sensitive values or secrets were accidentally added. If either command cannot run, document why.
-17. After all allowed tasks are complete or the workflow stops, create a review file in `_review/`.
-18. After the review, create release notes in `_release/<request-id>.md`.
-19. After release notes, create or append a summary in `_summary/`.
+17. After all allowed tasks are complete or the workflow stops, create a review file in `<artifact-root>/review.md`.
+18. After the review, create release notes in `<artifact-root>/release-notes.md`.
+19. After release notes, create or append a summary in `<artifact-root>/summary.md`.
 20. Run the workflow health check and mark the result as `Passed`, `Partial`, or `Failed`.
 21. Check repository status again:
 
@@ -154,18 +164,18 @@ For a work request:
 
 If the user says `continue workflow`:
 
-1. Read `_handoff/current.md` first and use it as the primary resume source.
-2. Read `_progress/progress.md` to verify completed task history.
-3. If `_handoff/current.md` conflicts with `_progress/progress.md`, trust `_progress/progress.md` for completed task history and update handoff.
-4. Read the latest relevant file in `_summary/`, if any.
+1. Read `<artifact-root>/handoff.md` first and use it as the primary resume source.
+2. Read `<artifact-root>/progress.md` to verify completed task history.
+3. If `<artifact-root>/handoff.md` conflicts with `<artifact-root>/progress.md`, trust `<artifact-root>/progress.md` for completed task history and update handoff.
+4. Read the latest relevant file in `<artifact-root>/summary.md`, if any.
 5. If a spec exists but no task plan exists for the active request, resume at the spec approval gate, show the spec summary and path again, and wait for approval. Do not auto-generate tasks.
-6. If a task plan exists, read the task plan referenced by `_handoff/current.md`, or the latest file in `_task/` if handoff has no task plan.
+6. If a task plan exists, read the task plan referenced by `<artifact-root>/handoff.md`, or the latest file in `<artifact-root>/tasks.md` if handoff has no task plan.
 7. Read the spec referenced by that task plan.
-8. Find the next task whose status is not `Done` and the current iteration recorded in `_handoff/current.md`.
+8. Find the next task whose status is not `Done` and the current iteration recorded in `<artifact-root>/handoff.md`.
 9. Continue from that task and iteration without asking the original intake questions again unless the request, scope, or acceptance criteria are unclear.
 10. Continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached; each executable task must complete the full 3-pass hardening loop before the next task starts.
 11. Do not regenerate the entire spec unless the request changed.
-12. If every task is `Done`, continue with any missing `_review/`, `_summary/`, handoff update, workflow health check, or final response steps.
+12. If every task is `Done`, continue with any missing `<artifact-root>/review.md`, `<artifact-root>/summary.md`, handoff update, workflow health check, or final response steps.
 
 ## Questioning Rules
 
@@ -184,11 +194,11 @@ Grill-me must cover:
 
 Stop grilling when the goal, scope, out-of-scope work, user-facing behavior, affected surfaces, and acceptance criteria are clear, or when the remaining unknowns can be documented as assumptions.
 
-`skip questions` bypasses grill-me and proceeds with a best-effort spec that records assumptions. `continue workflow` bypasses grill-me and resumes from `_handoff/current.md`.
+`skip questions` bypasses grill-me and proceeds with a best-effort spec that records assumptions. `continue workflow` bypasses grill-me and resumes from `<artifact-root>/handoff.md`.
 
 ## Spec Rules
 
-Each spec in `_spec/` must be a detailed, implementation-aware execution blueprint. Use `Not applicable` for irrelevant sections. Do not delete required sections.
+Each spec in `<artifact-root>/spec.md` must be a detailed, implementation-aware execution blueprint. Use `Not applicable` for irrelevant sections. Do not delete required sections.
 
 # Detailed Spec Template
 
@@ -205,7 +215,7 @@ Each spec in `_spec/` must be a detailed, implementation-aware execution bluepri
 ## 2. Original Request
 - Raw user request:
 - Normalized request:
-- Source prompt / WORK_REQUEST reference:
+- Source prompt / `<artifact-root>/request.md` reference:
 
 ## 3. Questions And Answers
 - Questions asked:
@@ -349,12 +359,12 @@ Each spec in `_spec/` must be a detailed, implementation-aware execution bluepri
 Use timestamped or slugged filenames, such as:
 
 ```txt
-_spec/2026-05-10-add-dark-theme.md
+<artifact-root>/spec.md
 ```
 
 ## Task Planning Rules
 
-Each task plan in `_task/` must include:
+Each task plan in `<artifact-root>/tasks.md` must include:
 
 - Spec file used.
 - Planning date.
@@ -452,11 +462,11 @@ Add one visible settings toggle that switches the app between light and dark the
 
 ## Progress Tracking
 
-Maintain `_progress/progress.md`.
+Maintain `<artifact-root>/progress.md`.
 
-`_progress/progress.md` is append-only task history. It records what happened over time and is authoritative for completed task history.
+`<artifact-root>/progress.md` is append-only task history. It records what happened over time and is authoritative for completed task history.
 
-`_handoff/current.md` is the live resume state. Keep it updated with the current phase, active files, last completed task, current task, next task, blockers, verification status, and workflow health status.
+`<artifact-root>/handoff.md` is the live resume state. Keep it updated with the current phase, active files, last completed task, current task, next task, blockers, verification status, and workflow health status.
 
 After each task, append:
 
@@ -477,7 +487,7 @@ Do not replace previous progress entries.
 
 ## Summary Rules
 
-After implementation and before the final summary, create a review file in `_review/`.
+After implementation and before the final summary, create a review file in `<artifact-root>/review.md`.
 
 The review must include:
 
@@ -495,7 +505,7 @@ The review must include:
 - Follow-up tasks.
 - Final review verdict.
 
-After the review is complete, create release notes in `_release/<request-id>.md`, then create or append a summary in `_summary/`.
+After the review is complete, create release notes in `<artifact-root>/release-notes.md`, then create or append a summary in `<artifact-root>/summary.md`.
 
 The release note must include:
 
@@ -513,7 +523,7 @@ The release note must include:
 
 If there are no user-facing changes, say so. If there are no new APIs, env vars, dependencies, or schema changes, say `none`.
 
-`_summary/` is completed workflow history. It records finished workflow runs and should not replace the live state in `_handoff/current.md`.
+`<artifact-root>/summary.md` is completed workflow history. It records finished workflow runs and should not replace the live state in `<artifact-root>/handoff.md`.
 
 The summary must include:
 
@@ -537,12 +547,12 @@ The summary must include:
 
 Before the final response, check:
 
-- Did `WORK_REQUEST.md` sync?
-- Did `_handoff/current.md` exist and reflect the latest workflow state?
+- Did `<artifact-root>/request.md` sync?
+- Did `<artifact-root>/handoff.md` exist and reflect the latest workflow state?
 - Did the spec file exist?
 - Did the spec include every required detailed spec section, or was any missing section repaired before planning?
 - Was the spec approval gate shown after saving the spec and before task planning?
-- Was explicit user approval recorded before `_task/` generation?
+- Was explicit user approval recorded before `<artifact-root>/tasks.md` generation?
 - Did the task plan exist?
 - Was progress updated?
 - Was the review created?
@@ -563,18 +573,18 @@ Final health status must be one of:
 - `Partial`
 - `Failed`
 
-`Passed` requires a synced work request, a detailed spec with every required section, explicit spec approval before task planning, a task plan derived from and citing or referencing the approved detailed spec, progress, handoff, review, summary, release notes, required iteration evidence for every executable task, required TDD-first evidence for every code-changing task or justified missing-test exceptions, final diff audit completed or documented, dirty worktree checked, acceptance results completed, verification run or documented, scope respected, and decisions recorded if needed.
+`Passed` requires a synced `<artifact-root>/request.md`, root `WORK_REQUEST.md` left manual/compatibility-only, a detailed spec with every required section, explicit spec approval before task planning, a task plan derived from and citing or referencing the approved detailed spec, progress, handoff, review, summary, release notes, required iteration evidence for every executable task, required TDD-first evidence for every code-changing task or justified missing-test exceptions, final diff audit completed or documented, dirty worktree checked, acceptance results completed, verification run or documented, scope respected, and decisions recorded if needed.
 
-If release notes, final diff audit, dirty worktree check, required detailed spec sections, explicit spec approval before task planning, iteration evidence, TDD-first evidence for code-changing tasks, or acceptance results are missing, health must be `Partial` or `Failed` depending on severity. If `_task/` was generated before explicit approval or workflow execution continued without user confirmation, health must be `Partial` or `Failed` depending on severity. If any required artifact is missing, mark workflow health as `Failed`.
+If release notes, final diff audit, dirty worktree check, required detailed spec sections, explicit spec approval before task planning, iteration evidence, TDD-first evidence for code-changing tasks, or acceptance results are missing, health must be `Partial` or `Failed` depending on severity. If `<artifact-root>/tasks.md` was generated before explicit approval or workflow execution continued without user confirmation, health must be `Partial` or `Failed` depending on severity. If any required artifact is missing, mark workflow health as `Failed`.
 
 ## Implementation Boundaries
 
 Agents must not:
 
 - Touch implementation code before questions, spec, spec approval, and task plan are complete.
-- Implement without a saved spec in `_spec/`.
-- Generate `_task/` before explicit user approval of the saved spec.
-- Implement without a saved task plan in `_task/`.
+- Implement without a saved spec in `<artifact-root>/spec.md`.
+- Generate `<artifact-root>/tasks.md` before explicit user approval of the saved spec.
+- Implement without a saved task plan in `<artifact-root>/tasks.md`.
 - Implement more than one active task at a time.
 - Expand scope beyond the request and active task.
 - Rewrite large parts of the application without explicit approval.
@@ -658,7 +668,7 @@ If tests or scripts are missing:
 - State that they are missing.
 - Recommend the command that should exist.
 - Use available manual verification.
-- Record the gap in `_progress/progress.md` and the final `_summary/` entry.
+- Record the gap in `<artifact-root>/progress.md` and the final `<artifact-root>/summary.md` entry.
 
 ## Git Workflow Guidance
 
@@ -700,22 +710,22 @@ At the end of a workflow run, report:
 - Iteration evidence summary.
 - Files changed.
 - Verification commands and results.
-- Progress updated in `_progress/progress.md`.
-- Handoff updated in `_handoff/current.md`.
-- Review updated in `_review/<file>.md`.
-- Release notes updated in `_release/<file>.md`.
-- Summary updated in `_summary/`.
+- Progress updated in `<artifact-root>/progress.md`.
+- Handoff updated in `<artifact-root>/handoff.md`.
+- Review updated in `<artifact-root>/review.md`.
+- Release notes updated in `<artifact-root>/release-notes.md`.
+- Summary updated in `<artifact-root>/summary.md`.
 - Decisions updated in `_decisions/<file>.md` or `none`.
 - Workflow health status: `Passed`, `Partial`, or `Failed`.
 - Final artifact checklist with exact paths:
-  - Work request: `WORK_REQUEST.md`
-  - Handoff: `_handoff/current.md`
-  - Spec: `_spec/<file>.md`
-  - Task plan: `_task/<file>.md`
-  - Progress: `_progress/progress.md`
-  - Review: `_review/<file>.md`
-  - Release notes: `_release/<file>.md`
-  - Summary: `_summary/<file>.md`
+  - Work request: `<artifact-root>/request.md`
+  - Handoff: `<artifact-root>/handoff.md`
+  - Spec: `<artifact-root>/spec.md`
+  - Task plan: `<artifact-root>/tasks.md`
+  - Progress: `<artifact-root>/progress.md`
+  - Review: `<artifact-root>/review.md`
+  - Release notes: `<artifact-root>/release-notes.md`
+  - Summary: `<artifact-root>/summary.md`
   - Decisions: `_decisions/<file>.md` or `none`
 - Unresolved issues or recommended next task.
 - Suggested commit message.
