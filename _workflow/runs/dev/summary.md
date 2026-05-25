@@ -229,3 +229,47 @@
   - Product decision still open: whether cancelled/completed bookings should reopen appointment availability.
 - Next recommended work:
   - User review, then commit with `feature: add admin booking dashboard`.
+
+## 2026-05-25 - Configure Env-Backed Admin Credentials
+
+- Request: Configure existing env-backed admin credentials locally with admin username `admin@gmail.com` and the user-provided local password.
+- Spec file used: `_workflow/runs/dev/spec.md`
+- Detailed spec completeness: Complete; all required sections were present before planning. Frontend Taste Application was recorded as not applicable.
+- Task plan used: `_workflow/runs/dev/tasks.md`
+- Review file used: `_workflow/runs/dev/review.md`
+- Release notes file used: `_workflow/runs/dev/release-notes.md`
+- Tasks completed:
+  - TASK-001: Configure local admin env credentials.
+  - TASK-002: Verify config and close workflow.
+- Iteration evidence summary:
+  - TASK-001: Pre-edit masked env key check proved admin keys were missing, local ignored `.env` was updated, duplicate/key safety and `.env.example` placeholder checks passed, and focused auth tests passed.
+  - TASK-002: Final verification, diff/security audit, review, verification record, release notes, summary, handoff, and health check completed.
+- Files changed:
+  - `.env` ignored local file.
+  - `_workflow/runs/dev/*`
+- Verification run:
+  - Masked env key-count checks: passed.
+  - Node/dotenv admin credential assertion: passed; `JWT_SECRET` presence reported false.
+  - `.env.example` placeholder check: passed.
+  - `npm run test:server -- admin-auth.test.js`: passed, 1 suite / 5 tests.
+  - `git diff --stat`: completed.
+  - `git diff`: completed.
+  - `git status --short --ignored`: completed.
+- Acceptance results:
+  - [x] Root `.env` has `ADMIN_USERNAME` set to `admin@gmail.com`.
+  - [x] Root `.env` has `ADMIN_PASSWORD` set to the user-provided local password without printing it.
+  - [x] Existing `.env` values such as `PORT`, `MONGODB_URI`, and any `JWT_SECRET` are preserved.
+  - [x] `.env.example` does not contain the real local password.
+  - [x] No database seed, user model, auth architecture, frontend UI, API contract, or deployment config change is introduced.
+  - [x] Relevant config/auth verification is run and documented.
+- Failure recovery notes:
+  - Parallel verification commands timed out; reran sequentially with longer timeouts and passed.
+- Final diff audit:
+  - Tracked diff contains workflow artifacts only.
+  - `.env` is ignored and not included in tracked diff.
+  - No tracked secret values, product code changes, dependencies, schema changes, generated screenshots, or deployment changes were added.
+  - Existing ignored generated files/folders are visible in ignored status but were not created for this request.
+- Unresolved issues:
+  - Local `.env` still lacks `JWT_SECRET`, which is required by the existing backend to issue admin JWTs outside test mode.
+- Next recommended work:
+  - Add a local `JWT_SECRET` value before starting the backend for admin login.

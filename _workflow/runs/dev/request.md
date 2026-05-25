@@ -1,13 +1,9 @@
-Add an admin dashboard where the admin has full CRUD functionality for bookings only.
+Configure the existing environment-variable-backed admin login credentials locally.
 
 Confirmed scope:
-- Add a simple admin login protected by backend-issued JWT.
-- Admin credentials come from the root `.env`.
-- Guard all admin API routes.
-- Guard the `/admin` frontend route.
-- Keep `/admin` hidden from public navigation.
-- Full CRUD applies only to bookings.
-- Expand booking status to `pending`, `confirmed`, `cancelled`, and `completed`.
-- Admins can edit booking status from the dashboard.
-- Admin-created and admin-edited bookings use the same service/date/time/contact/notes validation, Monday-Saturday date rules, and duplicate time-slot prevention as the public booking form.
-- Services and gallery content management are out of scope.
+- Do not add database-backed admin users or seed scripts.
+- Use the existing backend env variables: `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and existing `JWT_SECRET`.
+- Set root `.env` so the admin username is `admin@gmail.com`.
+- Set root `.env` so the admin password uses the user-provided local password from the chat.
+- Keep `.env.example` free of real credentials; update example text only if needed.
+- Do not change frontend UI, backend auth behavior, deployment config, or database schema unless verification proves a missing env example only.

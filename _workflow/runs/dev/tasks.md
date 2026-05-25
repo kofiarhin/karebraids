@@ -1,242 +1,124 @@
-# Admin Dashboard Booking CRUD Task Plan
+# Configure Env-Backed Admin Credentials Task Plan
 
 - Spec file used: `_workflow/runs/dev/spec.md`
 - Planning date: 2026-05-25
-- Progress and summary files read: `_workflow/runs/dev/progress.md`, `_workflow/runs/dev/summary.md`
-- Detailed spec sections used: 6 Desired End State, 7 Scope, 9 Functional Requirements, 11 Affected Surfaces, 12 Dependency And Integration Map, 13 Data And State Impact, 14 UX/API/Workflow Expectations, 15 Execution Strategy, 16 Verification Strategy, 17 Acceptance Criteria, 18 Edge Cases, 19 Risks, 20 Assumptions, 22 Task Extraction Notes, Frontend Taste Application.
+- Progress and summary files read:
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/summary.md`
+  - `_workflow/runs/dev/handoff.md`
+- Spec approval recorded: User response `spec approved`
 - Execution mode: complete-workflow
+- Detailed spec sections used: Sections 6, 7, 11, 12, 14, 15, 16, 17, 18, 19, 20, and 22.
 
 ## Task List
 
-### TASK-001: Add admin JWT login and route guard
+### TASK-001: Configure local admin env credentials
 
 - Status: Done
-- Objective: Add env-backed admin login, JWT signing, JWT verification middleware, and mount an admin login route.
-- Files likely affected:
-  - `package.json`
-  - `package-lock.json`
-  - `.env.example`
-  - `server/config/env.js`
-  - `server/app.js`
-  - `server/controllers/adminAuthController.js`
-  - `server/middleware/adminAuth.js`
-  - `server/routes/adminRoutes.js`
-  - `server/tests/admin-auth.test.js`
+- Objective: Update the ignored root `.env` file so existing env-backed admin auth uses `admin@gmail.com` and the user-provided local password.
+- Files affected:
+  - `.env` ignored local file
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
 - Checklist:
-  - [ ] Add/update failing auth/env tests first.
-  - [ ] Install or use JWT signing/verification support.
-  - [ ] Validate required env vars outside test mode.
-  - [ ] Add login route and guarded test route or middleware proof.
-  - [ ] Verify focused and relevant server tests.
-- Iteration 1 Build:
-  - Goal: Prove login/env guard behavior with failing tests, then implement the minimal route.
-  - Changes made: Pending.
-  - Test plan: `npm run test:server -- admin-auth.test.js`
-  - Red phase evidence: Pending.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Iteration 2 Refine:
-  - Goal: Prove missing/invalid token rejection and token success path.
-  - Changes made: Pending.
-  - Test plan: focused server auth tests.
-  - Red phase evidence: Pending.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Iteration 3 Polish:
-  - Goal: Confirm env example and broad server compatibility.
-  - Changes made: Pending.
-  - Test plan: focused auth tests plus server suite.
-  - Red phase evidence: Pending.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Acceptance criteria:
-  - [ ] Admin login uses root `.env` credentials and returns JWT.
-  - [ ] Missing required admin auth env vars fail fast outside test mode.
-  - [ ] Admin routes reject missing/invalid Bearer tokens.
-  - [ ] No secrets are exposed in responses.
-- Acceptance result:
-  - [x] Admin login uses root `.env` credentials and returns JWT.
-  - [x] Missing required admin auth env vars fail fast outside test mode.
-  - [x] Admin routes reject missing/invalid Bearer tokens.
-  - [x] No secrets are exposed in responses.
-- Verification commands: `npm run test:server -- admin-auth.test.js`, `npm run test:server`
-- Stop condition: Stop if JWT dependency cannot be installed or auth tests cannot verify behavior.
-- Out-of-scope items: User model, roles, password reset, refresh tokens.
+  - [x] Confirm admin env keys are missing or need replacement without printing values.
+  - [x] Add/update exactly one `ADMIN_USERNAME` entry.
+  - [x] Add/update exactly one `ADMIN_PASSWORD` entry.
+  - [x] Preserve unrelated existing env values.
+  - [x] Do not add a database seed, model, auth refactor, frontend change, or deployment change.
 
-### TASK-002: Add guarded admin booking CRUD API
+#### Iteration 1 Build
+
+- Goal: Prove missing local admin credential keys and add them.
+- Changes made: Added local ignored `.env` entries for `ADMIN_USERNAME` and `ADMIN_PASSWORD`.
+- Test plan: Masked env-key check before and after edit.
+- Red phase evidence: Masked pre-edit key check returned only `PORT:1` and `MONGODB_URI:1`; admin credential keys were missing.
+- Green phase evidence: Masked post-edit key check returned `ADMIN_USERNAME:1` and `ADMIN_PASSWORD:1`.
+- Refactor phase evidence: The update removed any existing admin credential duplicates before appending the active values; no further refactor needed.
+- Test commands run:
+  - Masked PowerShell env key-count check before edit.
+  - Masked PowerShell env key-count check after edit.
+- Verification command/result: Passed; admin env keys exist once.
+- Review findings: `.env` was updated locally without printing secret values.
+- Acceptance status: Partial pending later iterations.
+- Remaining issues: `JWT_SECRET` is not present in local `.env`.
+- Next action: Confirm example safety and run focused auth verification.
+
+#### Iteration 2 Refine
+
+- Goal: Confirm no duplicate/conflicting admin env keys and preserve `.env.example` safety.
+- Changes made: No additional product/config change.
+- Test plan: Key-count check and `.env.example` placeholder check without printing secrets.
+- Red phase evidence: Not applicable after Iteration 1 normalization; duplicate risk was checked directly.
+- Green phase evidence: Key-count check showed one active `ADMIN_USERNAME` and one active `ADMIN_PASSWORD`.
+- Refactor phase evidence: `.env.example` still uses `ADMIN_PASSWORD=replace-with-a-strong-password`; no tracked credential change needed.
+- Test commands run:
+  - Masked PowerShell env key-count check.
+  - `.env.example` placeholder check.
+- Verification command/result: Passed.
+- Review findings: No real local password was written to tracked files.
+- Acceptance status: Partial pending focused auth verification.
+- Remaining issues: `JWT_SECRET` remains absent from `.env`.
+- Next action: Run dotenv presence assertion and focused backend auth test.
+
+#### Iteration 3 Polish
+
+- Goal: Run focused config/auth verification and security review.
+- Changes made: No implementation code changes.
+- Test plan: Dotenv presence check and focused backend auth test.
+- Red phase evidence: Not applicable for this config-only local update; initial missing admin env keys were the expected failing condition.
+- Green phase evidence: Node/dotenv assertion passed for `ADMIN_USERNAME` and `ADMIN_PASSWORD` without printing values.
+- Refactor phase evidence: Focused backend auth test passed with no code changes.
+- Test commands run:
+  - `node -e "require('dotenv').config(); ..."`
+  - `npm run test:server -- admin-auth.test.js`
+- Verification command/result:
+  - Dotenv admin credential check: passed; `JWT_SECRET` presence reported false.
+  - `npm run test:server -- admin-auth.test.js`: passed, 1 suite / 5 tests.
+- Review findings: Existing backend auth behavior remains unchanged; local login still requires a valid `JWT_SECRET`.
+- Acceptance status: Complete for scoped credential configuration.
+- Remaining issues: Local `.env` still needs `JWT_SECRET` before the production/development server can issue JWTs.
+- Next action: Close workflow.
+
+- Test plan:
+  - Masked `.env` key presence check.
+  - Duplicate key count check.
+  - `.env.example` placeholder/safety check.
+  - `npm run test:server -- admin-auth.test.js`.
+- Red phase evidence: Pre-edit masked key check proved admin credential keys were absent.
+- Green phase evidence: Post-edit masked key check and dotenv assertion proved admin credential keys were present.
+- Refactor phase evidence: Duplicate normalization and focused auth test passed without code changes.
+- Test commands run:
+  - Masked PowerShell env key-count check.
+  - Node/dotenv admin env assertion.
+  - `.env.example` placeholder check.
+  - `npm run test:server -- admin-auth.test.js`.
+- Acceptance result:
+  - [x] Root `.env` has `ADMIN_USERNAME` set to `admin@gmail.com`.
+  - [x] Root `.env` has `ADMIN_PASSWORD` set to the user-provided local password without printing it.
+  - [x] Existing `.env` values such as `PORT`, `MONGODB_URI`, and any `JWT_SECRET` are preserved.
+  - [x] `.env.example` does not contain the real local password.
+  - [x] No database seed, user model, auth architecture, frontend UI, API contract, or deployment config change is introduced.
+  - [x] Relevant config/auth verification is run and documented.
+- Verification commands:
+  - Masked env-key check with PowerShell.
+  - Dotenv presence assertion with Node.
+  - `npm run test:server -- admin-auth.test.js`.
+- Stop condition: Not triggered. Missing `JWT_SECRET` is documented as an out-of-scope required env var for local login.
+- Out-of-scope items:
+  - Database seed scripts.
+  - Admin database/user model.
+  - Auth architecture changes.
+  - Frontend UI changes.
+  - Deployment/Heroku config changes.
+
+### TASK-002: Verify config and close workflow
 
 - Status: Done
-- Objective: Expand booking status and add guarded admin create/list/update/delete endpoints for bookings.
-- Files likely affected:
-  - `server/models/Booking.js`
-  - `server/utils/bookingValidation.js`
-  - `server/controllers/adminBookingController.js`
-  - `server/routes/adminRoutes.js`
-  - `server/tests/admin-bookings.test.js`
-  - `server/tests/bookings.test.js`
-- Checklist:
-  - [ ] Add failing CRUD/status tests first.
-  - [ ] Expand status enum.
-  - [ ] Reuse validation for create/update.
-  - [ ] Prevent duplicate slots on create/update excluding current booking.
-  - [ ] Add guarded list/create/update/delete endpoints.
-  - [ ] Verify public booking compatibility.
-- Iteration 1 Build:
-  - Goal: Prove guarded list/create behavior and implement minimum CRUD foundation.
-  - Changes made: Pending.
-  - Test plan: focused admin booking tests.
-  - Red phase evidence: Pending.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Iteration 2 Refine:
-  - Goal: Prove update/status/delete, not-found, validation, and duplicate conflicts.
-  - Changes made: Pending.
-  - Test plan: focused admin booking tests.
-  - Red phase evidence: Pending.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Iteration 3 Polish:
-  - Goal: Run broader server compatibility and review public availability behavior.
-  - Changes made: Pending.
-  - Test plan: admin booking tests plus server suite.
-  - Red phase evidence: Pending.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Acceptance criteria:
-  - [ ] Admin can list bookings.
-  - [ ] Admin can create/edit bookings with shared validation and duplicate prevention.
-  - [ ] Admin can set all four statuses.
-  - [ ] Admin can delete bookings.
-  - [ ] Public booking behavior remains compatible.
-- Acceptance result:
-  - [x] Admin can list bookings.
-  - [x] Admin can create/edit bookings with shared validation and duplicate prevention.
-  - [x] Admin can set all four statuses.
-  - [x] Admin can delete bookings.
-  - [x] Public booking behavior remains compatible.
-- Verification commands: `npm run test:server -- admin-bookings.test.js`, `npm run test:server`
-- Stop condition: Stop if duplicate prevention or auth guard cannot be proven.
-- Out-of-scope items: Services/gallery CRUD and availability reopening semantics for cancelled/completed bookings.
-
-### TASK-003: Add hidden frontend admin dashboard CRUD UI
-
-- Status: Done
-- Objective: Add `/admin` route with login, token session handling, admin services/hooks, and booking CRUD dashboard UI.
-- Files likely affected:
-  - `client/src/App.jsx`
-  - `client/src/lib/api.js`
-  - `client/src/pages/Admin.jsx`
-  - `client/src/services/adminService.js`
-  - `client/src/hooks/queries/useAdminBookings.js`
-  - `client/src/hooks/mutations/useAdminBookingMutations.js`
-  - `client/src/index.css`
-  - `client/test/admin-dashboard.test.jsx`
-  - `client/test/site-pages.test.jsx`
-- Checklist:
-  - [ ] Add failing frontend tests first.
-  - [ ] Add admin service methods using shared API client.
-  - [ ] Add query/mutation hooks.
-  - [ ] Add hidden route and login/dashboard states.
-  - [ ] Add create/edit/status/delete flows.
-  - [ ] Apply design-taste pre-flight.
-- Iteration 1 Build:
-  - Goal: Prove hidden route/login/dashboard shell and implement minimal auth UI.
-  - Changes made: Pending.
-  - Test plan: focused admin dashboard tests.
-  - Red phase evidence: Pending.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Iteration 2 Refine:
-  - Goal: Prove list/create/edit/status/delete UI flows and API error states.
-  - Changes made: Pending.
-  - Test plan: focused admin dashboard tests.
-  - Red phase evidence: Pending.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Iteration 3 Polish:
-  - Goal: Verify responsive, accessibility, lint, build, and public nav remains unchanged.
-  - Changes made: Pending.
-  - Test plan: focused frontend tests, full client tests, lint, build, browser check.
-  - Red phase evidence: Pending.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Acceptance criteria:
-  - [ ] `/admin` is hidden from public navigation.
-  - [ ] Unauthenticated admin route shows login.
-  - [ ] Authenticated admin can list/create/edit/status-update/delete bookings.
-  - [ ] Loading, empty, error, saving, and success states exist.
-  - [ ] API calls use shared client and TanStack Query hooks.
-  - [ ] Frontend taste pre-flight passes.
-- Acceptance result:
-  - [x] `/admin` is hidden from public navigation.
-  - [x] Unauthenticated admin route shows login.
-  - [x] Authenticated admin can list/create/edit/status-update/delete bookings.
-  - [x] Loading, empty, error, saving, and success states exist.
-  - [x] API calls use shared client and TanStack Query hooks.
-  - [x] Frontend taste pre-flight passes.
-- Verification commands: `npm test --prefix client -- admin-dashboard.test.jsx`, `npm test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`
-- Stop condition: Stop if admin UI cannot be tested or build/lint fails after targeted recovery.
-- Out-of-scope items: Public-site redesign, services/gallery CRUD, Redux auth state unless truly needed.
-
-### TASK-004: Final integrated verification and workflow closeout
-
-- Status: Done
-- Objective: Run final diff audit, broad verification, review, release notes, summary, and handoff.
-- Files likely affected:
+- Objective: Audit the final config-only diff, document verification, and close the workflow artifacts.
+- Files affected:
+  - `_workflow/runs/dev/tasks.md`
   - `_workflow/runs/dev/progress.md`
   - `_workflow/runs/dev/handoff.md`
   - `_workflow/runs/dev/verification.md`
@@ -244,61 +126,85 @@
   - `_workflow/runs/dev/release-notes.md`
   - `_workflow/runs/dev/summary.md`
 - Checklist:
-  - [ ] Run final server/client tests, lint, build.
-  - [ ] Run final diff audit.
-  - [ ] Confirm frontend taste compliance.
-  - [ ] Write review.
-  - [ ] Write verification.
-  - [ ] Write release notes.
-  - [ ] Append summary.
-  - [ ] Update handoff and health check.
-- Iteration 1 Build:
-  - Goal: Run broad verification and capture failures.
-  - Changes made: Pending.
-  - Test plan: broad verification commands.
-  - Red phase evidence: Not applicable for non-code closeout task.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Iteration 2 Refine:
-  - Goal: Address only in-scope final verification defects.
-  - Changes made: Pending.
-  - Test plan: rerun failing commands.
-  - Red phase evidence: Not applicable for non-code closeout task.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Iteration 3 Polish:
-  - Goal: Complete documentation artifacts and health check.
-  - Changes made: Pending.
-  - Test plan: final status/diff checks.
-  - Red phase evidence: Not applicable for non-code closeout task.
-  - Green phase evidence: Pending.
-  - Refactor phase evidence: Pending.
-  - Test commands run: Pending.
-  - Verification command/result: Pending.
-  - Review findings: Pending.
-  - Acceptance status: Pending.
-  - Remaining issues: Pending.
-  - Next action: Pending.
-- Acceptance criteria:
-  - [ ] Final diff audit completed.
-  - [ ] Review, verification, release notes, summary, and handoff are current.
-  - [ ] Workflow health check completed.
+  - [x] Run final dirty worktree check.
+  - [x] Run final diff audit.
+  - [x] Confirm `.env` remains ignored and is not in git diff.
+  - [x] Create review, verification, release notes, and summary.
+  - [x] Update handoff and workflow health.
+
+#### Iteration 1 Build
+
+- Goal: Record final verification evidence.
+- Changes made: Created closeout artifacts.
+- Test plan: Reuse TASK-001 verification results and final status checks.
+- Red phase evidence: Not applicable; documentation/verification task.
+- Green phase evidence: TASK-001 verification results were recorded.
+- Refactor phase evidence: Artifact content reviewed for secret leakage.
+- Test commands run:
+  - `npm run test:server -- admin-auth.test.js`
+- Verification command/result: Passed.
+- Review findings: Config change is local-only; `JWT_SECRET` caveat documented.
+- Acceptance status: Partial pending final diff audit.
+- Remaining issues: None in scope.
+- Next action: Run final diff/security audit.
+
+#### Iteration 2 Refine
+
+- Goal: Run final diff and security audit.
+- Changes made: Documented diff audit.
+- Test plan: `git diff --stat`, `git diff`, and `.env` ignore check.
+- Red phase evidence: Not applicable; documentation/verification task.
+- Green phase evidence: Final diff commands completed and `.env` appeared only as ignored.
+- Refactor phase evidence: Reviewed diff for secrets and scope.
+- Test commands run:
+  - `git diff --stat`
+  - `git diff`
+  - `git status --short --ignored`
+- Verification command/result: Passed.
+- Review findings: Tracked diff contains workflow artifacts only; `.env` is ignored and not included in tracked diff.
+- Acceptance status: Partial pending final artifact health check.
+- Remaining issues: Existing ignored generated folders/logs are present but were not created for this task.
+- Next action: Complete final artifacts.
+
+#### Iteration 3 Polish
+
+- Goal: Complete workflow closeout and health check.
+- Changes made: Updated review, verification, release notes, summary, and handoff.
+- Test plan: Artifact existence and health checklist.
+- Red phase evidence: Not applicable; documentation/verification task.
+- Green phase evidence: Required run-scoped artifacts exist and reflect the latest state.
+- Refactor phase evidence: Final artifact wording avoids secret values.
+- Test commands run:
+  - Artifact existence review.
+- Verification command/result: Passed.
+- Review findings: Scope respected; workflow health Passed with a documented out-of-scope `JWT_SECRET` requirement.
+- Acceptance status: Complete.
+- Remaining issues: None in scope.
+- Next action: Final response.
+
+- Test plan:
+  - `git status --short --ignored`
+  - `git diff --stat`
+  - `git diff`
+  - Artifact existence checks.
+- Red phase evidence: Not applicable; closeout task has no product code behavior.
+- Green phase evidence: Verification and final audit completed.
+- Refactor phase evidence: Closeout artifacts reviewed for credential leakage.
+- Test commands run:
+  - `git status --short --ignored`
+  - `git diff --stat`
+  - `git diff`
 - Acceptance result:
-  - [x] Final diff audit completed.
-  - [x] Review, verification, release notes, summary, and handoff are current.
-  - [x] Workflow health check completed.
-- Verification commands: `git diff --stat`, `git diff`, final test/lint/build commands.
-- Stop condition: Stop with Needs Human Review if final verification cannot prove the workflow.
-- Out-of-scope items: New feature work beyond the approved spec.
+  - [x] Review file exists and documents scope/security/diff.
+  - [x] Verification file exists and records commands/results.
+  - [x] Release notes exist.
+  - [x] Summary exists.
+  - [x] Handoff reflects complete state.
+  - [x] Workflow health is recorded.
+- Verification commands:
+  - `git status --short --ignored`
+  - `git diff --stat`
+  - `git diff`
+- Stop condition: Not triggered. `.env` is ignored and not present in tracked diff.
+- Out-of-scope items:
+  - Any implementation beyond documenting and auditing this config-only change.

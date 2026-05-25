@@ -6,131 +6,122 @@
 - Current worktree path: `C:/Users/laura.bolas/projects/karebraids/dev`.
 - Run id: dev.
 - Artifact root: `_workflow/runs/dev/`.
-- Request: Add a hidden admin dashboard with JWT-protected login and full CRUD for bookings only.
-- Request classification: feature.
-- Scope: large.
-- Risk: high.
+- Request: Configure existing env-backed admin credentials locally.
+- Request classification: ops.
+- Scope: small.
+- Risk: medium.
 - Current phase: Complete.
 - Spec file: `_workflow/runs/dev/spec.md`.
 - Task plan file: `_workflow/runs/dev/tasks.md`.
-- Spec approval: Approved by user response `approve spec`.
+- Spec approval: Approved by user response `spec approved`.
 - Implementation status: Complete.
-- Last completed task: TASK-004 Final integrated verification and workflow closeout.
+- Last completed task: TASK-002 Verify config and close workflow.
 - Current task: None.
 - Next task: None.
-- Next step: User review and optional commit.
+- Next step: Add local `JWT_SECRET` if the backend will be started for admin login.
 
 ## Shared Understanding Handoff
 
 ### Original Request
 
-Add an admin dashboard where the admin has full CRUD functionality.
+Seed the database with admin credentials: admin email `admin@gmail.com` and a user-provided password.
 
 ### Confirmed Understanding
 
-The admin dashboard is available at `/admin`, hidden from public navigation, and protected by a simple admin login. The backend issues a JWT after validating credentials from the root `.env`. All admin API routes require a valid Bearer token. Full CRUD applies to bookings only. Services and gallery content are out of scope.
+The repo already uses environment-variable-backed admin authentication rather than database-backed admin users. The clarified request was to use environment variables, so the work configured root `.env` for the existing auth path instead of adding a seed script or database model.
 
 ### Decisions Made
 
-- Use simple env-backed admin credentials and backend-issued JWT.
-- Guard `/admin` on the frontend and all admin API routes on the backend.
-- Keep `/admin` hidden from public navigation.
-- Limit CRUD to bookings.
-- Expand booking statuses to `pending`, `confirmed`, `cancelled`, and `completed`.
-- Allow admins to edit booking status.
-- Use the same booking validation, Monday-Saturday rules, and duplicate time-slot prevention for admin create/edit as the public booking form.
-- Record auth architecture decision in `_decisions/2026-05-25-admin-jwt-env-auth.md`.
+- Use existing `ADMIN_USERNAME` and `ADMIN_PASSWORD` env variables.
+- Store `admin@gmail.com` in `ADMIN_USERNAME`, because the current API expects a `username` field and can accept an email value.
+- Do not seed MongoDB.
+- Do not change backend auth architecture, frontend UI, or deployment config.
+- Do not print or commit real local password values.
 
 ### Assumptions
 
-- Env var names are `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and `JWT_SECRET`.
-- `jsonwebtoken` is acceptable as the JWT dependency.
-- Public booking behavior remains compatible.
-- Cancelled/completed bookings do not automatically reopen appointment availability in this workflow.
+- The password is local-only.
+- Existing `JWT_SECRET`, if present, should be preserved.
+- Since `JWT_SECRET` is missing, it is reported rather than generated silently.
+- Production/Heroku config vars are out of scope.
 
 ## Completion Summary
 
-- TASK-001 completed: Admin JWT login and route guard.
-- TASK-002 completed: Guarded admin booking CRUD API.
-- TASK-003 completed: Hidden frontend admin dashboard CRUD UI.
-- TASK-004 completed: Final integrated verification and closeout.
-- Final acceptance: all criteria checked `[x]`.
-- Final review verdict: Passed.
+- TASK-001 completed: Configure local admin env credentials.
+- TASK-002 completed: Verify config and close workflow.
+- Final acceptance: all in-scope criteria checked `[x]`.
+- Final review verdict: Passed for the approved config-only scope.
 - Workflow health: Passed.
 
 ## Verification Status
 
-- `npm run test:server`: passed, 4 suites / 24 tests.
-- `npm test --prefix client`: passed, 4 files / 23 tests.
-- `npm run lint --prefix client`: passed.
-- `npm run build --prefix client`: passed.
-- Playwright CLI `/admin` screenshot check: passed.
+- Masked env key-count checks: passed.
+- Node/dotenv admin credential assertion: passed; `JWT_SECRET` presence reported false.
+- `.env.example` placeholder check: passed.
+- `npm run test:server -- admin-auth.test.js`: passed, 1 suite / 5 tests.
 - `git diff --stat`: completed.
 - `git diff`: completed.
-- `git status --short`: completed.
+- `git status --short --ignored`: completed.
 
 ## Dirty Worktree
 
-- Pre-existing unrelated dirty files remain:
-  - `.agents/skills/grill-me/SKILL.md`
-  - `AGENTS.md`
-  - `RUN_WORKFLOW.md`
-  - `.agents/skills/design-taste-frontend/`
-- Expected changed files for this request include app/test/package/env files, run-scoped workflow artifacts, and `_decisions/2026-05-25-admin-jwt-env-auth.md`.
-- No generated Playwright screenshot or Vite log files remain.
+- Expected tracked workflow artifact changes:
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/request.md`
+  - `_workflow/runs/dev/spec.md`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
+- Expected ignored local config:
+  - `.env`
+- Existing ignored files/folders visible in final ignored status were not created for this request.
 
 ## Token / Resume State
 
 - Current phase: Complete.
 - Current task: None.
 - Current iteration: None.
-- Last completed safe checkpoint: TASK-004 Done with workflow health Passed.
+- Last completed safe checkpoint: TASK-002 Done with workflow health Passed.
 - Files already changed:
-  - `.env.example`
-  - `package.json`
-  - `package-lock.json`
-  - `server/app.js`
-  - `server/config/env.js`
-  - `server/models/Booking.js`
-  - `server/utils/bookingValidation.js`
-  - `server/controllers/adminAuthController.js`
-  - `server/controllers/adminBookingController.js`
-  - `server/middleware/adminAuth.js`
-  - `server/routes/adminRoutes.js`
-  - `server/tests/admin-auth.test.js`
-  - `server/tests/admin-bookings.test.js`
-  - `server/tests/env.test.js`
-  - `client/src/App.jsx`
-  - `client/src/pages/Admin.jsx`
-  - `client/src/services/adminService.js`
-  - `client/src/hooks/queries/useAdminBookings.js`
-  - `client/src/hooks/mutations/useAdminBookingMutations.js`
-  - `client/src/index.css`
-  - `client/test/admin-dashboard.test.jsx`
-  - `_workflow/runs/dev/*`
-  - `_decisions/2026-05-25-admin-jwt-env-auth.md`
-- Files planned next: None.
+  - `.env` ignored local file
+  - `_workflow/runs/dev/request.md`
+  - `_workflow/runs/dev/spec.md`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
+- Files planned next: None for this request.
 - Tests already run:
-  - `npm run test:server`
-  - `npm test --prefix client`
-  - `npm run lint --prefix client`
-  - `npm run build --prefix client`
-  - Playwright CLI `/admin` screenshot check
-- Exact next command/action: User review and optional commit.
-- Safe to continue automatically: No further work remains.
+  - Masked env key-count checks.
+  - Node/dotenv admin credential assertion.
+  - `.env.example` placeholder check.
+  - `npm run test:server -- admin-auth.test.js`
+  - `git diff --stat`
+  - `git diff`
+  - `git status --short --ignored`
+- Exact next command/action: Add a local `JWT_SECRET` value before starting the backend for admin login.
+- Safe to continue automatically: No further in-scope work remains.
 
 ## Workflow Health
 
 - Current status: Passed.
 - Notes:
   - Request synced.
-  - Detailed spec existed with all required sections.
-  - Spec approval was recorded before task planning.
-  - Task plan was generated from the approved spec.
-  - Required iteration and TDD-first evidence was recorded for code-changing tasks.
+  - Detailed spec saved with all required sections.
+  - Approval gate completed before task planning.
+  - Task plan generated from approved spec.
+  - Required iteration evidence recorded.
+  - Focused verification completed.
   - Final diff audit completed.
-  - Review, verification, release notes, summary, decision log, and handoff are current.
-  - `design-taste-frontend` was applied and recorded.
+  - Review, verification, release notes, summary, and handoff are current.
+  - No frontend work; `design-taste-frontend` not applicable.
+  - No decision log needed.
 
 ## Final Artifacts
 
@@ -143,4 +134,4 @@ The admin dashboard is available at `/admin`, hidden from public navigation, and
 - Review: `_workflow/runs/dev/review.md`
 - Release notes: `_workflow/runs/dev/release-notes.md`
 - Summary: `_workflow/runs/dev/summary.md`
-- Decisions: `_decisions/2026-05-25-admin-jwt-env-auth.md`
+- Decisions: none

@@ -755,6 +755,180 @@
 
 - Final review, release notes, summary, handoff update, and workflow health check.
 
+## 2026-05-25 - Intake and Spec Setup: Configure Env-Backed Admin Credentials
+
+- Request: Configure existing env-backed admin credentials locally with admin username `admin@gmail.com` and the user-provided local password.
+- Branch: dev.
+- Artifact root: `_workflow/runs/dev/`.
+- Dirty worktree check before spec:
+  - `git status --short` returned no output.
+- Repo context inspected:
+  - `.agents/skills/grill-me/SKILL.md`
+  - `RUN_WORKFLOW.md`
+  - `docs/PROJECT_CONTEXT.md`
+  - `docs/ARCHITECTURE.md`
+  - `docs/VERIFY.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/summary.md`
+  - `.env.example`
+  - `.gitignore`
+  - `package.json`
+  - `server/config/env.js`
+  - `server/controllers/adminAuthController.js`
+  - `server/tests/admin-auth.test.js`
+- Intake question asked:
+  - The current backend does not store admin users in MongoDB; admin login checks `ADMIN_USERNAME` and `ADMIN_PASSWORD` from environment variables. Do you want to change this to a database-backed admin account seed?
+- Answer received:
+  - Use environment variables.
+- Shared understanding:
+  - Configure the existing env-backed admin auth locally.
+  - Set `ADMIN_USERNAME` to `admin@gmail.com`.
+  - Set `ADMIN_PASSWORD` to the user-provided local password without recording it in tracked workflow artifacts or printing it.
+  - Do not add database seeding, a user model, frontend changes, API changes, deployment config changes, or auth refactors.
+- Frontend taste skill:
+  - Not applicable; no frontend/UI surface is in scope.
+- Current phase: Spec approval gate.
+- Spec file created: `_workflow/runs/dev/spec.md`
+- Task plan status: Not generated; pending explicit spec approval.
+- Implementation status: Not started.
+
+## 2026-05-25 - Spec Approval and Planning: Configure Env-Backed Admin Credentials
+
+- User approval received: `spec approved`.
+- Spec file approved: `_workflow/runs/dev/spec.md`.
+- Task plan created: `_workflow/runs/dev/tasks.md`.
+- Detailed spec completeness: Complete; all required sections plus Frontend Taste Application status are present before planning.
+- Planned executable tasks:
+  - `TASK-001: Configure local admin env credentials`
+  - `TASK-002: Verify config and close workflow`
+- Current phase: TASK-001 Ready for Iteration 1 Build.
+- Implementation status: Not started.
+
+## 2026-05-25 - TASK-001 Done: Configure Local Admin Env Credentials
+
+- Task ID: TASK-001
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed:
+  - `.env` ignored local file
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+
+### Iteration 1 Build Evidence
+
+- Goal: Prove missing local admin credential keys and add them.
+- Red phase: Masked pre-edit key check returned only `PORT:1` and `MONGODB_URI:1`; `ADMIN_USERNAME` and `ADMIN_PASSWORD` were missing.
+- Green phase: Updated ignored root `.env`; masked key check returned `ADMIN_USERNAME:1` and `ADMIN_PASSWORD:1`.
+- Refactor phase: Env update logic removed any duplicate admin credential keys before appending the active entries.
+- Verification: Passed.
+- Review findings: Secret values were not printed.
+
+### Iteration 2 Refine Evidence
+
+- Goal: Confirm no duplicate/conflicting admin env keys and preserve `.env.example` safety.
+- Red phase: Not applicable after Iteration 1 normalization; duplicate risk was checked directly.
+- Green phase: Key-count check showed one active entry per admin key.
+- Refactor phase: `.env.example` kept the placeholder `ADMIN_PASSWORD=replace-with-a-strong-password`.
+- Verification: Passed.
+- Review findings: No real password was written to tracked files.
+
+### Iteration 3 Polish Evidence
+
+- Goal: Run focused config/auth verification and security review.
+- Red phase: Not applicable for this config-only local update; initial missing admin env keys were the expected failing condition.
+- Green phase: Node/dotenv assertion passed for admin credential variables; `JWT_SECRET` presence reported false.
+- Refactor phase: `npm run test:server -- admin-auth.test.js` passed with no code changes.
+- Verification:
+  - Node/dotenv admin credential assertion: passed.
+  - `npm run test:server -- admin-auth.test.js`: passed, 1 suite / 5 tests.
+- Review findings: Existing backend auth remains unchanged; local login still requires `JWT_SECRET`.
+
+### Acceptance Result
+
+- [x] Root `.env` has `ADMIN_USERNAME` set to `admin@gmail.com`.
+- [x] Root `.env` has `ADMIN_PASSWORD` set to the user-provided local password without printing it.
+- [x] Existing `.env` values such as `PORT`, `MONGODB_URI`, and any `JWT_SECRET` are preserved.
+- [x] `.env.example` does not contain the real local password.
+- [x] No database seed, user model, auth architecture, frontend UI, API contract, or deployment config change is introduced.
+- [x] Relevant config/auth verification is run and documented.
+
+### Failure Recovery Notes
+
+- Parallel verification commands timed out; reran the checks sequentially with longer timeouts and passed.
+
+### Next Step
+
+- Continue to TASK-002: Verify config and close workflow.
+
+## 2026-05-25 - TASK-002 Done: Verify Config and Close Workflow
+
+- Task ID: TASK-002
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed:
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
+
+### Iteration 1 Build Evidence
+
+- Goal: Record final verification evidence.
+- Red phase: Not applicable; documentation/verification task.
+- Green phase: TASK-001 verification results were recorded in `_workflow/runs/dev/verification.md`.
+- Refactor phase: Artifact content reviewed for secret leakage.
+- Verification: Passed.
+- Review findings: Config change is local-only; `JWT_SECRET` caveat documented.
+
+### Iteration 2 Refine Evidence
+
+- Goal: Run final diff and security audit.
+- Red phase: Not applicable; documentation/verification task.
+- Green phase: `git diff --stat`, `git diff`, and `git status --short --ignored` completed.
+- Refactor phase: Reviewed diff for secrets and scope.
+- Verification: Passed.
+- Review findings: Tracked diff contains workflow artifacts only; `.env` is ignored and not included in tracked diff.
+
+### Iteration 3 Polish Evidence
+
+- Goal: Complete workflow closeout and health check.
+- Red phase: Not applicable; documentation/verification task.
+- Green phase: Review, verification, release notes, summary, and handoff were updated.
+- Refactor phase: Final artifact wording avoids secret values.
+- Verification: Passed.
+- Review findings: Scope respected; workflow health Passed with documented out-of-scope `JWT_SECRET` requirement.
+
+### Acceptance Result
+
+- [x] Review file exists and documents scope/security/diff.
+- [x] Verification file exists and records commands/results.
+- [x] Release notes exist.
+- [x] Summary exists.
+- [x] Handoff reflects complete state.
+- [x] Workflow health is recorded.
+
+### Failure Recovery Notes
+
+- None beyond the TASK-001 parallel command timeout recovery.
+
+### Final Diff Audit
+
+- `git diff --stat` completed.
+- `git diff` completed.
+- Tracked diff contains workflow artifacts only.
+- `.env` is ignored and not included in tracked diff.
+- No tracked secret values, product code changes, dependencies, schema changes, generated screenshots, or deployment changes were added.
+- Existing ignored generated files/folders are visible in ignored status but were not created for this request.
+
+### Next Step
+
+- Add a local `JWT_SECRET` value before starting the backend for admin login.
+
 ## 2026-05-25 - Intake and Spec Setup: Admin Dashboard Booking CRUD
 
 - Request: Add a hidden admin dashboard with JWT-protected login and full CRUD for bookings only.
