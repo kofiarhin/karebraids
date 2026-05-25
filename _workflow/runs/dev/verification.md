@@ -1,46 +1,54 @@
-# Verification: Homepage Hero Image Carousel
+# Verification: Homepage Visual Optimization
 
-- Request: Implement a rotating hero image carousel on the KareBraids homepage.
+- Request: Optimize the KareBraids homepage so it feels less text-heavy and more visual while preserving the current brand direction.
 - Spec file: `_workflow/runs/dev/spec.md`
 - Task plan: `_workflow/runs/dev/tasks.md`
-- Date: 2026-05-24
+- Date: 2026-05-25
 - Final status: Passed
 
 ## Commands Run
 
 - `cd client && npm test -- site-pages.test.jsx`
-  - Red evidence:
-    - Failed for missing hero dot button before implementation.
-    - Failed for missing media query change handler during reduced-motion refinement.
-    - Failed for missing semantic dot group role during polish.
-  - Final result: Passed, 9 tests.
+  - Iteration 1 Red: failed for missing `Featured trust style thumbnails`.
+  - Iteration 1 Green/Refactor: passed with 10 tests.
+  - Iteration 2 Red: failed for non-decorative trust thumbnail alt text.
+  - Iteration 2 Green/Refactor: passed with 11 tests.
+  - Iteration 3 Red: failed because `.cta-image` exposed `alt="Booking preview braid style"`.
+  - Iteration 3 Green/Refactor: passed with 12 tests.
 - `cd client && npm test`
-  - Final result: Passed, 3 test files / 16 tests.
+  - Final result: Passed, 3 test files / 19 tests.
 - `cd client && npm run lint`
   - Final result: Passed.
 - `cd client && npm run build`
   - Final result: Passed.
-- Playwright CLI desktop screenshot:
-  - URL: `http://127.0.0.1:5177/`
-  - Viewport: `1280x800`
-  - Wait selector: `.hero-carousel-dot[aria-current='true']`
-  - Result: Passed; active dot found and visual inspection confirmed hero image, dots, badge, and CTAs were intact.
-- Playwright CLI mobile full-page screenshot:
-  - URL: `http://127.0.0.1:5177/`
+
+## Browser Verification
+
+- Tooling:
+  - The in-app browser tool was not exposed by tool discovery, so Playwright/Chromium CLI automation was used as the browser fallback.
+  - Local Vite dev server ran at `http://127.0.0.1:5176/` during verification and was stopped afterward.
+- Desktop check:
+  - Viewport: `1280x900`
+  - Result: Passed.
+  - Evidence: no console issues, no horizontal overflow, 18 non-hero homepage visual images loaded, screenshot reviewed.
+- Mobile check:
   - Viewport: `390x844`
-  - Wait selector: `.hero-carousel-dot[aria-current='true']`
-  - Result: Passed; active dot found and visual inspection confirmed image, dots, badge, and CTAs were intact without overlap.
+  - Result: Passed.
+  - Evidence: no console issues, no horizontal overflow, 18 non-hero homepage visual images loaded, screenshot reviewed.
 
 ## Notes
 
-- The in-app browser Node control tool was not exposed by tool discovery, so browser verification used the Playwright CLI fallback.
-- A Vite dev server is running at `http://127.0.0.1:5177/` for user review.
-- Temporary screenshots were saved under the OS temp directory, not the repo.
-- Temporary repo-local Vite logs and one accidental shell-quoting artifact were removed.
+- Full-page screenshots taken from the top initially showed below-fold sections hidden because the page intentionally uses reveal-on-scroll. Final browser verification scrolled through sections before screenshots and metrics collection.
+- Temporary browser screenshots and scripts were saved under the OS temp directory, not the repo.
+- Generated `client/test-results/` from the temporary Playwright run was removed.
+- Pre-existing untracked homepage PNG files were left untouched.
 
 ## Design-Taste Frontend Pre-Flight
 
-- [x] Global state is not used for isolated carousel state.
-- [x] Mobile layout collapse remains within existing responsive hero rules.
+- [x] Global state is not used for homepage visual additions.
+- [x] Mobile layout collapse is covered by existing responsive breakpoints and new single-column rules.
 - [x] No `h-screen` full-height section was introduced.
-- [x] `useEffect` timer logic has cleanup for intervals and media query listeners.
+- [x] Existing carousel `useEffect` animation cleanup remains intact.
+- [x] Empty/loading/error states are not applicable to static homepage content.
+- [x] Cards are used only for repeated service/testimonial surfaces and not nested as page sections.
+- [x] No CPU-heavy perpetual animations were introduced.

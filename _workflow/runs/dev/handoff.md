@@ -6,120 +6,122 @@
 - Current worktree path: `C:/Users/laura.bolas/projects/karebraids/dev`.
 - Run id: dev.
 - Artifact root: `_workflow/runs/dev/`.
-- Request: Implement a rotating hero image carousel on the KareBraids homepage.
+- Request: Optimize the KareBraids homepage so it feels less text-heavy and more visual while preserving the current brand direction.
 - Request classification: feature.
-- Scope: small.
+- Scope: medium-small.
 - Risk: medium-low.
 - Current phase: Complete.
 - Spec file: `_workflow/runs/dev/spec.md`.
 - Task plan file: `_workflow/runs/dev/tasks.md`.
 - Spec approval: Approved by user response `approve spec`.
 - Implementation status: Complete.
-- Last completed task: TASK-001 Add homepage hero carousel with clickable dots.
+- Last completed task: TASK-001 Add gallery-image visuals to homepage sections.
 - Current task: None.
-- Next step: User review or commit.
+- Next task: None.
+- Next step: User review and optional commit.
 
 ## Shared Understanding Handoff
 
 ### Original Request
 
-Implement a rotating hero image carousel on the KareBraids homepage using the first five images from `galleryItems`, preserving the existing hero layout and styling.
+Optimize the KareBraids homepage so it feels less text-heavy and more visual. Keep the current brand style and layout direction, do not redesign the whole site, use existing `galleryItems` images, ensure every homepage section has a visual/image element, keep copy concise and premium, and limit implementation files to `client/src/pages/Home.jsx` and `client/src/index.css` unless a small reusable helper is clearly needed.
 
 ### Confirmed Understanding
 
-The homepage hero now replaces the previous static image with a lightweight carousel using the first five gallery images. It auto-rotates every 4.5 seconds, uses a smooth fade and subtle scale transition, preserves the surrounding hero copy, CTA buttons, luxury frame shape, decorative treatment, and "Salon and mobile appointments" badge, and includes accessible clickable dot controls.
+The homepage already has the rotating hero carousel and should keep it. The rest of the homepage should become more image-led by adding a thumbnail cluster to the trust strip, image-backed service cards, a supporting process/detail image in the why section, a visual companion treatment for testimonials, and a gallery-image-backed CTA treatment. The gallery preview remains an image grid. The result should feel premium and editorial without changing routes, backend behavior, data constants, dependencies, or the broader site structure.
 
 ### Decisions Made
 
-- `heroSlides` is created from `galleryItems.slice(0, 5)`.
-- Carousel state is local React state.
-- Dot indicators are accessible clickable buttons in a named group.
-- Clicking a dot jumps directly to that slide.
-- Auto-rotation is 4500ms.
-- `prefers-reduced-motion` disables ongoing auto-rotation and CSS transition duration.
-- No new dependencies were added.
+- App implementation was limited to `client/src/pages/Home.jsx` and homepage CSS in `client/src/index.css`.
+- Focused verification tests were updated in `client/test/site-pages.test.jsx`.
+- `galleryItems` remained the only image data source.
+- Existing carousel logic and reduced-motion handling remained intact.
+- Decorative duplicate imagery in the trust strip and CTA is hidden from assistive technology.
+- No new assets or dependencies were added.
 
 ### Assumptions
 
-- `galleryItems` titles are acceptable hero image alt text.
-- Existing remote image URLs remain the source of truth for gallery imagery.
-- No arrows, swipe, drag, or thumbnails are needed for this request.
+- Existing `galleryItems` titles/descriptions are acceptable sources for meaningful image alt text.
+- Remote Pexels image URLs in `galleryItems` remain valid and are acceptable for homepage visuals.
+- Service-to-gallery image pairing can be deterministic by array index without changing `content.js`.
+- "Every homepage section" refers to the rendered homepage sections in `Home.jsx`: hero, trust strip, services, why choose, gallery preview, testimonials, and CTA.
+- The visual refresh should keep the current warm forest/gold/terracotta/linen brand system and existing asymmetric layout direction.
 
-### In Scope Completed
+## Completion Summary
 
-- Updated homepage hero rendering in `client/src/pages/Home.jsx`.
-- Added hero carousel CSS in `client/src/index.css`.
-- Added focused frontend tests in `client/test/site-pages.test.jsx`.
-- Verified focused tests, full tests, lint, build, and responsive browser screenshots.
-
-### Out Of Scope
-
-- Redesigning the hero layout or typography.
-- Changing CTA buttons, hero text, trust strip, services, gallery preview, testimonials, or booking CTA.
-- Changing gallery data or adding API/data fetching logic.
-- Adding dependencies.
-- Backend, database, env, deployment, or routing changes.
-
-### Acceptance Criteria
-
-- [x] Homepage hero uses the first five `galleryItems` images as slides.
-- [x] Static single hero image is replaced by an auto-rotating carousel.
-- [x] Rotation timing is between 4 and 5 seconds per image.
-- [x] Slide transition is a smooth fade with subtle scale/zoom.
-- [x] Existing hero layout, luxury frame shape, CTA buttons, and appointment badge remain intact.
-- [x] Dot indicators are small, visually consistent with the brand, and positioned over or near the hero image bottom.
-- [x] Dot indicators are accessible clickable buttons with active-slide state.
-- [x] Clicking a dot jumps to the selected slide.
-- [x] Mobile layout remains responsive.
-- [x] `prefers-reduced-motion` is respected.
-- [x] No new dependencies are added.
-- [x] Changes are minimal and localized.
-
-### Risks And Edge Cases
-
-- Existing remote gallery image URLs must remain reachable for images to display.
-- Full-page screenshots can show blank reveal-on-scroll sections until the page is scrolled; this was pre-existing behavior and not changed.
-
-### Remaining Open Questions
-
-- None.
-
-## Dirty Worktree
-
-Current dirty files are expected for this completed request:
-
-- `_workflow/runs/dev/handoff.md`
-- `_workflow/runs/dev/progress.md`
-- `_workflow/runs/dev/request.md`
-- `_workflow/runs/dev/spec.md`
-- `_workflow/runs/dev/tasks.md`
-- `_workflow/runs/dev/verification.md`
-- `_workflow/runs/dev/review.md`
-- `_workflow/runs/dev/release-notes.md`
-- `_workflow/runs/dev/summary.md`
-- `client/src/index.css`
-- `client/src/pages/Home.jsx`
-- `client/test/site-pages.test.jsx`
-
-No unexpected untracked files remain after cleanup.
+- TASK-001 completed through Iteration 1 Build, Iteration 2 Refine, and Iteration 3 Polish.
+- Final acceptance: all criteria checked `[x]`.
+- Final review verdict: Passed.
+- Release notes created: `_workflow/runs/dev/release-notes.md`.
+- Summary appended: `_workflow/runs/dev/summary.md`.
+- Decisions recorded: none needed.
 
 ## Verification Status
 
-- `npm test -- site-pages.test.jsx`: passed.
-- `npm test`: passed, 3 test files / 16 tests.
-- `npm run lint`: passed.
-- `npm run build`: passed.
-- Playwright CLI responsive screenshot checks passed for desktop `1280x800` and mobile `390x844`.
-- Vite dev server is running for review at `http://127.0.0.1:5177/`.
+- Iteration 1 verification complete:
+  - `npm test -- site-pages.test.jsx`: failed first for missing trust thumbnail cluster.
+  - `npm test -- site-pages.test.jsx`: passed after implementation.
+  - `npm test -- site-pages.test.jsx`: passed after refactor review.
+- Iteration 2 verification complete:
+  - `npm test -- site-pages.test.jsx`: failed first for non-decorative trust thumbnails.
+  - `npm test -- site-pages.test.jsx`: passed after decorative thumbnail semantics.
+  - `npm test -- site-pages.test.jsx`: passed after refactor review.
+- Iteration 3 verification complete:
+  - `npm test -- site-pages.test.jsx`: failed first for redundant CTA background image alt text.
+  - `npm test -- site-pages.test.jsx`: passed after decorative CTA image semantics.
+  - `npm test -- site-pages.test.jsx`: passed after refactor review.
+- Final verification complete:
+  - `npm test -- site-pages.test.jsx`: passed, 12 tests.
+  - `npm test`: passed, 3 test files / 19 tests.
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Playwright/Chromium desktop `1280x900`: passed; no console issues, no horizontal overflow, images loaded.
+  - Playwright/Chromium mobile `390x844`: passed; no console issues, no horizontal overflow, images loaded.
+
+## Dirty Worktree
+
+- Dirty worktree before this request: none. `git status --short` returned no output during intake.
+- Expected changed implementation/test files:
+  - `client/src/pages/Home.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+- Expected changed workflow files:
+  - `_workflow/runs/dev/request.md`
+  - `_workflow/runs/dev/spec.md`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
+- Pre-existing untracked files left untouched:
+  - `client/homepage-cta-mobile.png`
+  - `client/homepage-services.png`
+  - `client/homepage-why.png`
+- Generated `client/test-results/` from the temporary Playwright browser check was removed.
 
 ## Workflow Health
 
 - Current status: Passed.
-- Notes: Request synced, spec approved before task planning, task completed with three iterations and TDD-first evidence, final verification/review/release notes/summary saved, final diff audit completed, and acceptance criteria met.
+- Notes:
+  - Request synced.
+  - Detailed spec existed with all 22 required sections.
+  - Spec approval was recorded before task planning.
+  - Task plan was generated from the approved spec.
+  - Required iteration and TDD-first evidence was recorded for TASK-001.
+  - Final diff audit completed.
+  - Review, verification, release notes, summary, and handoff are current.
 
 ## Final Artifacts
 
+- Request: `_workflow/runs/dev/request.md`
+- Spec: `_workflow/runs/dev/spec.md`
+- Handoff: `_workflow/runs/dev/handoff.md`
+- Task plan: `_workflow/runs/dev/tasks.md`
+- Progress: `_workflow/runs/dev/progress.md`
 - Verification: `_workflow/runs/dev/verification.md`
 - Review: `_workflow/runs/dev/review.md`
 - Release notes: `_workflow/runs/dev/release-notes.md`
 - Summary: `_workflow/runs/dev/summary.md`
+- Decisions: none

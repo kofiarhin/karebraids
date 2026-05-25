@@ -89,3 +89,57 @@
   - No generated temporary files, secrets, env changes, dependency changes, API changes, or deployment changes remain.
 - Unresolved issues: none.
 - Next recommended work: User review, then commit with `feature: add homepage hero carousel`.
+
+## 2026-05-25 - Homepage Visual Optimization
+
+- Request: Optimize the KareBraids homepage so it feels less text-heavy and more visual while preserving the current brand direction.
+- Spec file used: `_workflow/runs/dev/spec.md`
+- Detailed spec completeness: Complete; all 22 required sections were present before planning.
+- Task plan used: `_workflow/runs/dev/tasks.md`
+- Review file used: `_workflow/runs/dev/review.md`
+- Release notes file used: `_workflow/runs/dev/release-notes.md`
+- Tasks completed:
+  - TASK-001: Add gallery-image visuals to homepage sections
+- Iteration evidence summary:
+  - Iteration 1 Build: Red failure for missing trust thumbnail cluster, Green gallery-driven homepage visual structures, Refactor verification.
+  - Iteration 2 Refine: Red failure for non-decorative trust thumbnail alt text, Green decorative thumbnail semantics, Refactor verification.
+  - Iteration 3 Polish: Red failure for redundant CTA background image alt text, Green decorative CTA semantics, Refactor verification plus full browser checks.
+- Files changed:
+  - `client/src/pages/Home.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+  - `_workflow/runs/dev/*`
+- Verification run:
+  - `npm test -- site-pages.test.jsx`: passed, 12 tests.
+  - `npm test`: passed, 3 test files / 19 tests.
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Playwright/Chromium desktop check `1280x900`: passed, no console issues, no horizontal overflow, images loaded.
+  - Playwright/Chromium mobile check `390x844`: passed, no console issues, no horizontal overflow, images loaded.
+- Acceptance results:
+  - [x] Hero carousel remains present and functional.
+  - [x] Trust strip keeps existing trust badges and adds a 3-5 image overlapping thumbnail cluster from `galleryItems`.
+  - [x] Featured services render as visual cards with gallery images, overlays/gradients, title, duration, and short description.
+  - [x] Why choose KareBraids includes a supporting process/detail gallery image panel beside the reasons on larger screens and stacked on mobile.
+  - [x] Gallery preview remains an image grid.
+  - [x] Testimonials include a visual panel or small client/style thumbnails and quote text remains readable.
+  - [x] CTA includes a gallery image background or image panel with dark/green overlay and accessible contrast.
+  - [x] Added images have meaningful alt text or are correctly decorative when redundant.
+  - [x] No new dependencies or image assets are added.
+  - [x] Product implementation changes are limited to `client/src/pages/Home.jsx` and `client/src/index.css`.
+  - [x] Mobile responsive layout is clean with no incoherent overlaps.
+  - [x] Existing animations and `prefers-reduced-motion` support are respected.
+  - [x] Relevant client tests, lint, and build pass.
+- Failure recovery notes:
+  - Adjusted the older CTA test to remain structural after making the CTA background image decorative.
+  - Used Playwright/Chromium CLI automation as a browser fallback because the in-app browser tool was not exposed by tool discovery.
+  - Scrolled through sections before final browser screenshots because reveal-on-scroll intentionally hides below-fold sections until viewed.
+  - Removed generated `client/test-results/`; pre-existing untracked homepage PNGs were left untouched.
+- Final diff audit:
+  - `git diff --stat` and implementation diff completed.
+  - Diff matches approved spec.
+  - No unrelated implementation files, secrets, env values, dependencies, or deployment changes were added.
+  - CRLF warnings were observed and have no behavior impact.
+- Release notes file used: `_workflow/runs/dev/release-notes.md`
+- Unresolved issues: none.
+- Next recommended work: User review, then commit with `feature: make homepage more visual`.
