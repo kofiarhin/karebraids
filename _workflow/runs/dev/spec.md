@@ -1,330 +1,430 @@
-# Detailed Spec: Homepage Visual Optimization
+# Admin Dashboard Booking CRUD Spec
 
 ## 1. Metadata
-
 - Spec filename: `_workflow/runs/dev/spec.md`
-- Date: 2026-05-24
-- Request ID / slug: homepage-visual-optimization
-- Request source: Latest direct user prompt synced to `_workflow/runs/dev/request.md`
-- Execution mode: complete-workflow after explicit spec approval
+- Date: 2026-05-25
+- Request ID / slug: admin-dashboard-booking-crud
+- Request source: Latest direct user prompt plus grill-me intake answers.
+- Execution mode: complete-workflow after explicit spec approval.
 - Request classification: feature
-- Scope level: medium-small
-- Risk level: medium-low
+- Scope level: large
+- Risk level: high
 
 ## 2. Original Request
-
-- Raw user request: Optimize the KareBraids homepage so it feels less text-heavy and more visual. Keep the current brand style and layout direction. Do not redesign the whole site. Use existing `galleryItems` images from `client/src/constants/content.js`. Every homepage section should include some visual/image element. Keep copy concise and premium. Update only the homepage and CSS unless a small reusable helper is clearly needed. Preserve the rotating hero carousel. Add a gallery-image thumbnail cluster to the trust strip. Make featured services more visual with image cards and readable overlays. Add a process/detail image panel to Why choose KareBraids. Keep gallery preview as an image grid. Add visuals to testimonials. Add a gallery-image-backed CTA with dark/green overlay. No new assets, no new dependencies, accessible, mobile responsive, reduced-motion aware, minimal clean changes. Expected implementation files are `client/src/pages/Home.jsx` and `client/src/index.css`.
-- Normalized request: Make the existing homepage more image-led section by section, using only `galleryItems` imagery, while preserving brand direction, layout style, hero carousel behavior, accessibility, responsiveness, and minimal implementation scope.
-- Source prompt / `_workflow/runs/dev/request.md` reference: `_workflow/runs/dev/request.md`
+- Raw user request: "lets add admin dashboard where admin has full crud functionality"
+- Normalized request: Add a hidden `/admin` dashboard with JWT-protected admin login and full CRUD for bookings only.
+- Source prompt / `<artifact-root>/request.md` reference: `_workflow/runs/dev/request.md`
 
 ## 3. Questions And Answers
-
-- Questions asked: None.
-- Answers received: Not applicable.
-- Questions skipped: Clarifying questions skipped because the prompt gives concrete section-by-section requirements, constraints, expected files, and acceptance criteria.
-- Remaining open questions: None blocking. Exact gallery image pairings can be selected during implementation.
+- Questions asked:
+  - Should the admin dashboard be protected with a real login, or temporary unprotected internal page?
+  - Should "full CRUD" apply only to appointment bookings, or should the admin also manage services/gallery content?
+  - For booking status, should current statuses stay or should cancellation/completion states be added?
+  - Should `/admin` appear in public navigation or stay hidden?
+  - Should admin create/edit use the same rules as the public booking form?
+- Answers received:
+  - Use a simple admin login protected by backend-issued JWT, with credentials from root `.env`; guard admin API routes and `/admin`.
+  - Bookings only.
+  - Expand status to `pending`, `confirmed`, `cancelled`, and `completed`, editable by admin.
+  - Keep `/admin` hidden from public navigation.
+  - Use the same booking validation, Monday-Saturday rules, and duplicate time-slot prevention; allow status edit separately.
+- Questions skipped: None.
+- Remaining open questions: Exact dashboard table/filter layout can be chosen during implementation from existing design patterns.
 
 ## 4. Problem Definition
-
-- Problem being solved: The homepage communicates the KareBraids offer but relies heavily on text in several sections. The user wants a more visual, premium presentation without a full redesign.
-- Why it matters: Hair braiding is highly visual. More image-led sections can communicate quality, detail, and trust faster than text-heavy content.
-- Current pain point: Outside the hero and gallery preview, sections such as trust, services, why choose, testimonials, and CTA are mostly text or abstract styling.
-- Expected value: A homepage that feels richer, more premium, easier to scan, and better aligned with the visual nature of braid styling.
+- Problem being solved: The site can accept bookings but has no operational interface for the owner/admin to manage them.
+- Why it matters: Without an admin surface, bookings must be managed directly in the database or not at all.
+- Current pain point: The backend exposes only public booking creation and availability; there is no authentication, admin route, status lifecycle, update, delete, or booking list API.
+- Expected value: Admin can securely log in, view bookings, create bookings manually, edit appointment details/status, and delete records when needed.
 
 ## 5. Current State Analysis
-
-- Existing behavior: `Home.jsx` renders hero carousel, trust strip, featured services, why choose section, gallery preview, testimonials, and CTA. The hero carousel uses the first five `galleryItems`, rotates every 4500ms, exposes clickable dots, and respects `prefers-reduced-motion`.
-- Existing architecture/components: React Vite frontend with CSS in `client/src/index.css`. Homepage imports `Button`, `galleryItems`, `services`, `testimonials`, and `useRevealOnScroll`.
+- Existing behavior:
+  - Public users can check availability and submit bookings.
+  - Duplicate service/date/time slots are prevented.
+  - Booking status supports only `pending` and `confirmed`.
+- Existing architecture/components:
+  - React/Vite frontend with React Router and TanStack Query.
+  - Shared Axios client at `client/src/lib/api.js`.
+  - Booking service functions at `client/src/services/bookingService.js`.
+  - Express backend with `server/app.js`, booking routes/controller/model, and validation utility.
 - Existing files/modules likely involved:
-  - `client/src/pages/Home.jsx`
-  - `client/src/index.css`
-  - `client/src/constants/content.js` for read-only source data
-  - `client/test/site-pages.test.jsx` for focused page tests if needed
-- Existing data flow: Static constants from `content.js` render directly in homepage markup. No API, Redux, or TanStack Query involvement.
-- Existing API/UI/CLI/workflow behavior: UI-only static homepage. No backend or API behavior affected.
-- Existing tests or verification coverage: `client/test/site-pages.test.jsx` covers homepage section presence, hero carousel dots, auto-rotation, reduced-motion behavior, gallery page, and mobile navigation. Client scripts include `npm test`, `npm run lint`, and `npm run build`.
+  - `server/config/env.js`
+  - `server/app.js`
+  - `server/models/Booking.js`
+  - `server/utils/bookingValidation.js`
+  - `server/controllers/bookingController.js`
+  - `server/routes/bookingRoutes.js`
+  - New backend admin auth/controller/routes/middleware files under `server/`
+  - `client/src/App.jsx`
+  - `client/src/lib/api.js`
+  - New frontend admin page, admin services, query/mutation hooks, and focused tests.
+- Existing data flow:
+  - Client service calls `/api/bookings/availability` and `/api/bookings`.
+  - Backend validates payload, checks duplicate slots, and persists through Mongoose `Booking`.
+- Existing API/UI/CLI/workflow behavior:
+  - No admin API, no auth flow, no protected frontend routes.
+- Existing tests or verification coverage:
+  - Backend Jest/Supertest booking tests.
+  - Frontend Vitest/RTL booking flow and site page tests.
 
 ## 6. Desired End State
-
-- Expected final behavior: Every homepage section includes an image or visual element using existing `galleryItems`, while the current brand and layout direction remain recognizable.
-- User-facing outcome: Visitors see a more visual homepage with image-backed services, image detail panels, testimonial visuals, and an accessible image-backed CTA.
-- Developer-facing outcome: Homepage implementation remains straightforward, local to `Home.jsx` and `index.css`, with no new image assets or packages.
-- System/workflow outcome: Approved spec leads to a vertical task plan, TDD-first implementation, verification, review, release notes, and summary.
-- Backward compatibility expectations: Existing routes, content constants, hero carousel controls, navigation, booking flow, and gallery behavior remain compatible.
+- Expected final behavior:
+  - Admin visits `/admin`, sees login if unauthenticated, signs in with env-backed credentials, then manages bookings.
+  - Admin API routes require `Authorization: Bearer <token>`.
+  - Admin can list, view/create, edit, update status, and delete bookings.
+- User-facing outcome:
+  - Public site navigation remains unchanged and `/admin` is not advertised.
+  - Public booking behavior remains compatible.
+- Developer-facing outcome:
+  - Admin auth, admin booking APIs, services, hooks, and UI are organized in project conventions.
+- System/workflow outcome:
+  - Root `.env` and `.env.example` document required backend auth variables.
+  - Backend fails fast when required admin auth env vars are missing outside test mode.
+- Backward compatibility expectations:
+  - Existing pending/confirmed booking records remain valid.
+  - Public booking APIs keep their current behavior and response shape unless status expansion naturally appears in booking data.
 
 ## 7. Scope
-
 - In scope:
-  - Keep the current hero carousel.
-  - Add thumbnail cluster to trust strip using 3-5 `galleryItems`.
-  - Convert service tiles to image-backed cards with readable overlays.
-  - Add a supporting process/detail image panel to the why section.
-  - Keep gallery preview as an image grid.
-  - Add a visual panel or thumbnails to testimonials.
-  - Add a gallery-image-backed CTA treatment with dark/green overlay.
-  - Keep copy concise and premium.
-  - Update `Home.jsx`, `index.css`, and focused tests if needed.
+  - Backend JWT login and guarded admin middleware.
+  - Env variables for admin username, admin password, and JWT secret.
+  - Booking status enum expansion.
+  - Admin booking CRUD API.
+  - Frontend hidden `/admin` route with login and booking management dashboard.
+  - Shared API client authorization support.
+  - TanStack Query hooks wrapping admin services.
+  - Focused backend and frontend tests.
 - Out of scope:
-  - Whole-site redesign.
-  - New assets, new image constants, or content data changes.
-  - New dependencies.
-  - Backend/API/database/env/deployment changes.
-  - Non-homepage page redesigns.
+  - Services CRUD.
+  - Gallery/content CRUD.
+  - Multi-user admin accounts, registration, password reset, refresh tokens, role management, audit logs, email notifications, calendar integration, deployment changes.
 - Non-goals:
-  - Changing booking flow behavior.
-  - Changing routing or layout shell behavior.
-  - Replacing the current brand palette or typography system.
+  - Redesign the public site.
+  - Replace existing booking flow.
+  - Introduce Redux unless global auth state becomes necessary; local/session storage token state is acceptable for this isolated admin route.
 - Explicit boundaries:
-  - Product code changes should be limited to `client/src/pages/Home.jsx` and `client/src/index.css` unless a tiny helper is clearly necessary.
-  - `galleryItems` is a read-only source for this task.
+  - Do not expose `/admin` in public navigation.
+  - Do not hard-code API URLs or secrets.
+  - Do not duplicate server records into Redux.
 
 ## 8. Users And Use Cases
-
-- Primary users: Prospective KareBraids clients browsing services and deciding whether to book.
-- Secondary users: Returning clients checking styles, trust cues, and appointment options.
+- Primary users: KareBraids admin/owner.
+- Secondary users: Public customers indirectly affected by maintained booking availability.
 - Main use cases:
-  - Quickly understand the premium braid service offering.
-  - Browse visual examples while scanning service details.
-  - Build trust through badges, process imagery, testimonials, and CTA.
-  - Navigate to booking or gallery.
+  - Admin logs in.
+  - Admin views upcoming/recent bookings.
+  - Admin creates a booking from a phone or in-person request.
+  - Admin edits booking details or status.
+  - Admin deletes a booking record.
+  - Admin logs out.
 - Edge use cases:
-  - Mobile visitors with narrow screens.
-  - Users with reduced-motion preferences.
-  - Users relying on screen readers.
-  - Slow image loads from remote gallery URLs.
+  - Token missing, expired, or invalid.
+  - Duplicate slot on create/edit.
+  - Invalid booking id.
+  - Empty booking list.
+  - API/network failure while loading or saving.
 
 ## 9. Functional Requirements
-
 - Required behaviors:
-  - Hero carousel remains present and unchanged in intent.
-  - Trust strip renders existing badge text and a small overlapping thumbnail cluster.
-  - Service cards render service title, duration, short description, and one gallery image each.
-  - Why section renders reason text plus a process/detail gallery image panel.
-  - Gallery preview remains an image grid.
-  - Testimonials render readable quote text plus visual thumbnails or panel.
-  - CTA renders text/button over or beside a gallery image with a dark/green overlay.
-- Inputs: Static `services`, `galleryItems`, and `testimonials`.
-- Outputs: Homepage DOM with added image elements and CSS classes.
-- State changes: No new global state. Existing carousel local state remains.
-- Error states: No runtime data fetching errors. Image loading should degrade gracefully by preserving layout and readable text.
-- Permissions/auth expectations: Not applicable.
+  - `POST /api/admin/login` validates env-backed credentials and returns a signed JWT.
+  - Admin booking routes reject requests without a valid Bearer token.
+  - Booking status enum includes `pending`, `confirmed`, `cancelled`, `completed`.
+  - Admin list endpoint returns bookings sorted predictably, preferably newest or nearest appointment first.
+  - Admin create/update use shared booking validation and duplicate slot checks.
+  - Admin status update accepts only supported statuses.
+  - Admin delete removes a booking and returns a clear success response.
+  - `/admin` renders login state, dashboard state, loading state, empty state, error state, and save/delete feedback.
+- Inputs:
+  - Admin credentials.
+  - Booking fields: service, date, time, fullName, email, phone, preferredLocation, notes, status.
+  - Booking id path params.
+- Outputs:
+  - JWT login response.
+  - Booking list/item mutation responses.
+  - Clear error messages for validation/auth/conflict/not-found.
+- State changes:
+  - JWT stored client-side for the admin session.
+  - Booking documents created, updated, or deleted.
+  - Booking status changes persisted.
+- Error states:
+  - 400 invalid payload/status/id.
+  - 401 missing/invalid token or bad credentials.
+  - 404 missing booking.
+  - 409 duplicate slot.
+  - 500 generic server error without leaking internals.
+- Permissions/auth expectations:
+  - All admin booking APIs require valid JWT.
+  - Public booking and availability APIs remain public.
 
 ## 10. Non-Functional Requirements
-
-- Performance expectations: Use existing remote images; add `loading="lazy"` for below-fold images where appropriate; avoid new heavy animations or dependencies.
-- Reliability expectations: No dependency on mutable runtime APIs beyond existing static constants.
-- Security/privacy expectations: No secrets, no new external services, no user data exposure.
-- Accessibility expectations: Meaningful alt text for content images; decorative duplicated thumbnails may use empty alt and `aria-hidden` where appropriate; maintain readable contrast over images; preserve keyboard focus styling on controls.
-- Maintainability expectations: Keep image selection deterministic and simple; avoid over-abstracting unless a helper clearly reduces duplication.
-- DX expectations: Existing client test/lint/build commands continue to pass.
+- Performance expectations: Booking list should be efficient for MVP volume; use lean queries where appropriate.
+- Reliability expectations: Duplicate prevention must remain authoritative server-side.
+- Security/privacy expectations:
+  - JWT secret must come from env.
+  - Admin password must come from env and never be logged or sent to client.
+  - API responses must not expose secrets or sensitive auth internals.
+  - Token storage should be minimal and cleared on logout/invalid auth.
+- Accessibility expectations:
+  - Login and CRUD forms use labels above inputs, helper/error text below inputs, keyboard-accessible controls, focus states, and semantic alerts.
+- Maintainability expectations:
+  - Reuse booking validation helpers.
+  - Keep admin API logic out of React components.
+  - Keep server route handlers thin enough and testable.
+- DX expectations:
+  - Add focused tests that prove auth guards and CRUD behavior.
 
 ## 11. Affected Surfaces
-
 - Files likely affected:
-  - `client/src/pages/Home.jsx`
+  - `package.json`
+  - `package-lock.json`
+  - `.env.example`
+  - `server/config/env.js`
+  - `server/app.js`
+  - `server/models/Booking.js`
+  - `server/utils/bookingValidation.js`
+  - `server/controllers/bookingController.js`
+  - `server/routes/bookingRoutes.js`
+  - New `server/middleware/adminAuth.js`
+  - New `server/controllers/adminAuthController.js`
+  - New `server/controllers/adminBookingController.js`
+  - New `server/routes/adminRoutes.js`
+  - `server/tests/*`
+  - `client/src/App.jsx`
+  - `client/src/lib/api.js`
+  - New `client/src/pages/Admin.jsx`
+  - New `client/src/services/adminService.js`
+  - New `client/src/hooks/queries/useAdminBookings.js`
+  - New `client/src/hooks/mutations/useAdminBookingMutations.js` or similarly scoped hooks
   - `client/src/index.css`
-  - `client/test/site-pages.test.jsx` if tests are updated for TDD evidence
+  - `client/test/*`
 - Directories likely affected:
-  - `client/src/pages/`
-  - `client/src/`
-  - `client/test/` only for verification tests
-  - `_workflow/runs/dev/`
-- UI surfaces:
-  - Homepage hero
-  - Trust strip
-  - Featured services
-  - Why choose KareBraids
-  - Gallery preview
-  - Testimonials
-  - CTA
-- API routes: Not applicable.
-- Components: `Home` page only.
-- Services: Not applicable.
-- Database/schema: Not applicable.
-- Config/env vars: Not applicable.
-- Tests: Existing homepage tests may be extended.
-- Docs: Run-scoped workflow artifacts only.
-- Workflow artifacts: `_workflow/runs/dev/request.md`, `handoff.md`, `spec.md`, later `tasks.md`, `progress.md`, `verification.md`, `review.md`, `release-notes.md`, and `summary.md`.
+  - `server/controllers/`, `server/routes/`, `server/middleware/`, `server/tests/`
+  - `client/src/pages/`, `client/src/services/`, `client/src/hooks/queries/`, `client/src/hooks/mutations/`, `client/test/`
+- UI surfaces: Hidden `/admin` route with login form and booking management dashboard.
+- API routes:
+  - New `POST /api/admin/login`
+  - New guarded `/api/admin/bookings` CRUD routes
+- Components: Admin page and possible small local UI subcomponents within the page.
+- Services: Admin service functions through shared API client.
+- Database/schema: Booking status enum expanded.
+- Config/env vars: `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `JWT_SECRET` in root `.env`/`.env.example`.
+- Tests: Backend Jest/Supertest, frontend Vitest/RTL.
+- Docs: Workflow artifacts; `.env.example` only unless durable docs become necessary.
+- Workflow artifacts: `_workflow/runs/dev/request.md`, `spec.md`, `handoff.md`, `progress.md`; later `tasks.md`, `review.md`, `verification.md`, `release-notes.md`, `summary.md`.
 
 ## 12. Dependency And Integration Map
-
 - Internal dependencies:
-  - `galleryItems`, `services`, and `testimonials` from `client/src/constants/content.js`.
-  - `Button` from `client/src/components/Button.jsx`.
-  - `useRevealOnScroll` hook.
+  - Admin create/update depends on booking validation and Mongoose model.
+  - Frontend admin dashboard depends on shared API client and TanStack Query.
+  - Protected UI depends on token lifecycle and API auth header injection.
 - External packages/services:
-  - Existing React, React Router, Phosphor icons, Vite, Vitest, Testing Library.
-  - Existing remote image URLs embedded in `galleryItems`.
+  - Existing Express, Mongoose, Axios, TanStack Query, React Router.
+  - Add `jsonwebtoken` unless a repo-approved JWT library already exists before implementation.
 - Integration points:
-  - Homepage markup and CSS selectors.
-  - Existing reveal animation attributes.
-  - Existing reduced-motion CSS and hero carousel effect.
+  - Express app mounts admin routes under `/api/admin`.
+  - Axios request interceptor or explicit service header attaches Bearer token.
+  - React Router maps `/admin`.
 - Ordering constraints:
-  - Save and approve spec before task plan.
-  - Generate task plan before implementation.
-  - Update tests before implementation where practical.
-- Migration/setup requirements: None.
+  - Backend auth/env validation first.
+  - Admin CRUD API second.
+  - Frontend services/hooks third.
+  - Frontend UI last.
+- Migration/setup requirements:
+  - Existing records with `pending`/`confirmed` remain valid.
+  - Deployments must set `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and `JWT_SECRET`.
 
 ## 13. Data And State Impact
-
-- Data models: No changes.
-- Database changes: None.
-- State management changes: No Redux, Context, Query, localStorage, or session changes.
-- Cache/session/local storage impact: None.
-- Backward compatibility impact: No public contract changes expected.
+- Data models:
+  - Booking status enum expands to `pending`, `confirmed`, `cancelled`, `completed`.
+- Database changes:
+  - No new collection required.
+  - No mandatory data migration.
+- State management changes:
+  - Admin token can be kept in local state plus `localStorage` or `sessionStorage` for refresh resilience.
+  - Server booking data stays in TanStack Query, not Redux.
+- Cache/session/local storage impact:
+  - Store only JWT and minimal admin session marker if needed.
+  - Clear token on logout and auth failures.
+- Backward compatibility impact:
+  - Existing clients unaffected.
 
 ## 14. UX / API / Workflow Expectations
-
 - UX expectations:
-  - Preserve warm, premium, editorial KareBraids styling.
-  - Reduce text weight by letting images carry more of the story.
-  - Use overlays/gradients for image-backed text.
-  - Keep mobile layouts stacked and stable.
-  - Avoid image/text overlaps that reduce readability.
-- API contract expectations: Not applicable.
-- CLI/workflow behavior: Follow saved spec, approval gate, task plan, 3-pass task loop, verification, review, release notes, and summary.
-- Error handling expectations: Not applicable for API errors; image fallback is layout resilience rather than explicit error UI.
-- Empty/loading/success/failure states: Not applicable; all content is static. Images should use stable dimensions so loading does not cause severe layout shift.
+  - Admin page should feel operational and quiet: compact header, login panel, summary counts, booking table/list, inline forms/modal-like edit surface, status control, delete confirmation.
+  - Provide loading skeletons or stable placeholders, empty state, inline errors, disabled pending buttons, and successful mutation feedback.
+- API contract expectations:
+  - JSON request/response only.
+  - Auth failures use 401 with clear message.
+  - Validation failures use 400 and optional `errors`.
+  - Duplicate slots use 409.
+  - Missing booking uses 404.
+- CLI/workflow behavior:
+  - Stop after this spec until explicit approval.
+  - After approval, generate vertical task plan before implementation.
+- Error handling expectations:
+  - Reuse `getApiErrorMessage` on client.
+  - Backend must avoid leaking stack traces.
+- Empty/loading/success/failure states:
+  - Login loading/error.
+  - Booking list loading/empty/error.
+  - Create/edit/delete pending and success/error states.
 
 ## 15. Execution Strategy
-
 - Recommended implementation approach:
-  - Add small local image selection constants in `Home.jsx` derived from `galleryItems`.
-  - Keep hero carousel code intact.
-  - Add thumbnail cluster markup in the trust strip without removing badges.
-  - Render service cards with image elements, overlay wrappers, and text blocks.
-  - Add a why-section image panel using the `process-detail` gallery item when available, with fallback by index if needed.
-  - Add testimonial visual panel/thumbnails using existing gallery images.
-  - Add CTA background/image treatment via markup and CSS custom property or image element, ensuring contrast.
-  - Adjust CSS selectors for responsive layouts and reduced-motion compatibility.
+  - Add env validation for admin auth.
+  - Add JWT login and auth middleware.
+  - Add admin booking controller/routes with shared validation and duplicate checks.
+  - Expand Booking model status enum.
+  - Add client admin service/hook layer through `client/src/lib/api.js`.
+  - Add `/admin` page with login and CRUD dashboard.
+  - Add focused backend and frontend tests using TDD-first per task iteration.
 - Suggested sequencing:
-  1. Update or add focused tests proving added visual structures and source images.
-  2. Update `Home.jsx` markup with deterministic gallery image references.
-  3. Update `index.css` for layout, overlays, responsive stacking, and contrast.
-  4. Verify focused tests, full tests, lint, build, and browser visuals.
-- Safe rollout/migration approach: UI-only changes localized to homepage; no migration.
+  - TASK-001: Add backend admin auth and env checks.
+  - TASK-002: Add guarded admin booking CRUD API and expanded status.
+  - TASK-003: Add frontend admin route, login, services/hooks, and dashboard CRUD UI.
+  - TASK-004: Final hardening, full verification, docs/env example review if not covered earlier.
+- Safe rollout/migration approach:
+  - Keep public APIs unchanged.
+  - Add admin routes under a distinct `/api/admin` namespace.
 - Files to inspect before editing:
-  - `client/src/pages/Home.jsx`
-  - `client/src/constants/content.js`
-  - `client/src/index.css`
-  - `client/test/site-pages.test.jsx`
+  - `server/config/env.js`, `server/app.js`, `server/models/Booking.js`, `server/utils/bookingValidation.js`, `server/tests/bookings.test.js`
+  - `client/src/App.jsx`, `client/src/lib/api.js`, `client/src/pages/Booking.jsx`, `client/test/booking-flow.test.jsx`
 - Decisions to avoid until more evidence exists:
-  - Do not introduce new components or helpers unless duplication becomes meaningfully harmful.
-  - Do not alter `content.js` service or gallery data.
-  - Do not replace the carousel with a different pattern.
+  - Do not introduce a full user model or role system.
+  - Do not add content management for services/gallery.
 
 ## 16. Verification Strategy
-
 - Required automated checks:
-  - Focused test: `npm test -- site-pages.test.jsx` from `client/`
-  - Full frontend tests: `npm test` from `client/`
-  - Lint: `npm run lint` from `client/`
-  - Build: `npm run build` from `client/`
+  - Backend: `npm run test:server` or targeted Jest/Supertest tests.
+  - Frontend: `npm test --prefix client` or targeted Vitest tests.
+  - Frontend lint/build: `npm run lint --prefix client`, `npm run build --prefix client`.
 - Required manual checks:
-  - Desktop homepage visual review.
-  - Mobile homepage visual review.
-  - Check text contrast over service/CTA images.
-  - Check that reduced-motion rules are not undermined.
+  - Browser check `/admin` login, booking list, create/edit/status/delete, logout, invalid token handling.
+  - Confirm public navigation does not include Admin.
 - Test types needed:
-  - React Testing Library structural/accessibility checks for visual additions.
-  - Existing carousel behavior tests should continue to pass.
+  - Backend auth guard tests.
+  - Backend CRUD success and validation/conflict/not-found tests.
+  - Frontend route/login/dashboard interaction tests.
 - Build/lint/typecheck expectations:
   - Client lint and build pass.
-  - No TypeScript typecheck exists.
+  - Server tests pass.
 - Acceptance evidence required:
-  - Test outputs recorded in progress.
-  - Screenshots or browser verification notes if implementation proceeds.
-  - Final diff audit.
+  - Red -> Green -> Refactor evidence for each code-changing task iteration.
+  - Passing targeted and broad verification where feasible.
 - Proof of completion:
-  - All acceptance criteria checked `[x]`.
-  - Workflow review, release notes, summary, and handoff updated.
+  - Admin can perform booking CRUD through UI against guarded APIs.
 
 ## 17. Acceptance Criteria
-
-- [ ] Hero carousel remains present and functional.
-- [ ] Trust strip keeps existing trust badges and adds a 3-5 image overlapping thumbnail cluster from `galleryItems`.
-- [ ] Featured services render as visual cards with gallery images, overlays/gradients, title, duration, and short description.
-- [ ] Why choose KareBraids includes a supporting process/detail gallery image panel beside the reasons on larger screens and stacked on mobile.
-- [ ] Gallery preview remains an image grid.
-- [ ] Testimonials include a visual panel or small client/style thumbnails and quote text remains readable.
-- [ ] CTA includes a gallery image background or image panel with dark/green overlay and accessible contrast.
-- [ ] Added images have meaningful alt text or are correctly decorative when redundant.
-- [ ] No new dependencies or image assets are added.
-- [ ] Product implementation changes are limited to `client/src/pages/Home.jsx` and `client/src/index.css` unless a small helper is clearly justified.
-- [ ] Mobile responsive layout is clean with no incoherent overlaps.
-- [ ] Existing animations and `prefers-reduced-motion` support are respected.
-- [ ] Relevant client tests, lint, and build pass or any inability to run is documented.
+- [ ] `/admin` is not shown in public navigation.
+- [ ] Unauthenticated users who visit `/admin` see an admin login state rather than booking data.
+- [ ] Admin login uses root `.env` credentials and returns a backend-issued JWT.
+- [ ] Missing required admin auth env vars fail fast outside test mode.
+- [ ] Admin booking API routes reject missing/invalid Bearer tokens.
+- [ ] Admin can list bookings.
+- [ ] Admin can create a booking with the same validation and duplicate-slot prevention as the public form.
+- [ ] Admin can edit booking details with the same validation and duplicate-slot prevention.
+- [ ] Admin can set status to `pending`, `confirmed`, `cancelled`, or `completed`.
+- [ ] Admin can delete a booking after an explicit confirmation action.
+- [ ] Booking model supports `pending`, `confirmed`, `cancelled`, and `completed`.
+- [ ] Public booking create and availability behavior remain compatible.
+- [ ] Admin UI includes loading, empty, error, saving, and success states.
+- [ ] Frontend API calls use the shared API client and env-based base URL.
+- [ ] Services wrap API logic and TanStack Query hooks wrap server state.
+- [ ] Relevant backend and frontend tests are added or updated first and pass after implementation.
+- [ ] Client lint/build and relevant server tests pass or any inability is documented.
 
 ## 18. Edge Cases And Failure Modes
-
 - Edge cases:
-  - Very narrow mobile screens.
-  - Bright image regions under overlay text.
-  - Slow or failed remote image loading.
-  - Reduced-motion users.
-  - Screen-reader users encountering decorative thumbnails.
+  - Empty booking collection.
+  - Same booking updated without triggering false duplicate conflict.
+  - Changing date/time/service into an occupied slot.
+  - Deleting a booking already removed.
+  - Token expires while dashboard is open.
 - Failure modes:
-  - Low text contrast over images.
-  - Visual clutter from adding too many thumbnails.
-  - Layout shifts from unstabilized image dimensions.
-  - Accidental removal/regression of hero carousel controls.
-  - CSS changes leaking into non-homepage surfaces.
+  - Weak or missing `JWT_SECRET`.
+  - Admin password accidentally logged.
+  - Client displays stale list after mutation.
+  - Public availability includes cancelled/completed bookings if query semantics are not considered.
 - Regression risks:
-  - Existing homepage tests may need updates if markup changes.
-  - Mobile trust strip and testimonial layouts can become cramped.
-  - Service card hover transforms must not break reduced-motion preferences.
+  - Duplicate-slot validation could block editing an unchanged booking.
+  - Expanding status could affect availability calculations.
+  - Auth header changes could affect public API calls if applied incorrectly.
 - Recovery expectations:
-  - Keep fixes scoped to homepage markup/CSS.
-  - If browser verification shows overlap or contrast defects, adjust CSS only.
+  - Fail clearly, keep form data where practical, and refetch booking list after successful mutations.
 
 ## 19. Risks And Mitigations
-
 - Technical risks:
-  - CSS selector changes may affect gallery or booking pages because `index.css` is global.
-  - Mitigation: Use homepage-specific class names for new styles and avoid broad selector changes.
+  - Auth implementation touches server config and API paths. Mitigate with focused Supertest guard tests.
+  - CRUD UI can grow large. Mitigate with scoped page subcomponents and services/hooks.
 - Product/UX risks:
-  - The page may become too image-heavy or busy.
-  - Mitigation: Use restrained image counts, controlled overlays, and concise copy.
+  - Admin dashboard could become cluttered. Mitigate with compact operational layout, not marketing layout.
 - Security risks:
-  - None beyond existing external image URLs.
-  - Mitigation: Do not add secrets or new external services.
+  - Env-backed plaintext password is simple but sensitive. Mitigate by never exposing/logging it and requiring HTTPS in deployment.
+  - JWT in browser storage has XSS exposure. Mitigate by storing only token, clearing on logout, and avoiding dangerous HTML patterns.
 - Scope risks:
-  - A full redesign could creep in.
-  - Mitigation: Preserve section order, hero direction, brand palette, typography, and CTAs.
+  - Services/gallery CRUD is explicitly out of scope.
 - Mitigation plan:
-  - Implement one vertical homepage visual pass only; verify with tests and responsive review.
+  - Keep routes namespaced, tests narrow, and implement vertical slices.
 
 ## 20. Assumptions
-
 - Explicit assumptions:
-  - The current brand style is represented by the existing warm cream/forest/gold/terracotta palette and editorial image framing.
-  - The first five hero carousel images should remain unchanged.
-  - Process/detail imagery should prioritize `galleryItems` item `process-detail` if available.
-  - Service image pairings can be mapped by service index against `galleryItems`.
-  - Tests may be updated in `client/test/` for workflow evidence, while app implementation remains limited to expected files.
-- Confidence level: High.
+  - `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and `JWT_SECRET` are acceptable env var names.
+  - JWT expiry can default to a practical short/medium window, such as 8 hours, unless implementation finds a repo convention.
+  - Adding `jsonwebtoken` is acceptable if not already installed.
+  - Booking availability should continue to consider occupied slots based on existing booking records; if cancelled/completed should reopen slots, that requires an explicit product decision during planning or a follow-up.
+- Confidence level: Medium-high.
 - What to revisit if assumptions are wrong:
-  - Image pairings and exact section treatments can be changed before implementation through a spec revision.
+  - Env var names and token expiry.
+  - Whether cancelled/completed bookings should free availability.
 
 ## 21. Open Questions
-
-- Blocking questions: None.
+- Blocking questions: None for spec approval.
 - Non-blocking questions:
-  - Whether the user prefers specific gallery images for specific services.
-  - Whether testimonial visuals should use one larger panel or multiple small thumbnails.
-- Execution impact: Non-blocking; implementation can choose tasteful deterministic pairings from existing gallery content.
+  - Should cancelled/completed bookings free their appointment slots for public availability?
+  - Should admin token persist across browser refreshes via localStorage or be session-only?
+- Execution impact:
+  - Default conservative assumption: preserve current duplicate-slot and availability behavior unless the task plan explicitly includes reopening slots for cancelled/completed bookings.
 
 ## 22. Task Extraction Notes
-
 - Suggested vertical task boundaries:
-  - Single vertical task: Add gallery-image visuals across homepage sections while preserving hero carousel and responsive/accessibility behavior.
+  - Backend auth/env guard.
+  - Admin booking CRUD API/status model.
+  - Frontend admin login/dashboard CRUD UI.
+  - Final integrated verification/hardening.
 - Suggested first task:
-  - `TASK-001: Add gallery-image visuals to homepage sections`
+  - Add backend admin JWT login and route guard with env validation.
 - Suggested task ordering:
-  - One task is appropriate because the requested changes all touch the same homepage and CSS files and should be verified together.
+  - Backend auth before guarded CRUD, CRUD before frontend dashboard, full verification last.
 - Areas that should not become separate tasks:
-  - Backend, data constants, dependencies, deployment, and non-homepage redesign.
+  - Services/gallery management.
+  - Full user-role system.
+  - Deployment platform changes.
 - How the 3-pass Build -> Refine -> Polish loop should apply:
-  - Iteration 1 Build: Add tests for visual structures, implement core markup and initial CSS.
-  - Iteration 2 Refine: Strengthen accessibility, alt/decorative semantics, contrast, and responsive behavior.
-  - Iteration 3 Polish: Browser-check desktop/mobile, fix spacing/overlap, run full verification and final review.
+  - Each task must add or update failing tests first, implement the smallest passing change, then refine and polish with verification in every iteration.
+
+## Frontend Taste Application
+- Applied skill: `.agents/skills/design-taste-frontend/SKILL.md`
+- Dependency verification:
+  - Client uses React/Vite, React Router, TanStack Query, Axios, Tailwind v4, and `@phosphor-icons/react`.
+  - Do not import new frontend packages without checking `client/package.json`.
+- Design direction:
+  - Admin dashboard should be quiet, utilitarian, and work-focused.
+  - Avoid public-site marketing hero treatment for admin.
+  - Use icons from `@phosphor-icons/react` where useful.
+  - Avoid emojis and generic AI-purple styling.
+  - Use cards only for functional grouping; avoid nested cards.
+  - Ensure mobile collapse, stable table/list dimensions, visible focus states, and no text overflow.
+- Required states:
+  - Login loading/error.
+  - Dashboard loading skeleton/placeholder.
+  - Empty bookings state.
+  - Mutation saving/deleting states.
+  - Inline validation and API errors.
+- Final pre-flight matrix to execute before frontend output:
+  - [ ] Is global state used appropriately to avoid deep prop-drilling rather than arbitrarily?
+  - [ ] Is mobile layout collapse (`w-full`, `px-4`, `max-w-7xl mx-auto`) guaranteed for high-variance designs?
+  - [ ] Do full-height sections safely use `min-h-[100dvh]` instead of `h-screen`?
+  - [ ] Do `useEffect` animations contain strict cleanup functions?
+  - [ ] Are empty, loading, and error states provided?
+  - [ ] Are cards omitted in favor of spacing where possible?
+  - [ ] Did CPU-heavy perpetual animations stay out of the dashboard?

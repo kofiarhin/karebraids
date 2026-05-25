@@ -1,4 +1,5 @@
 const { SERVICES, TIME_SLOTS } = require("../constants/services");
+const BOOKING_STATUSES = ["pending", "confirmed", "cancelled", "completed"];
 
 function parseDateOnly(date) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date || "")) {
@@ -83,6 +84,23 @@ function validateBookingPayload(payload) {
   };
 }
 
+function validateAdminBookingPayload(payload) {
+  const { booking, errors } = validateBookingPayload(payload);
+  const status = String(payload.status || "pending").trim();
+
+  if (!BOOKING_STATUSES.includes(status)) {
+    errors.push("Choose a valid booking status.");
+  }
+
+  return {
+    booking: {
+      ...booking,
+      status,
+    },
+    errors,
+  };
+}
+
 function validateAvailabilityQuery(query) {
   const service = String(query.service || "").trim();
   const date = String(query.date || "").trim();
@@ -109,6 +127,8 @@ function validateAvailabilityQuery(query) {
 }
 
 module.exports = {
+  BOOKING_STATUSES,
+  validateAdminBookingPayload,
   validateBookingPayload,
   validateAvailabilityQuery,
 };

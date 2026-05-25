@@ -144,6 +144,288 @@
 - Current phase: TASK-001 Ready for Iteration 1 Build.
 - Implementation status: Not started.
 
+## 2026-05-25 - TASK-001 Done: Admin JWT Login and Route Guard
+
+- Task ID: TASK-001
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed:
+  - `package.json`
+  - `package-lock.json`
+  - `.env.example`
+  - `server/config/env.js`
+  - `server/app.js`
+  - `server/controllers/adminAuthController.js`
+  - `server/middleware/adminAuth.js`
+  - `server/routes/adminRoutes.js`
+  - `server/tests/admin-auth.test.js`
+  - `server/tests/env.test.js`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+
+### Iteration 1 Build Evidence
+
+- Goal: Prove and implement env-backed admin login with JWT output.
+- Red phase: Added `server/tests/admin-auth.test.js`; `npm run test:server -- admin-auth.test.js` failed because `jsonwebtoken` was missing.
+- Green phase: Installed `jsonwebtoken`; added env auth config, admin login controller, admin auth middleware, admin routes, app mount, and `.env.example` auth vars. `npm run test:server -- admin-auth.test.js` passed with 4 tests.
+- Refactor phase: Reviewed response shape to avoid password exposure; no behavior refactor needed.
+- Verification: `npm run test:server -- admin-auth.test.js` passed.
+- Review findings: Login reads credentials at request time and signs an 8-hour admin JWT.
+
+### Iteration 2 Refine Evidence
+
+- Goal: Harden Bearer header parsing.
+- Red phase: Added malformed `Authorization: Bearer <token> extra` test; focused auth test failed because the middleware accepted it.
+- Green phase: Required exactly two auth header parts before verifying JWT. Focused auth test passed with 5 tests.
+- Refactor phase: Reran focused auth test with no behavior changes; passed.
+- Verification: `npm run test:server -- admin-auth.test.js` passed.
+- Review findings: Missing, invalid, malformed, and valid token paths are covered.
+
+### Iteration 3 Polish Evidence
+
+- Goal: Check broad server compatibility after env validation changes.
+- Red phase: `npm run test:server` failed because an existing production env test did not include newly required admin vars.
+- Green phase: Updated `server/tests/env.test.js` to provide admin env vars and assert username trimming. `npm run test:server` passed with 3 suites / 15 tests.
+- Refactor phase: Reran focused auth test; passed.
+- Verification:
+  - `npm run test:server`: passed.
+  - `npm run test:server -- admin-auth.test.js`: passed.
+- Review findings: Required admin env vars fail fast outside test mode; tests remain allowed to omit them unless specifically testing auth.
+
+### Acceptance Result
+
+- [x] Admin login uses root `.env` credentials and returns JWT.
+- [x] Missing required admin auth env vars fail fast outside test mode.
+- [x] Admin routes reject missing/invalid Bearer tokens.
+- [x] No secrets are exposed in responses.
+
+### Failure Recovery Notes
+
+- Added the missing JWT dependency after the first Red failure.
+- Updated an existing env test after the broad suite exposed the new production env requirements.
+
+### Next Step
+
+- Continue to TASK-002: Add guarded admin booking CRUD API.
+
+## 2026-05-25 - TASK-002 Done: Guarded Admin Booking CRUD API
+
+- Task ID: TASK-002
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed:
+  - `server/models/Booking.js`
+  - `server/utils/bookingValidation.js`
+  - `server/controllers/adminBookingController.js`
+  - `server/routes/adminRoutes.js`
+  - `server/tests/admin-bookings.test.js`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+
+### Iteration 1 Build Evidence
+
+- Goal: Prove and implement guarded list/create/update/delete booking APIs.
+- Red phase: Added `server/tests/admin-bookings.test.js`; `npm run test:server -- admin-bookings.test.js` failed with 404s because admin booking routes did not exist.
+- Green phase: Added expanded booking statuses, admin booking validation, admin booking controller, and guarded admin booking routes. Focused admin booking tests passed with 8 tests.
+- Refactor phase: Kept duplicate-slot query construction in a small helper and route ordering explicit.
+- Verification: `npm run test:server -- admin-bookings.test.js` passed.
+- Review findings: CRUD endpoints are guarded and public booking routes are not changed.
+
+### Iteration 2 Refine Evidence
+
+- Goal: Add a status-only update endpoint.
+- Red phase: Added `PATCH /api/admin/bookings/:id/status` test; focused suite failed with 404.
+- Green phase: Added `updateAdminBookingStatus` controller and route with status enum validation. Focused suite passed with 9 tests.
+- Refactor phase: Reran focused suite without behavior changes; passed.
+- Verification: `npm run test:server -- admin-bookings.test.js` passed.
+- Review findings: Admin can update all supported statuses without resubmitting full booking details.
+
+### Iteration 3 Polish Evidence
+
+- Goal: Run broad server regression check.
+- Red phase: Broad suite was run as the polish check; no new failure after Iteration 2.
+- Green phase: No implementation change required.
+- Refactor phase: Reran focused admin booking tests; passed.
+- Verification:
+  - `npm run test:server`: passed, 4 suites / 24 tests.
+  - `npm run test:server -- admin-bookings.test.js`: passed.
+- Review findings: Public booking API tests still pass; duplicate prevention remains server-side.
+
+### Acceptance Result
+
+- [x] Admin can list bookings.
+- [x] Admin can create/edit bookings with shared validation and duplicate prevention.
+- [x] Admin can set all four statuses.
+- [x] Admin can delete bookings.
+- [x] Public booking behavior remains compatible.
+
+### Failure Recovery Notes
+
+- None beyond expected Red failures for missing CRUD and status-only routes.
+
+### Next Step
+
+- Continue to TASK-003: Add hidden frontend admin dashboard CRUD UI.
+
+## 2026-05-25 - TASK-003 Done: Hidden Frontend Admin Dashboard CRUD UI
+
+- Task ID: TASK-003
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed:
+  - `client/src/App.jsx`
+  - `client/src/pages/Admin.jsx`
+  - `client/src/services/adminService.js`
+  - `client/src/hooks/queries/useAdminBookings.js`
+  - `client/src/hooks/mutations/useAdminBookingMutations.js`
+  - `client/src/index.css`
+  - `client/test/admin-dashboard.test.jsx`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+
+### Iteration 1 Build Evidence
+
+- Goal: Prove and implement hidden `/admin` login and booking list shell.
+- Red phase: Added `client/test/admin-dashboard.test.jsx`; `npm test --prefix client -- admin-dashboard.test.jsx` failed because `client/src/services/adminService.js` did not exist.
+- Green phase: Added admin service, query/mutation hooks, `/admin` route, login UI, dashboard table, status controls, create/edit/delete form surface, and admin CSS. Focused test initially failed because React Query passed mutation context into direct `loginAdmin`; wrapped the mutation function and the focused suite passed with 3 tests.
+- Refactor phase: Kept API calls in `adminService`, server state in TanStack Query hooks, and admin route hidden from nav.
+- Verification: `npm test --prefix client -- admin-dashboard.test.jsx` passed.
+- Review findings: The admin route renders login before booking data and authenticated state lists bookings.
+
+### Iteration 2 Refine Evidence
+
+- Goal: Handle invalid saved admin tokens.
+- Red phase: Added a test for rejected saved token; focused test failed because the dashboard stayed on an errored authenticated state.
+- Green phase: Added invalid-token handling that removes the saved token and returns to the login UI. Focused suite passed with 4 tests.
+- Refactor phase: Reran focused suite without behavior changes; passed.
+- Verification: `npm test --prefix client -- admin-dashboard.test.jsx` passed.
+- Review findings: Expired/invalid token path clears local storage and prevents stale admin access state.
+
+### Iteration 3 Polish Evidence
+
+- Goal: Run full frontend verification, lint/build, browser check, and taste pre-flight.
+- Red phase: `npm run lint --prefix client` failed for an unused constant, effect-based form reset, and effect-based token reset. `npm run build --prefix client` passed.
+- Green phase: Removed unused constant, keyed the booking form instead of resetting state in an effect, derived bookings with `useMemo`, and moved invalid-token login rendering outside the effect path. `npm run lint --prefix client` passed and focused admin tests still passed.
+- Refactor phase: Ran full client tests and build after cleanup; both passed. Used Playwright CLI fallback to screenshot `http://127.0.0.1:5176/admin`; screenshot capture passed and confirmed the admin login route renders. Temporary screenshot and Vite logs were removed and the dev server was stopped.
+- Verification:
+  - `npm test --prefix client -- admin-dashboard.test.jsx`: passed, 4 tests.
+  - `npm test --prefix client`: passed, 4 files / 23 tests.
+  - `npm run lint --prefix client`: passed after lint recovery.
+  - `npm run build --prefix client`: passed.
+  - Playwright CLI screenshot of `/admin` login: passed.
+- Review findings: `/admin` is not in public nav; admin UI uses shared API client/services/hooks and includes loading, empty, error, saving, success, and invalid-token states.
+
+### Acceptance Result
+
+- [x] `/admin` is hidden from public navigation.
+- [x] Unauthenticated admin route shows login.
+- [x] Authenticated admin can list/create/edit/status-update/delete bookings.
+- [x] Loading, empty, error, saving, and success states exist.
+- [x] API calls use shared client and TanStack Query hooks.
+- [x] Frontend taste pre-flight passes:
+  - [x] Global state is not used arbitrarily; admin token is isolated to the admin page.
+  - [x] Mobile layout collapse is covered by existing breakpoints and admin-specific grid collapse.
+  - [x] No new `h-screen` full-height section was introduced.
+  - [x] No CPU-heavy animation or effect loop was introduced.
+  - [x] Empty, loading, and error states are provided.
+  - [x] Cards are used only for functional form/table grouping, not nested decorative sections.
+
+### Failure Recovery Notes
+
+- Fixed React Query mutation function argument shape for `loginAdmin`.
+- Refactored lint errors around synchronous state updates in effects.
+- Browser plugin tooling was not exposed; used Playwright CLI screenshot fallback.
+- Removed generated temporary browser screenshot and Vite log files.
+
+### Next Step
+
+- Continue to TASK-004: Final integrated verification and workflow closeout.
+
+## 2026-05-25 - TASK-004 Done: Final Integrated Verification and Closeout
+
+- Task ID: TASK-004
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed:
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
+  - `_decisions/2026-05-25-admin-jwt-env-auth.md`
+
+### Iteration 1 Build Evidence
+
+- Goal: Run final integrated verification.
+- Red phase: Not applicable; closeout task is documentation/verification, not code-changing behavior.
+- Green phase: Ran final server tests, client tests, client lint, and client build. All passed.
+- Refactor phase: No code changes needed.
+- Verification:
+  - `npm run test:server`: passed, 4 suites / 24 tests.
+  - `npm test --prefix client`: passed, 4 files / 23 tests.
+  - `npm run lint --prefix client`: passed.
+  - `npm run build --prefix client`: passed.
+- Review findings: Verification proves approved backend and frontend scope.
+
+### Iteration 2 Refine Evidence
+
+- Goal: Run and document final diff audit.
+- Red phase: Not applicable for non-code closeout. A filtered `git diff` attempt failed due unsupported pathspec magic; required plain `git diff` was run afterward.
+- Green phase: `git diff --stat`, `git diff`, and `git status --short` completed.
+- Refactor phase: Reviewed diff for scope, generated files, secrets, dependency changes, and unrelated dirty files.
+- Verification:
+  - `git diff --stat`: completed.
+  - `git diff`: completed.
+  - `git status --short`: completed.
+- Review findings: Diff matches spec; no generated screenshots/logs remain; pre-existing workflow/instruction file changes remain unrelated.
+
+### Iteration 3 Polish Evidence
+
+- Goal: Complete workflow artifacts and health check.
+- Red phase: Not applicable for non-code closeout.
+- Green phase: Created/updated review, verification, release notes, summary, handoff, and auth decision record.
+- Refactor phase: Final artifact review completed.
+- Verification: Artifact presence and content reviewed.
+- Review findings: Workflow health is Passed.
+
+### Acceptance Result
+
+- [x] Final diff audit completed.
+- [x] Review, verification, release notes, summary, and handoff are current.
+- [x] Workflow health check completed.
+
+### Final Workflow Health Check
+
+- [x] `_workflow/runs/dev/request.md` synced.
+- [x] `_workflow/runs/dev/handoff.md` exists and reflects latest state.
+- [x] `_workflow/runs/dev/spec.md` exists with every required detailed section.
+- [x] Spec approval gate was shown and explicit approval was recorded before planning.
+- [x] `_workflow/runs/dev/tasks.md` exists and was derived from the approved spec.
+- [x] Progress updated.
+- [x] Review created.
+- [x] Verification record created.
+- [x] Release notes created.
+- [x] Summary updated.
+- [x] Required iteration evidence recorded for executable tasks.
+- [x] TDD-first evidence recorded for code-changing tasks.
+- [x] Final diff audit completed.
+- [x] Dirty worktree checked.
+- [x] Acceptance results completed.
+- [x] Verification commands run and documented.
+- [x] Scope respected.
+- [x] `design-taste-frontend` applied and recorded.
+- [x] Decision recorded in `_decisions/2026-05-25-admin-jwt-env-auth.md`.
+- Workflow health status: Passed.
+
+### Next Step
+
+- User review and optional commit.
+
 ## 2026-05-24 - TASK-001 Done: Homepage Hero Carousel
 
 - Task ID: TASK-001
@@ -275,6 +557,20 @@
 - Current phase: Spec approval gate.
 - Spec file created: `_workflow/runs/dev/spec.md`.
 - Task plan status: Not generated; pending explicit spec approval.
+- Implementation status: Not started.
+
+## 2026-05-25 - Spec Approval and Planning: Admin Dashboard Booking CRUD
+
+- User approval received: `approve spec`.
+- Spec file approved: `_workflow/runs/dev/spec.md`.
+- Task plan created: `_workflow/runs/dev/tasks.md`.
+- Detailed spec completeness: Complete; all 22 required sections plus Frontend Taste Application are present before planning.
+- Planned executable tasks:
+  - `TASK-001: Add admin JWT login and route guard`
+  - `TASK-002: Add guarded admin booking CRUD API`
+  - `TASK-003: Add hidden frontend admin dashboard CRUD UI`
+  - `TASK-004: Final integrated verification and workflow closeout`
+- Current phase: TASK-001 Ready for Iteration 1 Build.
 - Implementation status: Not started.
 
 ## 2026-05-24 - Spec Approval and Planning: Homepage Visual Optimization
@@ -458,3 +754,67 @@
 ### Next Step
 
 - Final review, release notes, summary, handoff update, and workflow health check.
+
+## 2026-05-25 - Intake and Spec Setup: Admin Dashboard Booking CRUD
+
+- Request: Add a hidden admin dashboard with JWT-protected login and full CRUD for bookings only.
+- Branch: dev.
+- Artifact root: `_workflow/runs/dev/`.
+- Dirty worktree check before spec:
+  - `M .agents/skills/grill-me/SKILL.md`
+  - `M AGENTS.md`
+  - `M RUN_WORKFLOW.md`
+  - `?? .agents/skills/design-taste-frontend/`
+- Dirty file overlap risk:
+  - Existing dirty files are workflow/instruction files and a frontend taste skill folder.
+  - Planned implementation files are expected under `server/`, `client/src/`, `client/test/`, and package/env example files after approval.
+  - No implementation-file overlap identified during intake.
+- Repo context inspected:
+  - `.agents/skills/grill-me/SKILL.md`
+  - `.agents/skills/design-taste-frontend/SKILL.md`
+  - `RUN_WORKFLOW.md`
+  - `docs/PROJECT_CONTEXT.md`
+  - `docs/ARCHITECTURE.md`
+  - `docs/VERIFY.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/summary.md`
+  - `package.json`
+  - `client/package.json`
+  - `server/app.js`
+  - `server/config/env.js`
+  - `server/models/Booking.js`
+  - `server/controllers/bookingController.js`
+  - `server/routes/bookingRoutes.js`
+  - `server/utils/bookingValidation.js`
+  - `server/constants/services.js`
+  - `server/tests/bookings.test.js`
+  - `client/src/App.jsx`
+  - `client/src/main.jsx`
+  - `client/src/lib/api.js`
+  - `client/src/services/bookingService.js`
+  - `client/src/components/Layout.jsx`
+  - `client/src/index.css`
+  - `client/test/booking-flow.test.jsx`
+- Intake questions asked:
+  - Should the admin dashboard be protected with a real login, or temporary unprotected internal page?
+  - Should "full CRUD" apply only to appointment bookings, or should the admin also manage services/gallery content?
+  - For booking status, should current statuses stay or should cancellation/completion states be added?
+  - Should `/admin` appear in public navigation or stay hidden?
+  - Should admin create/edit use the same rules as the public booking form?
+- Answers received:
+  - Use env-backed admin credentials and backend-issued JWT; guard admin APIs and `/admin`.
+  - Bookings only.
+  - Expand status to `pending`, `confirmed`, `cancelled`, and `completed`.
+  - Keep `/admin` hidden from public navigation.
+  - Reuse the same validation, Monday-Saturday rules, and duplicate-slot prevention; allow status edit separately.
+- Shared understanding:
+  - Add JWT admin login, guarded admin booking CRUD APIs, and a hidden `/admin` booking management dashboard.
+  - Keep public booking behavior compatible.
+  - Keep services/gallery CRUD out of scope.
+- Frontend taste skill:
+  - Applied before spec because the request includes `/admin` UI, forms, dashboard, responsive behavior, and visual states.
+- Current phase: Spec approval gate.
+- Spec file created: `_workflow/runs/dev/spec.md`
+- Task plan status: Not generated; pending explicit spec approval.
+- Implementation status: Not started.

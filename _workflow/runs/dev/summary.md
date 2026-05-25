@@ -143,3 +143,89 @@
 - Release notes file used: `_workflow/runs/dev/release-notes.md`
 - Unresolved issues: none.
 - Next recommended work: User review, then commit with `feature: make homepage more visual`.
+
+## 2026-05-25 - Admin Dashboard Booking CRUD
+
+- Request: Add a hidden `/admin` dashboard with JWT-protected login and full CRUD for bookings only.
+- Spec file used: `_workflow/runs/dev/spec.md`
+- Detailed spec completeness: Complete; all 22 required sections plus Frontend Taste Application were present before planning.
+- Task plan used: `_workflow/runs/dev/tasks.md`
+- Review file used: `_workflow/runs/dev/review.md`
+- Release notes file used: `_workflow/runs/dev/release-notes.md`
+- Tasks completed:
+  - TASK-001: Add admin JWT login and route guard.
+  - TASK-002: Add guarded admin booking CRUD API.
+  - TASK-003: Add hidden frontend admin dashboard CRUD UI.
+  - TASK-004: Final integrated verification and workflow closeout.
+- Iteration evidence summary:
+  - TASK-001: Red failure for missing JWT dependency, Green auth/env implementation, Refine malformed Bearer rejection, Polish broad server env test recovery.
+  - TASK-002: Red failures for missing admin booking CRUD routes and missing status-only route, Green guarded CRUD/status APIs, Polish broad server verification.
+  - TASK-003: Red failure for missing admin service, Green admin route/service/hooks/UI, Refine invalid-token recovery, Polish lint/build/full test/browser verification.
+  - TASK-004: Final verification, diff audit, review, verification record, release notes, summary, handoff, and health check.
+- Files changed:
+  - `.env.example`
+  - `package.json`
+  - `package-lock.json`
+  - `server/app.js`
+  - `server/config/env.js`
+  - `server/models/Booking.js`
+  - `server/utils/bookingValidation.js`
+  - `server/controllers/adminAuthController.js`
+  - `server/controllers/adminBookingController.js`
+  - `server/middleware/adminAuth.js`
+  - `server/routes/adminRoutes.js`
+  - `server/tests/admin-auth.test.js`
+  - `server/tests/admin-bookings.test.js`
+  - `server/tests/env.test.js`
+  - `client/src/App.jsx`
+  - `client/src/pages/Admin.jsx`
+  - `client/src/services/adminService.js`
+  - `client/src/hooks/queries/useAdminBookings.js`
+  - `client/src/hooks/mutations/useAdminBookingMutations.js`
+  - `client/src/index.css`
+  - `client/test/admin-dashboard.test.jsx`
+  - `_workflow/runs/dev/*`
+  - `_decisions/2026-05-25-admin-jwt-env-auth.md`
+- Verification run:
+  - `npm run test:server`: passed, 4 suites / 24 tests.
+  - `npm test --prefix client`: passed, 4 files / 23 tests.
+  - `npm run lint --prefix client`: passed.
+  - `npm run build --prefix client`: passed.
+  - Playwright CLI screenshot check for `/admin`: passed.
+  - `git diff --stat`: completed.
+  - `git diff`: completed.
+- Acceptance results:
+  - [x] `/admin` is not shown in public navigation.
+  - [x] Unauthenticated users who visit `/admin` see admin login rather than booking data.
+  - [x] Admin login uses root `.env` credentials and returns a backend-issued JWT.
+  - [x] Missing required admin auth env vars fail fast outside test mode.
+  - [x] Admin booking API routes reject missing/invalid Bearer tokens.
+  - [x] Admin can list bookings.
+  - [x] Admin can create a booking with the same validation and duplicate-slot prevention as the public form.
+  - [x] Admin can edit booking details with the same validation and duplicate-slot prevention.
+  - [x] Admin can set status to `pending`, `confirmed`, `cancelled`, or `completed`.
+  - [x] Admin can delete a booking after explicit confirmation.
+  - [x] Booking model supports all four statuses.
+  - [x] Public booking create and availability behavior remain compatible.
+  - [x] Admin UI includes loading, empty, error, saving, and success states.
+  - [x] Frontend API calls use the shared API client and env-based base URL.
+  - [x] Services wrap API logic and TanStack Query hooks wrap server state.
+  - [x] Relevant backend and frontend tests were added/updated first and pass.
+  - [x] Client lint/build and server tests pass.
+- Failure recovery notes:
+  - Added `jsonwebtoken` after Red failure.
+  - Fixed malformed Bearer acceptance.
+  - Updated env tests for new admin env requirements.
+  - Added missing status-only route after Red failure.
+  - Fixed React Query mutation argument shape.
+  - Added invalid-token frontend recovery.
+  - Refactored admin page lint issues.
+  - Used Playwright CLI browser fallback because the Browser plugin tool was not exposed.
+- Final diff audit:
+  - Diff matches the approved spec.
+  - Pre-existing dirty workflow/instruction files remain and were not part of implementation.
+  - No secrets, generated screenshots, dev logs, or deployment config changes were added.
+- Unresolved issues:
+  - Product decision still open: whether cancelled/completed bookings should reopen appointment availability.
+- Next recommended work:
+  - User review, then commit with `feature: add admin booking dashboard`.

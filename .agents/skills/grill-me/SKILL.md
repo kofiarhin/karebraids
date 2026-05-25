@@ -16,7 +16,7 @@ Use this skill when a user starts a normal workflow request that needs intake.
 Do not use this skill when:
 - the user says `skip questions`
 - the user says `continue workflow`
-- the workflow is already in progress and should resume from `_handoff/current.md`
+- the workflow is already in progress and should resume from `_workflow/runs/<run-id>/handoff.md`
 
 ## Core Behavior
 

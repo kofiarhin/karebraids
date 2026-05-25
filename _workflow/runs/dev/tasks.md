@@ -1,37 +1,242 @@
-# Task Plan: Homepage Visual Optimization
+# Admin Dashboard Booking CRUD Task Plan
 
 - Spec file used: `_workflow/runs/dev/spec.md`
-- Planning date: 2026-05-24
-- Progress and summary files read:
-  - `_workflow/runs/dev/progress.md`
-  - `_workflow/runs/dev/summary.md`
-- Handoff read: `_workflow/runs/dev/handoff.md`
-- Detailed spec sections used:
-  - Section 5 Current State Analysis
-  - Section 7 Scope
-  - Section 9 Functional Requirements
-  - Section 10 Non-Functional Requirements
-  - Section 11 Affected Surfaces
-  - Section 12 Dependency And Integration Map
-  - Section 14 UX / API / Workflow Expectations
-  - Section 15 Execution Strategy
-  - Section 16 Verification Strategy
-  - Section 17 Acceptance Criteria
-  - Section 18 Edge Cases And Failure Modes
-  - Section 19 Risks And Mitigations
-  - Section 20 Assumptions
-  - Section 22 Task Extraction Notes
+- Planning date: 2026-05-25
+- Progress and summary files read: `_workflow/runs/dev/progress.md`, `_workflow/runs/dev/summary.md`
+- Detailed spec sections used: 6 Desired End State, 7 Scope, 9 Functional Requirements, 11 Affected Surfaces, 12 Dependency And Integration Map, 13 Data And State Impact, 14 UX/API/Workflow Expectations, 15 Execution Strategy, 16 Verification Strategy, 17 Acceptance Criteria, 18 Edge Cases, 19 Risks, 20 Assumptions, 22 Task Extraction Notes, Frontend Taste Application.
+- Execution mode: complete-workflow
 
 ## Task List
 
-### TASK-001: Add gallery-image visuals to homepage sections
+### TASK-001: Add admin JWT login and route guard
 
 - Status: Done
-- Objective: Make the existing homepage more visual by adding `galleryItems` imagery to the trust strip, services, why section, testimonials, and CTA while preserving the hero carousel and gallery grid.
-- Files affected:
-  - `client/src/pages/Home.jsx`
+- Objective: Add env-backed admin login, JWT signing, JWT verification middleware, and mount an admin login route.
+- Files likely affected:
+  - `package.json`
+  - `package-lock.json`
+  - `.env.example`
+  - `server/config/env.js`
+  - `server/app.js`
+  - `server/controllers/adminAuthController.js`
+  - `server/middleware/adminAuth.js`
+  - `server/routes/adminRoutes.js`
+  - `server/tests/admin-auth.test.js`
+- Checklist:
+  - [ ] Add/update failing auth/env tests first.
+  - [ ] Install or use JWT signing/verification support.
+  - [ ] Validate required env vars outside test mode.
+  - [ ] Add login route and guarded test route or middleware proof.
+  - [ ] Verify focused and relevant server tests.
+- Iteration 1 Build:
+  - Goal: Prove login/env guard behavior with failing tests, then implement the minimal route.
+  - Changes made: Pending.
+  - Test plan: `npm run test:server -- admin-auth.test.js`
+  - Red phase evidence: Pending.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Iteration 2 Refine:
+  - Goal: Prove missing/invalid token rejection and token success path.
+  - Changes made: Pending.
+  - Test plan: focused server auth tests.
+  - Red phase evidence: Pending.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Iteration 3 Polish:
+  - Goal: Confirm env example and broad server compatibility.
+  - Changes made: Pending.
+  - Test plan: focused auth tests plus server suite.
+  - Red phase evidence: Pending.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Acceptance criteria:
+  - [ ] Admin login uses root `.env` credentials and returns JWT.
+  - [ ] Missing required admin auth env vars fail fast outside test mode.
+  - [ ] Admin routes reject missing/invalid Bearer tokens.
+  - [ ] No secrets are exposed in responses.
+- Acceptance result:
+  - [x] Admin login uses root `.env` credentials and returns JWT.
+  - [x] Missing required admin auth env vars fail fast outside test mode.
+  - [x] Admin routes reject missing/invalid Bearer tokens.
+  - [x] No secrets are exposed in responses.
+- Verification commands: `npm run test:server -- admin-auth.test.js`, `npm run test:server`
+- Stop condition: Stop if JWT dependency cannot be installed or auth tests cannot verify behavior.
+- Out-of-scope items: User model, roles, password reset, refresh tokens.
+
+### TASK-002: Add guarded admin booking CRUD API
+
+- Status: Done
+- Objective: Expand booking status and add guarded admin create/list/update/delete endpoints for bookings.
+- Files likely affected:
+  - `server/models/Booking.js`
+  - `server/utils/bookingValidation.js`
+  - `server/controllers/adminBookingController.js`
+  - `server/routes/adminRoutes.js`
+  - `server/tests/admin-bookings.test.js`
+  - `server/tests/bookings.test.js`
+- Checklist:
+  - [ ] Add failing CRUD/status tests first.
+  - [ ] Expand status enum.
+  - [ ] Reuse validation for create/update.
+  - [ ] Prevent duplicate slots on create/update excluding current booking.
+  - [ ] Add guarded list/create/update/delete endpoints.
+  - [ ] Verify public booking compatibility.
+- Iteration 1 Build:
+  - Goal: Prove guarded list/create behavior and implement minimum CRUD foundation.
+  - Changes made: Pending.
+  - Test plan: focused admin booking tests.
+  - Red phase evidence: Pending.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Iteration 2 Refine:
+  - Goal: Prove update/status/delete, not-found, validation, and duplicate conflicts.
+  - Changes made: Pending.
+  - Test plan: focused admin booking tests.
+  - Red phase evidence: Pending.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Iteration 3 Polish:
+  - Goal: Run broader server compatibility and review public availability behavior.
+  - Changes made: Pending.
+  - Test plan: admin booking tests plus server suite.
+  - Red phase evidence: Pending.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Acceptance criteria:
+  - [ ] Admin can list bookings.
+  - [ ] Admin can create/edit bookings with shared validation and duplicate prevention.
+  - [ ] Admin can set all four statuses.
+  - [ ] Admin can delete bookings.
+  - [ ] Public booking behavior remains compatible.
+- Acceptance result:
+  - [x] Admin can list bookings.
+  - [x] Admin can create/edit bookings with shared validation and duplicate prevention.
+  - [x] Admin can set all four statuses.
+  - [x] Admin can delete bookings.
+  - [x] Public booking behavior remains compatible.
+- Verification commands: `npm run test:server -- admin-bookings.test.js`, `npm run test:server`
+- Stop condition: Stop if duplicate prevention or auth guard cannot be proven.
+- Out-of-scope items: Services/gallery CRUD and availability reopening semantics for cancelled/completed bookings.
+
+### TASK-003: Add hidden frontend admin dashboard CRUD UI
+
+- Status: Done
+- Objective: Add `/admin` route with login, token session handling, admin services/hooks, and booking CRUD dashboard UI.
+- Files likely affected:
+  - `client/src/App.jsx`
+  - `client/src/lib/api.js`
+  - `client/src/pages/Admin.jsx`
+  - `client/src/services/adminService.js`
+  - `client/src/hooks/queries/useAdminBookings.js`
+  - `client/src/hooks/mutations/useAdminBookingMutations.js`
   - `client/src/index.css`
+  - `client/test/admin-dashboard.test.jsx`
   - `client/test/site-pages.test.jsx`
+- Checklist:
+  - [ ] Add failing frontend tests first.
+  - [ ] Add admin service methods using shared API client.
+  - [ ] Add query/mutation hooks.
+  - [ ] Add hidden route and login/dashboard states.
+  - [ ] Add create/edit/status/delete flows.
+  - [ ] Apply design-taste pre-flight.
+- Iteration 1 Build:
+  - Goal: Prove hidden route/login/dashboard shell and implement minimal auth UI.
+  - Changes made: Pending.
+  - Test plan: focused admin dashboard tests.
+  - Red phase evidence: Pending.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Iteration 2 Refine:
+  - Goal: Prove list/create/edit/status/delete UI flows and API error states.
+  - Changes made: Pending.
+  - Test plan: focused admin dashboard tests.
+  - Red phase evidence: Pending.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Iteration 3 Polish:
+  - Goal: Verify responsive, accessibility, lint, build, and public nav remains unchanged.
+  - Changes made: Pending.
+  - Test plan: focused frontend tests, full client tests, lint, build, browser check.
+  - Red phase evidence: Pending.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Acceptance criteria:
+  - [ ] `/admin` is hidden from public navigation.
+  - [ ] Unauthenticated admin route shows login.
+  - [ ] Authenticated admin can list/create/edit/status-update/delete bookings.
+  - [ ] Loading, empty, error, saving, and success states exist.
+  - [ ] API calls use shared client and TanStack Query hooks.
+  - [ ] Frontend taste pre-flight passes.
+- Acceptance result:
+  - [x] `/admin` is hidden from public navigation.
+  - [x] Unauthenticated admin route shows login.
+  - [x] Authenticated admin can list/create/edit/status-update/delete bookings.
+  - [x] Loading, empty, error, saving, and success states exist.
+  - [x] API calls use shared client and TanStack Query hooks.
+  - [x] Frontend taste pre-flight passes.
+- Verification commands: `npm test --prefix client -- admin-dashboard.test.jsx`, `npm test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`
+- Stop condition: Stop if admin UI cannot be tested or build/lint fails after targeted recovery.
+- Out-of-scope items: Public-site redesign, services/gallery CRUD, Redux auth state unless truly needed.
+
+### TASK-004: Final integrated verification and workflow closeout
+
+- Status: Done
+- Objective: Run final diff audit, broad verification, review, release notes, summary, and handoff.
+- Files likely affected:
   - `_workflow/runs/dev/progress.md`
   - `_workflow/runs/dev/handoff.md`
   - `_workflow/runs/dev/verification.md`
@@ -39,147 +244,61 @@
   - `_workflow/runs/dev/release-notes.md`
   - `_workflow/runs/dev/summary.md`
 - Checklist:
-  - [x] Add tests for homepage visual image structures.
-  - [x] Keep existing hero carousel behavior intact.
-  - [x] Add trust thumbnail cluster using 3-5 gallery images.
-  - [x] Convert service tiles to image-backed readable cards.
-  - [x] Add process/detail image panel to why section.
-  - [x] Keep gallery preview image grid.
-  - [x] Add testimonial visual panel or thumbnails.
-  - [x] Add CTA gallery-image treatment with dark/green overlay.
-  - [x] Verify alt/decorative image semantics.
-  - [x] Verify mobile responsiveness and reduced-motion compatibility.
-
-#### Iteration 1 Build
-
-- Goal: Prove and implement the core added visual structures.
-- Changes made: Added a focused homepage visual-structure test, deterministic gallery image selections in `Home.jsx`, trust thumbnail cluster, image-backed service cards, why visual panel, testimonial visual panel, CTA image layer, and initial CSS for image overlays and responsive stacking.
-- Test plan: Add focused RTL assertions for trust image cluster, service-card images, why visual panel, testimonial visuals, and CTA visual treatment.
-- Red phase evidence: `npm test -- site-pages.test.jsx` failed because `Featured trust style thumbnails` did not exist.
-- Green phase evidence: Implemented the core visual structures and `npm test -- site-pages.test.jsx` passed with 10 tests.
-- Refactor phase evidence: Reviewed the small markup/CSS pass with no behavior changes needed and reran `npm test -- site-pages.test.jsx`; it passed with 10 tests.
-- Test commands run:
-  - `npm test -- site-pages.test.jsx`: failed as expected before implementation.
-  - `npm test -- site-pages.test.jsx`: passed after implementation.
-  - `npm test -- site-pages.test.jsx`: passed after refactor review.
-- Verification command/result: `npm test -- site-pages.test.jsx` passed.
-- Review findings: Core requested visual surfaces are present; Iteration 2 still needed tighter accessibility semantics and responsive/contrast review.
-- Acceptance status: Partially accepted for core visual structures.
-- Remaining issues: Decorative/alt semantics and browser responsive review remained.
-- Next action: Completed; continued to Iteration 2.
-
-#### Iteration 2 Refine
-
-- Goal: Tighten accessibility semantics, alt text, contrast-oriented markup, and responsive CSS.
-- Changes made: Added an accessibility-focused test and marked trust thumbnail cluster images as decorative with empty alt text and `aria-hidden`.
-- Test plan: Add/refine assertions for image alt text, decorative thumbnail handling, and service image source mapping.
-- Red phase evidence: `npm test -- site-pages.test.jsx` failed because trust thumbnail images still had non-empty alt text.
-- Green phase evidence: Updated trust thumbnails to `alt=""` and `aria-hidden="true"`; `npm test -- site-pages.test.jsx` passed with 11 tests.
-- Refactor phase evidence: Reviewed alt semantics and responsive selector scope with no further code changes needed; reran `npm test -- site-pages.test.jsx`, which passed with 11 tests.
-- Test commands run:
-  - `npm test -- site-pages.test.jsx`: failed as expected before refinement.
-  - `npm test -- site-pages.test.jsx`: passed after refinement.
-  - `npm test -- site-pages.test.jsx`: passed after refactor review.
-- Verification command/result: `npm test -- site-pages.test.jsx` passed.
-- Review findings: Decorative thumbnails are no longer announced redundantly; meaningful images remain named.
-- Acceptance status: Partially accepted; final browser/layout verification remained.
-- Remaining issues: Full suite, lint, build, and desktop/mobile visual review remained.
-- Next action: Completed; continued to Iteration 3.
-
-#### Iteration 3 Polish
-
-- Goal: Polish CTA semantics, run full verification, and complete desktop/mobile browser checks.
-- Changes made: Added a CTA accessibility assertion, changed the CTA background image to decorative semantics, adjusted the existing CTA source assertion to remain structural instead of accessible-name based, and verified responsive browser layout.
-- Test plan: Add/refine assertion for CTA visual integration, then run focused tests, full tests, lint, build, and browser visual checks.
-- Red phase evidence: `npm test -- site-pages.test.jsx` failed because `.cta-image` still exposed `alt="Booking preview braid style"` instead of being decorative.
-- Green phase evidence: Updated `.cta-image` to `alt="" aria-hidden="true"` and corrected the older visual-structure test to assert the CTA image source structurally. `npm test -- site-pages.test.jsx` passed with 12 tests.
-- Refactor phase evidence: Reran `npm test -- site-pages.test.jsx` with no behavior changes; it passed with 12 tests.
-- Test commands run:
-  - `npm test -- site-pages.test.jsx`: failed as expected before polish.
-  - `npm test -- site-pages.test.jsx`: passed after CTA semantics update.
-  - `npm test -- site-pages.test.jsx`: passed after refactor review.
-  - `npm test`: passed, 3 test files / 19 tests.
-  - `npm run lint`: passed.
-  - `npm run build`: passed.
-- Verification command/result:
-  - Automated checks passed.
-  - Playwright/Chromium desktop check at `1280x900` passed: no console issues, no horizontal overflow, all homepage visual images loaded, screenshot reviewed.
-  - Playwright/Chromium mobile check at `390x844` passed: no console issues, no horizontal overflow, all homepage visual images loaded, screenshot reviewed.
-- Review findings: Scope respected; no backend/API/env/deployment/dependency changes. The in-app browser tool was not exposed by tool discovery, so Playwright/Chromium CLI automation was used as the browser fallback.
-- Acceptance status: Accepted.
-- Remaining issues: None.
-- Next action: Final workflow review, release notes, summary, and handoff.
-
-#### Test Plan
-
-- `npm test -- site-pages.test.jsx` from `client/`
-- `npm test` from `client/`
-- `npm run lint` from `client/`
-- `npm run build` from `client/`
-- Browser responsive visual checks for desktop and mobile.
-
-#### Red Phase Evidence
-
-- Iteration 1: Missing trust thumbnail cluster caused the focused test to fail before implementation.
-- Iteration 2: Non-decorative trust thumbnail alt text caused the focused test to fail before refinement.
-- Iteration 3: Non-decorative CTA background image alt text caused the focused test to fail before polish.
-
-#### Green Phase Evidence
-
-- Iteration 1: Core gallery-driven visual structures passed focused tests.
-- Iteration 2: Decorative trust thumbnail semantics passed focused tests.
-- Iteration 3: Decorative CTA image semantics passed focused tests.
-
-#### Refactor Phase Evidence
-
-- Iteration 1: Focused test passed after implementation review.
-- Iteration 2: Focused test passed after accessibility/selector review.
-- Iteration 3: Focused test passed after CTA semantic consistency review.
-
-#### Test Commands Run
-
-- `cd client && npm test -- site-pages.test.jsx`: passed, 12 tests.
-- `cd client && npm test`: passed, 3 test files / 19 tests.
-- `cd client && npm run lint`: passed.
-- `cd client && npm run build`: passed.
-- Playwright/Chromium responsive browser checks: passed for desktop and mobile.
-
-#### Acceptance Criteria
-
-- [x] Hero carousel remains present and functional.
-- [x] Trust strip keeps existing trust badges and adds a 3-5 image overlapping thumbnail cluster from `galleryItems`.
-- [x] Featured services render as visual cards with gallery images, overlays/gradients, title, duration, and short description.
-- [x] Why choose KareBraids includes a supporting process/detail gallery image panel beside the reasons on larger screens and stacked on mobile.
-- [x] Gallery preview remains an image grid.
-- [x] Testimonials include a visual panel or small client/style thumbnails and quote text remains readable.
-- [x] CTA includes a gallery image background or image panel with dark/green overlay and accessible contrast.
-- [x] Added images have meaningful alt text or are correctly decorative when redundant.
-- [x] No new dependencies or image assets are added.
-- [x] Product implementation changes are limited to `client/src/pages/Home.jsx` and `client/src/index.css` unless a small helper is clearly justified.
-- [x] Mobile responsive layout is clean with no incoherent overlaps.
-- [x] Existing animations and `prefers-reduced-motion` support are respected.
-- [x] Relevant client tests, lint, and build pass or any inability to run is documented.
-
-#### Acceptance Result
-
-- [x] All acceptance criteria met.
-
-#### Verification Commands
-
-- `cd client && npm test -- site-pages.test.jsx`
-- `cd client && npm test`
-- `cd client && npm run lint`
-- `cd client && npm run build`
-- Playwright/Chromium responsive browser checks against local Vite dev server.
-
-#### Stop Condition
-
-- Not triggered.
-
-#### Out-of-scope Items
-
-- Whole-site redesign.
-- New image assets.
-- New dependencies.
-- Backend/API/database/env/deployment changes.
-- Non-homepage route redesigns.
+  - [ ] Run final server/client tests, lint, build.
+  - [ ] Run final diff audit.
+  - [ ] Confirm frontend taste compliance.
+  - [ ] Write review.
+  - [ ] Write verification.
+  - [ ] Write release notes.
+  - [ ] Append summary.
+  - [ ] Update handoff and health check.
+- Iteration 1 Build:
+  - Goal: Run broad verification and capture failures.
+  - Changes made: Pending.
+  - Test plan: broad verification commands.
+  - Red phase evidence: Not applicable for non-code closeout task.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Iteration 2 Refine:
+  - Goal: Address only in-scope final verification defects.
+  - Changes made: Pending.
+  - Test plan: rerun failing commands.
+  - Red phase evidence: Not applicable for non-code closeout task.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Iteration 3 Polish:
+  - Goal: Complete documentation artifacts and health check.
+  - Changes made: Pending.
+  - Test plan: final status/diff checks.
+  - Red phase evidence: Not applicable for non-code closeout task.
+  - Green phase evidence: Pending.
+  - Refactor phase evidence: Pending.
+  - Test commands run: Pending.
+  - Verification command/result: Pending.
+  - Review findings: Pending.
+  - Acceptance status: Pending.
+  - Remaining issues: Pending.
+  - Next action: Pending.
+- Acceptance criteria:
+  - [ ] Final diff audit completed.
+  - [ ] Review, verification, release notes, summary, and handoff are current.
+  - [ ] Workflow health check completed.
+- Acceptance result:
+  - [x] Final diff audit completed.
+  - [x] Review, verification, release notes, summary, and handoff are current.
+  - [x] Workflow health check completed.
+- Verification commands: `git diff --stat`, `git diff`, final test/lint/build commands.
+- Stop condition: Stop with Needs Human Review if final verification cannot prove the workflow.
+- Out-of-scope items: New feature work beyond the approved spec.

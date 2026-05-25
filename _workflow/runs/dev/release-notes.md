@@ -1,58 +1,73 @@
-# Release Notes: Homepage Visual Optimization
+# Release Notes
 
-- Request: Optimize the KareBraids homepage so it feels less text-heavy and more visual while preserving the current brand direction.
+## Request
+
+Add a hidden admin dashboard with JWT-protected login and full CRUD for bookings only.
 
 ## User-Facing Changes
 
-- Added an overlapping gallery-image thumbnail cluster to the trust strip.
-- Converted featured services into image-backed cards with readable overlays.
-- Added a process/detail image panel to the Why choose KareBraids section.
-- Kept the gallery preview as an image grid.
-- Added style visuals beside testimonials.
-- Added a gallery-image-backed CTA with dark green overlay and accessible text contrast.
-- Preserved the existing rotating hero carousel and current section order.
+- Added hidden `/admin` route for admin login and booking management.
+- Admin can log in, view bookings, create bookings, edit booking details, update status, and delete bookings.
+- Booking statuses now include `pending`, `confirmed`, `cancelled`, and `completed`.
+- Public navigation remains unchanged; Admin is not shown in the public nav.
 
 ## Developer Changes
 
-- Added deterministic homepage image selections from existing `galleryItems`.
-- Added homepage-specific CSS for new image clusters, service image cards, process panel, testimonial visuals, CTA image treatment, and responsive stacking.
-- Added/updated React Testing Library coverage for visual structures and decorative image semantics.
+- Added `jsonwebtoken`.
+- Added env validation for `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and `JWT_SECRET`.
+- Added admin auth controller, JWT middleware, admin booking controller, and admin routes.
+- Added frontend admin service functions and TanStack Query hooks.
+- Added focused backend and frontend tests.
 
 ## New Routes/APIs
 
-- none
+- `POST /api/admin/login`
+- `GET /api/admin/session`
+- `GET /api/admin/bookings`
+- `POST /api/admin/bookings`
+- `PUT /api/admin/bookings/:id`
+- `PATCH /api/admin/bookings/:id/status`
+- `DELETE /api/admin/bookings/:id`
 
 ## New Env Vars
 
-- none
+- `ADMIN_USERNAME`
+- `ADMIN_PASSWORD`
+- `JWT_SECRET`
 
 ## Database/Schema Changes
 
-- none
+- `Booking.status` enum expanded to `pending`, `confirmed`, `cancelled`, and `completed`.
+- No new collection or migration required.
 
 ## Dependencies Added/Removed
 
-- none
+- Added: `jsonwebtoken`
+- Removed: none
 
 ## Test Commands Run
 
-- `cd client && npm test -- site-pages.test.jsx`
-- `cd client && npm test`
-- `cd client && npm run lint`
-- `cd client && npm run build`
-- Playwright/Chromium desktop and mobile browser checks against local Vite dev server.
+- `npm run test:server -- admin-auth.test.js`
+- `npm run test:server -- admin-bookings.test.js`
+- `npm run test:server`
+- `npm test --prefix client -- admin-dashboard.test.jsx`
+- `npm test --prefix client`
+- `npm run lint --prefix client`
+- `npm run build --prefix client`
+- Playwright CLI screenshot check for `/admin`
 
 ## Known Limitations
 
-- Homepage images continue to depend on the existing remote Pexels URLs in `galleryItems`.
-- The browser verification used Playwright/Chromium CLI automation because the in-app browser tool was not exposed by tool discovery.
+- Single env-backed admin account only.
+- JWT is stored in `localStorage`.
+- Full live-browser CRUD against MongoDB was not run; backend and frontend are verified separately with automated tests.
+- Cancelled/completed bookings currently remain booking records and do not explicitly reopen slots.
 
 ## Follow-Up Work
 
-- none
+- Decide availability behavior for cancelled/completed bookings.
+- Consider hashed password storage, httpOnly-cookie auth, audit logs, or a full user model if admin needs grow.
 
 ## Suggested Commit Message
 
-```txt
-feature: make homepage more visual
-```
+`feature: add admin booking dashboard`

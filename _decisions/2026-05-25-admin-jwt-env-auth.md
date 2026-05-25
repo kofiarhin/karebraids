@@ -1,0 +1,24 @@
+# Admin JWT Auth With Env Credentials
+
+- Date: 2026-05-25
+- Decision: Use a simple env-backed admin credential pair with backend-issued JWTs for the booking admin dashboard.
+- Context: KareBraids needed an admin-only booking management surface, but the app had no user model, role system, or authentication layer.
+- Options considered:
+  - Full user model with roles and password hashing.
+  - Third-party auth provider.
+  - Single admin username/password from root `.env` with signed JWTs.
+- Selected option: Single admin username/password from root `.env` with signed JWTs.
+- Consequences:
+  - Keeps scope small and avoids introducing user-account CRUD.
+  - Requires production environments to set `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and `JWT_SECRET`.
+  - JWTs must be treated as sensitive browser session data.
+  - A full admin user model remains a future upgrade if multiple admins or password reset are needed.
+- Affected files:
+  - `server/config/env.js`
+  - `server/controllers/adminAuthController.js`
+  - `server/middleware/adminAuth.js`
+  - `server/routes/adminRoutes.js`
+  - `client/src/pages/Admin.jsx`
+  - `.env.example`
+- Follow-up tasks:
+  - Consider hashed admin password support or a user model if more than one admin account is needed.

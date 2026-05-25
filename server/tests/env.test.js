@@ -37,8 +37,16 @@ describe("environment validation", () => {
     process.env = {
       NODE_ENV: "production",
       MONGODB_URI: "  mongodb://127.0.0.1:27017/karebraids  ",
+      ADMIN_USERNAME: "  admin  ",
+      ADMIN_PASSWORD: "correct-password",
+      JWT_SECRET: "test-secret",
     };
 
-    expect(getEnv().mongodbUri).toBe("mongodb://127.0.0.1:27017/karebraids");
+    expect(getEnv()).toEqual(
+      expect.objectContaining({
+        adminUsername: "admin",
+        mongodbUri: "mongodb://127.0.0.1:27017/karebraids",
+      }),
+    );
   });
 });

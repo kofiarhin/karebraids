@@ -43,6 +43,7 @@ direct user prompt or <artifact-root>/request.md
 -> shared understanding handoff
 -> sync <artifact-root>/request.md
 -> dirty worktree check
+-> frontend taste skill detection when frontend/UI surfaces are in scope
 -> spec in <artifact-root>/spec.md
 -> display spec summary and spec path
 -> STOP and wait for explicit user approval or requested changes
@@ -53,8 +54,8 @@ direct user prompt or <artifact-root>/request.md
 -> run each executable task through Iteration 1 Build, Iteration 2 Refine, and Iteration 3 Polish
 -> for every code-changing task, run Red -> Green -> Refactor inside each iteration
 -> verify, review, and record evidence inside each iteration
--> update <artifact-root>/progress.md after each task
--> update <artifact-root>/handoff.md after each task
+-> update <artifact-root>/progress.md after each task iteration and after each task
+-> update <artifact-root>/handoff.md after each task iteration and after each task
 -> in parallel modes, orchestrator validates claims, locks, worker status, and merge review
 -> final diff audit
 -> review in <artifact-root>/review.md
@@ -140,25 +141,68 @@ Sync the active request into `<artifact-root>/request.md` before questioning and
 
 Before planning, read `<artifact-root>/handoff.md` if it exists. If no handoff exists, create it and populate the current request, request ID, current phase, current branch, current worktree path, run id, artifact root, blockers, verification status, workflow health status, suggested next prompt, and continuation notes.
 
-## 1A. Continue Workflow Command
+
+## 1A. Token Budget / Resume Safety Protocol
+
+Apply this protocol before starting any long task, risky edit, or new iteration:
+
+1. Estimate whether the next task or iteration can fit in the remaining context/output budget.
+2. If the remaining budget appears low, do not start or continue risky edits.
+3. First update `<artifact-root>/handoff.md` with a complete resume-safe state.
+4. Append a progress checkpoint to `<artifact-root>/progress.md` that records the stop reason as low budget.
+5. Include the exact next prompt `continue workflow` in both handoff and progress checkpoint notes.
+6. Stop after writing those artifacts so another agent/session can resume safely.
+
+Low Token Stop Protocol (required):
+
+- Stop before starting a risky edit when remaining context/output budget appears low.
+- Write current state to `<artifact-root>/handoff.md` first.
+- Append a progress checkpoint entry to `<artifact-root>/progress.md`.
+- Record the exact next prompt: `continue workflow`.
+
+Crash/Interrupted Resume Protocol (required):
+
+When a prior session ended without a fresh handoff update:
+
+1. Inspect `git status --short`.
+2. Inspect `<artifact-root>/progress.md`.
+3. Inspect `<artifact-root>/tasks.md`.
+4. Infer partial work from changed files and task/iteration evidence.
+5. If safe completion cannot be proven, mark the affected task `Needs Human Review` and record why.
+
+Handoff must always be safe to resume. Include a required `Token / Resume State` section with:
+
+- current phase
+- current task
+- current iteration
+- last completed safe checkpoint
+- files already changed
+- files planned next
+- tests already run
+- exact next command/action
+- whether it is safe to continue automatically
+
+## 1B. Continue Workflow Command
 
 If the active user prompt is exactly or primarily `continue workflow`, resume instead of restarting intake:
 
 1. Resolve current branch, worktree path, run id, and artifact root first.
 2. Read `<artifact-root>/handoff.md` first and use it as the primary resume source.
-3. If no handoff exists, create it, then fall back to `<artifact-root>/progress.md`, the latest relevant run-scoped `summary.md`, `<artifact-root>/tasks.md`, and the referenced spec to reconstruct the live state.
-4. Read `<artifact-root>/progress.md` to verify completed task history.
-5. If `<artifact-root>/handoff.md` conflicts with `<artifact-root>/progress.md`, trust `<artifact-root>/progress.md` for completed task history and update handoff accordingly.
-6. Read the latest relevant run-scoped `summary.md`, if any.
-7. If a spec exists but no task plan exists for the active request, resume at the spec approval gate: read the saved spec, show the approval prompt from section 5A, and stop for explicit user approval. Do not generate tasks automatically.
-8. If a task plan exists, read the task plan referenced by `<artifact-root>/handoff.md`, or `<artifact-root>/tasks.md` if handoff has no task plan.
-9. Read the spec referenced by that task plan.
-10. Find the next task whose status is not `Done` and the current iteration recorded in `<artifact-root>/handoff.md`.
-11. Continue from that task and iteration.
-12. Do not ask the original intake questions again unless a current ambiguity blocks safe continuation.
-13. Do not regenerate the entire spec unless the request changed.
-14. Continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached, preserving the Build -> Refine -> Polish loop for each executable task.
-15. If all tasks are `Done`, complete any missing run-scoped review, release notes, summary, handoff update, workflow health check, or final response step.
+3. Read `<artifact-root>/progress.md` second to verify completed task and iteration history.
+4. Run `git status --short` and reconcile changed files against the handoff `Token / Resume State` section before continuing.
+5. If no handoff exists, create it, then fall back to `<artifact-root>/progress.md`, the latest relevant run-scoped `summary.md`, `<artifact-root>/tasks.md`, and the referenced spec to reconstruct the live state.
+6. If `<artifact-root>/handoff.md` conflicts with `<artifact-root>/progress.md`, trust `<artifact-root>/progress.md` for completed task history and update handoff accordingly.
+7. Reconcile `git status --short` output with files recorded in handoff and progress; document mismatches before resuming edits.
+8. Read the latest relevant run-scoped `summary.md`, if any.
+9. If a spec exists but no task plan exists for the active request, resume at the spec approval gate: read the saved spec, show the approval prompt from section 5A, and stop for explicit user approval. Do not generate tasks automatically.
+10. If a task plan exists, read the task plan referenced by `<artifact-root>/handoff.md`, or `<artifact-root>/tasks.md` if handoff has no task plan.
+11. Read the spec referenced by that task plan.
+12. Find the next unfinished task and unfinished iteration from `<artifact-root>/tasks.md` plus handoff/progress evidence.
+13. Continue only from the next unfinished task/iteration; do not repeat completed iterations.
+14. Do not ask the original intake questions again unless a current ambiguity blocks safe continuation.
+15. Do not regenerate the entire spec unless the request changed or required artifacts are missing/corrupt.
+16. Continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached, preserving the Build -> Refine -> Polish loop for each executable task.
+17. If all tasks are `Done`, complete any missing run-scoped review, release notes, summary, handoff update, workflow health check, or final response step.
 
 ## 2. Intake And Questioning
 
@@ -239,6 +283,16 @@ Dirty worktree rules:
 - If dirty files are unrelated, continue but document them in the spec, task plan, `<artifact-root>/handoff.md`, and `<artifact-root>/progress.md`.
 - Never overwrite user changes.
 - Never clean or reset files unless explicitly instructed.
+
+## Frontend Taste Skill Detection
+
+- Detect whether the request touches frontend/UI surfaces after grill-me/shared understanding and repo intake, before writing spec.
+- Frontend/UI surfaces include React, Next.js, Vite, Tailwind, CSS, components, pages, layouts, forms, dashboards, icons, motion/animation, loading/empty/error states, responsive behavior, accessibility states, visual polish, and frontend review.
+- If frontend/UI is in scope, read `.agents/skills/design-taste-frontend/SKILL.md` before writing `<artifact-root>/spec.md`.
+- Record result in spec under `Frontend Taste Application`.
+- Carry the skill through tasks, implementation, review, verification, release notes, summary, and health check.
+- If frontend scope is discovered later, pause before frontend edits, read the skill, update spec/task acceptance criteria, then continue.
+- If frontend is not in scope, record `Frontend Taste Application: Not applicable`.
 
 ## 5. Spec Phase
 
@@ -386,6 +440,10 @@ Detailed spec required sections:
    - Suggested task ordering.
    - Areas that should not become separate tasks.
    - How the 3-pass Build -> Refine -> Polish loop should apply.
+23. Frontend Taste Application:
+   - Applicable or `Not applicable`.
+   - Detection result and reason.
+   - Required propagation points (spec/tasks/implementation/review/verification/release notes/summary/health check).
 
 No implementation may happen until this file exists.
 
@@ -450,7 +508,7 @@ Before planning, read:
 - The saved detailed spec in `<artifact-root>/spec.md`.
 - Relevant durable docs in `docs/`.
 
-Generate a vertical implementation plan from the saved detailed spec. Derive tasks from the spec's affected surfaces, dependency/integration map, data/state impact, UX/API/workflow expectations, execution strategy, verification strategy, acceptance criteria, edge cases, risks, assumptions, open questions, and task extraction notes.
+Generate a vertical implementation plan from the saved detailed spec. Derive tasks from the spec's affected surfaces, dependency/integration map, data/state impact, UX/API/workflow expectations, execution strategy, verification strategy, acceptance criteria, edge cases, risks, assumptions, open questions, and task extraction notes. When `Frontend Taste Application` is applicable, include explicit frontend taste acceptance criteria in relevant tasks.
 
 Save the task breakdown at the current run-scoped path:
 
@@ -775,7 +833,7 @@ After each task, append:
 
 Do not rewrite previous progress entries except to correct factual errors.
 
-After each task and before any stop, update `<artifact-root>/handoff.md` with the current task and current iteration. Do not leave handoff stale after task execution.
+After each task iteration and before any stop, update `<artifact-root>/handoff.md` with the current task and current iteration. Do not leave handoff stale after task execution.
 
 ## 10. Final Diff Audit
 
@@ -790,6 +848,7 @@ git diff
 
 Document:
 
+- Frontend taste skill compliance (when applicable).
 - Does the diff match the saved spec?
 - Were unrelated files touched?
 - Were workflow artifacts updated correctly?
@@ -939,6 +998,7 @@ Before the final response, check:
 - Were release notes created?
 - Was required iteration evidence recorded for every executable task?
 - Was the final diff audit completed or documented?
+- For frontend work, did review and verification explicitly record frontend taste skill compliance?
 - Was the dirty worktree checked?
 - Were acceptance results completed?
 - Were verification commands run or documented?
@@ -947,6 +1007,7 @@ Before the final response, check:
 - For every code-changing task, was passing verification recorded after implementation and after refactor?
 - For every code-changing task without first-test evidence, was a missing-test exception explicitly justified?
 - Was scope respected?
+- For frontend work, was `design-taste-frontend` applied and recorded across spec, tasks, review, summary, and health check?
 - Were decisions recorded if needed?
 - For parallel modes, did every task include priority, parallel-safe flag, dependencies, file locks, claim status, claimed by, agent role, and merge risk?
 - For parallel modes, were `<artifact-root>/parallel/claims.md`, `<artifact-root>/parallel/locks.md`, and `<artifact-root>/parallel/agent-status.md` updated?

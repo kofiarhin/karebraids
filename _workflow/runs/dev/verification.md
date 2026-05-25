@@ -1,54 +1,50 @@
-# Verification: Homepage Visual Optimization
+# Verification
 
-- Request: Optimize the KareBraids homepage so it feels less text-heavy and more visual while preserving the current brand direction.
-- Spec file: `_workflow/runs/dev/spec.md`
-- Task plan: `_workflow/runs/dev/tasks.md`
-- Date: 2026-05-25
-- Final status: Passed
+## Request
+
+Add a hidden `/admin` dashboard with env-backed JWT admin login and full CRUD for bookings only.
 
 ## Commands Run
 
-- `cd client && npm test -- site-pages.test.jsx`
-  - Iteration 1 Red: failed for missing `Featured trust style thumbnails`.
-  - Iteration 1 Green/Refactor: passed with 10 tests.
-  - Iteration 2 Red: failed for non-decorative trust thumbnail alt text.
-  - Iteration 2 Green/Refactor: passed with 11 tests.
-  - Iteration 3 Red: failed because `.cta-image` exposed `alt="Booking preview braid style"`.
-  - Iteration 3 Green/Refactor: passed with 12 tests.
-- `cd client && npm test`
-  - Final result: Passed, 3 test files / 19 tests.
-- `cd client && npm run lint`
-  - Final result: Passed.
-- `cd client && npm run build`
-  - Final result: Passed.
+- `npm run test:server -- admin-auth.test.js`
+  - Initial Red: failed because `jsonwebtoken` was missing.
+  - Final: passed, 5 tests.
+- `npm run test:server -- admin-bookings.test.js`
+  - Initial Red: failed with 404s for missing admin booking routes.
+  - Status endpoint Red: failed with 404 for missing status-only route.
+  - Final: passed, 9 tests.
+- `npm run test:server`
+  - Initial TASK-001 polish: failed until env tests included required admin vars.
+  - Final: passed, 4 suites / 24 tests.
+- `npm test --prefix client -- admin-dashboard.test.jsx`
+  - Initial Red: failed because `adminService.js` did not exist.
+  - Invalid-token Red: failed until rejected saved tokens returned to login.
+  - Final: passed, 4 tests.
+- `npm test --prefix client`
+  - Final: passed, 4 files / 23 tests.
+- `npm run lint --prefix client`
+  - Initial TASK-003 polish: failed for admin page lint issues.
+  - Final: passed.
+- `npm run build --prefix client`
+  - Final: passed.
+- `npx --yes playwright screenshot --browser=chromium --viewport-size=1280,900 http://127.0.0.1:5176/admin output/playwright/admin-login-desktop.png`
+  - Passed. Verified `/admin` login route renders through a real Chromium screenshot.
+  - Temporary screenshot/log files were removed and the dev server was stopped.
+- `git diff --stat`
+  - Passed.
+- `git diff`
+  - Passed.
+- `git status --short`
+  - Passed.
 
-## Browser Verification
+## Results
 
-- Tooling:
-  - The in-app browser tool was not exposed by tool discovery, so Playwright/Chromium CLI automation was used as the browser fallback.
-  - Local Vite dev server ran at `http://127.0.0.1:5176/` during verification and was stopped afterward.
-- Desktop check:
-  - Viewport: `1280x900`
-  - Result: Passed.
-  - Evidence: no console issues, no horizontal overflow, 18 non-hero homepage visual images loaded, screenshot reviewed.
-- Mobile check:
-  - Viewport: `390x844`
-  - Result: Passed.
-  - Evidence: no console issues, no horizontal overflow, 18 non-hero homepage visual images loaded, screenshot reviewed.
+- Backend auth, env validation, guarded admin routes, booking CRUD, and public booking compatibility are verified by Jest/Supertest.
+- Frontend login route, token handling, booking list/status UI, shared services/hooks usage, and invalid-token recovery are verified by Vitest/RTL.
+- Client lint and production build pass.
+- Browser screenshot verification for `/admin` login passed via Playwright CLI fallback.
 
 ## Notes
 
-- Full-page screenshots taken from the top initially showed below-fold sections hidden because the page intentionally uses reveal-on-scroll. Final browser verification scrolled through sections before screenshots and metrics collection.
-- Temporary browser screenshots and scripts were saved under the OS temp directory, not the repo.
-- Generated `client/test-results/` from the temporary Playwright run was removed.
-- Pre-existing untracked homepage PNG files were left untouched.
-
-## Design-Taste Frontend Pre-Flight
-
-- [x] Global state is not used for homepage visual additions.
-- [x] Mobile layout collapse is covered by existing responsive breakpoints and new single-column rules.
-- [x] No `h-screen` full-height section was introduced.
-- [x] Existing carousel `useEffect` animation cleanup remains intact.
-- [x] Empty/loading/error states are not applicable to static homepage content.
-- [x] Cards are used only for repeated service/testimonial surfaces and not nested as page sections.
-- [x] No CPU-heavy perpetual animations were introduced.
+- A filtered `git diff` command using exclusion pathspecs failed with `fatal: Unimplemented pathspec magic '_'`; the required plain `git diff` command was run successfully afterward.
+- Pre-existing dirty workflow/instruction files remain in the worktree and are unrelated to the admin implementation.
