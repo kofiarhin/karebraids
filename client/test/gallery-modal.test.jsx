@@ -19,7 +19,9 @@ describe('gallery modal', () => {
 
     await user.click(screen.getByRole('button', { name: /copper knotless braids/i }))
 
-    expect(screen.getByRole('dialog', { name: /copper knotless braids/i })).toBeInTheDocument()
+    expect(screen.getByRole('dialog', { name: /copper knotless braids/i })).toHaveClass(
+      'dark-gallery-modal',
+    )
     expect(screen.getByRole('button', { name: /close gallery image/i })).toHaveFocus()
 
     await user.click(screen.getByRole('button', { name: /close gallery image/i }))

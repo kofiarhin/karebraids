@@ -58,8 +58,9 @@ describe('booking flow', () => {
 
   it('prevents Sunday selection before showing appointment times', async () => {
     const user = userEvent.setup()
-    renderBooking()
+    const { container } = renderBooking()
 
+    expect(container.querySelector('.booking-page')).toHaveClass('dark-booking-page')
     await chooseService(user)
 
     expect(screen.queryByLabelText(/appointment date/i)).not.toBeInTheDocument()

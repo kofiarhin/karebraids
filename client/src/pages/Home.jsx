@@ -59,7 +59,7 @@ export function Home() {
 
   return (
     <>
-      <section className="hero-section home-hero">
+      <section className="hero-section home-hero dark-home-hero">
         <div className="hero-copy" data-reveal>
           <p className="eyebrow">Premium African hair braiding in London</p>
           <h1>KareBraids</h1>

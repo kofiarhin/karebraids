@@ -27,8 +27,9 @@ function renderRoute(route = '/') {
 
 describe('KareBraids pages', () => {
   it('renders the home page with primary booking navigation', () => {
-    renderRoute('/')
+    const { container } = renderRoute('/')
 
+    expect(container.querySelector('.site-shell')).toHaveClass('dark-brand-shell')
     expect(screen.getByRole('heading', { name: /karebraids/i })).toBeInTheDocument()
     expect(screen.getAllByRole('link', { name: /book now/i })).toHaveLength(2)
     expect(screen.getByRole('link', { name: /view gallery/i })).toHaveAttribute('href', '/gallery')
@@ -38,6 +39,7 @@ describe('KareBraids pages', () => {
   it('keeps the full homepage section story intact', () => {
     const { container } = renderRoute('/')
 
+    expect(container.querySelector('.home-hero')).toHaveClass('dark-home-hero')
     expect(screen.getByText(/premium african hair braiding in london/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/karebraids trust highlights/i)).toHaveTextContent(/protective styling/i)
     expect(screen.getByText(/featured services/i)).toBeInTheDocument()
@@ -182,14 +184,16 @@ describe('KareBraids pages', () => {
   })
 
   it('renders the about page', () => {
-    renderRoute('/about')
+    const { container } = renderRoute('/about')
 
+    expect(container.querySelector('.about-page')).toHaveClass('dark-about-page')
     expect(screen.getByRole('heading', { name: /meet karen/i })).toBeInTheDocument()
   })
 
   it('renders the gallery page', () => {
     const { container } = renderRoute('/gallery')
 
+    expect(container.querySelector('.gallery-page')).toHaveClass('dark-gallery-page')
     expect(screen.getByRole('heading', { name: /braid gallery/i })).toBeInTheDocument()
     expect(container.querySelectorAll('.gallery-card')).toHaveLength(9)
     expect(screen.getByRole('region', { name: /gallery image wall/i })).toHaveClass(

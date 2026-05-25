@@ -1,0 +1,195 @@
+# Progress: KareBraids Full Dark Brand Redesign
+
+## 2026-05-25 - Intake And Spec Setup
+
+- Current branch: `dark-theme`
+- Worktree: `C:/Users/laura.bolas/projects/karebraids/dark-theme`
+- Artifact root: `_workflow/runs/dark-theme/`
+- Dirty worktree before artifact creation: clean.
+- Intake skill used: `grill-me`.
+- Frontend design skill used: `design-taste-frontend`.
+- Shared understanding reached: yes.
+- Spec status: created and awaiting explicit user approval.
+- Task plan status: not created; blocked by spec approval gate.
+- Implementation status: not started.
+- Verification status: not applicable before implementation.
+- Next step: user replies `approve spec`, requests a spec change, or cancels workflow.
+
+## 2026-05-25 - Spec Approved And Task Plan Created
+
+- User approval: `approve spec`
+- Spec approved before task planning: yes.
+- Task plan created: `_workflow/runs/dark-theme/tasks.md`
+- Execution mode: `complete-workflow`
+- Dirty worktree before planning: only run-scoped workflow artifacts under `_workflow/runs/dark-theme/`.
+- Planned first task: `TASK-001: Apply dark brand shell to shared UI`
+- Implementation status: not started at this checkpoint.
+
+## 2026-05-25 - TASK-001 Done
+
+- Task ID: `TASK-001`
+- Status: `Done`
+- Lifecycle transition reached: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`
+- Files changed:
+  - `client/src/components/Layout.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+  - `_workflow/runs/dark-theme/tasks.md`
+  - `_workflow/runs/dark-theme/progress.md`
+  - `_workflow/runs/dark-theme/handoff.md`
+- Iteration 1 Build:
+  - Goal: Add test coverage for the dark shell marker and implement the smallest shared shell change.
+  - Red: Initial targeted test command failed because `vitest` was missing from `client/node_modules`; after `npm install --prefix client`, the expected Red failure appeared for missing `dark-brand-shell`.
+  - Green: Added `dark-brand-shell` to `Layout` and dark brand CSS tokens/shared shell styling; targeted tests passed.
+  - Refactor: Shared shell styling was reviewed and targeted tests still passed.
+  - Commands: `npm install --prefix client`; `npm test --prefix client -- site-pages.test.jsx`.
+- Iteration 2 Refine:
+  - Goal: Refine shared visual states and mobile drawer styling.
+  - Red: Missing-test exception; changes were CSS/source-review only with existing behavior tests already covering nav and route behavior.
+  - Green: `npm test --prefix client -- site-pages.test.jsx` passed.
+  - Refactor: CSS scan confirmed remaining old palette values are page-specific and assigned to later tasks.
+  - Commands: `rg` palette scan; `npm test --prefix client -- site-pages.test.jsx`.
+- Iteration 3 Polish:
+  - Goal: Final shared UI verification.
+  - Red: Missing-test exception; no new behavior introduced.
+  - Green: `npm test --prefix client -- site-pages.test.jsx` passed.
+  - Refactor: Final targeted verification remained green.
+  - Commands: `npm test --prefix client -- site-pages.test.jsx`.
+- Acceptance result:
+  - [x] Shared UI uses approved dark brand tokens.
+  - [x] Header/nav/mobile drawer/footer/buttons remain accessible and functional.
+  - [x] Existing page routes still render.
+- Verification result: passed.
+- Failure recovery notes: Installed client dependencies from existing lockfile because local `vitest` was unavailable.
+- Review result: No shared behavior regression found.
+- Blockers: none.
+- Next step: Start `TASK-002`.
+
+## 2026-05-25 - TASK-002 Done
+
+- Task ID: `TASK-002`
+- Status: `Done`
+- Lifecycle transition reached: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`
+- Files changed:
+  - `client/src/pages/Home.jsx`
+  - `client/src/pages/About.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+  - `_workflow/runs/dark-theme/tasks.md`
+  - `_workflow/runs/dark-theme/progress.md`
+  - `_workflow/runs/dark-theme/handoff.md`
+- Iteration 1 Build:
+  - Goal: Add semantic Home/About dark treatment tests and implement page hooks.
+  - Red: `npm test --prefix client -- site-pages.test.jsx` failed because `.home-hero` lacked `dark-home-hero` and `.about-page` lacked `dark-about-page`.
+  - Green: Added the classes and scoped dark marketing CSS; targeted tests passed.
+  - Refactor: Tests remained green after selector review.
+  - Commands: `npm test --prefix client -- site-pages.test.jsx`.
+- Iteration 2 Refine:
+  - Goal: Refine Home visual density and section treatment.
+  - Red: Missing-test exception; refinement was CSS/source-review only after semantic hooks and route behavior tests were green.
+  - Green: `npm test --prefix client -- site-pages.test.jsx` passed.
+  - Refactor: Selector scan confirmed the main Home/About override layer exists.
+  - Commands: `rg` selector scan; `npm test --prefix client -- site-pages.test.jsx`.
+- Iteration 3 Polish:
+  - Goal: Polish About and final route verification.
+  - Red: Missing-test exception; no new behavior introduced.
+  - Green: `npm test --prefix client -- site-pages.test.jsx` passed.
+  - Refactor: Final targeted verification remained green.
+  - Commands: `npm test --prefix client -- site-pages.test.jsx`.
+- Acceptance result:
+  - [x] Home and About preserve existing content/flow.
+  - [x] Home and About use the dark luxury salon direction through scoped hooks/styles.
+  - [x] Mobile collapse remains scheduled for final browser verification.
+- Verification result: passed.
+- Failure recovery notes: none.
+- Review result: No route, CTA, carousel, or section-story regression found by tests.
+- Blockers: none.
+- Next step: Start `TASK-003`.
+
+## 2026-05-25 - TASK-003 Done
+
+- Task ID: `TASK-003`
+- Status: `Done`
+- Lifecycle transition reached: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`
+- Files changed:
+  - `client/src/pages/Gallery.jsx`
+  - `client/src/components/GalleryModal.jsx`
+  - `client/src/pages/Booking.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+  - `client/test/gallery-modal.test.jsx`
+  - `client/test/booking-flow.test.jsx`
+  - `_workflow/runs/dark-theme/tasks.md`
+  - `_workflow/runs/dark-theme/progress.md`
+  - `_workflow/runs/dark-theme/handoff.md`
+- Iteration 1 Build:
+  - Goal: Add dark hooks for Gallery, modal, and Booking and implement the smallest surface change.
+  - Red: `site-pages`, `gallery-modal`, and `booking-flow` targeted tests failed because `dark-gallery-page`, `dark-gallery-modal`, and `dark-booking-page` were missing.
+  - Green: Added hook classes and scoped CSS for gallery cards, modal, booking panels, calendar, forms, loading, empty, error, selected, disabled, and confirmation states; all targeted tests passed.
+  - Refactor: Targeted tests stayed green after source review.
+  - Commands: `npm test --prefix client -- site-pages.test.jsx`; `npm test --prefix client -- gallery-modal.test.jsx`; `npm test --prefix client -- booking-flow.test.jsx`.
+- Iteration 2 Refine:
+  - Goal: Refine gallery/modal dark overlay and focus states.
+  - Red: Missing-test exception; refinement was CSS/source-review only after behavior tests were green.
+  - Green: Gallery modal and site page tests passed.
+  - Refactor: Selector scan confirmed dark gallery/modal coverage.
+  - Commands: `rg` selector scan; `npm test --prefix client -- gallery-modal.test.jsx`; `npm test --prefix client -- site-pages.test.jsx`.
+- Iteration 3 Polish:
+  - Goal: Refine booking states and final behavior.
+  - Red: Missing-test exception; verification-only polish with no new behavior.
+  - Green: Booking flow, gallery modal, and site-page tests passed.
+  - Refactor: Final targeted verification stayed green.
+  - Commands: `npm test --prefix client -- booking-flow.test.jsx`; `npm test --prefix client -- gallery-modal.test.jsx`; `npm test --prefix client -- site-pages.test.jsx`.
+- Acceptance result:
+  - [x] Gallery image data and modal behavior are preserved.
+  - [x] Booking flow, API calls, and all states are preserved.
+  - [x] Gallery/modal/booking UI uses the dark luxury brand palette through scoped hooks/styles.
+- Verification result: passed.
+- Failure recovery notes: none.
+- Review result: No modal focus or booking submission regression found by tests.
+- Blockers: none.
+- Next step: Start `TASK-004`.
+
+## 2026-05-25 - TASK-004 Done
+
+- Task ID: `TASK-004`
+- Status: `Done`
+- Lifecycle transition reached: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`
+- Files changed:
+  - `_workflow/runs/dark-theme/tasks.md`
+  - `_workflow/runs/dark-theme/progress.md`
+  - `_workflow/runs/dark-theme/handoff.md`
+  - `_workflow/runs/dark-theme/review.md`
+  - `_workflow/runs/dark-theme/verification.md`
+  - `_workflow/runs/dark-theme/release-notes.md`
+  - `_workflow/runs/dark-theme/summary.md`
+- Iteration 1 Build:
+  - Goal: Run full verification and capture failures.
+  - Red: Not applicable; final verification/documentation task.
+  - Green: `npm test --prefix client`, `npm run lint --prefix client`, and `npm run build --prefix client` passed.
+  - Refactor: Removed unintended package dependency churn and re-ran full verification successfully.
+  - Commands: `npm test --prefix client`; `npm run lint --prefix client`; `npm run build --prefix client`.
+- Iteration 2 Refine:
+  - Goal: Browser-check desktop/mobile and fix in-scope visual defects if found.
+  - Red: Missing-test exception for CSS-only visual polish.
+  - Green: Dedicated Vite server on port 5199 served the current worktree; Playwright screenshots verified dark Home desktop and Gallery/Booking mobile.
+  - Refactor: Reduced mobile page heading size from `3rem` to `2.7rem`; `site-pages` tests passed.
+  - Commands: `npx playwright screenshot ...`; `npm test --prefix client -- site-pages.test.jsx`.
+- Iteration 3 Polish:
+  - Goal: Final lint/build/diff audit and artifact closeout.
+  - Red: Not applicable; final verification/documentation task.
+  - Green: Final diff audit completed.
+  - Refactor: Review, verification, release notes, summary, progress, and handoff updated.
+  - Commands: `git diff --stat`; `git diff`; `git status --short`.
+- Acceptance result:
+  - [x] Full client test/lint/build verification passes.
+  - [x] Desktop/mobile visual sanity checks are completed.
+  - [x] Final workflow artifacts are complete.
+- Verification result: passed.
+- Failure recovery notes:
+  - Initial screenshot used existing stale port 5173 and was discarded; reran against dedicated port 5199.
+  - In-app Browser plugin could not be used because the required Node REPL execution tool was not exposed by tool discovery; terminal Playwright fallback was used.
+  - `npm install --prefix client` temporarily added `karebraids: file:..`; this was removed. Package files still show modified in `git status` due line-ending metadata, but their content hashes match `HEAD` and `git diff` is empty.
+- Review result: Final review passed.
+- Blockers: none.
+- Next step: user review and commit.

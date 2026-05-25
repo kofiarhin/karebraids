@@ -32,7 +32,7 @@ export function GalleryModal({ item, onClose }) {
       <section
         aria-modal="true"
         aria-labelledby="gallery-modal-title"
-        className="gallery-modal"
+        className="gallery-modal dark-gallery-modal"
         onClick={(event) => event.stopPropagation()}
         role="dialog"
       >

@@ -205,7 +205,7 @@ export function Booking() {
   const readableDate = formatReadableDate(form.date)
 
   return (
-    <section className="booking-page">
+    <section className="booking-page dark-booking-page">
       <div className="booking-hero">
         <div className="page-hero-copy narrow">
           <p className="eyebrow">Booking concierge</p>

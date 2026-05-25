@@ -43,7 +43,7 @@ export function Layout() {
   const closeMobileNav = () => setIsMobileNavOpen(false)
 
   return (
-    <div className="site-shell">
+    <div className="site-shell dark-brand-shell">
       <header className="site-header">
         <NavLink className="brand-mark" to="/" aria-label="KareBraids home">
           <span className="brand-symbol">KB</span>
