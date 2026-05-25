@@ -3,7 +3,7 @@ import { galleryItems } from '../constants/content.js'
 
 export function About() {
   return (
-    <section className="about-page">
+    <section className="about-page dark-about-page">
       <div className="page-hero-copy">
         <p className="eyebrow">Founder story</p>
         <h1>Meet Karen</h1>

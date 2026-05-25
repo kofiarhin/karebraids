@@ -19,7 +19,7 @@ export function Gallery() {
   }
 
   return (
-    <section className="gallery-page">
+    <section className="gallery-page dark-gallery-page">
       <div className="page-hero-copy narrow">
         <p className="eyebrow">Craftsmanship preview</p>
         <h1>Braid Gallery</h1>

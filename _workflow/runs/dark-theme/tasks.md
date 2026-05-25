@@ -1,0 +1,310 @@
+# Task Plan: KareBraids Full Dark Brand Redesign
+
+- Spec file used: `_workflow/runs/dark-theme/spec.md`
+- Planning date: 2026-05-25
+- Execution mode: `complete-workflow`
+- Progress file read: `_workflow/runs/dark-theme/progress.md`
+- Handoff file read: `_workflow/runs/dark-theme/handoff.md`
+- Summary files read:
+  - `_workflow/runs/dev/summary.md`
+  - `_summary/2026-05-23-redesign-homepage-motion.md`
+  - `_summary/2026-05-23-redesign-gallery-page.md`
+  - `_summary/2026-05-23-redesign-booking-page-calendar.md`
+- Spec sections used:
+  - Section 5 Current State Analysis
+  - Section 6 Desired End State
+  - Section 7 Scope
+  - Section 11 Affected Surfaces
+  - Section 12 Dependency And Integration Map
+  - Section 14 UX / API / Workflow Expectations
+  - Section 15 Execution Strategy
+  - Section 16 Verification Strategy
+  - Section 17 Acceptance Criteria
+  - Section 18 Edge Cases And Failure Modes
+  - Section 19 Risks And Mitigations
+  - Section 22 Task Extraction Notes
+
+## Dirty Worktree Protection
+
+- `git status --short` before planning showed only the new run-scoped workflow directory: `_workflow/runs/dark-theme/`.
+- Existing dirty files outside this workflow: none observed.
+- Files planned for implementation: `client/src/index.css`, `client/src/components/Layout.jsx`, `client/src/components/Button.jsx`, `client/src/components/GalleryModal.jsx`, `client/src/pages/Home.jsx`, `client/src/pages/About.jsx`, `client/src/pages/Gallery.jsx`, `client/src/pages/Booking.jsx`, and focused client tests.
+- Overlap risk: low. Current dirty files are the run-scoped workflow artifacts created for this request.
+
+## TASK-001: Apply dark brand shell to shared UI
+
+- Status: Done
+- Objective: Add the dark brand semantic hook and redesign the shared shell, header, navigation, buttons, mobile drawer, footer, and global tokens around the approved espresso/bronze/amber/cream palette.
+- Files likely affected:
+  - `client/src/components/Layout.jsx`
+  - `client/src/components/Button.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+- Checklist:
+  - [x] Add a semantic theme hook/class for the dark brand shell.
+  - [x] Replace global palette variables with approved brand tokens.
+  - [x] Restyle shared shell, nav, mobile drawer, buttons, focus states, and footer.
+  - [x] Preserve desktop/mobile navigation behavior.
+  - [x] Verify route/header/footer tests.
+- Iteration 1 Build:
+  - Goal: Add test coverage for the dark shell marker and implement the smallest shared shell change.
+  - Changes made: Added test expectation for `.dark-brand-shell`, added the shell class to `Layout`, and introduced approved dark brand CSS tokens/shared shell styling.
+  - Test plan: Update `site-pages.test.jsx`; run targeted test and observe Red before implementation.
+  - Red phase evidence: `npm test --prefix client -- site-pages.test.jsx` first failed because `vitest` was not installed; after `npm install --prefix client`, the expected Red failure appeared because `.site-shell` did not have `dark-brand-shell`.
+  - Green phase evidence: `npm test --prefix client -- site-pages.test.jsx` passed after adding the class and shared dark token styling.
+  - Refactor phase evidence: Shared route/nav tests passed after token and shell styling cleanup.
+  - Test commands run: `npm install --prefix client`; `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification command/result: `npm test --prefix client -- site-pages.test.jsx` passed, 12 tests.
+  - Review findings: Shared behavior preserved; dependency install restored local test tooling from lockfile.
+  - Acceptance status: Accepted for shared shell.
+  - Remaining issues: Page-specific light/green values remain for later tasks.
+  - Next action: TASK-002.
+- Iteration 2 Refine:
+  - Goal: Refine shared visual states and mobile drawer styling.
+  - Changes made: Scanned CSS for remaining old light/green values and confirmed remaining matches are page-specific rather than shared shell blockers.
+  - Test plan: Run navigation tests and targeted page tests.
+  - Red phase evidence: Missing-test exception; refinement was CSS/source-review only after behavior-covering tests existed.
+  - Green phase evidence: `npm test --prefix client -- site-pages.test.jsx` passed.
+  - Refactor phase evidence: No further refactor required; targeted tests remained green.
+  - Test commands run: `rg` scan for old colors; `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification command/result: Passed, 12 tests.
+  - Review findings: Shared UI has the new dark shell marker and approved token base; remaining old values are assigned to later page tasks.
+  - Acceptance status: Accepted.
+  - Remaining issues: Page-specific surfaces still need full dark pass.
+  - Next action: TASK-002.
+- Iteration 3 Polish:
+  - Goal: Polish shared spacing/focus/reduced-motion-safe interactions.
+  - Changes made: Final targeted verification for shared route/nav behavior.
+  - Test plan: Run full `site-pages` tests.
+  - Red phase evidence: Missing-test exception; final polish did not introduce new behavior beyond the shell test already added.
+  - Green phase evidence: `npm test --prefix client -- site-pages.test.jsx` passed.
+  - Refactor phase evidence: Targeted verification passed after final review.
+  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification command/result: Passed, 12 tests.
+  - Review findings: No route/nav/mobile drawer regressions observed by tests.
+  - Acceptance status: Accepted.
+  - Remaining issues: None for TASK-001.
+  - Next action: Start TASK-002.
+- Acceptance criteria:
+  - [ ] Shared UI uses approved dark brand tokens.
+  - [ ] Header/nav/mobile drawer/footer/buttons remain accessible and functional.
+  - [ ] Existing page routes still render.
+- Acceptance result:
+  - [x] Shared UI uses approved dark brand tokens.
+  - [x] Header/nav/mobile drawer/footer/buttons remain accessible and functional by existing tests.
+  - [x] Existing page routes still render.
+- Verification commands:
+  - `npm test --prefix client -- site-pages.test.jsx`
+- Stop condition: Stop if navigation behavior breaks or route tests cannot be restored without expanding scope.
+- Out-of-scope items: Backend/API changes, dependency additions, route changes.
+
+## TASK-002: Redesign Home and About pages with dark salon composition
+
+- Status: Done
+- Objective: Restyle Home and About page sections with the approved dark palette, image overlays, warm typography, and premium salon layout while preserving current content, carousel, reveal behavior, and CTA routes.
+- Files likely affected:
+  - `client/src/pages/Home.jsx`
+  - `client/src/pages/About.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+- Checklist:
+  - [x] Preserve home section story, carousel, gallery-driven images, and CTA routes.
+  - [x] Add dark premium visual structure for hero, trust strip, services, why, gallery preview, testimonials, CTA.
+  - [x] Add dark premium About layout for founder story and value panel.
+  - [x] Verify no behavior route regressions.
+- Iteration 1 Build:
+  - Goal: Add semantic page-level test expectations and implement page hooks.
+  - Changes made: Added Home/About dark treatment test expectations, added page hook classes, and added scoped dark marketing section CSS.
+  - Test plan: Update `site-pages.test.jsx`; observe Red before implementation.
+  - Red phase evidence: `npm test --prefix client -- site-pages.test.jsx` failed because `.home-hero` lacked `dark-home-hero` and `.about-page` lacked `dark-about-page`.
+  - Green phase evidence: Added the classes and scoped CSS; targeted tests passed.
+  - Refactor phase evidence: Targeted tests passed after CSS review.
+  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification command/result: Passed, 12 tests.
+  - Review findings: Home/About hooks and dark section styling preserve route and section behavior.
+  - Acceptance status: Accepted.
+  - Remaining issues: Gallery and booking surfaces still need task-specific dark pass.
+  - Next action: TASK-003.
+- Iteration 2 Refine:
+  - Goal: Refine Home visual density and section treatment.
+  - Changes made: Scanned marketing selectors and verified the override layer covers the main Home/About surfaces.
+  - Test plan: Targeted route tests plus source review.
+  - Red phase evidence: Missing-test exception; refinement was CSS/source-review only after semantic hooks and behavior tests were already green.
+  - Green phase evidence: `npm test --prefix client -- site-pages.test.jsx` passed.
+  - Refactor phase evidence: No behavior change after selector review; tests remained green.
+  - Test commands run: `rg` selector scan; `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification command/result: Passed, 12 tests.
+  - Review findings: Home/About content flow and CTA routes remain protected by tests.
+  - Acceptance status: Accepted.
+  - Remaining issues: None for Home/About.
+  - Next action: TASK-003.
+- Iteration 3 Polish:
+  - Goal: Polish About page, mobile collapse, and copy hierarchy.
+  - Changes made: Final targeted page verification for Home/About route behavior and dark hooks.
+  - Test plan: Targeted route tests.
+  - Red phase evidence: Missing-test exception; final polish did not add new behavior beyond tested hooks.
+  - Green phase evidence: `npm test --prefix client -- site-pages.test.jsx` passed.
+  - Refactor phase evidence: Final targeted verification passed.
+  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification command/result: Passed, 12 tests.
+  - Review findings: No Home/About behavior regressions observed by tests.
+  - Acceptance status: Accepted.
+  - Remaining issues: None for TASK-002.
+  - Next action: Start TASK-003.
+- Acceptance criteria:
+  - [ ] Home and About preserve existing content/flow.
+  - [ ] Home and About visibly use the dark luxury salon direction.
+  - [ ] Mobile collapse remains clean.
+- Acceptance result:
+  - [x] Home and About preserve existing content/flow.
+  - [x] Home and About visibly use the dark luxury salon direction through scoped hooks and styles.
+  - [x] Mobile collapse remains covered by existing responsive CSS and final browser checks remain scheduled.
+- Verification commands:
+  - `npm test --prefix client -- site-pages.test.jsx`
+- Stop condition: Stop if carousel/CTA/route behavior regresses.
+- Out-of-scope items: Content rewrite, image replacement, backend changes.
+
+## TASK-003: Redesign Gallery, modal, and Booking surfaces
+
+- Status: Done
+- Objective: Restyle Gallery, GalleryModal, and Booking workflow states with the approved dark palette while preserving image data, modal focus behavior, booking calendar, availability, validation, API submission, and confirmation behavior.
+- Files likely affected:
+  - `client/src/pages/Gallery.jsx`
+  - `client/src/components/GalleryModal.jsx`
+  - `client/src/pages/Booking.jsx`
+  - `client/src/index.css`
+  - `client/test/gallery-modal.test.jsx`
+  - `client/test/booking-flow.test.jsx`
+  - `client/test/site-pages.test.jsx`
+- Checklist:
+  - [x] Preserve gallery card count and modal behavior.
+  - [x] Restyle gallery cards and modal for dark overlay treatment.
+  - [x] Preserve booking service/date/time/details/confirmation behavior.
+  - [x] Restyle booking panels, calendar, form fields, loading, empty, error, selected, disabled, and confirmation states.
+  - [x] Verify relevant tests.
+- Iteration 1 Build:
+  - Goal: Add tests for dark gallery/modal/booking hooks and implement the smallest semantic hooks.
+  - Changes made: Added failing dark-surface expectations for gallery page, modal, and booking page; added hook classes and scoped CSS for gallery/modal/booking surfaces.
+  - Test plan: Update tests; observe Red before implementation.
+  - Red phase evidence: `site-pages`, `gallery-modal`, and `booking-flow` targeted tests failed because the new dark hook classes were missing.
+  - Green phase evidence: Added the classes and scoped CSS; all three targeted test files passed.
+  - Refactor phase evidence: Targeted tests stayed green after source review.
+  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`; `npm test --prefix client -- gallery-modal.test.jsx`; `npm test --prefix client -- booking-flow.test.jsx`.
+  - Verification command/result: Passed, 12 site tests, 3 gallery modal tests, 4 booking tests.
+  - Review findings: Gallery/modal/booking behavior preserved while dark hooks/styles landed.
+  - Acceptance status: Accepted.
+  - Remaining issues: Final browser/lint/build verification still pending.
+  - Next action: TASK-004.
+- Iteration 2 Refine:
+  - Goal: Refine gallery/modal dark overlay and focus states.
+  - Changes made: Scanned gallery/modal selectors and verified targeted gallery/site tests.
+  - Test plan: Run gallery modal and site-page tests.
+  - Red phase evidence: Missing-test exception; refinement was CSS/source-review only after behavior-covering tests were green.
+  - Green phase evidence: Gallery modal and site page tests passed.
+  - Refactor phase evidence: Selector scan confirmed dark gallery/modal coverage.
+  - Test commands run: `rg` selector scan; `npm test --prefix client -- gallery-modal.test.jsx`; `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification command/result: Passed, 3 gallery modal tests and 12 site tests.
+  - Review findings: Modal focus/close behavior remains covered.
+  - Acceptance status: Accepted.
+  - Remaining issues: Booking final targeted verification pending in iteration 3.
+  - Next action: TASK-004.
+- Iteration 3 Polish:
+  - Goal: Refine booking states and final behavior.
+  - Changes made: Final booking, gallery, and site targeted verification.
+  - Test plan: Run booking flow, gallery modal, and site-page tests.
+  - Red phase evidence: Missing-test exception; polish was verification-only with no new behavior.
+  - Green phase evidence: Booking flow, gallery modal, and site-page tests passed.
+  - Refactor phase evidence: Final targeted verification remained green.
+  - Test commands run: `npm test --prefix client -- booking-flow.test.jsx`; `npm test --prefix client -- gallery-modal.test.jsx`; `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification command/result: Passed, 4 booking tests, 3 gallery modal tests, and 12 site tests.
+  - Review findings: Booking API call assertions, validation, empty/error states, and confirmation remained intact.
+  - Acceptance status: Accepted.
+  - Remaining issues: None for TASK-003.
+  - Next action: Start TASK-004.
+- Acceptance criteria:
+  - [ ] Gallery image data and modal behavior are preserved.
+  - [ ] Booking flow, API calls, and all states are preserved.
+  - [ ] Gallery/modal/booking UI uses the dark luxury brand palette.
+- Acceptance result:
+  - [x] Gallery image data and modal behavior are preserved.
+  - [x] Booking flow, API calls, and all states are preserved.
+  - [x] Gallery/modal/booking UI uses the dark luxury brand palette through scoped hooks/styles.
+- Verification commands:
+  - `npm test --prefix client -- gallery-modal.test.jsx`
+  - `npm test --prefix client -- booking-flow.test.jsx`
+  - `npm test --prefix client -- site-pages.test.jsx`
+- Stop condition: Stop if modal focus or booking submission behavior cannot be restored.
+- Out-of-scope items: API contract changes, new booking steps, new routes.
+
+## TASK-004: Final responsive hardening and workflow closeout
+
+- Status: Done
+- Objective: Run full client verification, inspect desktop/mobile rendering, audit the final diff, and complete review, verification, release notes, summary, and handoff artifacts.
+- Files likely affected:
+  - `_workflow/runs/dark-theme/progress.md`
+  - `_workflow/runs/dark-theme/review.md`
+  - `_workflow/runs/dark-theme/verification.md`
+  - `_workflow/runs/dark-theme/release-notes.md`
+  - `_workflow/runs/dark-theme/summary.md`
+  - `_workflow/runs/dark-theme/handoff.md`
+- Checklist:
+  - [x] Run full frontend tests.
+  - [x] Run lint and build.
+  - [x] Perform desktop/mobile visual sanity checks.
+  - [x] Run final diff audit.
+  - [x] Write review, verification, release notes, summary, and final handoff.
+- Iteration 1 Build:
+  - Goal: Run full verification and capture failures.
+  - Changes made: Pending.
+  - Test plan: `npm test --prefix client`.
+  - Red phase evidence: Not applicable; verification/documentation task.
+  - Green phase evidence: `npm test --prefix client`, `npm run lint --prefix client`, and `npm run build --prefix client` passed.
+  - Refactor phase evidence: Re-ran full verification after removing unintended package dependency churn.
+  - Test commands run: `npm test --prefix client`; `npm run lint --prefix client`; `npm run build --prefix client`.
+  - Verification command/result: Passed.
+  - Review findings: Full automated verification passed.
+  - Acceptance status: Accepted.
+  - Remaining issues: Browser plugin Node REPL was unavailable; terminal Playwright fallback used.
+  - Next action: Browser checks and diff audit.
+- Iteration 2 Refine:
+  - Goal: Browser-check desktop/mobile and fix in-scope visual defects if found.
+  - Changes made: Pending.
+  - Test plan: Browser/manual checks plus targeted tests if fixes are needed.
+  - Red phase evidence: Missing-test exception if CSS-only visual fixes are made.
+  - Green phase evidence: Dedicated Vite server on port 5199 served the current worktree; Playwright screenshots confirmed dark desktop Home and mobile Gallery/Booking.
+  - Refactor phase evidence: Mobile heading scale was reduced from `3rem` to `2.7rem`; `site-pages` tests passed.
+  - Test commands run: `npx playwright screenshot ...`; `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification command/result: Passed visual sanity checks; temporary screenshots/logs removed.
+  - Review findings: Initial 5173 screenshot was invalid because it hit an existing stale server; reran against dedicated 5199 server.
+  - Acceptance status: Accepted.
+  - Remaining issues: Package files still show modified in status from line-ending metadata, but content hashes match `HEAD` and `git diff` is empty for them.
+  - Next action: Final diff audit and artifacts.
+- Iteration 3 Polish:
+  - Goal: Final lint/build/diff audit and artifact closeout.
+  - Changes made: Pending.
+  - Test plan: `npm run lint --prefix client`, `npm run build --prefix client`, `git diff --stat`, `git diff`.
+  - Red phase evidence: Not applicable; final verification/documentation task.
+  - Green phase evidence: `git diff --stat`, `git diff`, and `git status --short` completed.
+  - Refactor phase evidence: Review, verification, release notes, summary, progress, and handoff updated.
+  - Test commands run: `git diff --stat`; `git diff`; `git status --short`.
+  - Verification command/result: Completed.
+  - Review findings: Diff matches approved spec; no API/env/deployment/schema changes; no dependency changes in diff.
+  - Acceptance status: Accepted.
+  - Remaining issues: None blocking.
+  - Next action: Final response.
+- Acceptance criteria:
+  - [ ] Full client test/lint/build verification passes or failures are documented.
+  - [ ] Desktop/mobile visual sanity checks are completed.
+  - [ ] Final workflow artifacts are complete.
+- Acceptance result:
+  - [x] Full client test/lint/build verification passes.
+  - [x] Desktop/mobile visual sanity checks are completed.
+  - [x] Final workflow artifacts are complete.
+- Verification commands:
+  - `npm test --prefix client`
+  - `npm run lint --prefix client`
+  - `npm run build --prefix client`
+  - `git diff --stat`
+  - `git diff`
+- Stop condition: Stop if full verification fails after targeted recovery.
+- Out-of-scope items: Product changes beyond approved redesign.

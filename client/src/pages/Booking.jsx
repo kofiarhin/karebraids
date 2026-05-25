@@ -1,4 +1,13 @@
-import { CheckCircle, CircleNotch, WarningCircle } from '@phosphor-icons/react'
+import {
+  CalendarBlank,
+  CaretLeft,
+  CaretRight,
+  CheckCircle,
+  CircleNotch,
+  Clock,
+  MapPin,
+  WarningCircle,
+} from '@phosphor-icons/react'
 import { useMemo, useState } from 'react'
 import { Button } from '../components/Button.jsx'
 import { services } from '../constants/content.js'
@@ -18,6 +27,20 @@ const initialForm = {
 }
 
 const steps = ['service', 'date', 'time', 'details', 'confirmation']
+const workflowSteps = [
+  { id: 'service', label: 'Service', detail: 'Choose the style' },
+  { id: 'date', label: 'Date', detail: 'Pick from the calendar' },
+  { id: 'time', label: 'Time', detail: 'Match an open slot' },
+  { id: 'details', label: 'Details', detail: 'Share contact info' },
+]
+const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+const monthFormatter = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' })
+const dayLabelFormatter = new Intl.DateTimeFormat('en-US', {
+  weekday: 'long',
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+})
 
 function parseDate(date) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null
@@ -36,19 +59,66 @@ function todayString() {
   return `${now.getFullYear()}-${month}-${day}`
 }
 
+function formatDateValue(date) {
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${date.getFullYear()}-${month}-${day}`
+}
+
+function dateValueToLocalDate(dateValue) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) return null
+  const [year, month, day] = dateValue.split('-').map(Number)
+  const date = new Date(year, month - 1, day)
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
+function getInitialMonth() {
+  const now = new Date()
+  return new Date(now.getFullYear(), now.getMonth(), 1)
+}
+
+function buildCalendarDays(monthDate) {
+  const year = monthDate.getFullYear()
+  const month = monthDate.getMonth()
+  const firstDay = new Date(year, month, 1)
+  const startOffset = (firstDay.getDay() + 6) % 7
+  const startDate = new Date(year, month, 1 - startOffset)
+
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(startDate)
+    date.setDate(startDate.getDate() + index)
+    return {
+      date,
+      day: date.getDate(),
+      inCurrentMonth: date.getMonth() === month,
+      value: formatDateValue(date),
+    }
+  })
+}
+
+function formatReadableDate(dateValue) {
+  const parsed = dateValueToLocalDate(dateValue)
+  return parsed ? dayLabelFormatter.format(parsed) : 'Not selected'
+}
+
 export function Booking() {
   const [form, setForm] = useState(initialForm)
   const [step, setStep] = useState('service')
+  const [visibleMonth, setVisibleMonth] = useState(getInitialMonth)
   const [formError, setFormError] = useState('')
   const [confirmedBooking, setConfirmedBooking] = useState(null)
   const availability = useAvailability(form.service, form.date, step === 'time')
   const createBooking = useCreateBooking()
   const currentStepIndex = steps.indexOf(step)
+  const today = todayString()
 
   const selectedService = useMemo(
     () => services.find((service) => service.title === form.service),
     [form.service],
   )
+
+  const calendarDays = useMemo(() => buildCalendarDays(visibleMonth), [visibleMonth])
+  const canShowPreviousMonth = formatDateValue(visibleMonth) > `${today.slice(0, 8)}01`
 
   const updateField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }))
@@ -69,6 +139,11 @@ export function Booking() {
       return
     }
 
+    if (form.date < today) {
+      setFormError('Choose a future appointment date.')
+      return
+    }
+
     if (isSunday(parsedDate)) {
       setFormError('Bookings are available Monday to Saturday.')
       return
@@ -81,6 +156,20 @@ export function Booking() {
   const selectTime = (time) => {
     updateField('time', time)
     setStep('details')
+  }
+
+  const selectDate = (day) => {
+    const parsedDate = parseDate(day.value)
+
+    if (!parsedDate || !day.inCurrentMonth || day.value < today || isSunday(parsedDate)) return
+
+    setForm((current) => ({ ...current, date: day.value, time: '' }))
+    setFormError('')
+  }
+
+  const moveMonth = (amount) => {
+    setVisibleMonth((current) => new Date(current.getFullYear(), current.getMonth() + amount, 1))
+    setFormError('')
   }
 
   const validateDetails = () => {
@@ -113,25 +202,60 @@ export function Booking() {
 
   const apiError = availability.isError ? getApiErrorMessage(availability.error) : ''
   const availableSlots = availability.data?.slots || []
+  const readableDate = formatReadableDate(form.date)
 
   return (
-    <section className="booking-page">
-      <div className="page-hero-copy narrow">
-        <p className="eyebrow">Booking</p>
-        <h1>Book your braid appointment</h1>
-        <p>
-          Choose your service, preferred date, time, and location. KareBraids will confirm the final
-          details after your request is received.
-        </p>
+    <section className="booking-page dark-booking-page">
+      <div className="booking-hero">
+        <div className="page-hero-copy narrow">
+          <p className="eyebrow">Booking concierge</p>
+          <h1>Book your braid appointment</h1>
+          <p>
+            Choose your style, select a calendar date, and request a time. KareBraids will confirm
+            the final appointment details after your request is received.
+          </p>
+        </div>
+        <div className="booking-hero-note" aria-label="Booking promise">
+          <CalendarBlank aria-hidden="true" size={24} weight="duotone" />
+          <span>Monday to Saturday appointments with careful, low-tension styling.</span>
+        </div>
       </div>
 
       <div className="booking-workspace">
-        <aside className="booking-summary" aria-label="Booking progress">
-          {steps.slice(0, 4).map((item, index) => (
-            <span className={index <= currentStepIndex ? 'step-pill active' : 'step-pill'} key={item}>
-              {index + 1}. {item}
-            </span>
-          ))}
+        <aside className="booking-summary" aria-label="Booking progress and summary">
+          <div className="booking-step-list">
+            {workflowSteps.map((item, index) => (
+              <div
+                className={index <= currentStepIndex ? 'step-pill active' : 'step-pill'}
+                key={item.id}
+              >
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <strong>{item.label}</strong>
+                <small>{item.detail}</small>
+              </div>
+            ))}
+          </div>
+          <div className="booking-live-card">
+            <p className="eyebrow">Request summary</p>
+            <dl>
+              <div>
+                <dt>Service</dt>
+                <dd>{form.service || 'Select a style'}</dd>
+              </div>
+              <div>
+                <dt>Date</dt>
+                <dd>{form.date ? readableDate : 'Choose from calendar'}</dd>
+              </div>
+              <div>
+                <dt>Time</dt>
+                <dd>{form.time || 'Pick after date'}</dd>
+              </div>
+              <div>
+                <dt>Location</dt>
+                <dd>{form.preferredLocation || 'Shared in details'}</dd>
+              </div>
+            </dl>
+          </div>
         </aside>
 
         <div className="booking-panel">
@@ -144,9 +268,10 @@ export function Booking() {
 
           {step === 'service' ? (
             <div className="booking-step">
-              <div>
+              <div className="booking-step-heading">
                 <p className="eyebrow">Step 1</p>
                 <h2>Select service</h2>
+                <p className="step-context">Start with the braid style you want reserved.</p>
               </div>
               <div className="booking-service-grid">
                 {services.map((service) => (
@@ -167,21 +292,70 @@ export function Booking() {
 
           {step === 'date' ? (
             <div className="booking-step">
-              <div>
+              <div className="booking-step-heading">
                 <p className="eyebrow">Step 2</p>
                 <h2>Select date</h2>
-                <p className="step-context">{selectedService?.title}</p>
+                <p className="step-context">
+                  {selectedService?.title}. Monday to Saturday appointments.
+                </p>
               </div>
-              <label className="field-group">
-                <span>Appointment date</span>
-                <input
-                  min={todayString()}
-                  onChange={(event) => updateField('date', event.target.value)}
-                  type="date"
-                  value={form.date}
-                />
-                <small>Available Monday to Saturday.</small>
-              </label>
+              <div className="booking-calendar" aria-label="Appointment calendar">
+                <div className="calendar-toolbar">
+                  <button
+                    aria-label="Previous appointment month"
+                    className="calendar-nav-button"
+                    disabled={!canShowPreviousMonth}
+                    onClick={() => moveMonth(-1)}
+                    type="button"
+                  >
+                    <CaretLeft aria-hidden="true" size={18} weight="bold" />
+                  </button>
+                  <strong>{monthFormatter.format(visibleMonth)}</strong>
+                  <button
+                    aria-label="Next appointment month"
+                    className="calendar-nav-button"
+                    onClick={() => moveMonth(1)}
+                    type="button"
+                  >
+                    <CaretRight aria-hidden="true" size={18} weight="bold" />
+                  </button>
+                </div>
+                <div className="calendar-weekdays" aria-hidden="true">
+                  {weekDays.map((day) => (
+                    <span key={day}>{day}</span>
+                  ))}
+                </div>
+                <div className="calendar-grid">
+                  {calendarDays.map((day) => {
+                    const parsedDate = parseDate(day.value)
+                    const disabled = !day.inCurrentMonth || day.value < today || isSunday(parsedDate)
+                    const selected = day.value === form.date
+                    const label = disabled
+                      ? `${dayLabelFormatter.format(day.date)} unavailable`
+                      : `Select ${dayLabelFormatter.format(day.date)}`
+
+                    return (
+                      <button
+                        aria-label={label}
+                        aria-current={selected ? 'date' : undefined}
+                        aria-pressed={selected}
+                        className={selected ? 'calendar-day selected' : 'calendar-day'}
+                        disabled={disabled}
+                        key={day.value}
+                        onClick={() => selectDate(day)}
+                        type="button"
+                      >
+                        <span>{day.day}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+                <p className="calendar-helper">
+                  {form.date
+                    ? `Selected: ${readableDate}`
+                    : 'Available Monday to Saturday. Past dates and Sundays are unavailable.'}
+                </p>
+              </div>
               <button className="btn btn-primary" onClick={continueToTimes} type="button">
                 <span>Continue to Times</span>
               </button>
@@ -190,11 +364,11 @@ export function Booking() {
 
           {step === 'time' ? (
             <div className="booking-step">
-              <div>
+              <div className="booking-step-heading">
                 <p className="eyebrow">Step 3</p>
                 <h2>Select time</h2>
                 <p className="step-context">
-                  {form.service} on {form.date}
+                  {form.service} on {readableDate}
                 </p>
               </div>
               {availability.isLoading ? (
@@ -227,11 +401,11 @@ export function Booking() {
 
           {step === 'details' ? (
             <form className="booking-step" onSubmit={submitBooking}>
-              <div>
+              <div className="booking-step-heading">
                 <p className="eyebrow">Step 4</p>
                 <h2>Customer details</h2>
                 <p className="step-context">
-                  {form.service}, {form.date} at {form.time}
+                  {form.service}, {readableDate} at {form.time}
                 </p>
               </div>
               <div className="form-grid">
@@ -285,8 +459,18 @@ export function Booking() {
               <h2>Booking request received</h2>
               <p>
                 Thank you, {confirmedBooking?.fullName || form.fullName}. Your {form.service} request
-                for {form.date} at {form.time} has been received.
+                for {readableDate} at {form.time} has been received.
               </p>
+              <div className="confirmation-cues">
+                <span>
+                  <Clock aria-hidden="true" size={18} weight="duotone" />
+                  We will confirm your time
+                </span>
+                <span>
+                  <MapPin aria-hidden="true" size={18} weight="duotone" />
+                  Location checked before arrival
+                </span>
+              </div>
               <Button to="/gallery" variant="secondary">
                 View Gallery
               </Button>
