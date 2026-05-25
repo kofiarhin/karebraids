@@ -1,21 +1,22 @@
-# Release Notes: Homepage Hero Image Carousel
+# Release Notes: Homepage Visual Optimization
 
-- Request: Implement a rotating hero image carousel on the KareBraids homepage.
+- Request: Optimize the KareBraids homepage so it feels less text-heavy and more visual while preserving the current brand direction.
 
 ## User-Facing Changes
 
-- Homepage hero now rotates through the first five gallery images.
-- Added small clickable dot controls over the hero image.
-- Dot controls show the active slide and let users jump directly to another slide.
-- The existing hero layout, CTA buttons, luxury frame, and "Salon and mobile appointments" badge remain in place.
-- Mobile styling keeps the dots visible above the appointment badge.
-- Reduced-motion users do not receive ongoing automatic carousel motion.
+- Added an overlapping gallery-image thumbnail cluster to the trust strip.
+- Converted featured services into image-backed cards with readable overlays.
+- Added a process/detail image panel to the Why choose KareBraids section.
+- Kept the gallery preview as an image grid.
+- Added style visuals beside testimonials.
+- Added a gallery-image-backed CTA with dark green overlay and accessible text contrast.
+- Preserved the existing rotating hero carousel and current section order.
 
 ## Developer Changes
 
-- Added local hero carousel state and timer cleanup in `client/src/pages/Home.jsx`.
-- Added carousel slide, dot, focus, mobile, and reduced-motion CSS in `client/src/index.css`.
-- Added React Testing Library coverage for carousel rendering, click behavior, auto-rotation, and reduced-motion behavior.
+- Added deterministic homepage image selections from existing `galleryItems`.
+- Added homepage-specific CSS for new image clusters, service image cards, process panel, testimonial visuals, CTA image treatment, and responsive stacking.
+- Added/updated React Testing Library coverage for visual structures and decorative image semantics.
 
 ## New Routes/APIs
 
@@ -39,12 +40,12 @@
 - `cd client && npm test`
 - `cd client && npm run lint`
 - `cd client && npm run build`
-- Playwright CLI screenshot checks for desktop and mobile homepage hero.
+- Playwright/Chromium desktop and mobile browser checks against local Vite dev server.
 
 ## Known Limitations
 
-- Carousel uses existing remote gallery image URLs, so image display still depends on those external images loading.
-- No swipe, arrows, or drag controls were added because they were out of scope.
+- Homepage images continue to depend on the existing remote Pexels URLs in `galleryItems`.
+- The browser verification used Playwright/Chromium CLI automation because the in-app browser tool was not exposed by tool discovery.
 
 ## Follow-Up Work
 
@@ -53,5 +54,5 @@
 ## Suggested Commit Message
 
 ```txt
-feature: add homepage hero carousel
+feature: make homepage more visual
 ```

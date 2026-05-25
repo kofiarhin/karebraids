@@ -49,6 +49,58 @@ describe('KareBraids pages', () => {
     expect(container.querySelector('[data-parallax]')).toBeInTheDocument()
   })
 
+  it('renders gallery-driven visual elements across homepage sections', () => {
+    const { container } = renderRoute('/')
+
+    const trustCluster = screen.getByLabelText(/featured trust style thumbnails/i)
+    expect(trustCluster.querySelectorAll('img')).toHaveLength(4)
+
+    const serviceImages = container.querySelectorAll('.service-tile img')
+    expect(serviceImages).toHaveLength(6)
+    expect(serviceImages[0]).toHaveAttribute('src', galleryItems[0].image)
+    expect(serviceImages[0]).toHaveAttribute('alt', 'Knotless Braids style inspiration')
+
+    expect(screen.getByRole('img', { name: /process detail for careful braid work/i })).toHaveAttribute(
+      'src',
+      galleryItems.find((item) => item.id === 'process-detail').image,
+    )
+    expect(screen.getByLabelText(/testimonial style visuals/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/book a karebraids appointment/i).querySelector('.cta-image')).toHaveAttribute(
+      'src',
+      galleryItems[8].image,
+    )
+  })
+
+  it('keeps decorative homepage thumbnail clusters quiet for assistive technology', () => {
+    renderRoute('/')
+
+    const trustImages = screen
+      .getByLabelText(/featured trust style thumbnails/i)
+      .querySelectorAll('img')
+
+    expect(trustImages).toHaveLength(4)
+    trustImages.forEach((image) => {
+      expect(image).toHaveAttribute('alt', '')
+      expect(image).toHaveAttribute('aria-hidden', 'true')
+      expect(image).toHaveAttribute('loading', 'lazy')
+    })
+  })
+
+  it('keeps the image-backed booking CTA action clear without repeating decorative image text', () => {
+    renderRoute('/')
+
+    const cta = screen.getByLabelText(/book a karebraids appointment/i)
+    const ctaImage = cta.querySelector('.cta-image')
+
+    expect(ctaImage).toHaveAttribute('alt', '')
+    expect(ctaImage).toHaveAttribute('aria-hidden', 'true')
+    expect(ctaImage).toHaveAttribute('loading', 'lazy')
+    expect(within(cta).getByRole('link', { name: /start booking/i })).toHaveAttribute(
+      'href',
+      '/booking',
+    )
+  })
+
   it('renders clickable hero carousel dots for the first five gallery images', async () => {
     const user = userEvent.setup()
     renderRoute('/')

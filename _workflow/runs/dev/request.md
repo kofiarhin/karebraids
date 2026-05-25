@@ -1,37 +1,46 @@
-# Active Request
+# Active Workflow Request
 
-## Raw User Request
-
-Implement a rotating hero image carousel on the KareBraids homepage.
-
-Repo: React + Vite app in /client.
+Optimize the KareBraids homepage so it feels less text-heavy and more visual.
 
 Requirements:
-- Update the homepage hero only.
-- Use existing `galleryItems` from `client/src/constants/content.js`.
-- Create `heroSlides` from the first 5 gallery images.
-- Replace the single static hero `<img>` with a carousel that auto-rotates.
-- Keep the current hero layout, luxury frame shape, CTA buttons, and "Salon and mobile appointments" badge.
-- Add small elegant dot indicators over/near the bottom of the hero image.
-- Use CSS animation or React state, but keep it lightweight.
-- Rotation timing: 4 to 5 seconds per image.
-- Transition: smooth fade with subtle scale/zoom.
+- Keep the current brand style and layout direction.
+- Do not redesign the whole site.
+- Use existing `galleryItems` images from `client/src/constants/content.js`.
+- Every homepage section should include some visual/image element.
+- Keep copy concise and premium.
+- Update only the homepage and CSS unless a small reusable helper is clearly needed.
+
+Section changes:
+1. Hero:
+   - Keep the rotating hero carousel already planned/implemented.
+2. Trust strip:
+   - Add a small overlapping image thumbnail cluster using 3-5 gallery images.
+   - Keep existing trust badges.
+3. Featured services:
+   - Convert service tiles into more visual cards.
+   - Each service card should include an image from `galleryItems`.
+   - Keep service title, duration, and short description.
+   - Use image overlays/gradient so text remains readable.
+4. Why choose KareBraids:
+   - Add a supporting image panel beside the reasons.
+   - Use a process/detail image from the gallery.
+   - Keep mobile-first responsive stacking.
+5. Gallery preview:
+   - Keep as image grid.
+6. Testimonials:
+   - Add a visual panel or small client/style thumbnails beside/inside the testimonial section.
+   - Keep testimonial text readable.
+7. CTA section:
+   - Add a soft background image or image panel using a gallery image.
+   - Apply dark/green overlay so CTA text stays accessible.
+
+Technical:
+- Use existing `galleryItems`; no new image assets.
+- No new dependencies.
+- Keep accessibility: meaningful alt text, readable contrast.
 - Mobile responsive.
-- Respect `prefers-reduced-motion`.
-- Do not add new dependencies.
-- Keep API/data logic out of UI components.
-- Make minimal changes to existing files.
-
-Expected files likely:
-- `client/src/pages/Home.jsx`
-- `client/src/index.css`
-
-Use existing brand styling/colors. Do not redesign the whole hero.
-
-## Follow-Up Answer
-
-Dot indicators should be clickable, accessible buttons that show the active slide and let users jump to a slide.
-
-## Normalized Workflow Request
-
-Workflow request: update only the KareBraids homepage hero media area so it uses a lightweight carousel built from the first five `galleryItems` images. Replace the current static hero image with auto-rotating slides every 4 to 5 seconds, using smooth fade and subtle scale transitions, while preserving the existing hero layout, luxury frame, CTA buttons, and "Salon and mobile appointments" badge. Add small elegant clickable dot buttons over or near the bottom of the hero image with accessible labels and active state. Respect `prefers-reduced-motion`, keep the implementation mobile responsive, avoid new dependencies, and make minimal changes primarily in `client/src/pages/Home.jsx`, `client/src/index.css`, and focused frontend tests if needed.
+- Respect existing animations and `prefers-reduced-motion`.
+- Minimal, clean changes.
+- Expected implementation files:
+  - `client/src/pages/Home.jsx`
+  - `client/src/index.css`

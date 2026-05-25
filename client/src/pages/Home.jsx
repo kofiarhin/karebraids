@@ -6,6 +6,10 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll.js'
 
 const heroSlides = galleryItems.slice(0, 5)
 const heroRotationMs = 4500
+const trustImages = galleryItems.slice(0, 4)
+const processImage = galleryItems.find((item) => item.id === 'process-detail') ?? galleryItems[6]
+const testimonialImages = [galleryItems[5], galleryItems[7], galleryItems[8]].filter(Boolean)
+const ctaImage = galleryItems[8]
 
 export function Home() {
   const [activeHeroSlide, setActiveHeroSlide] = useState(0)
@@ -102,15 +106,27 @@ export function Home() {
       </section>
 
       <section className="trust-strip" aria-label="KareBraids trust highlights">
-        <span data-reveal style={{ '--index': 0 }}>
-          <ShieldCheck aria-hidden="true" size={22} weight="duotone" /> Protective styling
-        </span>
-        <span data-reveal style={{ '--index': 1 }}>
-          <CalendarCheck aria-hidden="true" size={22} weight="duotone" /> Monday to Saturday
-        </span>
-        <span data-reveal style={{ '--index': 2 }}>
-          <MapPin aria-hidden="true" size={22} weight="duotone" /> Salon or mobile
-        </span>
+        <div className="trust-badges">
+          <span data-reveal style={{ '--index': 0 }}>
+            <ShieldCheck aria-hidden="true" size={22} weight="duotone" /> Protective styling
+          </span>
+          <span data-reveal style={{ '--index': 1 }}>
+            <CalendarCheck aria-hidden="true" size={22} weight="duotone" /> Monday to Saturday
+          </span>
+          <span data-reveal style={{ '--index': 2 }}>
+            <MapPin aria-hidden="true" size={22} weight="duotone" /> Salon or mobile
+          </span>
+        </div>
+        <div
+          aria-label="Featured trust style thumbnails"
+          className="trust-image-cluster"
+          data-reveal
+          style={{ '--index': 3 }}
+        >
+          {trustImages.map((item) => (
+            <img alt="" aria-hidden="true" key={item.id} loading="lazy" src={item.image} />
+          ))}
+        </div>
       </section>
 
       <section className="section-block services-section">
@@ -119,13 +135,24 @@ export function Home() {
           <h2>Styles designed around comfort, neatness, and longevity.</h2>
         </div>
         <div className="service-rack">
-          {services.slice(0, 6).map((service, index) => (
-            <article className="service-tile" data-reveal key={service.title} style={{ '--index': index }}>
-              <span>{service.duration}</span>
-              <h3>{service.title}</h3>
-              <p>{service.description}</p>
-            </article>
-          ))}
+          {services.slice(0, 6).map((service, index) => {
+            const serviceImage = galleryItems[index % galleryItems.length]
+
+            return (
+              <article className="service-tile" data-reveal key={service.title} style={{ '--index': index }}>
+                <img
+                  alt={`${service.title} style inspiration`}
+                  loading="lazy"
+                  src={serviceImage.image}
+                />
+                <div className="service-tile-copy">
+                  <span>{service.duration}</span>
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                </div>
+              </article>
+            )
+          })}
         </div>
       </section>
 
@@ -134,19 +161,29 @@ export function Home() {
           <p className="eyebrow">Why choose KareBraids</p>
           <h2>Warm service, disciplined technique, and a finish made for real life.</h2>
         </div>
-        <div className="why-list">
-          <article data-reveal style={{ '--index': 0 }}>
-            <h3>Clean consultation</h3>
-            <p>We confirm length, size, tension, location, and hair-prep expectations before the appointment.</p>
-          </article>
-          <article data-reveal style={{ '--index': 1 }}>
-            <h3>Craft first</h3>
-            <p>Parting, braid consistency, and edge comfort are treated as part of the luxury experience.</p>
-          </article>
-          <article data-reveal style={{ '--index': 2 }}>
-            <h3>Mobile convenience</h3>
-            <p>Book salon time or request a preferred location for mobile appointments.</p>
-          </article>
+        <div className="why-story">
+          <div className="why-list">
+            <article data-reveal style={{ '--index': 0 }}>
+              <h3>Clean consultation</h3>
+              <p>We confirm length, size, tension, location, and hair-prep expectations before the appointment.</p>
+            </article>
+            <article data-reveal style={{ '--index': 1 }}>
+              <h3>Craft first</h3>
+              <p>Parting, braid consistency, and edge comfort are treated as part of the luxury experience.</p>
+            </article>
+            <article data-reveal style={{ '--index': 2 }}>
+              <h3>Mobile convenience</h3>
+              <p>Book salon time or request a preferred location for mobile appointments.</p>
+            </article>
+          </div>
+          <figure className="why-visual-panel" data-reveal style={{ '--index': 3 }}>
+            <img
+              alt="Process detail for careful braid work"
+              loading="lazy"
+              src={processImage.image}
+            />
+            <figcaption>{processImage.description}</figcaption>
+          </figure>
         </div>
       </section>
 
@@ -170,18 +207,34 @@ export function Home() {
       </section>
 
       <section className="testimonial-section">
-        {testimonials.map((testimonial, index) => (
-          <blockquote data-reveal key={testimonial.name} style={{ '--index': index }}>
-            <p>{testimonial.text}</p>
-            <cite>{testimonial.name}</cite>
-          </blockquote>
-        ))}
+        <div className="testimonial-quotes">
+          {testimonials.map((testimonial, index) => (
+            <blockquote data-reveal key={testimonial.name} style={{ '--index': index }}>
+              <p>{testimonial.text}</p>
+              <cite>{testimonial.name}</cite>
+            </blockquote>
+          ))}
+        </div>
+        <aside aria-label="Testimonial style visuals" className="testimonial-visual-panel" data-reveal>
+          {testimonialImages.map((item, index) => (
+            <img
+              alt={`${item.title} client style`}
+              key={item.id}
+              loading="lazy"
+              src={item.image}
+              style={{ '--index': index }}
+            />
+          ))}
+        </aside>
       </section>
 
-      <section className="cta-section" data-reveal>
-        <p className="eyebrow">Ready when you are</p>
-        <h2>Choose your service, date, and preferred location in a few steps.</h2>
-        <Button to="/booking">Start Booking</Button>
+      <section aria-label="Book a KareBraids appointment" className="cta-section" data-reveal>
+        <img alt="" aria-hidden="true" className="cta-image" loading="lazy" src={ctaImage.image} />
+        <div className="cta-copy">
+          <p className="eyebrow">Ready when you are</p>
+          <h2>Choose your service, date, and preferred location in a few steps.</h2>
+          <Button to="/booking">Start Booking</Button>
+        </div>
       </section>
     </>
   )
