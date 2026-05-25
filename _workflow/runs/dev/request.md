@@ -1,9 +1,8 @@
-Configure the existing environment-variable-backed admin login credentials locally.
+Fix missing homepage images.
 
 Confirmed scope:
-- Do not add database-backed admin users or seed scripts.
-- Use the existing backend env variables: `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and existing `JWT_SECRET`.
-- Set root `.env` so the admin username is `admin@gmail.com`.
-- Set root `.env` so the admin password uses the user-provided local password from the chat.
-- Keep `.env.example` free of real credentials; update example text only if needed.
-- Do not change frontend UI, backend auth behavior, deployment config, or database schema unless verification proves a missing env example only.
+- Some images on the home page are not visibly showing.
+- Investigate and fix the frontend home page image rendering issue.
+- Keep the fix localized to the home page/reveal/image-loading behavior unless verification proves a shared frontend helper needs adjustment.
+- Preserve the current visual direction, image choices, hero carousel, responsive layout, and accessibility semantics.
+- Do not change backend APIs, deployment configuration, database schema, admin behavior, or unrelated pages unless required for a shared helper regression.

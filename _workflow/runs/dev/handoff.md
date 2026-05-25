@@ -6,132 +6,156 @@
 - Current worktree path: `C:/Users/laura.bolas/projects/karebraids/dev`.
 - Run id: dev.
 - Artifact root: `_workflow/runs/dev/`.
-- Request: Configure existing env-backed admin credentials locally.
-- Request classification: ops.
+- Request: Fix missing homepage images.
+- Request classification: bugfix.
 - Scope: small.
-- Risk: medium.
-- Current phase: Complete.
+- Risk: low-medium.
+- Current phase: Spec approval gate.
 - Spec file: `_workflow/runs/dev/spec.md`.
-- Task plan file: `_workflow/runs/dev/tasks.md`.
-- Spec approval: Approved by user response `spec approved`.
-- Implementation status: Complete.
-- Last completed task: TASK-002 Verify config and close workflow.
+- Task plan file: Not generated for this request; pending explicit spec approval.
+- Spec approval: Pending.
+- Implementation status: Not started.
+- Last completed task: None for this request.
 - Current task: None.
-- Next task: None.
-- Next step: Add local `JWT_SECRET` if the backend will be started for admin login.
+- Next task: After approval, generate `_workflow/runs/dev/tasks.md` and execute `TASK-001: Make homepage images reveal reliably`.
+- Next step: Wait for explicit user approval of `_workflow/runs/dev/spec.md`.
 
 ## Shared Understanding Handoff
 
 ### Original Request
 
-Seed the database with admin credentials: admin email `admin@gmail.com` and a user-provided password.
+some of the images are not showing on the home page. please fix it
 
 ### Confirmed Understanding
 
-The repo already uses environment-variable-backed admin authentication rather than database-backed admin users. The clarified request was to use environment variables, so the work configured root `.env` for the existing auth path instead of adding a seed script or database model.
+The request is to fix a frontend home page bug where intended image content is not visibly rendering. Intake inspection found the home page sources images from `galleryItems` in `client/src/constants/content.js`, and the current remote image URLs returned HTTP 200. A live browser check showed some lower home page image elements could remain at `opacity: 0` under the reveal-on-scroll styling until an additional scroll event fired, so the likely issue is app-owned reveal/lazy-load visibility behavior rather than dead image URLs.
 
 ### Decisions Made
 
-- Use existing `ADMIN_USERNAME` and `ADMIN_PASSWORD` env variables.
-- Store `admin@gmail.com` in `ADMIN_USERNAME`, because the current API expects a `username` field and can accept an email value.
-- Do not seed MongoDB.
-- Do not change backend auth architecture, frontend UI, or deployment config.
-- Do not print or commit real local password values.
+- Treat this as a small frontend bug fix.
+- Keep the current homepage visual direction and image choices unless a specific image URL proves broken during implementation.
+- Apply `design-taste-frontend` because the work touches a user-facing page, CSS, responsive behavior, and accessibility.
+- Stop at the required spec approval gate before implementation.
 
 ### Assumptions
 
-- The password is local-only.
-- Existing `JWT_SECRET`, if present, should be preserved.
-- Since `JWT_SECRET` is missing, it is reported rather than generated silently.
-- Production/Heroku config vars are out of scope.
+- The missing images are on the current React/Vite home page.
+- The root cause is likely reveal/image visibility timing rather than backend/API behavior.
+- Exact user-observed image names are non-blocking because the fix and verification will cover all homepage image sections.
 
-## Completion Summary
+### In Scope
 
-- TASK-001 completed: Configure local admin env credentials.
-- TASK-002 completed: Verify config and close workflow.
-- Final acceptance: all in-scope criteria checked `[x]`.
-- Final review verdict: Passed for the approved config-only scope.
-- Workflow health: Passed.
+- Fix homepage image visibility.
+- Add/update focused frontend regression coverage.
+- Verify desktop and mobile home page image rendering.
+- Update run-scoped workflow artifacts.
 
-## Verification Status
+### Out Of Scope
 
-- Masked env key-count checks: passed.
-- Node/dotenv admin credential assertion: passed; `JWT_SECRET` presence reported false.
-- `.env.example` placeholder check: passed.
-- `npm run test:server -- admin-auth.test.js`: passed, 1 suite / 5 tests.
-- `git diff --stat`: completed.
-- `git diff`: completed.
-- `git status --short --ignored`: completed.
+- Backend, admin, booking, database, deployment, and environment changes.
+- Full homepage redesign.
+- New dependencies.
+- Broad image asset migration unless proven necessary.
+
+### Acceptance Criteria
+
+- Homepage hero carousel images still render and rotate/select as before.
+- Trust thumbnails, service tile images, why panel image, gallery preview images, testimonial visual images, and CTA image render visibly when their sections are reached.
+- The missing-image failure is covered by a frontend regression test.
+- Existing image alt/decorative semantics remain correct.
+- Mobile and desktop home page checks show no blank image panels caused by app styling/state.
+- No backend, env, database, deployment, or unrelated route behavior changes are introduced.
+- Relevant client test, lint, and build verification is attempted and documented.
+
+### Risks And Edge Cases
+
+- Fast scrolling may skip reveal callbacks.
+- Lazy-loaded images may load after reveal state is calculated.
+- Inactive hero slides intentionally have `opacity: 0` and must not be treated as broken.
+- External CDN failures should be separated from app-owned reveal/visibility failures.
+
+### Remaining Open Questions
+
+- Non-blocking: which exact home page images the user noticed missing.
+
+### Normalized Workflow Request
+
+workflow complete-workflow bugfix: Fix the home page so all intended images render visibly and reliably across the current homepage sections. Preserve the current homepage design, image choices, carousel behavior, responsive layout, and accessibility semantics. Add focused frontend regression coverage and verify with client checks plus browser inspection.
+
+## Repo Intake
+
+- `RUN_WORKFLOW.md` read.
+- `docs/PROJECT_CONTEXT.md` read.
+- `client/package.json` read; stack is React 19, Vite 8, Tailwind v4, Vitest, React Testing Library.
+- `client/src/pages/Home.jsx`, `client/src/constants/content.js`, `client/src/hooks/useRevealOnScroll.js`, `client/src/index.css`, and `client/test/site-pages.test.jsx` inspected.
+- Existing image URLs returned HTTP 200 during intake.
+- Browser inspection used the Playwright CLI skill. Generated `.playwright-cli/` state was removed after inspection.
 
 ## Dirty Worktree
 
-- Expected tracked workflow artifact changes:
-  - `_workflow/runs/dev/handoff.md`
-  - `_workflow/runs/dev/progress.md`
+- `git status --short` before writing artifacts returned no tracked or untracked changes.
+- Planned implementation files after approval:
+  - `client/src/hooks/useRevealOnScroll.js`
+  - `client/src/pages/Home.jsx` if needed
+  - `client/src/index.css` if needed
+  - `client/test/site-pages.test.jsx`
+- Overlap risk: none identified before spec.
+- Current expected dirty files before approval:
   - `_workflow/runs/dev/request.md`
   - `_workflow/runs/dev/spec.md`
-  - `_workflow/runs/dev/tasks.md`
-  - `_workflow/runs/dev/verification.md`
-  - `_workflow/runs/dev/review.md`
-  - `_workflow/runs/dev/release-notes.md`
-  - `_workflow/runs/dev/summary.md`
-- Expected ignored local config:
-  - `.env`
-- Existing ignored files/folders visible in final ignored status were not created for this request.
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/progress.md`
+
+## Verification Status
+
+- Intake checks only:
+  - `git status --short`: clean before artifact updates.
+  - Remote Pexels image HEAD checks: all current `galleryItems` image URLs returned 200.
+  - Playwright CLI browser inspection: found some homepage image elements could remain opacity `0` before an additional scroll event.
+- Implementation verification: not started pending approval.
 
 ## Token / Resume State
 
-- Current phase: Complete.
+- Current phase: Spec approval gate.
 - Current task: None.
 - Current iteration: None.
-- Last completed safe checkpoint: TASK-002 Done with workflow health Passed.
+- Last completed safe checkpoint: Saved request and spec for approval.
 - Files already changed:
-  - `.env` ignored local file
   - `_workflow/runs/dev/request.md`
   - `_workflow/runs/dev/spec.md`
-  - `_workflow/runs/dev/tasks.md`
-  - `_workflow/runs/dev/progress.md`
   - `_workflow/runs/dev/handoff.md`
-  - `_workflow/runs/dev/verification.md`
-  - `_workflow/runs/dev/review.md`
-  - `_workflow/runs/dev/release-notes.md`
-  - `_workflow/runs/dev/summary.md`
-- Files planned next: None for this request.
+  - `_workflow/runs/dev/progress.md`
+- Files planned next:
+  - `_workflow/runs/dev/tasks.md` after explicit spec approval.
+  - `client/src/hooks/useRevealOnScroll.js`
+  - `client/src/pages/Home.jsx` if needed.
+  - `client/src/index.css` if needed.
+  - `client/test/site-pages.test.jsx`
 - Tests already run:
-  - Masked env key-count checks.
-  - Node/dotenv admin credential assertion.
-  - `.env.example` placeholder check.
-  - `npm run test:server -- admin-auth.test.js`
-  - `git diff --stat`
-  - `git diff`
-  - `git status --short --ignored`
-- Exact next command/action: Add a local `JWT_SECRET` value before starting the backend for admin login.
-- Safe to continue automatically: No further in-scope work remains.
+  - No implementation tests yet.
+  - Intake browser and URL checks only.
+- Exact next command/action: Wait for user to approve or request changes to `_workflow/runs/dev/spec.md`.
+- Safe to continue automatically: No; task planning requires explicit spec approval.
 
 ## Workflow Health
 
-- Current status: Passed.
+- Current status: Partial.
 - Notes:
   - Request synced.
-  - Detailed spec saved with all required sections.
-  - Approval gate completed before task planning.
-  - Task plan generated from approved spec.
-  - Required iteration evidence recorded.
-  - Focused verification completed.
-  - Final diff audit completed.
-  - Review, verification, release notes, summary, and handoff are current.
-  - No frontend work; `design-taste-frontend` not applicable.
-  - No decision log needed.
+  - Detailed spec saved with all required sections plus Frontend Taste Application.
+  - Dirty worktree checked.
+  - `design-taste-frontend` applied before spec.
+  - Approval gate is pending, so tasks and implementation have not started.
 
 ## Final Artifacts
 
 - Request: `_workflow/runs/dev/request.md`
 - Spec: `_workflow/runs/dev/spec.md`
 - Handoff: `_workflow/runs/dev/handoff.md`
-- Task plan: `_workflow/runs/dev/tasks.md`
+- Task plan: pending approval
 - Progress: `_workflow/runs/dev/progress.md`
-- Verification: `_workflow/runs/dev/verification.md`
-- Review: `_workflow/runs/dev/review.md`
-- Release notes: `_workflow/runs/dev/release-notes.md`
-- Summary: `_workflow/runs/dev/summary.md`
+- Verification: pending implementation
+- Review: pending implementation
+- Release notes: pending implementation
+- Summary: pending implementation
 - Decisions: none

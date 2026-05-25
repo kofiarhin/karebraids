@@ -793,6 +793,46 @@
 - Task plan status: Not generated; pending explicit spec approval.
 - Implementation status: Not started.
 
+## 2026-05-25 - Intake and Spec Setup: Fix Missing Homepage Images
+
+- Request: Fix home page images that are not showing.
+- Branch: dev.
+- Artifact root: `_workflow/runs/dev/`.
+- Dirty worktree check before spec:
+  - `git status --short` returned no output.
+- Repo context inspected:
+  - `.agents/skills/grill-me/SKILL.md`
+  - `.agents/skills/design-taste-frontend/SKILL.md`
+  - `RUN_WORKFLOW.md`
+  - `docs/PROJECT_CONTEXT.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/summary.md`
+  - `client/package.json`
+  - `client/src/pages/Home.jsx`
+  - `client/src/constants/content.js`
+  - `client/src/hooks/useRevealOnScroll.js`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+- Intake questions asked:
+  - None. The exact affected image names are non-blocking because implementation can verify every homepage image section.
+- Answers received:
+  - None.
+- Shared understanding:
+  - Fix the frontend home page so all intended images render visibly and reliably.
+  - Preserve the current home page visual design, image choices, carousel behavior, responsive layout, and accessibility semantics.
+  - Keep backend, admin, database, deployment, and env changes out of scope.
+- Current-state evidence:
+  - All current remote `galleryItems` image URLs returned HTTP 200.
+  - Playwright CLI browser inspection showed some lower homepage image elements could remain under reveal styling with `opacity: 0` until an additional scroll event.
+  - Generated `.playwright-cli/` inspection state was removed after the check.
+- Frontend taste skill:
+  - Applied before spec because the request touches homepage UI, CSS, responsive behavior, image rendering, and accessibility.
+- Current phase: Spec approval gate.
+- Spec file created: `_workflow/runs/dev/spec.md`
+- Task plan status: Not generated; pending explicit spec approval.
+- Implementation status: Not started.
+
 ## 2026-05-25 - Spec Approval and Planning: Configure Env-Backed Admin Credentials
 
 - User approval received: `spec approved`.
