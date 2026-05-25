@@ -10,6 +10,7 @@ import {
 } from '@phosphor-icons/react'
 import { useMemo, useState } from 'react'
 import { Button } from '../components/Button.jsx'
+import { Input } from '../components/ui/Input.jsx'
 import { services } from '../constants/content.js'
 import { useCreateBooking } from '../hooks/mutations/useCreateBooking.js'
 import { useAvailability } from '../hooks/queries/useAvailability.js'
@@ -411,30 +412,19 @@ export function Booking() {
               <div className="form-grid">
                 <label className="field-group">
                   <span>Full Name</span>
-                  <input
-                    onChange={(event) => updateField('fullName', event.target.value)}
-                    value={form.fullName}
-                  />
+                  <Input onChange={(event) => updateField('fullName', event.target.value)} value={form.fullName} />
                 </label>
                 <label className="field-group">
                   <span>Email</span>
-                  <input
-                    onChange={(event) => updateField('email', event.target.value)}
-                    type="email"
-                    value={form.email}
-                  />
+                  <Input onChange={(event) => updateField('email', event.target.value)} type="email" value={form.email} />
                 </label>
                 <label className="field-group">
                   <span>Phone</span>
-                  <input onChange={(event) => updateField('phone', event.target.value)} value={form.phone} />
+                  <Input onChange={(event) => updateField('phone', event.target.value)} value={form.phone} />
                 </label>
                 <label className="field-group">
                   <span>Preferred Location</span>
-                  <input
-                    onChange={(event) => updateField('preferredLocation', event.target.value)}
-                    placeholder="Salon, postcode, or area"
-                    value={form.preferredLocation}
-                  />
+                  <Input onChange={(event) => updateField('preferredLocation', event.target.value)} placeholder="Salon, postcode, or area" value={form.preferredLocation} />
                 </label>
                 <label className="field-group full">
                   <span>Notes</span>
