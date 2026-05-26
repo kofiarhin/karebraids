@@ -226,6 +226,7 @@ export function Booking() {
           <div className="booking-step-list">
             {workflowSteps.map((item, index) => (
               <div
+                aria-current={item.id === step ? 'step' : undefined}
                 className={index <= currentStepIndex ? 'step-pill active' : 'step-pill'}
                 key={item.id}
               >

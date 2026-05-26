@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
@@ -19,9 +19,12 @@ describe('gallery modal', () => {
 
     await user.click(screen.getByRole('button', { name: /copper knotless braids/i }))
 
-    expect(screen.getByRole('dialog', { name: /copper knotless braids/i })).toHaveClass(
-      'dark-gallery-modal',
-    )
+    const dialog = screen.getByRole('dialog', { name: /copper knotless braids/i })
+    const description = within(dialog).getByText(/long knotless braids with warm copper tone/i)
+
+    expect(dialog).toHaveClass('dark-gallery-modal')
+    expect(dialog).toHaveAttribute('aria-describedby', 'gallery-modal-description')
+    expect(description).toHaveAttribute('id', 'gallery-modal-description')
     expect(screen.getByRole('button', { name: /close gallery image/i })).toHaveFocus()
 
     await user.click(screen.getByRole('button', { name: /close gallery image/i }))

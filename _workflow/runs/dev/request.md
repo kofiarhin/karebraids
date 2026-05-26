@@ -1,8 +1,10 @@
-Fix missing homepage images.
+# Active Request
 
-Confirmed scope:
-- Some images on the home page are not visibly showing.
-- Investigate and fix the frontend home page image rendering issue.
-- Keep the fix localized to the home page/reveal/image-loading behavior unless verification proves a shared frontend helper needs adjustment.
-- Preserve the current visual direction, image choices, hero carousel, responsive layout, and accessibility semantics.
-- Do not change backend APIs, deployment configuration, database schema, admin behavior, or unrelated pages unless required for a shared helper regression.
+Polish the public KareBraids UI across the homepage, about page, gallery page, and booking page.
+
+Preserve the warm KareBraids brand, but make the public pages feel more refined, brighter where images/content need room, and more consistent across home, about, gallery, and booking.
+
+Allow small JSX changes only when they improve page consistency, hierarchy, accessibility, or expected UI states. Avoid changing routes, booking behavior, API calls, data models, admin UI, or brand copy beyond minor layout labels.
+
+Execution mode: complete-workflow.
+Workflow path: polish-ui.

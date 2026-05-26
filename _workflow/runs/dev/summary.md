@@ -273,3 +273,57 @@
   - Local `.env` still lacks `JWT_SECRET`, which is required by the existing backend to issue admin JWTs outside test mode.
 - Next recommended work:
   - Add a local `JWT_SECRET` value before starting the backend for admin login.
+
+## 2026-05-26 - Polish Public KareBraids UI
+
+- Request: Polish home, about, gallery, and booking public pages.
+- Spec used: `_workflow/runs/dev/spec.md`
+- Spec completeness: detailed spec included all required sections before planning.
+- Task plan used: `_workflow/runs/dev/tasks.md`
+- Review file used: `_workflow/runs/dev/review.md`
+- Release notes file used: `_workflow/runs/dev/release-notes.md`
+- Applied skill: design-taste-frontend
+- Tasks completed:
+  - TASK-001: Public shell, homepage, and about polish.
+  - TASK-002: Gallery polish.
+  - TASK-003: Booking polish.
+  - TASK-004: Final verification and closeout.
+- Iteration evidence summary:
+  - TASK-001: Public page CSS tests failed before shared home/about polish, passed after implementation, and lint/focused verification passed.
+  - TASK-002: Gallery card/modal tests failed before gallery polish and modal description wiring, passed after implementation, and lint/focused verification passed.
+  - TASK-003: Booking CSS and active-step accessibility tests failed before scoped polish/accessibility changes, passed after implementation, and lint/focused verification passed.
+  - TASK-004: Browser verification found mobile home overflow, targeted CSS guard tests failed before responsive fixes, then full verification and browser checks passed.
+- Files changed:
+  - `client/src/index.css`
+  - `client/src/components/GalleryModal.jsx`
+  - `client/src/pages/Booking.jsx`
+  - `client/test/site-pages.test.jsx`
+  - `client/test/gallery-modal.test.jsx`
+  - `client/test/booking-flow.test.jsx`
+  - `_workflow/runs/dev/*`
+  - `.workflow/artifacts/polish-ui/*`
+- Verification run:
+  - `npm test --prefix client`: passed, 32 tests.
+  - `npm run lint --prefix client`: passed.
+  - `npm run build --prefix client`: passed.
+  - Playwright CLI desktop/mobile verification: passed for `/`, `/about`, `/gallery`, `/booking`.
+  - Browser console check: 0 warnings, 0 errors.
+- Acceptance results:
+  - [x] Warm KareBraids brand preserved.
+  - [x] Public pages are more refined and consistent.
+  - [x] Images/content have brighter, more readable treatments where needed.
+  - [x] Gallery modal remains accessible.
+  - [x] Booking behavior and API calls remain unchanged.
+  - [x] Mobile layouts have no horizontal overflow in final browser pass.
+  - [x] No backend, admin, route, data model, dependency, env, or deployment changes.
+- Failure recovery notes:
+  - Fixed final mobile homepage overflow discovered in browser verification using test-first CSS guard additions.
+  - Updated brittle booking fixture date from May 25, 2026 to May 26, 2026.
+- Final diff audit:
+  - Diff matches saved spec.
+  - Pre-existing dirty `AGENTS.md` and `RUN_WORKFLOW.md` remain unrelated.
+  - No generated junk remains.
+  - No secrets or sensitive values added.
+- Release notes file used: `_workflow/runs/dev/release-notes.md`
+- Unresolved issues: none blocking.
+- Next recommended work: User review, then commit with `polish public KareBraids pages`.

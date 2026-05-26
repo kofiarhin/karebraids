@@ -1,61 +1,49 @@
-# Review
+# Review: Polish Public KareBraids UI
 
-## Request
-
-Configure existing env-backed admin credentials locally.
-
-## Spec And Plan
-
+- Request: Polish public home, about, gallery, and booking pages.
 - Spec file used: `_workflow/runs/dev/spec.md`
 - Task plan used: `_workflow/runs/dev/tasks.md`
-
-## Tasks Reviewed
-
-- TASK-001: Configure local admin env credentials.
-- TASK-002: Verify config and close workflow.
+- Tasks reviewed: TASK-001, TASK-002, TASK-003, TASK-004.
+- Applied skill: design-taste-frontend
 
 ## Bugs Found
 
-- None in scope.
+- Mobile homepage had a 4px horizontal overflow during final browser verification. Fixed with responsive carousel/decorative panel guards and regression tests.
 
 ## Scope Creep Check
 
-- Scope respected.
-- No database seed script, user model, backend auth refactor, frontend UI change, API contract change, deployment change, or schema change was introduced.
-- The only implementation/config change is the ignored local `.env` file.
+- Routes: unchanged.
+- Booking behavior/API calls/data models: unchanged.
+- Backend/admin/env/deployment/dependencies: unchanged.
+- Brand copy: no major copy rewrites.
+- JSX changes were limited to gallery dialog description wiring and booking step `aria-current`.
 
 ## Final Diff Audit
 
-- `git diff --stat` completed.
-- `git diff` completed.
-- Tracked diff contains workflow artifacts only.
-- `.env` appears as ignored and is not included in tracked diff.
-- No secret values were added to tracked files.
-- CRLF warnings appeared for workflow artifacts and are not behavior changes.
-
-## Failure Recovery Notes
-
-- Parallel verification commands timed out twice; reran the same checks sequentially with longer timeouts and they passed.
+- Implementation files changed:
+  - `client/src/index.css`
+  - `client/src/components/GalleryModal.jsx`
+  - `client/src/pages/Booking.jsx`
+  - `client/test/site-pages.test.jsx`
+  - `client/test/gallery-modal.test.jsx`
+  - `client/test/booking-flow.test.jsx`
+- Workflow artifacts changed under `_workflow/runs/dev/` and `.workflow/artifacts/polish-ui/`.
+- Pre-existing dirty files outside implementation scope remain: `AGENTS.md`, `RUN_WORKFLOW.md`.
+- No generated screenshot scratch files remain.
+- No secrets, credentials, dependency changes, database changes, or backend changes found.
 
 ## Missing Tests
 
-- None required for product code because no product code changed.
-- Focused existing backend auth test was run and passed.
+- No missing-test exception remains for changed behavior. Verification-only iterations documented justified exceptions where no new behavior was introduced.
 
-## Security Concerns
+## Security / Architecture Concerns
 
-- The requested local password is weak; keep it local-only.
-- `JWT_SECRET` is still missing from local `.env`, so the backend will still require that env var before admin login can issue JWTs outside test mode.
-
-## Architecture Concerns
-
-- None. Existing env-backed admin auth architecture remains unchanged.
+- None found.
 
 ## Follow-Up Tasks
 
-- Add a local `JWT_SECRET` value before starting the backend for local admin login.
-- Configure production/Heroku admin env vars separately if these credentials are intended beyond local development.
+- Optional: replace or locally host external homepage/gallery images if image-provider reliability becomes a product concern.
 
-## Final Review Verdict
+## Verdict
 
-Passed for the approved config-only scope.
+Passed. The completed changes match the saved spec and preserve the requested boundaries.

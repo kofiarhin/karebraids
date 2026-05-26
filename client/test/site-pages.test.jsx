@@ -1,3 +1,6 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
@@ -6,6 +9,8 @@ import App from '../src/App.jsx'
 import { galleryItems } from '../src/constants/content.js'
 
 const originalMatchMedia = window.matchMedia
+const testDirectory = path.dirname(fileURLToPath(import.meta.url))
+const homeStyles = () => fs.readFileSync(path.join(testDirectory, '../src/index.css'), 'utf8')
 
 afterEach(() => {
   vi.useRealTimers()
@@ -103,6 +108,23 @@ describe('KareBraids pages', () => {
     )
   })
 
+  it('uses lighter home image overlays instead of full dark image covers', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('rgba(36, 20, 8, 0.58)')
+    expect(styles).toContain('rgba(255, 250, 246, 0.72)')
+    expect(styles).not.toContain('rgba(36, 20, 8, 0.88)')
+    expect(styles).not.toContain('rgba(36, 20, 8, 0.96), rgba(53, 30, 12, 0.82)')
+  })
+
+  it('keeps brighter image-backed CTA text readable with a localized panel', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('.cta-copy')
+    expect(styles).toContain('background: rgba(36, 20, 8, 0.46);')
+    expect(styles).toContain('max-width: 52rem;')
+  })
+
   it('renders clickable hero carousel dots for the first five gallery images', async () => {
     const user = userEvent.setup()
     renderRoute('/')
@@ -190,6 +212,37 @@ describe('KareBraids pages', () => {
     expect(screen.getByRole('heading', { name: /meet karen/i })).toBeInTheDocument()
   })
 
+  it('defines a refined shared public page treatment for home and about', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('--surface-lift')
+    expect(styles).toContain('.dark-brand-shell .page-hero-copy')
+    expect(styles).toContain('.dark-brand-shell .about-page::before')
+    expect(styles).toContain('.dark-brand-shell .about-image::before')
+    expect(styles).toContain('linear-gradient(180deg, rgba(255, 250, 246, 0.13)')
+  })
+
+  it('keeps refined public page treatments mobile-safe', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('@media (max-width: 840px)')
+    expect(styles).toContain('.dark-brand-shell .about-page::before {\n    display: none;')
+    expect(styles).toContain('.dark-brand-shell .page-hero-copy {\n    padding: clamp(1.1rem, 5vw, 1.5rem);')
+    expect(styles).toContain('.dark-brand-shell .home-hero .hero-copy::before {\n    inset: -0.75rem;')
+  })
+
+  it('prevents the mobile hero carousel zoom from creating horizontal overflow', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('.hero-slide.is-active {\n    transform: scale(1);')
+  })
+
+  it('keeps small-phone homepage decorative panels inside the viewport', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('.dark-brand-shell .home-hero .hero-copy::before {\n    inset: -0.35rem;')
+  })
+
   it('renders the gallery page', () => {
     const { container } = renderRoute('/gallery')
 
@@ -199,6 +252,26 @@ describe('KareBraids pages', () => {
     expect(screen.getByRole('region', { name: /gallery image wall/i })).toHaveClass(
       'gallery-grid',
     )
+  })
+
+  it('defines a refined gallery card and modal treatment', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('.dark-brand-shell .gallery-card::before')
+    expect(styles).toContain('linear-gradient(180deg, rgba(36, 20, 8, 0), rgba(36, 20, 8, 0.62)')
+    expect(styles).toContain('.dark-gallery-modal::before')
+    expect(styles).toContain('grid-auto-rows: 10.5rem;')
+    expect(styles).toContain('background: rgba(36, 20, 8, 0.5);')
+  })
+
+  it('defines a refined booking flow treatment', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('.dark-brand-shell .booking-panel::before')
+    expect(styles).toContain('.dark-brand-shell .booking-service::after')
+    expect(styles).toContain('.dark-brand-shell .field-group:focus-within')
+    expect(styles).toContain('background: rgba(255, 250, 246, 0.08);')
+    expect(styles).toContain('box-shadow: inset 0 1px 0 rgba(255, 250, 246, 0.08);')
   })
 
   it('opens and closes the mobile navigation drawer', async () => {

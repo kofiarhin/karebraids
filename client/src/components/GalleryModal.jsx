@@ -30,6 +30,7 @@ export function GalleryModal({ item, onClose }) {
   return (
     <div className="modal-backdrop" onClick={onClose} role="presentation">
       <section
+        aria-describedby="gallery-modal-description"
         aria-modal="true"
         aria-labelledby="gallery-modal-title"
         className="gallery-modal dark-gallery-modal"
@@ -49,7 +50,7 @@ export function GalleryModal({ item, onClose }) {
         <div className="modal-copy">
           <p className="eyebrow">KareBraids Gallery</p>
           <h2 id="gallery-modal-title">{item.title}</h2>
-          <p>{item.description}</p>
+          <p id="gallery-modal-description">{item.description}</p>
         </div>
       </section>
     </div>

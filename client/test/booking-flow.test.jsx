@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -32,8 +32,8 @@ async function chooseService(user) {
   await user.click(screen.getByRole('button', { name: /knotless braids/i }))
 }
 
-async function chooseMondayMay252026(user) {
-  await user.click(screen.getByRole('button', { name: /select monday, may 25, 2026/i }))
+async function chooseTuesdayMay262026(user) {
+  await user.click(screen.getByRole('button', { name: /select tuesday, may 26, 2026/i }))
 }
 
 describe('booking flow', () => {
@@ -71,18 +71,40 @@ describe('booking flow', () => {
     expect(bookingService.getAvailability).not.toHaveBeenCalled()
   })
 
+  it('marks the active booking step for assistive technology', async () => {
+    const user = userEvent.setup()
+    renderBooking()
+    const progress = screen.getByLabelText(/booking progress and summary/i)
+    const stepList = progress.querySelector('.booking-step-list')
+
+    expect(within(stepList).getByText('Service').closest('.step-pill')).toHaveAttribute(
+      'aria-current',
+      'step',
+    )
+
+    await chooseService(user)
+
+    expect(within(stepList).getByText('Date').closest('.step-pill')).toHaveAttribute(
+      'aria-current',
+      'step',
+    )
+    expect(within(stepList).getByText('Service').closest('.step-pill')).not.toHaveAttribute(
+      'aria-current',
+    )
+  })
+
   it('submits a valid booking and shows confirmation', async () => {
     const user = userEvent.setup()
     renderBooking()
 
     await chooseService(user)
-    await chooseMondayMay252026(user)
+    await chooseTuesdayMay262026(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
 
     await screen.findByRole('button', { name: /10:00/i })
     expect(bookingService.getAvailability).toHaveBeenCalledWith({
       service: 'Knotless Braids',
-      date: '2026-05-25',
+      date: '2026-05-26',
     })
     await user.click(screen.getByRole('button', { name: /10:00/i }))
     await user.type(screen.getByLabelText(/full name/i), 'Amara Okafor')
@@ -95,7 +117,7 @@ describe('booking flow', () => {
     expect(bookingService.createBooking).toHaveBeenCalledWith(
       expect.objectContaining({
         service: 'Knotless Braids',
-        date: '2026-05-25',
+        date: '2026-05-26',
         time: '10:00',
       }),
       expect.any(Object),
@@ -115,7 +137,7 @@ describe('booking flow', () => {
     renderBooking()
 
     await chooseService(user)
-    await chooseMondayMay252026(user)
+    await chooseTuesdayMay262026(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
     await user.click(await screen.findByRole('button', { name: /10:00/i }))
     await user.type(screen.getByLabelText(/full name/i), 'Amara Okafor')
@@ -136,7 +158,7 @@ describe('booking flow', () => {
     renderBooking()
 
     await chooseService(user)
-    await chooseMondayMay252026(user)
+    await chooseTuesdayMay262026(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
 
     expect(await screen.findByText(/no appointments are available/i)).toBeInTheDocument()

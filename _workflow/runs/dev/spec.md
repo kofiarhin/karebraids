@@ -1,270 +1,429 @@
-# Fix Missing Homepage Images Spec
+# Detailed Spec: Polish Public KareBraids UI
 
 ## 1. Metadata
 - Spec filename: `_workflow/runs/dev/spec.md`
-- Date: 2026-05-25
-- Request ID / slug: `fix-homepage-missing-images`
-- Request source: latest user prompt
-- Execution mode: `complete-workflow`
-- Request classification: `bugfix`
-- Scope level: small
-- Risk level: low-medium
+- Date: 2026-05-26
+- Request ID / slug: polish-public-karebraids-ui
+- Request source: latest user prompt plus grill-me intake answers
+- Execution mode: complete-workflow
+- Request classification: polish-ui / frontend visual refinement
+- Scope level: medium
+- Risk level: medium because the request spans four public pages and shared CSS
 
 ## 2. Original Request
-- Raw user request: `some of the images are not showing on the home page. please fix it`
-- Normalized request: Fix the home page so all intended images render visibly and reliably across the current homepage sections.
+- Raw user request: `polish-ui`
+- Normalized request: Polish the public KareBraids UI across the homepage, about page, gallery page, and booking page while preserving the warm brand direction, improving refinement/brightness/consistency, and allowing small JSX changes only when they support hierarchy, accessibility, or expected UI states.
 - Source prompt / `<artifact-root>/request.md` reference: `_workflow/runs/dev/request.md`
 
 ## 3. Questions And Answers
-- Questions asked: none.
-- Answers received: none.
-- Questions skipped: No user-facing question was needed because the repo and browser inspection identify a likely frontend reveal/image visibility failure.
-- Remaining open questions: The exact images seen missing by the user are not named; treat every home page image section as in scope for verification.
+- Questions asked:
+  - Which UI surface should this `polish-ui` pass target?
+  - Should the public-page polish pass preserve the current warm dark luxury brand direction or shift to a brighter/light editorial look?
+  - Should this polish pass allow small JSX/content-structure changes where needed, or be limited mostly to CSS?
+- Answers received:
+  - Polish the homepage, about page, gallery page, and booking page.
+  - Preserve the warm KareBraids brand, but make the public pages feel more refined, brighter where images/content need room, and more consistent across home, about, gallery, and booking.
+  - Allow small JSX changes only when they improve page consistency, hierarchy, accessibility, or expected UI states; avoid changing routes, booking behavior, API calls, data models, admin UI, or brand copy beyond minor layout labels.
+- Questions skipped: none.
+- Remaining open questions:
+  - Implementation must confirm whether current dirty frontend files (`client/src/index.css`, `client/test/site-pages.test.jsx`) are safe to build on before code edits. They appear to be expected prior completed-work changes, but they overlap likely files for this request.
 
 ## 4. Problem Definition
-- Problem being solved: Some homepage images are present in markup but not visible to users.
-- Why it matters: The homepage was intentionally made image-led; hidden images weaken the brand presentation and make sections look incomplete.
-- Current pain point: A user can scroll the home page and encounter image areas that remain blank or invisible.
-- Expected value: The homepage reliably displays its hero, trust, service, why, gallery preview, testimonial, and CTA imagery.
+- Problem being solved: The public site has grown through several focused iterations, leaving page-level polish uneven across home, about, gallery, and booking.
+- Why it matters: These pages are the main customer-facing journey from brand impression to booking conversion.
+- Current pain point: Home has received more recent visual attention than About/Gallery/Booking, and shared dark styling can feel heavy or inconsistent where imagery and form content need breathing room.
+- Expected value: A more refined, consistent public experience that keeps the warm KareBraids identity while improving readability, image presentation, responsive polish, and booking flow clarity.
 
 ## 5. Current State Analysis
-- Existing behavior: `Home.jsx` renders gallery-driven images from `galleryItems` in `client/src/constants/content.js`. The image URLs returned HTTP 200 in a HEAD check.
-- Existing architecture/components: React/Vite app with CSS in `client/src/index.css`; reveal effects are controlled by `client/src/hooks/useRevealOnScroll.js`.
-- Existing files/modules likely involved: `client/src/pages/Home.jsx`, `client/src/hooks/useRevealOnScroll.js`, `client/src/index.css`, `client/test/site-pages.test.jsx`.
-- Existing data flow: `Home.jsx` imports `galleryItems`, assigns those images to multiple homepage sections, and uses `data-reveal` plus IntersectionObserver-driven `.is-visible` classes.
-- Existing API/UI/CLI/workflow behavior: No backend or API involvement. Images are remote browser assets.
-- Existing tests or verification coverage: `client/test/site-pages.test.jsx` checks image markup and sources, but it does not currently assert that revealed image elements become visible or that no home images remain hidden after scrolling.
+- Existing behavior:
+  - Public routes are `/`, `/about`, `/gallery`, and `/booking`.
+  - `/admin` exists but is out of scope.
+  - Layout provides shared sticky header, mobile drawer, footer, and warm dark shell.
+- Existing architecture/components:
+  - React/Vite frontend with React Router.
+  - Public pages live in `client/src/pages/`.
+  - Shared layout and buttons live in `client/src/components/`.
+  - Styling is mostly centralized in `client/src/index.css`.
+  - Booking server-state uses TanStack Query hooks and services.
+- Existing files/modules likely involved:
+  - `client/src/pages/Home.jsx`
+  - `client/src/pages/About.jsx`
+  - `client/src/pages/Gallery.jsx`
+  - `client/src/pages/Booking.jsx`
+  - `client/src/components/Layout.jsx` only if shared public shell polish is needed
+  - `client/src/components/GalleryModal.jsx` only if modal polish/accessibility needs small refinement
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+  - `client/test/booking-flow.test.jsx`
+- Existing data flow:
+  - Static page content uses `client/src/constants/content.js`.
+  - Booking availability and creation use existing hooks/services; API behavior must not change.
+- Existing API/UI/CLI/workflow behavior:
+  - Booking flow steps: service, date, time, details, confirmation.
+  - Gallery modal opens/closes with focus restoration.
+  - Homepage hero carousel auto-rotates with reduced-motion handling.
+  - Mobile drawer is accessible and tested.
+- Existing tests or verification coverage:
+  - `client/test/site-pages.test.jsx` covers public pages, homepage visual structure, carousel, and mobile navigation.
+  - `client/test/booking-flow.test.jsx` covers booking flow validation, submission, API error, and empty slots.
+  - Client commands: `npm test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`.
 
 ## 6. Desired End State
-- Expected final behavior: Every intended homepage image loads and becomes visible when its section is in or near the viewport.
-- User-facing outcome: No blank image panels or invisible image grids on the home page under normal browsing.
-- Developer-facing outcome: A focused regression test covers the image visibility behavior that failed.
-- System/workflow outcome: Workflow artifacts document the frontend bug fix, verification, and design-taste application.
-- Backward compatibility expectations: Existing homepage visual structure, hero carousel behavior, route behavior, and gallery content remain compatible.
+- Expected final behavior:
+  - Home, About, Gallery, and Booking feel like one cohesive public experience.
+  - The warm KareBraids brand remains intact but surfaces/images have more visual breathing room.
+  - Page hierarchy, spacing, media treatment, focus states, and form states feel production-ready.
+- User-facing outcome:
+  - Visitors can scan the brand story, inspect styles, and book with clearer visual hierarchy and less heaviness.
+- Developer-facing outcome:
+  - Changes remain localized to public UI files and tests.
+  - Existing route/API/booking behavior remains compatible.
+- System/workflow outcome:
+  - polish-ui evidence is recorded under `.workflow/artifacts/polish-ui/`.
+  - `Applied skill: design-taste-frontend` is recorded in task evidence and downstream artifacts.
+- Backward compatibility expectations:
+  - No route changes.
+  - No API contract changes.
+  - No data model changes.
+  - Existing tests continue to pass after relevant updates.
 
 ## 7. Scope
 - In scope:
-  - Fix the homepage image visibility/rendering issue.
-  - Adjust reveal-on-scroll behavior if it is the root cause.
-  - Add or update a focused frontend test for image visibility.
-  - Verify with client tests, lint/build if practical, and a browser check.
+  - Visual polish for `/`, `/about`, `/gallery`, and `/booking`.
+  - Shared public shell polish if needed for those pages.
+  - Small JSX changes for page consistency, hierarchy, accessibility, or expected UI states.
+  - CSS refinements for layout, spacing, typography, color balance, image treatments, responsive behavior, interactions, focus states, and booking form states.
+  - Test updates/additions that prove structure, accessibility, and key visual-regression expectations.
+  - Browser verification on desktop and mobile when tooling is available.
 - Out of scope:
-  - Replacing the gallery images with new assets unless current URLs prove broken during implementation.
-  - Redesigning the home page.
-  - Backend, admin, booking, deployment, database, or environment changes.
+  - Admin UI.
+  - Backend/API/server changes.
+  - Booking logic changes, availability rules, or submission behavior changes.
+  - Route changes.
+  - Database/schema changes.
+  - Deployment or env changes.
+  - New dependencies unless unavoidable and explicitly approved.
+  - Major brand copy rewrite.
 - Non-goals:
-  - Full image asset migration.
-  - New dependencies.
-  - Broad CSS refactors.
-- Explicit boundaries: Keep implementation changes minimal and localized to the home page/reveal/image visibility path.
+  - Full rebrand.
+  - Replacing all content or imagery.
+  - Building new booking features.
+  - Changing admin authentication or dashboard behavior.
+- Explicit boundaries:
+  - Preserve the current warm brand direction.
+  - Keep changes public-page focused.
+  - Use existing `@phosphor-icons/react`; do not add icon packages.
 
 ## 8. Users And Use Cases
-- Primary users: Public site visitors viewing the KareBraids home page.
-- Secondary users: Site owner reviewing the homepage presentation.
+- Primary users:
+  - Prospective KareBraids clients browsing services and booking an appointment.
+- Secondary users:
+  - Returning clients checking gallery styles before booking.
+  - Site owner reviewing public presentation.
 - Main use cases:
-  - Visit the home page.
-  - Scroll through visual sections.
-  - See all intended images without blank panels.
+  - Land on homepage and understand brand/services.
+  - Read About page and build trust.
+  - Browse Gallery and inspect styles.
+  - Complete booking request flow.
 - Edge use cases:
-  - Slow image loading.
-  - Reduced motion preferences.
-  - Browsers with or without IntersectionObserver support.
-  - Mobile viewport scrolling.
+  - Mobile visitor using drawer navigation.
+  - Keyboard user navigating gallery modal and booking flow.
+  - Reduced-motion user on homepage carousel/reveals.
+  - Booking availability returns no slots or an API error.
 
 ## 9. Functional Requirements
 - Required behaviors:
-  - Homepage image elements must not remain hidden solely because a reveal class was missed.
-  - Existing reveal animations should still work for text and image sections where possible.
-  - Hero carousel slides remain functional and accessible.
-  - Lazy-loaded below-fold images still load when users approach/enter their sections.
-- Inputs: Browser scroll/viewport state and existing `galleryItems` image URLs.
-- Outputs: Visible image content on the home page.
-- State changes: Reveal state may update DOM classes such as `.is-visible`.
-- Error states: If an image source fails, the page should not trap it in an invisible state; optional graceful fallback may be added if low risk.
-- Permissions/auth expectations: Not applicable.
+  - Public pages retain current routes and core content.
+  - Booking flow remains functionally identical.
+  - Gallery modal remains functional with focus restoration.
+  - Mobile navigation remains functional.
+  - Existing loading, empty, error, saving, and confirmation states in booking remain present and polished.
+- Inputs:
+  - User navigation, gallery card clicks, booking form inputs, booking service/date/time selections.
+- Outputs:
+  - Updated visual presentation only; no new API outputs.
+- State changes:
+  - No new persistent state.
+  - Existing local booking/page UI state remains.
+- Error states:
+  - Booking form validation and API errors remain visible and readable.
+  - Empty slot state remains visible and readable.
+- Permissions/auth expectations:
+  - Not applicable for public pages.
+  - `/admin` auth behavior is out of scope.
 
 ## 10. Non-Functional Requirements
-- Performance expectations: Keep IntersectionObserver/lightweight CSS behavior; no new heavy runtime dependency.
-- Reliability expectations: Reveal behavior should be deterministic after initial mount and while scrolling.
-- Security/privacy expectations: Do not add secrets, credentials, or unsafe external scripts.
-- Accessibility expectations: Preserve existing meaningful alt text and decorative `alt=""`/`aria-hidden` semantics.
-- Maintainability expectations: Keep logic small and easy to test.
-- DX expectations: Tests should clearly identify image visibility regressions.
+- Performance expectations:
+  - No CPU-heavy animation loops.
+  - Animate transform/opacity only.
+  - Avoid unnecessary rerenders or new client-side state.
+- Reliability expectations:
+  - Existing routes and booking flow remain stable.
+  - CSS changes must not break mobile layout or hidden reveal states.
+- Security/privacy expectations:
+  - No secrets, env values, or sensitive data introduced.
+  - No admin surfaces exposed in public navigation.
+- Accessibility expectations:
+  - Maintain semantic headings, accessible buttons/links, focus states, labels, alerts, modal focus restoration, and decorative image semantics.
+  - Text must preserve readable contrast.
+- Maintainability expectations:
+  - Prefer existing class naming and CSS organization.
+  - Keep changes scoped and avoid broad rewrites.
+- DX expectations:
+  - Tests, lint, and build should remain runnable with existing npm scripts.
 
 ## 11. Affected Surfaces
 - Files likely affected:
-  - `client/src/hooks/useRevealOnScroll.js`
   - `client/src/pages/Home.jsx`
+  - `client/src/pages/About.jsx`
+  - `client/src/pages/Gallery.jsx`
+  - `client/src/pages/Booking.jsx`
+  - `client/src/components/Layout.jsx`
+  - `client/src/components/GalleryModal.jsx`
   - `client/src/index.css`
   - `client/test/site-pages.test.jsx`
+  - `client/test/booking-flow.test.jsx`
 - Directories likely affected:
-  - `client/src/`
+  - `client/src/pages/`
   - `client/test/`
   - `_workflow/runs/dev/`
-- UI surfaces: Home page image sections and reveal animation behavior.
-- API routes: Not applicable.
-- Components: `Home`, possibly shared reveal hook consumers.
-- Services: Not applicable.
-- Database/schema: Not applicable.
-- Config/env vars: Not applicable.
-- Tests: Frontend Vitest/React Testing Library, plus browser verification.
-- Docs: Run-scoped workflow artifacts only.
-- Workflow artifacts: `_workflow/runs/dev/request.md`, `spec.md`, `tasks.md` after approval, `progress.md`, `handoff.md`, `review.md`, `verification.md`, `release-notes.md`, `summary.md`.
+  - `.workflow/artifacts/polish-ui/`
+- UI surfaces:
+  - Homepage hero/trust/services/why/gallery-preview/testimonials/CTA.
+  - About hero/image/value panel.
+  - Gallery hero/grid/cards/modal presentation.
+  - Booking hero/progress summary/service/date/time/details/confirmation states.
+  - Shared header/footer only if needed for consistency.
+- API routes: none.
+- Components:
+  - `Layout` and `Button` only if public-shell polish requires minor updates.
+  - `GalleryModal` only if modal polish/accessibility needs small refinement.
+- Services: none.
+- Database/schema: none.
+- Config/env vars: none.
+- Tests:
+  - Public page and booking flow tests should be updated/added first for code-changing tasks.
+- Docs:
+  - Run-scoped workflow artifacts and polish-ui artifacts.
+- Workflow artifacts:
+  - `_workflow/runs/dev/request.md`
+  - `_workflow/runs/dev/spec.md`
+  - `_workflow/runs/dev/tasks.md` after approval only
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
+  - `.workflow/artifacts/polish-ui/*`
 
 ## 12. Dependency And Integration Map
 - Internal dependencies:
-  - `Home.jsx` depends on `galleryItems`.
-  - `Home.jsx` depends on `useRevealOnScroll`.
-  - CSS selectors under `.reveal-ready [data-reveal]` control visibility.
+  - `Home`, `About`, `Gallery`, `Booking` render through `Layout`.
+  - Public pages depend on `content.js` imagery/services/testimonials.
+  - Booking page depends on `useAvailability`, `useCreateBooking`, and API services; do not alter these contracts.
 - External packages/services:
-  - Existing React/Vite/Tailwind v4 stack.
-  - Remote Pexels image CDN used by existing content.
+  - Existing React, React Router, TanStack Query, Phosphor icons, Tailwind/Vite CSS pipeline.
 - Integration points:
-  - Browser IntersectionObserver.
-  - Lazy image loading.
-  - Existing CSS reveal classes.
+  - Browser routing through `App.jsx`.
+  - Booking API calls through existing service/hook layers.
 - Ordering constraints:
-  - Add/update failing frontend test first.
-  - Implement smallest visibility fix.
-  - Verify browser behavior after automated tests.
-- Migration/setup requirements: none.
+  - Spec approval required before task planning.
+  - Task plan required before implementation.
+  - Dirty frontend overlap must be acknowledged before editing overlapping files.
+- Migration/setup requirements:
+  - None.
 
 ## 13. Data And State Impact
-- Data models: Not applicable.
+- Data models: none.
 - Database changes: none.
-- State management changes: none.
-- Cache/session/local storage impact: none.
-- Backward compatibility impact: Existing image data remains unchanged unless a source is proven broken.
+- State management changes:
+  - Avoid adding global state.
+  - Existing booking local state remains.
+- Cache/session/local storage impact:
+  - None.
+- Backward compatibility impact:
+  - Public behavior and API compatibility must be preserved.
 
 ## 14. UX / API / Workflow Expectations
 - UX expectations:
-  - Images appear in their intended layouts without requiring extra unrelated scroll nudges.
-  - Existing animation remains subtle and does not cause layout shifts.
-  - Mobile layout stays clean with no incoherent overlaps.
-- API contract expectations: Not applicable.
-- CLI/workflow behavior: Follow run-scoped workflow with approval before task planning.
-- Error handling expectations: Avoid blank sections from reveal-state bugs; document if an external CDN failure is outside the app's control.
-- Empty/loading/success/failure states: Not a data-fetching surface; image fallback may be considered if needed, but no loading spinner should be introduced.
+  - Warm, refined, image-led public pages.
+  - Brighter surfaces where content/images need room.
+  - Consistent spacing, radii, typography scale, page intro treatment, and section rhythm.
+  - Booking flow should feel calmer and easier to scan without changing steps.
+- API contract expectations:
+  - No changes.
+- CLI/workflow behavior:
+  - Use default complete-workflow after approval.
+  - Use polish-ui evidence directory.
+- Error handling expectations:
+  - Booking validation/API errors stay inline and readable.
+  - Empty slot state remains clear.
+- Empty/loading/success/failure states:
+  - Booking time loading, empty slots, API error, details validation, saving button, and confirmation states must remain covered.
 
 ## 15. Execution Strategy
 - Recommended implementation approach:
-  - Add a regression test that proves image reveal/visibility behavior for homepage image sections.
-  - Inspect whether the current issue is caused by `data-reveal` being applied directly to images, hook timing, IntersectionObserver thresholds, or CSS.
-  - Prefer fixing `useRevealOnScroll` to reveal already-visible elements reliably if the issue is shared.
-  - Otherwise, remove/adjust direct `data-reveal` usage on image elements and reveal their containing section instead.
+  - Use `design-taste-frontend` before frontend edits.
+  - Capture baseline UI evidence where browser tooling is available.
+  - Start with public shared visual system refinements in CSS.
+  - Make small page JSX improvements only where CSS alone cannot fix hierarchy/accessibility/state clarity.
+  - Keep booking behavior untouched and verify with existing flow tests.
 - Suggested sequencing:
-  1. Create focused failing test.
-  2. Implement minimal fix.
-  3. Refine for reduced motion/observer fallback.
-  4. Polish with browser checks.
-- Safe rollout/migration approach: Single frontend patch with no data migration.
+  - Task 1: Align shared public visual system and homepage/about consistency.
+  - Task 2: Polish gallery browsing and modal presentation.
+  - Task 3: Polish booking flow presentation and states without behavior changes.
+  - Task 4: Final responsive/browser verification and closeout, if not covered inside prior tasks.
+- Safe rollout/migration approach:
+  - No migration. Frontend-only polish behind existing routes.
 - Files to inspect before editing:
-  - `client/src/pages/Home.jsx`
-  - `client/src/hooks/useRevealOnScroll.js`
   - `client/src/index.css`
-  - `client/test/site-pages.test.jsx`
+  - `client/src/pages/Home.jsx`
+  - `client/src/pages/About.jsx`
+  - `client/src/pages/Gallery.jsx`
+  - `client/src/pages/Booking.jsx`
+  - `client/src/components/GalleryModal.jsx`
+  - Relevant tests.
 - Decisions to avoid until more evidence exists:
-  - Do not replace all image URLs unless browser verification shows actual source failures.
-  - Do not introduce local asset downloading without explicit need.
+  - New assets.
+  - New dependencies.
+  - Rewriting page copy.
+  - Changing booking step behavior.
 
 ## 16. Verification Strategy
 - Required automated checks:
   - `npm test --prefix client -- site-pages.test.jsx`
-  - `npm test --prefix client` if practical.
+  - `npm test --prefix client -- booking-flow.test.jsx`
+  - `npm test --prefix client`
   - `npm run lint --prefix client`
   - `npm run build --prefix client`
 - Required manual checks:
-  - Browser check of home page at desktop and mobile widths after scrolling through visual sections.
+  - Desktop and mobile browser inspection for `/`, `/about`, `/gallery`, `/booking`.
+  - Confirm no horizontal overflow, incoherent overlap, clipped text, or unreadable image text.
+  - Confirm gallery modal still opens/closes and restores focus.
+  - Confirm booking flow still moves through steps and states.
 - Test types needed:
-  - React Testing Library regression test for reveal/image visibility.
-  - Browser runtime check for actual rendered image visibility and load status.
+  - React Testing Library structural/accessibility tests.
+  - CSS regression checks when useful for visual intent.
+  - Browser visual/responsive checks.
 - Build/lint/typecheck expectations:
-  - Client lint/build should pass.
+  - Client lint/build pass.
 - Acceptance evidence required:
-  - No homepage image elements remain unintentionally hidden after their section is in view.
-  - Existing carousel and homepage structure remain intact.
+  - Updated tests first for code-changing tasks where practical.
+  - Screenshots or browser inspection notes in `.workflow/artifacts/polish-ui/` when available.
 - Proof of completion:
-  - Passing tests and browser check results documented in progress/review/summary.
+  - All tasks complete through Build -> Refine -> Polish.
+  - Final diff audit, review, release notes, summary, handoff, and health check completed.
 
 ## 17. Acceptance Criteria
-- [ ] Homepage hero carousel images still render and rotate/select as before.
-- [ ] Trust thumbnail images, service tile images, why panel image, gallery preview images, testimonial visual images, and CTA image render visibly when their sections are reached.
-- [ ] The specific missing-image failure is covered by a frontend regression test.
-- [ ] Existing image alt/decorative semantics remain correct.
-- [ ] Mobile and desktop home page checks show no blank image panels caused by app styling/state.
-- [ ] No backend, env, database, deployment, or unrelated route behavior changes are introduced.
-- [ ] Relevant client test, lint, and build verification is attempted and documented.
+- [ ] Home, About, Gallery, and Booking preserve the warm KareBraids brand while feeling more refined and visually consistent.
+- [ ] Public pages are brighter where image or content readability needs room, without shifting into a cold/light rebrand.
+- [ ] Page intros, section rhythm, image treatments, surfaces, buttons, focus states, and responsive spacing are consistent across the four public pages.
+- [ ] Small JSX changes, if any, improve hierarchy, accessibility, or expected UI states without changing routes, booking behavior, APIs, data models, admin UI, or major copy.
+- [ ] Booking service/date/time/details/confirmation flow behaves the same as before.
+- [ ] Booking loading, empty, error, saving, and confirmation states remain visible and readable.
+- [ ] Gallery grid and modal remain accessible and usable, including keyboard/focus expectations.
+- [ ] Mobile navigation and public responsive layouts remain clean with no horizontal overflow, incoherent overlap, or clipped text.
+- [ ] Existing hero carousel behavior, dots, auto-rotation, and reduced-motion behavior remain compatible.
+- [ ] No backend, env, database, dependency, deployment, or admin route changes are introduced.
+- [ ] Relevant frontend tests are added/updated first, expected Red evidence is recorded where possible, and client test/lint/build verification passes or any blocker is documented.
+- [ ] `Applied skill: design-taste-frontend` is recorded in task evidence and downstream workflow artifacts.
 
 ## 18. Edge Cases And Failure Modes
 - Edge cases:
-  - Fast scrolling can skip an IntersectionObserver callback.
-  - Images can be lazy-loaded after reveal state is calculated.
-  - Browser lacks IntersectionObserver.
-  - User has reduced motion enabled.
+  - Small mobile widths around 320-390px.
+  - Booking calendar dense layout.
+  - Long service names/descriptions.
+  - No available slots.
+  - Booking API error.
+  - Reduced motion preference.
+  - Gallery modal with focus restoration.
 - Failure modes:
-  - `data-reveal` elements remain opacity `0`.
-  - Image URL fails independently of app logic.
-  - Fix accidentally disables intended reveal animation globally.
+  - Shared CSS change breaks admin or booking layout unintentionally.
+  - Over-brightening reduces brand warmth.
+  - Image overlays become too light and hurt text readability.
+  - CSS reveal states leave below-fold images hidden.
+  - Mobile calendar/buttons become cramped or overflow.
 - Regression risks:
-  - About/gallery pages also use image/reveal styling.
-  - Hero carousel opacity states are intentional for inactive slides and must not be mistaken for broken images.
+  - `client/src/index.css` is large and shared across public/admin surfaces.
+  - Existing dirty CSS/test files overlap planned implementation.
 - Recovery expectations:
-  - Scope fixes only to app-owned visibility failures; document external CDN failures separately if found.
+  - Fix only in-scope regressions.
+  - If dirty overlap cannot be safely resolved, stop for human review.
 
 ## 19. Risks And Mitigations
 - Technical risks:
-  - IntersectionObserver behavior differs between jsdom and browsers.
-  - Mitigation: combine unit regression with real-browser verification.
+  - Large shared CSS file may cause unintended cross-page effects.
+  - Mitigation: inspect selectors carefully, keep scoped class changes, run broad client tests/build/lint and browser checks.
 - Product/UX risks:
-  - Removing all reveal styling could flatten the homepage.
-  - Mitigation: preserve animations where reliable; reveal containers instead of hiding important image pixels if needed.
+  - Polish could drift into rebrand.
+  - Mitigation: preserve warm brand palette and existing content, improve consistency/brightness selectively.
 - Security risks:
-  - none expected.
+  - Low; no backend/admin/env work.
+  - Mitigation: avoid touching auth/admin files and check diff for secrets.
 - Scope risks:
-  - Temptation to migrate images/local assets.
-  - Mitigation: only replace sources if proven broken.
+  - Four-page polish can expand.
+  - Mitigation: task plan must use small vertical slices and explicit out-of-scope items.
 - Mitigation plan:
-  - Keep changes small, prove with tests, and run browser checks.
+  - Use TDD-first evidence for each code-changing task.
+  - Record browser evidence under `.workflow/artifacts/polish-ui/`.
+  - Stop before implementation if dirty overlap is not approved.
 
 ## 20. Assumptions
 - Explicit assumptions:
-  - The reported missing images are on the current React home page.
-  - The remote Pexels image URLs are not the primary cause because all current URLs returned HTTP 200 during intake.
-  - The likely cause is reveal/lazy-load timing or CSS keeping some images hidden.
-- Confidence level: medium.
+  - Existing dirty `client/src/index.css` and `client/test/site-pages.test.jsx` are from prior completed homepage work and are intended to remain.
+  - No new external images or dependencies are required.
+  - Existing brand content and imagery remain acceptable.
+  - User wants complete-workflow after approval.
+- Confidence level: Medium-high.
 - What to revisit if assumptions are wrong:
-  - If browser/network checks after implementation show specific CDN failures, replace those specific image URLs or add a graceful fallback.
+  - If dirty files contain user changes not intended for this polish pass, implementation must pause and reconcile.
+  - If visual direction should become a larger rebrand, spec and task plan must be revised.
 
 ## 21. Open Questions
-- Blocking questions: none.
+- Blocking questions:
+  - Before implementation, confirm it is safe to build on the currently dirty overlapping frontend files: `client/src/index.css` and `client/test/site-pages.test.jsx`.
 - Non-blocking questions:
-  - Which exact home page images did the user observe missing?
+  - Whether browser screenshots should be saved as image artifacts or documented as inspection notes if tooling is limited.
 - Execution impact:
-  - The fix will verify all home page image sections, so exact user screenshot is not required to proceed.
+  - Spec can be approved now; implementation should not edit overlapping dirty implementation files until the overlap is approved or proven to be this workflow's intended base.
 
 ## 22. Task Extraction Notes
 - Suggested vertical task boundaries:
-  - One task: Fix homepage image visibility and prove it with tests/browser verification.
+  - TASK-001: Polish shared public visual system, homepage, and about page consistency.
+  - TASK-002: Polish gallery grid/modal browsing presentation.
+  - TASK-003: Polish booking flow presentation and state readability without behavior changes.
+  - TASK-004: Final public-page responsive verification and closeout if not fully covered by previous tasks.
 - Suggested first task:
-  - `TASK-001: Make homepage images reveal reliably`
+  - TASK-001: Polish public shell/home/about consistency.
 - Suggested task ordering:
-  - Single vertical task is sufficient because this is a small frontend bug fix.
+  - Shared and narrative pages first, gallery second, booking third, final verification last.
 - Areas that should not become separate tasks:
-  - Backend/API work.
-  - Full redesign.
-  - Image asset migration unless evidence requires it.
+  - Backend, admin, env, database, deployment, dependency updates.
 - How the 3-pass Build -> Refine -> Polish loop should apply:
-  - Build: add failing visibility test and minimal fix.
-  - Refine: harden observer/lazy/reduced-motion behavior.
-  - Polish: browser-check desktop/mobile and run full client verification.
+  - Each executable task must use Red -> Green -> Refactor inside Build, Refine, and Polish where code changes occur.
+  - Iteration 1 should establish the visible baseline improvement and tests.
+  - Iteration 2 should harden responsive/accessibility/state details.
+  - Iteration 3 should run broader verification, browser checks, design pre-flight, and cleanup.
 
-## 23. Frontend Taste Application
-- Applied: yes.
-- Skill source: `.agents/skills/design-taste-frontend/SKILL.md`
-- Relevant application:
-  - No new dependency without package verification.
-  - Tailwind v4 confirmed from `client/package.json`; current styling is mostly plain CSS, so follow existing CSS convention for touched files.
-  - Preserve mobile collapse and avoid layout shifts.
-  - Preserve accessible alt/decorative semantics.
-  - Do not add decorative gimmicks, new palettes, emojis, or unrelated redesign.
-  - Final pre-flight matrix must be checked before final output.
+## Frontend Taste Application
+- Applied skill: design-taste-frontend
+- Scope: frontend UI polish for public pages only.
+- Notes:
+  - Dependency check: `@phosphor-icons/react` is already installed in `client/package.json`; no new icon dependency is needed.
+  - Tailwind v4 is present through `tailwindcss` and `@tailwindcss/vite`, but project styling is currently centralized CSS with `@import "tailwindcss";`.
+  - Avoid emoji, purple/blue AI gradients, pure black, new card-heavy nesting, and broad dependency additions.
+
+## Polish-UI Artifact Plan
+- Reusable artifact path: `.workflow/artifacts/polish-ui/`
+- Planned polish artifacts:
+  - `.workflow/artifacts/polish-ui/spec.md`
+  - `.workflow/artifacts/polish-ui/task-plan.md` after approval
+  - `.workflow/artifacts/polish-ui/audit.md`
+  - `.workflow/artifacts/polish-ui/before/`
+  - `.workflow/artifacts/polish-ui/after/`
+  - `.workflow/artifacts/polish-ui/review.md`
+  - `.workflow/artifacts/polish-ui/verification.md`
+  - `.workflow/artifacts/polish-ui/release-notes.md`
+  - `.workflow/artifacts/polish-ui/summary.md`
+  - `.workflow/artifacts/polish-ui/handoff.md`
