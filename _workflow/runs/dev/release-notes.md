@@ -1,23 +1,27 @@
-# Release Notes: Polish Public KareBraids UI
+# Release Notes
 
-## Request
-
-Polish the public KareBraids home, about, gallery, and booking pages while preserving the warm brand and avoiding route, booking behavior, API, data model, admin, backend, env, dependency, deployment, and major copy changes.
+- Request: Homepage Featured services square price row.
+- Applied skill: design-taste-frontend
 
 ## User-Facing Changes
 
-- Refined the shared warm public-page visual system with brighter lifted surfaces, softer image overlays, and more consistent page intro treatments.
-- Improved homepage and about page image/content readability while preserving the warm dark brand.
-- Improved gallery card overlays and modal presentation.
-- Improved booking page visual hierarchy, service cards, panel treatment, field focus states, and active step accessibility.
-- Added responsive guards to prevent mobile horizontal overflow.
+- The homepage Featured services section now shows all six services as same-size square image tiles.
+- Desktop shows the six service tiles horizontally in one row, reducing the height of the services section.
+- Each service image now displays a starting price:
+  - Knotless Braids: From £80
+  - Box Braids: From £70
+  - Cornrows: From £35
+  - Twists: From £65
+  - Stitch Braids: From £45
+  - Kids Braids: From £30
+- Mobile keeps the service tiles square in a compact two-column layout without page-level horizontal overflow.
 
 ## Developer Changes
 
-- Added CSS regression coverage for public polish, gallery polish, booking polish, and mobile overflow guards.
-- Added gallery modal `aria-describedby`.
-- Added booking step `aria-current="step"`.
-- Updated booking test fixture from May 25, 2026 to May 26, 2026 because the former is now a past date for this run.
+- Added `fromPrice` to the static `services` content.
+- Rendered service price badges and accessible service/price labels in the homepage service tile markup.
+- Updated service tile CSS for square sizing, desktop horizontal layout, responsive mobile layout, and dark-theme badge readability.
+- Added focused frontend test coverage.
 
 ## New Routes/APIs
 
@@ -38,21 +42,19 @@ none
 ## Test Commands Run
 
 - `npm test --prefix client -- site-pages.test.jsx`
-- `npm test --prefix client -- gallery-modal.test.jsx`
-- `npm test --prefix client -- booking-flow.test.jsx`
-- `npm test --prefix client`
 - `npm run lint --prefix client`
+- `npm test --prefix client`
 - `npm run build --prefix client`
-- Playwright CLI browser/responsive verification
+- Playwright CLI browser verification against Vite preview.
 
 ## Known Limitations
 
-- Public images still depend on existing external image URLs; no asset replacement was in scope.
+- Starting prices are display-only and are not wired into booking calculations.
 
 ## Follow-Up Work
 
-- Optional image reliability pass if the project wants local or first-party hosted public imagery.
+- Optional: add starting prices to the booking service selection if desired.
 
 ## Suggested Commit Message
 
-Polish public KareBraids pages
+`update homepage service tiles with starting prices`

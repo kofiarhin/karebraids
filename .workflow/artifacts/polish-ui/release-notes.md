@@ -1,17 +1,10 @@
-# Polish-UI Release Notes
+# Polish UI Release Notes
 
-- Source release notes: `_workflow/runs/dev/release-notes.md`
-- Date: 2026-05-26
+- Applied skill: design-taste-frontend
 
-## User-Facing
+## Changes
 
-- Public KareBraids pages now share a more refined warm visual system.
-- Homepage/about image and content areas are brighter and easier to read.
-- Gallery card and modal presentation is more consistent.
-- Booking page hierarchy, focus states, service cards, and active step state are clearer.
-- Mobile overflow found in verification was fixed.
-
-## Technical
-
-- No new routes, APIs, env vars, dependencies, schemas, backend, admin, or deployment changes.
-- Suggested commit message: `Polish public KareBraids pages`.
+- Homepage service images are now square, same-size tiles.
+- Desktop service tiles run horizontally in one row.
+- Each service tile shows a starting price.
+- Mobile uses compact square tiles without horizontal page overflow.

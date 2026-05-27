@@ -1,9 +1,15 @@
-# Polish-UI Spec
+# Polish UI Spec
 
-Canonical active spec: `_workflow/runs/dev/spec.md`
+- Applied skill: design-taste-frontend
+- Surface: Homepage Featured services section.
 
-Request: Polish the public KareBraids UI across the homepage, about page, gallery page, and booking page while preserving the warm brand direction, improving refinement/brightness/consistency, and keeping routes, booking behavior, API calls, data models, admin UI, backend, env, dependencies, and deployment out of scope.
+## Goal
 
-Status: Spec saved; pending explicit user approval before task planning or implementation.
+Make the Featured services tiles square, same-size, horizontally arranged on desktop, and visibly priced.
 
-Applied skill: design-taste-frontend
+## Acceptance
+
+- Six square service tiles.
+- Desktop one-row service band.
+- Starting price visible on each tile.
+- Mobile has no page-level horizontal overflow.

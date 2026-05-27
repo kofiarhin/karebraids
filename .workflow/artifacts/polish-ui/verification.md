@@ -1,21 +1,17 @@
-# Polish-UI Verification
+# Polish UI Verification
 
-- Source verification: `_workflow/runs/dev/verification.md`
-- Date: 2026-05-26
 - Applied skill: design-taste-frontend
-
-## Result
-
-Passed.
+- Surface: Homepage Featured services section.
+- Result: Passed.
 
 ## Evidence
 
-- `npm test --prefix client`: passed, 32 tests.
-- `npm run lint --prefix client`: passed.
-- `npm run build --prefix client`: passed.
-- Playwright CLI desktop/mobile pass for `/`, `/about`, `/gallery`, and `/booking`: passed with no horizontal overflow.
-- Browser console check: 0 warnings, 0 errors.
-
-## Notes
-
-- Temporary Playwright screenshot scratch files were removed after recording the evidence.
+- Desktop 1440x1100: six 180x180 square service tiles in one horizontal row, no horizontal overflow.
+- Mobile 390x844: six 182x182 square service tiles in a compact two-column layout, no horizontal overflow.
+- Price badges visible for all services.
+- Console warnings/errors: 0.
+- Automated verification passed:
+  - `npm test --prefix client -- site-pages.test.jsx`
+  - `npm run lint --prefix client`
+  - `npm test --prefix client`
+  - `npm run build --prefix client`

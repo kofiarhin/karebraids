@@ -1146,6 +1146,157 @@
 - Task plan status: Not generated; pending explicit spec approval.
 - Implementation status: Not started.
 
+## 2026-05-26 - TASK-001: Add square priced service tiles on the homepage
+
+- Request: Update the homepage Featured services section so all six image tiles are same-size squares, arranged horizontally across desktop, with visible starting prices.
+- Spec file: `_workflow/runs/dev/spec.md`
+- Task plan: `_workflow/runs/dev/tasks.md`
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed:
+  - `client/src/constants/content.js`
+  - `client/src/pages/Home.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build Evidence
+
+- Goal: Add visible starting prices and square/horizontal service layout.
+- Changes made: Added `fromPrice` service values, rendered `.service-price-badge`, and updated service rack/tile CSS.
+- Test plan: Focused homepage page tests.
+- Red phase evidence: `npm test --prefix client -- site-pages.test.jsx` failed with missing `From £80` text and missing square/horizontal CSS.
+- Green phase evidence: Focused test passed after implementation, 22 tests.
+- Refactor phase evidence: Implementation remained additive and scoped; focused test passed after final Iteration 1 code.
+- Test commands run:
+  - `npm test --prefix client -- site-pages.test.jsx`: failed, then passed.
+- Verification command/result: Passed.
+- Review findings: Booking service consumer remains compatible because `fromPrice` is additive.
+- Acceptance status: Price and square/horizontal layout criteria met.
+- Remaining issues: Accessibility naming and dark badge polish still pending at this point.
+- Next action: Iteration 2 Refine.
+
+### Iteration 2 Refine Evidence
+
+- Goal: Improve assistive technology naming for priced service tiles.
+- Changes made: Added `aria-label` to each homepage service article with service title and starting price.
+- Test plan: Focused homepage page tests.
+- Red phase evidence: New accessibility label test failed before the markup change.
+- Green phase evidence: Focused test passed after adding labels, 23 tests.
+- Refactor phase evidence: Markup remains scoped to the service article; focused test rerun passed.
+- Test commands run:
+  - `npm test --prefix client -- site-pages.test.jsx`: failed, then passed.
+- Verification command/result: Passed.
+- Review findings: Visible copy was not duplicated or removed.
+- Acceptance status: Accessibility refinement met.
+- Remaining issues: Dark badge polish still pending at this point.
+- Next action: Iteration 3 Polish.
+
+### Iteration 3 Polish Evidence
+
+- Goal: Harden dark-theme price badge readability.
+- Changes made: Added scoped `.dark-brand-shell .service-price-badge` styling.
+- Test plan: Focused homepage page tests and client lint.
+- Red phase evidence: New dark badge CSS guard test failed before adding the selector.
+- Green phase evidence: Focused test passed after adding dark badge styling, 23 tests.
+- Refactor phase evidence: `npm run lint --prefix client` passed.
+- Test commands run:
+  - `npm test --prefix client -- site-pages.test.jsx`: failed, then passed.
+  - `npm run lint --prefix client`: passed.
+- Verification command/result: Passed.
+- Review findings: Final task diff is scoped to approved frontend files and focused test coverage.
+- Acceptance status:
+  - [x] Six service price labels render with confirmed values.
+  - [x] CSS defines square service tiles.
+  - [x] CSS defines horizontal desktop service layout.
+  - [x] Mobile CSS avoids body-level horizontal overflow using constrained two-column rules.
+  - [x] Existing homepage and booking behavior remain unchanged.
+- Failure recovery notes: None; all failures were expected Red-phase failures.
+- Blockers: None.
+- Next step: TASK-002 final verification and closeout.
+
+## 2026-05-26 - TASK-002: Verify responsive service row and close workflow
+
+- Request: Update homepage service tiles to square same-size priced cards.
+- Spec file: `_workflow/runs/dev/spec.md`
+- Task plan: `_workflow/runs/dev/tasks.md`
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed:
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
+  - `.workflow/artifacts/polish-ui/*`
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build Evidence
+
+- Goal: Run final verification commands and record results.
+- Changes made: Ran full client test/build verification and browser verification against Vite preview.
+- Test plan: full client tests, build, browser responsive checks.
+- Red phase evidence: Not applicable; documentation/verification task after code-changing task completed test-first Red/Green/Refactor.
+- Green phase evidence:
+  - `npm test --prefix client`: passed, 35 tests.
+  - `npm run build --prefix client`: passed.
+  - Playwright CLI desktop/mobile verification: passed.
+- Refactor phase evidence: Preview server was stopped after browser verification.
+- Test commands run:
+  - `npm test --prefix client`
+  - `npm run build --prefix client`
+  - Playwright CLI browser verification.
+- Verification command/result: Passed.
+- Review findings: Desktop has six 180x180 square tiles in one row; mobile has six 182x182 square tiles, no horizontal overflow, and 0 console warnings/errors.
+- Acceptance status: Met.
+- Remaining issues: Final diff/artifact closeout pending at this point.
+- Next action: Iteration 2 Refine.
+
+### Iteration 2 Refine Evidence
+
+- Goal: Perform final diff and scope audit.
+- Changes made: Ran final diff audit and removed generated `.playwright-cli/` scratch folder.
+- Test plan: `git diff --stat`, `git diff`, `git status --short`.
+- Red phase evidence: Not applicable; documentation/verification task.
+- Green phase evidence: Diff audit completed; scratch folder removed.
+- Refactor phase evidence: Dirty worktree contains only expected implementation and workflow artifact files.
+- Test commands run:
+  - `git diff --stat`
+  - `git diff`
+  - `git status --short`
+- Verification command/result: Passed.
+- Review findings: No scope creep, secrets, dependency changes, backend/API/database/env/deployment changes, or generated junk remain.
+- Acceptance status: Met.
+- Remaining issues: Final workflow artifacts pending at this point.
+- Next action: Iteration 3 Polish.
+
+### Iteration 3 Polish Evidence
+
+- Goal: Complete final workflow artifacts and health check.
+- Changes made: Created/updated review, verification, release notes, summary, handoff, and polish-ui artifact files.
+- Test plan: Artifact consistency and workflow health check.
+- Red phase evidence: Not applicable; documentation/verification task.
+- Green phase evidence: Required artifacts exist and record completed acceptance.
+- Refactor phase evidence: Handoff and summary were aligned to the completed request.
+- Test commands run:
+  - Final artifact review.
+  - `git status --short`.
+- Verification command/result: Passed.
+- Review findings: Workflow health Passed.
+- Acceptance status:
+  - [x] Final verification recorded.
+  - [x] Final diff audit recorded.
+  - [x] Review file exists.
+  - [x] Verification file exists.
+  - [x] Release notes exist.
+  - [x] Summary exists.
+  - [x] Handoff reflects latest complete state.
+  - [x] Workflow health recorded.
+- Failure recovery notes: Generated `.playwright-cli/` scratch folder was removed.
+- Blockers: None.
+- Next step: User review or commit.
+
 ## 2026-05-25 - Spec Approval and Planning: Brighten Homepage Overlays
 
 - User approval received: `approved proceed`.

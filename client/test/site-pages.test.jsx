@@ -78,6 +78,34 @@ describe('KareBraids pages', () => {
     )
   })
 
+  it('shows starting prices on each featured service tile', () => {
+    renderRoute('/')
+
+    expect(screen.getByText('From \u00a380')).toBeInTheDocument()
+    expect(screen.getByText('From \u00a370')).toBeInTheDocument()
+    expect(screen.getByText('From \u00a335')).toBeInTheDocument()
+    expect(screen.getByText('From \u00a365')).toBeInTheDocument()
+    expect(screen.getByText('From \u00a345')).toBeInTheDocument()
+    expect(screen.getByText('From \u00a330')).toBeInTheDocument()
+  })
+
+  it('names each priced featured service tile for assistive technology', () => {
+    renderRoute('/')
+
+    expect(screen.getByLabelText('Knotless Braids, From \u00a380')).toBeInTheDocument()
+    expect(screen.getByLabelText('Kids Braids, From \u00a330')).toBeInTheDocument()
+  })
+
+  it('defines square horizontal featured service tiles', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('grid-template-columns: repeat(6, minmax(0, 1fr));')
+    expect(styles).toContain('aspect-ratio: 1 / 1;')
+    expect(styles).toContain('.service-price-badge')
+    expect(styles).toContain('.dark-brand-shell .service-price-badge')
+    expect(styles).toContain('grid-template-columns: repeat(2, minmax(9.5rem, 1fr));')
+  })
+
   it('keeps decorative homepage thumbnail clusters quiet for assistive technology', () => {
     renderRoute('/')
 

@@ -1,329 +1,73 @@
-# Summary
+# Workflow Summary
 
-## 2026-05-24 - Mobile Navigation Drawer
+## 2026-05-26 - Homepage Featured Services Square Price Row
 
-- Request: Improve mobile navigation with hamburger menu and side navigation links for mobile.
+- Request: Make homepage service images the same square size, arrange them horizontally, and show starting prices so visitors do not need to scroll as much.
 - Spec file used: `_workflow/runs/dev/spec.md`
-- Detailed spec completeness: Complete; all required sections were present before planning.
-- Task plan used: `_workflow/runs/dev/tasks.md`
-- Review file used: `_workflow/runs/dev/review.md`
-- Release notes file used: `_workflow/runs/dev/release-notes.md`
-- Tasks completed:
-  - TASK-001: Add mobile hamburger drawer navigation
-- Iteration evidence summary:
-  - Iteration 1 Build: Red failure for missing hamburger, Green implementation, Refactor label cleanup.
-  - Iteration 2 Refine: Red failure for focus transfer, Green focus management, Refactor scoped duplicated link query.
-  - Iteration 3 Polish: Red failure for missing primary Booking class, Green primary action styling, final verification.
-- Files changed:
-  - `client/src/components/Layout.jsx`
-  - `client/src/index.css`
-  - `client/test/site-pages.test.jsx`
-  - `_workflow/runs/dev/*`
-- Verification run:
-  - `npm test -- site-pages.test.jsx`: passed.
-  - `npm test`: passed.
-  - `npm run lint`: passed.
-  - `npm run build`: passed.
-  - Playwright CLI responsive checks: passed for mobile and desktop.
-- Acceptance results:
-  - [x] Desktop/tablet header still shows brand, nav links, and "Book Now" CTA.
-  - [x] Mobile header uses a hamburger button instead of showing the horizontal nav row.
-  - [x] Hamburger opens a right-side drawer with Home, About, Gallery, and Booking links.
-  - [x] Drawer closes via close button, backdrop, Escape key, and drawer link selection.
-  - [x] Navigation controls have accessible labels and visible focus states.
-  - [x] Existing routes and page tests continue to pass.
-  - [x] Relevant frontend test, lint, and build verification are attempted and documented.
-- Failure recovery notes:
-  - Fixed ambiguous close labels and scoped mobile Gallery link test.
-- Final diff audit:
-  - Implementation diff matches approved spec.
-  - Pre-existing unrelated dirty docs/workflow files remain untouched.
-  - No generated temporary files remain.
-  - No secrets added.
-- Unresolved issues: none.
-- Next recommended work: User review, then commit with `feature: add mobile navigation drawer`.
-
-## 2026-05-24 - Homepage Hero Image Carousel
-
-- Request: Implement a rotating hero image carousel on the KareBraids homepage.
-- Spec file used: `_workflow/runs/dev/spec.md`
-- Detailed spec completeness: Complete; all 22 required sections were present before planning.
-- Task plan used: `_workflow/runs/dev/tasks.md`
-- Review file used: `_workflow/runs/dev/review.md`
-- Release notes file used: `_workflow/runs/dev/release-notes.md`
-- Tasks completed:
-  - TASK-001: Add homepage hero carousel with clickable dots
-- Iteration evidence summary:
-  - Iteration 1 Build: Red failure for missing hero dot button, Green carousel markup/state/CSS, Refactor test scoping for hidden inactive slides.
-  - Iteration 2 Refine: Red failure for missing media query change handler, Green reduced-motion-aware interval lifecycle, Refactor cleanup review.
-  - Iteration 3 Polish: Red failure for missing dot group role, Green semantic group/focus styling, Refactor mobile dot position after screenshot review.
-- Files changed:
-  - `client/src/pages/Home.jsx`
-  - `client/src/index.css`
-  - `client/test/site-pages.test.jsx`
-  - `_workflow/runs/dev/*`
-- Verification run:
-  - `npm test -- site-pages.test.jsx`: passed.
-  - `npm test`: passed, 3 test files / 16 tests.
-  - `npm run lint`: passed.
-  - `npm run build`: passed.
-  - Playwright CLI desktop and mobile screenshot checks: passed.
-- Acceptance results:
-  - [x] Homepage hero uses `heroSlides` from the first five `galleryItems`.
-  - [x] Static hero image is replaced by a carousel in the existing hero media frame.
-  - [x] Carousel auto-rotates every 4 to 5 seconds.
-  - [x] Slide transition uses smooth fade with subtle scale/zoom.
-  - [x] Existing hero layout, luxury frame shape, CTA buttons, and appointment badge remain intact.
-  - [x] Small elegant dot indicators appear over or near the bottom of the hero image.
-  - [x] Dot indicators are clickable accessible buttons and show the active slide.
-  - [x] Clicking a dot jumps to the selected slide.
-  - [x] Mobile responsiveness is preserved.
-  - [x] `prefers-reduced-motion` is respected.
-  - [x] No new dependencies are added.
-  - [x] Changes are minimal and localized.
-- Failure recovery notes:
-  - Fixed jsdom `matchMedia` guard, refined hidden-slide test assertion, added dot group role, adjusted mobile dot positioning, and removed generated junk from a failed shell command.
-- Final diff audit:
-  - Implementation diff matches approved spec.
-  - Only expected implementation files and run-scoped workflow artifacts were touched.
-  - No generated temporary files, secrets, env changes, dependency changes, API changes, or deployment changes remain.
-- Unresolved issues: none.
-- Next recommended work: User review, then commit with `feature: add homepage hero carousel`.
-
-## 2026-05-25 - Homepage Visual Optimization
-
-- Request: Optimize the KareBraids homepage so it feels less text-heavy and more visual while preserving the current brand direction.
-- Spec file used: `_workflow/runs/dev/spec.md`
-- Detailed spec completeness: Complete; all 22 required sections were present before planning.
-- Task plan used: `_workflow/runs/dev/tasks.md`
-- Review file used: `_workflow/runs/dev/review.md`
-- Release notes file used: `_workflow/runs/dev/release-notes.md`
-- Tasks completed:
-  - TASK-001: Add gallery-image visuals to homepage sections
-- Iteration evidence summary:
-  - Iteration 1 Build: Red failure for missing trust thumbnail cluster, Green gallery-driven homepage visual structures, Refactor verification.
-  - Iteration 2 Refine: Red failure for non-decorative trust thumbnail alt text, Green decorative thumbnail semantics, Refactor verification.
-  - Iteration 3 Polish: Red failure for redundant CTA background image alt text, Green decorative CTA semantics, Refactor verification plus full browser checks.
-- Files changed:
-  - `client/src/pages/Home.jsx`
-  - `client/src/index.css`
-  - `client/test/site-pages.test.jsx`
-  - `_workflow/runs/dev/*`
-- Verification run:
-  - `npm test -- site-pages.test.jsx`: passed, 12 tests.
-  - `npm test`: passed, 3 test files / 19 tests.
-  - `npm run lint`: passed.
-  - `npm run build`: passed.
-  - Playwright/Chromium desktop check `1280x900`: passed, no console issues, no horizontal overflow, images loaded.
-  - Playwright/Chromium mobile check `390x844`: passed, no console issues, no horizontal overflow, images loaded.
-- Acceptance results:
-  - [x] Hero carousel remains present and functional.
-  - [x] Trust strip keeps existing trust badges and adds a 3-5 image overlapping thumbnail cluster from `galleryItems`.
-  - [x] Featured services render as visual cards with gallery images, overlays/gradients, title, duration, and short description.
-  - [x] Why choose KareBraids includes a supporting process/detail gallery image panel beside the reasons on larger screens and stacked on mobile.
-  - [x] Gallery preview remains an image grid.
-  - [x] Testimonials include a visual panel or small client/style thumbnails and quote text remains readable.
-  - [x] CTA includes a gallery image background or image panel with dark/green overlay and accessible contrast.
-  - [x] Added images have meaningful alt text or are correctly decorative when redundant.
-  - [x] No new dependencies or image assets are added.
-  - [x] Product implementation changes are limited to `client/src/pages/Home.jsx` and `client/src/index.css`.
-  - [x] Mobile responsive layout is clean with no incoherent overlaps.
-  - [x] Existing animations and `prefers-reduced-motion` support are respected.
-  - [x] Relevant client tests, lint, and build pass.
-- Failure recovery notes:
-  - Adjusted the older CTA test to remain structural after making the CTA background image decorative.
-  - Used Playwright/Chromium CLI automation as a browser fallback because the in-app browser tool was not exposed by tool discovery.
-  - Scrolled through sections before final browser screenshots because reveal-on-scroll intentionally hides below-fold sections until viewed.
-  - Removed generated `client/test-results/`; pre-existing untracked homepage PNGs were left untouched.
-- Final diff audit:
-  - `git diff --stat` and implementation diff completed.
-  - Diff matches approved spec.
-  - No unrelated implementation files, secrets, env values, dependencies, or deployment changes were added.
-  - CRLF warnings were observed and have no behavior impact.
-- Release notes file used: `_workflow/runs/dev/release-notes.md`
-- Unresolved issues: none.
-- Next recommended work: User review, then commit with `feature: make homepage more visual`.
-
-## 2026-05-25 - Admin Dashboard Booking CRUD
-
-- Request: Add a hidden `/admin` dashboard with JWT-protected login and full CRUD for bookings only.
-- Spec file used: `_workflow/runs/dev/spec.md`
-- Detailed spec completeness: Complete; all 22 required sections plus Frontend Taste Application were present before planning.
-- Task plan used: `_workflow/runs/dev/tasks.md`
-- Review file used: `_workflow/runs/dev/review.md`
-- Release notes file used: `_workflow/runs/dev/release-notes.md`
-- Tasks completed:
-  - TASK-001: Add admin JWT login and route guard.
-  - TASK-002: Add guarded admin booking CRUD API.
-  - TASK-003: Add hidden frontend admin dashboard CRUD UI.
-  - TASK-004: Final integrated verification and workflow closeout.
-- Iteration evidence summary:
-  - TASK-001: Red failure for missing JWT dependency, Green auth/env implementation, Refine malformed Bearer rejection, Polish broad server env test recovery.
-  - TASK-002: Red failures for missing admin booking CRUD routes and missing status-only route, Green guarded CRUD/status APIs, Polish broad server verification.
-  - TASK-003: Red failure for missing admin service, Green admin route/service/hooks/UI, Refine invalid-token recovery, Polish lint/build/full test/browser verification.
-  - TASK-004: Final verification, diff audit, review, verification record, release notes, summary, handoff, and health check.
-- Files changed:
-  - `.env.example`
-  - `package.json`
-  - `package-lock.json`
-  - `server/app.js`
-  - `server/config/env.js`
-  - `server/models/Booking.js`
-  - `server/utils/bookingValidation.js`
-  - `server/controllers/adminAuthController.js`
-  - `server/controllers/adminBookingController.js`
-  - `server/middleware/adminAuth.js`
-  - `server/routes/adminRoutes.js`
-  - `server/tests/admin-auth.test.js`
-  - `server/tests/admin-bookings.test.js`
-  - `server/tests/env.test.js`
-  - `client/src/App.jsx`
-  - `client/src/pages/Admin.jsx`
-  - `client/src/services/adminService.js`
-  - `client/src/hooks/queries/useAdminBookings.js`
-  - `client/src/hooks/mutations/useAdminBookingMutations.js`
-  - `client/src/index.css`
-  - `client/test/admin-dashboard.test.jsx`
-  - `_workflow/runs/dev/*`
-  - `_decisions/2026-05-25-admin-jwt-env-auth.md`
-- Verification run:
-  - `npm run test:server`: passed, 4 suites / 24 tests.
-  - `npm test --prefix client`: passed, 4 files / 23 tests.
-  - `npm run lint --prefix client`: passed.
-  - `npm run build --prefix client`: passed.
-  - Playwright CLI screenshot check for `/admin`: passed.
-  - `git diff --stat`: completed.
-  - `git diff`: completed.
-- Acceptance results:
-  - [x] `/admin` is not shown in public navigation.
-  - [x] Unauthenticated users who visit `/admin` see admin login rather than booking data.
-  - [x] Admin login uses root `.env` credentials and returns a backend-issued JWT.
-  - [x] Missing required admin auth env vars fail fast outside test mode.
-  - [x] Admin booking API routes reject missing/invalid Bearer tokens.
-  - [x] Admin can list bookings.
-  - [x] Admin can create a booking with the same validation and duplicate-slot prevention as the public form.
-  - [x] Admin can edit booking details with the same validation and duplicate-slot prevention.
-  - [x] Admin can set status to `pending`, `confirmed`, `cancelled`, or `completed`.
-  - [x] Admin can delete a booking after explicit confirmation.
-  - [x] Booking model supports all four statuses.
-  - [x] Public booking create and availability behavior remain compatible.
-  - [x] Admin UI includes loading, empty, error, saving, and success states.
-  - [x] Frontend API calls use the shared API client and env-based base URL.
-  - [x] Services wrap API logic and TanStack Query hooks wrap server state.
-  - [x] Relevant backend and frontend tests were added/updated first and pass.
-  - [x] Client lint/build and server tests pass.
-- Failure recovery notes:
-  - Added `jsonwebtoken` after Red failure.
-  - Fixed malformed Bearer acceptance.
-  - Updated env tests for new admin env requirements.
-  - Added missing status-only route after Red failure.
-  - Fixed React Query mutation argument shape.
-  - Added invalid-token frontend recovery.
-  - Refactored admin page lint issues.
-  - Used Playwright CLI browser fallback because the Browser plugin tool was not exposed.
-- Final diff audit:
-  - Diff matches the approved spec.
-  - Pre-existing dirty workflow/instruction files remain and were not part of implementation.
-  - No secrets, generated screenshots, dev logs, or deployment config changes were added.
-- Unresolved issues:
-  - Product decision still open: whether cancelled/completed bookings should reopen appointment availability.
-- Next recommended work:
-  - User review, then commit with `feature: add admin booking dashboard`.
-
-## 2026-05-25 - Configure Env-Backed Admin Credentials
-
-- Request: Configure existing env-backed admin credentials locally with admin username `admin@gmail.com` and the user-provided local password.
-- Spec file used: `_workflow/runs/dev/spec.md`
-- Detailed spec completeness: Complete; all required sections were present before planning. Frontend Taste Application was recorded as not applicable.
-- Task plan used: `_workflow/runs/dev/tasks.md`
-- Review file used: `_workflow/runs/dev/review.md`
-- Release notes file used: `_workflow/runs/dev/release-notes.md`
-- Tasks completed:
-  - TASK-001: Configure local admin env credentials.
-  - TASK-002: Verify config and close workflow.
-- Iteration evidence summary:
-  - TASK-001: Pre-edit masked env key check proved admin keys were missing, local ignored `.env` was updated, duplicate/key safety and `.env.example` placeholder checks passed, and focused auth tests passed.
-  - TASK-002: Final verification, diff/security audit, review, verification record, release notes, summary, handoff, and health check completed.
-- Files changed:
-  - `.env` ignored local file.
-  - `_workflow/runs/dev/*`
-- Verification run:
-  - Masked env key-count checks: passed.
-  - Node/dotenv admin credential assertion: passed; `JWT_SECRET` presence reported false.
-  - `.env.example` placeholder check: passed.
-  - `npm run test:server -- admin-auth.test.js`: passed, 1 suite / 5 tests.
-  - `git diff --stat`: completed.
-  - `git diff`: completed.
-  - `git status --short --ignored`: completed.
-- Acceptance results:
-  - [x] Root `.env` has `ADMIN_USERNAME` set to `admin@gmail.com`.
-  - [x] Root `.env` has `ADMIN_PASSWORD` set to the user-provided local password without printing it.
-  - [x] Existing `.env` values such as `PORT`, `MONGODB_URI`, and any `JWT_SECRET` are preserved.
-  - [x] `.env.example` does not contain the real local password.
-  - [x] No database seed, user model, auth architecture, frontend UI, API contract, or deployment config change is introduced.
-  - [x] Relevant config/auth verification is run and documented.
-- Failure recovery notes:
-  - Parallel verification commands timed out; reran sequentially with longer timeouts and passed.
-- Final diff audit:
-  - Tracked diff contains workflow artifacts only.
-  - `.env` is ignored and not included in tracked diff.
-  - No tracked secret values, product code changes, dependencies, schema changes, generated screenshots, or deployment changes were added.
-  - Existing ignored generated files/folders are visible in ignored status but were not created for this request.
-- Unresolved issues:
-  - Local `.env` still lacks `JWT_SECRET`, which is required by the existing backend to issue admin JWTs outside test mode.
-- Next recommended work:
-  - Add a local `JWT_SECRET` value before starting the backend for admin login.
-
-## 2026-05-26 - Polish Public KareBraids UI
-
-- Request: Polish home, about, gallery, and booking public pages.
-- Spec used: `_workflow/runs/dev/spec.md`
-- Spec completeness: detailed spec included all required sections before planning.
+- Detailed spec completeness: Complete; all required detailed spec sections were present before planning.
 - Task plan used: `_workflow/runs/dev/tasks.md`
 - Review file used: `_workflow/runs/dev/review.md`
 - Release notes file used: `_workflow/runs/dev/release-notes.md`
 - Applied skill: design-taste-frontend
-- Tasks completed:
-  - TASK-001: Public shell, homepage, and about polish.
-  - TASK-002: Gallery polish.
-  - TASK-003: Booking polish.
-  - TASK-004: Final verification and closeout.
-- Iteration evidence summary:
-  - TASK-001: Public page CSS tests failed before shared home/about polish, passed after implementation, and lint/focused verification passed.
-  - TASK-002: Gallery card/modal tests failed before gallery polish and modal description wiring, passed after implementation, and lint/focused verification passed.
-  - TASK-003: Booking CSS and active-step accessibility tests failed before scoped polish/accessibility changes, passed after implementation, and lint/focused verification passed.
-  - TASK-004: Browser verification found mobile home overflow, targeted CSS guard tests failed before responsive fixes, then full verification and browser checks passed.
-- Files changed:
-  - `client/src/index.css`
-  - `client/src/components/GalleryModal.jsx`
-  - `client/src/pages/Booking.jsx`
-  - `client/test/site-pages.test.jsx`
-  - `client/test/gallery-modal.test.jsx`
-  - `client/test/booking-flow.test.jsx`
-  - `_workflow/runs/dev/*`
-  - `.workflow/artifacts/polish-ui/*`
-- Verification run:
-  - `npm test --prefix client`: passed, 32 tests.
-  - `npm run lint --prefix client`: passed.
-  - `npm run build --prefix client`: passed.
-  - Playwright CLI desktop/mobile verification: passed for `/`, `/about`, `/gallery`, `/booking`.
-  - Browser console check: 0 warnings, 0 errors.
-- Acceptance results:
-  - [x] Warm KareBraids brand preserved.
-  - [x] Public pages are more refined and consistent.
-  - [x] Images/content have brighter, more readable treatments where needed.
-  - [x] Gallery modal remains accessible.
-  - [x] Booking behavior and API calls remain unchanged.
-  - [x] Mobile layouts have no horizontal overflow in final browser pass.
-  - [x] No backend, admin, route, data model, dependency, env, or deployment changes.
-- Failure recovery notes:
-  - Fixed final mobile homepage overflow discovered in browser verification using test-first CSS guard additions.
-  - Updated brittle booking fixture date from May 25, 2026 to May 26, 2026.
-- Final diff audit:
-  - Diff matches saved spec.
-  - Pre-existing dirty `AGENTS.md` and `RUN_WORKFLOW.md` remain unrelated.
-  - No generated junk remains.
-  - No secrets or sensitive values added.
-- Release notes file used: `_workflow/runs/dev/release-notes.md`
-- Unresolved issues: none blocking.
-- Next recommended work: User review, then commit with `polish public KareBraids pages`.
+
+## Tasks Completed
+
+- TASK-001: Add square priced service tiles on the homepage.
+- TASK-002: Verify responsive service row and close workflow.
+
+## Iteration Evidence Summary
+
+- TASK-001 Iteration 1: Price/layout tests failed first, then passed after adding price data, price badges, and square/horizontal CSS.
+- TASK-001 Iteration 2: Accessibility label test failed first, then passed after adding service/price aria labels.
+- TASK-001 Iteration 3: Dark price badge CSS guard failed first, then passed after adding scoped dark-shell badge styling.
+- TASK-002: Full verification, browser responsive checks, final diff audit, review, release notes, summary, and handoff were completed.
+
+## Files Changed
+
+- `client/src/constants/content.js`
+- `client/src/pages/Home.jsx`
+- `client/src/index.css`
+- `client/test/site-pages.test.jsx`
+- `_workflow/runs/dev/*`
+- `.workflow/artifacts/polish-ui/*`
+
+## Verification Run
+
+- `npm test --prefix client -- site-pages.test.jsx`: passed, 23 tests.
+- `npm run lint --prefix client`: passed.
+- `npm test --prefix client`: passed, 35 tests.
+- `npm run build --prefix client`: passed.
+- Playwright CLI desktop/mobile homepage verification: passed.
+- Browser console check: 0 warnings, 0 errors.
+- Final diff audit: completed.
+
+## Acceptance Results
+
+- [x] Homepage Featured services renders all six existing service tiles with visible starting prices.
+- [x] Starting prices match confirmed values.
+- [x] Service tiles use a consistent square layout.
+- [x] Desktop arranges the six tiles horizontally across the section.
+- [x] Mobile remains usable and has no body-level horizontal overflow.
+- [x] Existing homepage navigation, CTA links, gallery preview, and booking behavior remain unchanged.
+- [x] Tests were added/updated first, Red evidence was captured, and verification passes.
+- [x] Applied skill: design-taste-frontend is recorded.
+
+## Failure Recovery Notes
+
+- No unexpected failures. All failures were expected test-first Red-phase failures.
+- Removed generated `.playwright-cli/` scratch folder after browser verification.
+
+## Final Diff Audit
+
+- Diff matches the saved spec.
+- No scope creep found.
+- No backend, admin, API, database, route, dependency, env, deployment, package, or secret changes.
+- Workflow artifacts were updated for the active run.
+
+## Unresolved Issues
+
+- None blocking.
+
+## Next Recommended Work
+
+- User review, then commit with `update homepage service tiles with starting prices`.

@@ -139,12 +139,19 @@ export function Home() {
             const serviceImage = galleryItems[index % galleryItems.length]
 
             return (
-              <article className="service-tile" data-reveal key={service.title} style={{ '--index': index }}>
+              <article
+                aria-label={`${service.title}, ${service.fromPrice}`}
+                className="service-tile"
+                data-reveal
+                key={service.title}
+                style={{ '--index': index }}
+              >
                 <img
                   alt={`${service.title} style inspiration`}
                   loading="lazy"
                   src={serviceImage.image}
                 />
+                <span className="service-price-badge">{service.fromPrice}</span>
                 <div className="service-tile-copy">
                   <span>{service.duration}</span>
                   <h3>{service.title}</h3>

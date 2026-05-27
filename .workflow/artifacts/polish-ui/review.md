@@ -1,20 +1,14 @@
-# Polish-UI Review
+# Polish UI Review
 
-- Source review: `_workflow/runs/dev/review.md`
-- Date: 2026-05-26
 - Applied skill: design-taste-frontend
+- Surface reviewed: Homepage Featured services section.
 
 ## Verdict
 
-Passed.
+Passed. The service tiles now form a shorter, easier-to-scan service band on desktop, keep square sizing on mobile, and show readable starting-price badges.
 
-## Scope Check
+## Notes
 
-- Public pages polished: home, about, gallery, booking.
-- Backend/API/admin/routes/data models/dependencies/env/deployment: unchanged.
-- Booking behavior: unchanged.
-- Accessibility JSX changes: gallery modal description relationship and booking active step state.
-
-## Follow-Up
-
-- Optional image reliability pass if public external image URLs become unreliable.
+- The UI avoids a tall staggered section on desktop.
+- Price labels are real text and included in accessible service tile labels.
+- Mobile has no page-level horizontal overflow in browser verification.

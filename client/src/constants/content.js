@@ -3,31 +3,37 @@ export const services = [
     title: 'Knotless Braids',
     description: 'Lightweight braids with a natural finish and reduced scalp tension.',
     duration: '4-6 hrs',
+    fromPrice: 'From \u00a380',
   },
   {
     title: 'Box Braids',
     description: 'Classic protective styling with clean parting and polished ends.',
     duration: '4-7 hrs',
+    fromPrice: 'From \u00a370',
   },
   {
     title: 'Cornrows',
     description: 'Sleek rows for everyday wear, events, or base styling.',
     duration: '1.5-3 hrs',
+    fromPrice: 'From \u00a335',
   },
   {
     title: 'Twists',
     description: 'Soft, elegant twists for flexible length and easy maintenance.',
     duration: '3-5 hrs',
+    fromPrice: 'From \u00a365',
   },
   {
     title: 'Stitch Braids',
     description: 'Defined stitch parting for sculpted, camera-ready detail.',
     duration: '2-4 hrs',
+    fromPrice: 'From \u00a345',
   },
   {
     title: 'Kids Braids',
     description: 'Gentle, age-appropriate styling with comfort as the priority.',
     duration: '1.5-3 hrs',
+    fromPrice: 'From \u00a330',
   },
 ]
 

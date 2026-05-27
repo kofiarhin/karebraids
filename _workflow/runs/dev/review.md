@@ -1,49 +1,54 @@
-# Review: Polish Public KareBraids UI
+# Review
 
-- Request: Polish public home, about, gallery, and booking pages.
+- Request: Add same-size square homepage service images arranged horizontally with starting prices.
 - Spec file used: `_workflow/runs/dev/spec.md`
 - Task plan used: `_workflow/runs/dev/tasks.md`
-- Tasks reviewed: TASK-001, TASK-002, TASK-003, TASK-004.
 - Applied skill: design-taste-frontend
+
+## Tasks Reviewed
+
+- TASK-001: Add square priced service tiles on the homepage.
+- TASK-002: Verify responsive service row and close workflow.
 
 ## Bugs Found
 
-- Mobile homepage had a 4px horizontal overflow during final browser verification. Fixed with responsive carousel/decorative panel guards and regression tests.
+- None remaining.
+- Expected Red-phase failures were resolved:
+  - Missing price labels.
+  - Missing square/horizontal CSS.
+  - Missing accessible service tile labels.
+  - Missing dark-shell price badge styling.
 
 ## Scope Creep Check
 
-- Routes: unchanged.
-- Booking behavior/API calls/data models: unchanged.
-- Backend/admin/env/deployment/dependencies: unchanged.
-- Brand copy: no major copy rewrites.
-- JSX changes were limited to gallery dialog description wiring and booking step `aria-current`.
+- In scope: service data, homepage service tile markup, homepage service CSS, focused frontend tests, workflow artifacts.
+- Out of scope and untouched: backend, APIs, database/schema, admin UI, booking logic, routes, dependencies, env, deployment.
 
 ## Final Diff Audit
 
-- Implementation files changed:
-  - `client/src/index.css`
-  - `client/src/components/GalleryModal.jsx`
-  - `client/src/pages/Booking.jsx`
-  - `client/test/site-pages.test.jsx`
-  - `client/test/gallery-modal.test.jsx`
-  - `client/test/booking-flow.test.jsx`
-- Workflow artifacts changed under `_workflow/runs/dev/` and `.workflow/artifacts/polish-ui/`.
-- Pre-existing dirty files outside implementation scope remain: `AGENTS.md`, `RUN_WORKFLOW.md`.
-- No generated screenshot scratch files remain.
-- No secrets, credentials, dependency changes, database changes, or backend changes found.
+- `git diff --stat`: completed.
+- `git diff`: completed.
+- Diff matches the saved spec.
+- Generated Playwright scratch folder `.playwright-cli/` was removed.
+- No secrets, credentials, generated screenshots, package changes, or deployment changes were added.
+- Dirty files are expected implementation and workflow artifact files.
 
 ## Missing Tests
 
-- No missing-test exception remains for changed behavior. Verification-only iterations documented justified exceptions where no new behavior was introduced.
+- None blocking. Focused tests cover price rendering, accessibility labels, and CSS layout guardrails. Full client tests pass.
 
-## Security / Architecture Concerns
+## Security Concerns
 
-- None found.
+- None. Static public pricing copy only.
+
+## Architecture Concerns
+
+- None. `fromPrice` is an additive static content field; booking logic remains unchanged.
 
 ## Follow-Up Tasks
 
-- Optional: replace or locally host external homepage/gallery images if image-provider reliability becomes a product concern.
+- Optional future task: decide whether starting prices should also appear in the booking flow.
 
-## Verdict
+## Final Review Verdict
 
-Passed. The completed changes match the saved spec and preserve the requested boundaries.
+Passed.
