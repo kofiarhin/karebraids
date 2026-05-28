@@ -1,8 +1,10 @@
-# Polish UI Task Plan
+# Polish-UI Task Plan Pointer: KareBraids Dark Luxury Homepage Redesign
 
+- Active run task plan: `_workflow/runs/dev/tasks.md`
+- Date: 2026-05-27
+- Workflow path: `polish-ui`
+- Scope: Homepage-only dark luxury redesign based on the approved mockup.
+- Status: All tasks completed after explicit spec approval.
 - Applied skill: design-taste-frontend
 
-## Tasks
-
-- TASK-001: Add square priced service tiles on the homepage. Status: Done.
-- TASK-002: Verify responsive service row and close workflow. Status: Done.
+Use `_workflow/runs/dev/tasks.md` as the authoritative task plan for this run.

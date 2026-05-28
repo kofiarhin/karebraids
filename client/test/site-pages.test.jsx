@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { act, render, screen, within } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -31,206 +31,134 @@ function renderRoute(route = '/') {
 }
 
 describe('KareBraids pages', () => {
-  it('renders the home page with primary booking navigation', () => {
+  it('renders the redesigned homepage with dark luxury header navigation', () => {
     const { container } = renderRoute('/')
 
     expect(container.querySelector('.site-shell')).toHaveClass('dark-brand-shell')
-    expect(screen.getByRole('heading', { name: /karebraids/i })).toBeInTheDocument()
-    expect(screen.getAllByRole('link', { name: /book now/i })).toHaveLength(2)
-    expect(screen.getByRole('link', { name: /view gallery/i })).toHaveAttribute('href', '/gallery')
-    expect(screen.getByRole('link', { name: /start booking/i })).toHaveAttribute('href', '/booking')
+    expect(screen.getByRole('banner')).toHaveClass('site-header')
+    expect(screen.getByRole('link', { name: /karebraids home/i })).toBeInTheDocument()
+    expect(screen.getByRole('navigation', { name: /main navigation/i })).toHaveTextContent(/services/i)
+    expect(screen.getByRole('navigation', { name: /main navigation/i })).toHaveTextContent(/contact/i)
+    expect(screen.getAllByRole('link', { name: /book appointment/i }).length).toBeGreaterThanOrEqual(2)
   })
 
-  it('keeps the full homepage section story intact', () => {
+  it('renders the approved dark luxury homepage story', () => {
     const { container } = renderRoute('/')
 
-    expect(container.querySelector('.home-hero')).toHaveClass('dark-home-hero')
-    expect(screen.getByText(/premium african hair braiding in london/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/karebraids trust highlights/i)).toHaveTextContent(/protective styling/i)
-    expect(screen.getByText(/featured services/i)).toBeInTheDocument()
+    expect(container.querySelector('.luxury-homepage')).toBeInTheDocument()
+    expect(screen.getByText(/luxury african hair braiding/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /luxury braiding, crafted with care/i })).toBeInTheDocument()
+    expect(screen.getByText(/premium salon and mobile braiding services across london/i)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /view styles/i })).toHaveAttribute('href', '#signature-styles')
+    expect(screen.getByText(/500\+ happy clients/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/karebraids trust highlights/i)).toHaveTextContent(/london based/i)
+    expect(screen.getByText(/signature styles/i)).toBeInTheDocument()
     expect(screen.getByText(/why choose karebraids/i)).toBeInTheDocument()
     expect(screen.getByText(/gallery preview/i)).toBeInTheDocument()
-    expect(screen.getByText(/the parting was immaculate/i)).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /choose your service, date/i })).toBeInTheDocument()
-    expect(container.querySelectorAll('[data-reveal]').length).toBeGreaterThan(6)
-    expect(container.querySelector('[data-parallax]')).toBeInTheDocument()
+    expect(screen.getByText(/client love/i)).toBeInTheDocument()
+    expect(screen.getByText(/ready for your next style/i)).toBeInTheDocument()
+    expect(screen.getByRole('contentinfo')).toHaveTextContent(/mon - sat: 8am - 7pm/i)
+    expect(container.querySelectorAll('[data-reveal]').length).toBeGreaterThan(8)
   })
 
-  it('renders gallery-driven visual elements across homepage sections', () => {
+  it('renders editorial homepage images with accessible semantics', () => {
     const { container } = renderRoute('/')
 
-    const trustCluster = screen.getByLabelText(/featured trust style thumbnails/i)
-    expect(trustCluster.querySelectorAll('img')).toHaveLength(4)
-
-    const serviceImages = container.querySelectorAll('.service-tile img')
-    expect(serviceImages).toHaveLength(6)
-    expect(serviceImages[0]).toHaveAttribute('src', galleryItems[0].image)
-    expect(serviceImages[0]).toHaveAttribute('alt', 'Knotless Braids style inspiration')
-
-    expect(screen.getByRole('img', { name: /process detail for careful braid work/i })).toHaveAttribute(
+    expect(screen.getByRole('img', { name: /black woman with long sculpted braids/i })).toHaveAttribute(
+      'src',
+      galleryItems[0].image,
+    )
+    expect(screen.getByRole('img', { name: /salon braiding detail/i })).toHaveAttribute(
       'src',
       galleryItems.find((item) => item.id === 'process-detail').image,
     )
-    expect(screen.getByLabelText(/testimonial style visuals/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/book a karebraids appointment/i).querySelector('.cta-image')).toHaveAttribute(
-      'src',
-      galleryItems[8].image,
-    )
-  })
-
-  it('shows starting prices on each featured service tile', () => {
-    renderRoute('/')
-
-    expect(screen.getByText('From \u00a380')).toBeInTheDocument()
-    expect(screen.getByText('From \u00a370')).toBeInTheDocument()
-    expect(screen.getByText('From \u00a335')).toBeInTheDocument()
-    expect(screen.getByText('From \u00a365')).toBeInTheDocument()
-    expect(screen.getByText('From \u00a345')).toBeInTheDocument()
-    expect(screen.getByText('From \u00a330')).toBeInTheDocument()
-  })
-
-  it('names each priced featured service tile for assistive technology', () => {
-    renderRoute('/')
-
-    expect(screen.getByLabelText('Knotless Braids, From \u00a380')).toBeInTheDocument()
-    expect(screen.getByLabelText('Kids Braids, From \u00a330')).toBeInTheDocument()
-  })
-
-  it('defines square horizontal featured service tiles', () => {
-    const styles = homeStyles()
-
-    expect(styles).toContain('grid-template-columns: repeat(6, minmax(0, 1fr));')
-    expect(styles).toContain('aspect-ratio: 1 / 1;')
-    expect(styles).toContain('.service-price-badge')
-    expect(styles).toContain('.dark-brand-shell .service-price-badge')
-    expect(styles).toContain('grid-template-columns: repeat(2, minmax(9.5rem, 1fr));')
-  })
-
-  it('keeps decorative homepage thumbnail clusters quiet for assistive technology', () => {
-    renderRoute('/')
-
-    const trustImages = screen
-      .getByLabelText(/featured trust style thumbnails/i)
-      .querySelectorAll('img')
-
-    expect(trustImages).toHaveLength(4)
-    trustImages.forEach((image) => {
+    expect(screen.getByRole('img', { name: /jasmine a. client portrait/i })).toBeInTheDocument()
+    expect(container.querySelectorAll('.gallery-mosaic img')).toHaveLength(4)
+    container.querySelectorAll('.client-avatar-stack img').forEach((image) => {
       expect(image).toHaveAttribute('alt', '')
       expect(image).toHaveAttribute('aria-hidden', 'true')
-      expect(image).toHaveAttribute('loading', 'lazy')
     })
   })
 
-  it('keeps the image-backed booking CTA action clear without repeating decorative image text', () => {
+  it('shows the five approved mockup signature styles and prices only', () => {
     renderRoute('/')
 
-    const cta = screen.getByLabelText(/book a karebraids appointment/i)
-    const ctaImage = cta.querySelector('.cta-image')
-
-    expect(ctaImage).toHaveAttribute('alt', '')
-    expect(ctaImage).toHaveAttribute('aria-hidden', 'true')
-    expect(ctaImage).toHaveAttribute('loading', 'lazy')
-    expect(within(cta).getByRole('link', { name: /start booking/i })).toHaveAttribute(
-      'href',
-      '/booking',
-    )
+    expect(screen.getByLabelText('Knotless Braids, From \u00a3120')).toBeInTheDocument()
+    expect(screen.getByLabelText('Boho Braids, From \u00a3150')).toBeInTheDocument()
+    expect(screen.getByLabelText('Stitch Braids, From \u00a3130')).toBeInTheDocument()
+    expect(screen.getByLabelText('Twists / Locs, From \u00a3140')).toBeInTheDocument()
+    expect(screen.getByLabelText('Cornrows, From \u00a3100')).toBeInTheDocument()
+    expect(screen.queryByLabelText(/kids braids/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/box braids/i)).not.toBeInTheDocument()
   })
 
-  it('uses lighter home image overlays instead of full dark image covers', () => {
+  it('renders the requested value, gallery, testimonial, and booking CTA copy', () => {
+    renderRoute('/')
+
+    expect(screen.getByText(/neat, lightweight and flawless every time/i)).toBeInTheDocument()
+    expect(screen.getByText(/we come to you - home, hotel or workplace/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /see the finish before you book/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /view gallery/i })).toHaveAttribute('href', '/gallery')
+    expect(screen.getByText(/my braids were neat, lightweight and lasted beautifully/i)).toBeInTheDocument()
+    expect(screen.getByText(/jasmine a\./i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /let's get you booked/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /book your appointment/i })).toHaveAttribute('href', '/booking')
+  })
+
+  it('defines the locked dark luxury homepage design hooks', () => {
     const styles = homeStyles()
 
-    expect(styles).toContain('rgba(36, 20, 8, 0.58)')
-    expect(styles).toContain('rgba(255, 250, 246, 0.72)')
-    expect(styles).not.toContain('rgba(36, 20, 8, 0.88)')
-    expect(styles).not.toContain('rgba(36, 20, 8, 0.96), rgba(53, 30, 12, 0.82)')
+    expect(styles).toContain('--espresso-noir: #171311;')
+    expect(styles).toContain('--smoked-cocoa: #221C19;')
+    expect(styles).toContain('--burnished-bronze: #B78652;')
+    expect(styles).toContain('--warm-ivory: #F5EEE8;')
+    expect(styles).toContain('.luxury-homepage')
+    expect(styles).toContain('.signature-grid')
+    expect(styles).toContain('.service-card:hover img')
+    expect(styles).toContain('transform: scale(1.04);')
+    expect(styles).toContain('.service-card::before')
+    expect(styles).toContain('rgba(23, 19, 17, 0.78)')
+    expect(styles).toContain('.luxury-homepage .btn:focus-visible')
+    expect(styles).toContain('outline: 3px solid rgba(183, 134, 82, 0.45);')
+    expect(styles).toContain('@media (max-width: 760px)')
+    expect(styles).toContain('.signature-grid {\n    display: flex;')
   })
 
-  it('keeps brighter image-backed CTA text readable with a localized panel', () => {
+  it('keeps decorative homepage imagery quiet for assistive technology', () => {
+    renderRoute('/')
+
+    const decorativeImages = [
+      ...document.querySelectorAll('.client-avatar-stack img'),
+      ...document.querySelectorAll('.booking-cta-texture'),
+    ]
+
+    expect(decorativeImages.length).toBeGreaterThan(0)
+    decorativeImages.forEach((image) => {
+      expect(image).toHaveAttribute('alt', '')
+      expect(image).toHaveAttribute('aria-hidden', 'true')
+    })
+  })
+
+  it('keeps booking and style CTAs route-safe', () => {
+    renderRoute('/')
+
+    screen.getAllByRole('link', { name: /book appointment/i }).forEach((link) => {
+      expect(link).toHaveAttribute('href', '/booking')
+    })
+    screen.getAllByRole('link', { name: /book this style/i }).forEach((link) => {
+      expect(link).toHaveAttribute('href', '/booking')
+    })
+    expect(screen.getByRole('link', { name: /view all services/i })).toHaveAttribute('href', '/booking')
+    expect(screen.getByRole('link', { name: /view gallery/i })).toHaveAttribute('href', '/gallery')
+  })
+
+  it('defines smallest-phone fallbacks for the luxury homepage', () => {
     const styles = homeStyles()
 
-    expect(styles).toContain('.cta-copy')
-    expect(styles).toContain('background: rgba(36, 20, 8, 0.46);')
-    expect(styles).toContain('max-width: 52rem;')
-  })
-
-  it('renders clickable hero carousel dots for the first five gallery images', async () => {
-    const user = userEvent.setup()
-    renderRoute('/')
-
-    const heroSlides = galleryItems.slice(0, 5)
-    const carousel = screen.getByRole('region', { name: /featured braid styles carousel/i })
-    const dotGroup = within(carousel).getByRole('group', { name: /hero image slides/i })
-    const firstDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[0].title}` })
-    const fifthDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[4].title}` })
-
-    expect(within(dotGroup).getAllByRole('button', { name: /^show /i })).toHaveLength(5)
-    expect(carousel.querySelectorAll('.hero-slide')).toHaveLength(5)
-    expect(firstDot).toHaveAttribute('aria-current', 'true')
-    expect(fifthDot).not.toHaveAttribute('aria-current')
-
-    await user.click(fifthDot)
-
-    expect(firstDot).not.toHaveAttribute('aria-current')
-    expect(fifthDot).toHaveAttribute('aria-current', 'true')
-  })
-
-  it('auto-rotates hero slides on a 4.5 second interval', () => {
-    vi.useFakeTimers()
-    renderRoute('/')
-
-    const heroSlides = galleryItems.slice(0, 5)
-    const carousel = screen.getByRole('region', { name: /featured braid styles carousel/i })
-    const firstDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[0].title}` })
-    const secondDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[1].title}` })
-
-    expect(firstDot).toHaveAttribute('aria-current', 'true')
-
-    act(() => {
-      vi.advanceTimersByTime(4500)
-    })
-
-    expect(firstDot).not.toHaveAttribute('aria-current')
-    expect(secondDot).toHaveAttribute('aria-current', 'true')
-  })
-
-  it('stops hero auto-rotation when reduced motion becomes preferred', () => {
-    vi.useFakeTimers()
-    let motionChangeHandler
-    const mediaQuery = {
-      matches: false,
-      addEventListener: vi.fn((eventName, handler) => {
-        if (eventName === 'change') motionChangeHandler = handler
-      }),
-      removeEventListener: vi.fn(),
-    }
-
-    Object.defineProperty(window, 'matchMedia', {
-      configurable: true,
-      writable: true,
-      value: vi.fn(() => mediaQuery),
-    })
-
-    renderRoute('/')
-
-    const heroSlides = galleryItems.slice(0, 5)
-    const carousel = screen.getByRole('region', { name: /featured braid styles carousel/i })
-    const secondDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[1].title}` })
-    const thirdDot = within(carousel).getByRole('button', { name: `Show ${heroSlides[2].title}` })
-
-    act(() => {
-      vi.advanceTimersByTime(4500)
-    })
-
-    expect(secondDot).toHaveAttribute('aria-current', 'true')
-
-    mediaQuery.matches = true
-    act(() => {
-      motionChangeHandler({ matches: true })
-      vi.advanceTimersByTime(4500)
-    })
-
-    expect(secondDot).toHaveAttribute('aria-current', 'true')
-    expect(thirdDot).not.toHaveAttribute('aria-current')
+    expect(styles).toContain('@media (max-width: 480px)')
+    expect(styles).toContain('.luxury-trust-strip,\n  .value-row {\n    grid-template-columns: 1fr;')
+    expect(styles).toContain('.signature-grid {\n    margin-inline: -0.5rem;')
+    expect(styles).toContain('.site-header {\n    width: min(100% - 1rem, 1240px);')
   })
 
   it('renders the about page', () => {
@@ -316,10 +244,16 @@ describe('KareBraids pages', () => {
     expect(screen.getByRole('button', { name: /close mobile navigation/i })).toHaveFocus()
     expect(mobileNav).toBeInTheDocument()
     expect(mobileNav).toHaveTextContent(/home/i)
+    expect(mobileNav).toHaveTextContent(/services/i)
     expect(mobileNav).toHaveTextContent(/about/i)
     expect(mobileNav).toHaveTextContent(/gallery/i)
     expect(mobileNav).toHaveTextContent(/booking/i)
+    expect(mobileNav).toHaveTextContent(/contact/i)
     expect(within(mobileNav).getByRole('link', { name: /^booking$/i })).toHaveClass('primary')
+    expect(within(mobileNav).getByRole('link', { name: /^services$/i })).toHaveAttribute(
+      'href',
+      '#signature-styles',
+    )
     expect(document.body).toHaveClass('mobile-nav-open')
 
     await user.click(screen.getByRole('button', { name: /close mobile navigation/i }))

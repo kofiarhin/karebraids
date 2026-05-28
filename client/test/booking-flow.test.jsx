@@ -32,8 +32,8 @@ async function chooseService(user) {
   await user.click(screen.getByRole('button', { name: /knotless braids/i }))
 }
 
-async function chooseTuesdayMay262026(user) {
-  await user.click(screen.getByRole('button', { name: /select tuesday, may 26, 2026/i }))
+async function chooseWednesdayMay272026(user) {
+  await user.click(screen.getByRole('button', { name: /select wednesday, may 27, 2026/i }))
 }
 
 describe('booking flow', () => {
@@ -98,13 +98,13 @@ describe('booking flow', () => {
     renderBooking()
 
     await chooseService(user)
-    await chooseTuesdayMay262026(user)
+    await chooseWednesdayMay272026(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
 
     await screen.findByRole('button', { name: /10:00/i })
     expect(bookingService.getAvailability).toHaveBeenCalledWith({
       service: 'Knotless Braids',
-      date: '2026-05-26',
+      date: '2026-05-27',
     })
     await user.click(screen.getByRole('button', { name: /10:00/i }))
     await user.type(screen.getByLabelText(/full name/i), 'Amara Okafor')
@@ -117,7 +117,7 @@ describe('booking flow', () => {
     expect(bookingService.createBooking).toHaveBeenCalledWith(
       expect.objectContaining({
         service: 'Knotless Braids',
-        date: '2026-05-26',
+        date: '2026-05-27',
         time: '10:00',
       }),
       expect.any(Object),
@@ -137,7 +137,7 @@ describe('booking flow', () => {
     renderBooking()
 
     await chooseService(user)
-    await chooseTuesdayMay262026(user)
+    await chooseWednesdayMay272026(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
     await user.click(await screen.findByRole('button', { name: /10:00/i }))
     await user.type(screen.getByLabelText(/full name/i), 'Amara Okafor')
@@ -158,7 +158,7 @@ describe('booking flow', () => {
     renderBooking()
 
     await chooseService(user)
-    await chooseTuesdayMay262026(user)
+    await chooseWednesdayMay272026(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
 
     expect(await screen.findByText(/no appointments are available/i)).toBeInTheDocument()

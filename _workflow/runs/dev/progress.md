@@ -1146,6 +1146,329 @@
 - Task plan status: Not generated; pending explicit spec approval.
 - Implementation status: Not started.
 
+## 2026-05-27 - Intake and Spec Setup: Dark Luxury Homepage Redesign
+
+- Request: Redesign the KareBraids homepage based on the approved dark luxury mockup.
+- Branch: `dev`.
+- Worktree path: `C:/Users/laura.bolas/projects/karebraids/dev`.
+- Artifact root: `_workflow/runs/dev/`.
+- Workflow path: `polish-ui`.
+- Polish artifact root: `.workflow/artifacts/polish-ui/`.
+- Dirty worktree check before spec:
+  - `git status --short` returned no output.
+- Repo context inspected:
+  - `.agents/skills/grill-me/SKILL.md`
+  - `.agents/skills/design-taste-frontend/SKILL.md`
+  - `RUN_WORKFLOW.md`
+  - `docs/PROJECT_CONTEXT.md`
+  - `docs/ARCHITECTURE.md`
+  - `docs/VERIFY.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/summary.md`
+  - `_workflow/runs/dark-theme/spec.md`
+  - `_workflow/runs/dark-theme/summary.md`
+  - `package.json`
+  - `client/package.json`
+  - `client/src/App.jsx`
+  - `client/src/components/Layout.jsx`
+  - `client/src/pages/Home.jsx`
+  - `client/src/constants/content.js`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+- Intake question asked:
+  - Should the homepage service lineup be replaced with the five requested mockup styles and prices exactly?
+- Answer received:
+  - Yes. Use the five mockup services exactly for the redesigned homepage, and treat the old six-service homepage row as superseded for this page only.
+- Shared understanding:
+  - Homepage-only dark luxury redesign using the locked palette and approved mockup structure.
+  - Use CSS-only motion because Framer Motion is not installed.
+  - Use `@phosphor-icons/react`, which is installed.
+  - Preserve existing booking route links and API/data logic boundaries.
+  - Keep backend, API, database, admin, env, deployment, and dependency changes out of scope.
+- Frontend taste skill:
+  - Applied before spec because the request touches frontend UI generation, JSX, CSS/Tailwind styling, responsive behavior, image treatment, and UI polish.
+  - Applied skill: design-taste-frontend
+- Current phase: Spec approval gate.
+- Spec file created: `_workflow/runs/dev/spec.md`
+- Polish spec pointer updated: `.workflow/artifacts/polish-ui/spec.md`
+- Task plan status: Not generated for this request; pending explicit spec approval.
+- Existing `_workflow/runs/dev/tasks.md` status: stale from prior workflow and must not be used for this request.
+- Implementation status: Not started.
+
+## 2026-05-27 - Spec Approval and Task Planning: Dark Luxury Homepage Redesign
+
+- User approval received: `approve spec and proceed`.
+- Spec file approved: `_workflow/runs/dev/spec.md`.
+- Task plan created: `_workflow/runs/dev/tasks.md`.
+- Polish task-plan pointer created: `.workflow/artifacts/polish-ui/task-plan.md`.
+- Detailed spec completeness: Complete; all required 22 detailed spec sections plus polish-ui and frontend pre-flight sections are present before planning.
+- Planning inputs read:
+  - `_workflow/runs/dev/spec.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/summary.md`
+  - `RUN_WORKFLOW.md`
+  - `docs/PROJECT_CONTEXT.md`
+  - `docs/ARCHITECTURE.md`
+  - `docs/VERIFY.md`
+- Planned executable tasks:
+  - `TASK-001: Build the modular homepage content structure`
+  - `TASK-002: Apply the locked dark luxury visual system`
+  - `TASK-003: Harden responsive and accessibility behavior`
+  - `TASK-004: Verify redesigned homepage and close workflow`
+- Frontend taste skill:
+  - Applied skill: design-taste-frontend
+- Dirty worktree status:
+  - Active workflow artifact changes only at planning time.
+  - No implementation file overlap observed before starting TASK-001.
+- Current phase: TASK-001 Ready.
+- Implementation status: Starting TASK-001 Iteration 1.
+
+## 2026-05-27 - TASK-001 Done: Build Modular Homepage Content Structure
+
+- Task ID: TASK-001.
+- Status: Done.
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files changed:
+  - `client/test/site-pages.test.jsx`
+  - `client/src/pages/Home.jsx`
+  - `client/src/components/Layout.jsx`
+  - `client/src/components/Header.jsx`
+  - `client/src/components/Footer.jsx`
+  - `client/src/components/home/SectionHeading.jsx`
+  - `client/src/components/home/ServiceCard.jsx`
+  - `client/src/components/home/Hero.jsx`
+  - `client/src/components/home/TrustStrip.jsx`
+  - `client/src/components/home/WhyChoose.jsx`
+  - `client/src/components/home/GalleryPreview.jsx`
+  - `client/src/components/home/TestimonialSection.jsx`
+  - `client/src/components/home/BookingCTA.jsx`
+  - `client/src/constants/homepage.js`
+  - `client/src/index.css`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+- Applied skill: design-taste-frontend
+- Iteration 1 Build:
+  - Goal: Establish failing tests for approved homepage content and implement the minimum modular structure.
+  - Changes made: Updated homepage tests for the approved mockup content, created homepage constants, extracted `Header` and `Footer`, created homepage section components, and rewired `Home.jsx`.
+  - Test plan: `npm test --prefix client -- site-pages.test.jsx`.
+  - Red phase evidence: Focused suite failed with 8 homepage failures because the old nav, hero, six-service row, old prices, old testimonial/CTA, and missing locked palette hooks were still present.
+  - Green phase evidence: Focused suite passed with 18 tests after implementing modular homepage structure and constants.
+  - Refactor phase evidence: Focused suite reran and passed with 18 tests after review.
+  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification result: Passed.
+  - Review findings: Route links remain `/booking` and `/gallery`; homepage data is outside UI components.
+  - Acceptance status: Met.
+- Iteration 2 Refine:
+  - Goal: Refine component/data boundaries and route compatibility.
+  - Changes made: Reviewed component boundaries and ran lint; no behavior changes required.
+  - Test plan: `npm run lint --prefix client`.
+  - Red phase evidence: Missing-test exception for boundary review; the failing content/structure tests were already captured in Iteration 1 and no new behavior was introduced.
+  - Green phase evidence: `npm run lint --prefix client` passed.
+  - Refactor phase evidence: Component diff reviewed for data/UI separation.
+  - Test commands run: `npm run lint --prefix client`.
+  - Verification result: Passed.
+  - Review findings: `Layout` now delegates shared shell to `Header`/`Footer`; homepage section components are small and data-driven.
+  - Acceptance status: Met.
+- Iteration 3 Polish:
+  - Goal: Polish structure semantics and run focused verification.
+  - Changes made: Verification-only polish pass; no additional product behavior changes.
+  - Test plan: `npm test --prefix client -- site-pages.test.jsx`.
+  - Red phase evidence: Missing-test exception for verification-only polish; no new behavior was added after Iteration 2.
+  - Green phase evidence: Focused homepage/site suite passed with 18 tests.
+  - Refactor phase evidence: Focused suite reran after lint/review and passed with 18 tests.
+  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`; `npm run lint --prefix client`.
+  - Verification result: Passed.
+  - Review findings: Scope stayed homepage/shared shell only; no API, backend, booking logic, env, deployment, or dependency changes.
+  - Acceptance status: Met.
+- Acceptance result:
+  - [x] Homepage renders the requested section structure and copy.
+  - [x] Homepage renders exactly the five confirmed services/prices.
+  - [x] Header/footer are componentized and route links remain correct.
+  - [x] Homepage data lives in constants outside UI components.
+  - [x] Existing non-home routes still render through `Layout`.
+- Failure recovery notes:
+  - After initial implementation, one image test failed because the gallery detail image did not use `process-detail`; remapped homepage gallery constants and reran the focused suite successfully.
+- Blockers: none.
+- Next step: TASK-002: Apply the locked dark luxury visual system.
+
+## 2026-05-27 - TASK-002 Done: Apply Locked Dark Luxury Visual System
+
+- Task ID: TASK-002.
+- Status: Done.
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files changed:
+  - `client/test/site-pages.test.jsx`
+  - `client/src/index.css`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+- Applied skill: design-taste-frontend
+- Iteration 1 Build:
+  - Goal: Establish failing visual guardrail tests and apply first-pass locked palette/styles.
+  - Changes made: Added visual guardrail assertions for service overlays, locked focus styling, and responsive hooks; added focus and mobile CSS refinements.
+  - Test plan: `npm test --prefix client -- site-pages.test.jsx`.
+  - Red phase evidence: Focused suite failed because `.luxury-homepage .btn:focus-visible`, bronze focus outline, and `@media (max-width: 760px)` responsive hooks were absent.
+  - Green phase evidence: Focused suite passed with 18 tests after adding focus and responsive CSS.
+  - Refactor phase evidence: Focused suite reran and passed.
+  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification result: Passed.
+  - Review findings: CSS uses locked tokens and transform/opacity hover/reveal hooks.
+  - Acceptance status: Met.
+- Iteration 2 Refine:
+  - Goal: Refine image hierarchy, dividers, hover/focus states, and typography.
+  - Changes made: Reviewed the visual CSS layer and route components; no additional code changes were required.
+  - Test plan: `npm run lint --prefix client`.
+  - Red phase evidence: Missing-test exception for review-only refinement; Iteration 1 captured the visual Red failure and no new behavior was introduced.
+  - Green phase evidence: `npm run lint --prefix client` passed.
+  - Refactor phase evidence: Visual CSS selector scope reviewed for homepage/shared-shell impact.
+  - Test commands run: `npm run lint --prefix client`.
+  - Verification result: Passed.
+  - Review findings: Styling stayed scoped to `.luxury-*` selectors and shared shell controls.
+  - Acceptance status: Met.
+- Iteration 3 Polish:
+  - Goal: Run focused tests and lint after visual polish.
+  - Changes made: Verification-only polish pass.
+  - Test plan: focused suite and lint.
+  - Red phase evidence: Missing-test exception for verification-only polish.
+  - Green phase evidence: Focused suite passed with 18 tests and lint passed.
+  - Refactor phase evidence: Focused suite reran and passed after lint.
+  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`; `npm run lint --prefix client`.
+  - Verification result: Passed.
+  - Review findings: No Framer Motion import or dependency change was introduced.
+  - Acceptance status: Met.
+- Acceptance result:
+  - [x] Homepage uses the locked colour system and remains uniformly dark.
+  - [x] Visual hierarchy matches the dark luxury editorial direction.
+  - [x] Bronze is used sparingly and no bright/white sections appear.
+  - [x] Hover/focus/reveal motion uses transform/opacity and honors reduced motion.
+- Failure recovery notes:
+  - None beyond expected Red failure.
+- Blockers: none.
+- Next step: TASK-003: Harden responsive and accessibility behavior.
+
+## 2026-05-27 - TASK-003 Done: Harden Responsive and Accessibility Behavior
+
+- Task ID: TASK-003.
+- Status: Done.
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files changed:
+  - `client/test/site-pages.test.jsx`
+  - `client/src/index.css`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+- Applied skill: design-taste-frontend
+- Iteration 1 Build:
+  - Goal: Add failing accessibility/responsive expectations and implement required fixes.
+  - Changes made: Added mobile drawer expectations for Services/Contact and smallest-phone CSS guardrails; added 480px homepage fallback rules.
+  - Test plan: `npm test --prefix client -- site-pages.test.jsx`.
+  - Red phase evidence: Focused suite failed because `@media (max-width: 480px)`, one-column trust/value fallback, signature-grid edge padding, and narrow header rule were absent.
+  - Green phase evidence: Focused suite passed with 19 tests after adding 480px fallback CSS.
+  - Refactor phase evidence: Focused suite reran and passed.
+  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`.
+  - Verification result: Passed.
+  - Review findings: Mobile drawer exposes Services and Contact; Services anchors to `#signature-styles`.
+  - Acceptance status: Met.
+- Iteration 2 Refine:
+  - Goal: Refine smallest viewport behavior and reduced-motion support.
+  - Changes made: Reviewed 760px and 480px CSS fallbacks; no additional code changes were required.
+  - Test plan: `npm run lint --prefix client`.
+  - Red phase evidence: Missing-test exception for review-only refinement; Iteration 1 captured the responsive Red failure and no new behavior was introduced.
+  - Green phase evidence: `npm run lint --prefix client` passed.
+  - Refactor phase evidence: Responsive CSS reviewed for body-width constraints and full-width mobile CTAs.
+  - Test commands run: `npm run lint --prefix client`.
+  - Verification result: Passed.
+  - Review findings: Reduced-motion support remains in the existing global media query; new transitions use transform/opacity.
+  - Acceptance status: Met.
+- Iteration 3 Polish:
+  - Goal: Run focused route test/lint after responsive/a11y polish.
+  - Changes made: Verification-only polish pass.
+  - Test plan: focused suite and lint.
+  - Red phase evidence: Missing-test exception for verification-only polish.
+  - Green phase evidence: Focused suite passed with 19 tests and lint passed.
+  - Refactor phase evidence: Focused suite reran after lint and passed.
+  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`; `npm run lint --prefix client`.
+  - Verification result: Passed.
+  - Review findings: Header/mobile drawer accessibility tests remain passing.
+  - Acceptance status: Met.
+- Acceptance result:
+  - [x] Header/mobile drawer remains accessible and responsive.
+  - [x] Homepage has semantic sections and accessible CTAs/images.
+  - [x] Mobile layouts stack or scroll safely with no intended horizontal body overflow.
+  - [x] Focus-visible and reduced-motion behavior are present.
+- Failure recovery notes:
+  - None beyond expected Red failure.
+- Blockers: none.
+- Next step: TASK-004: Verify redesigned homepage and close workflow.
+
+## 2026-05-27 - TASK-004 Done: Verify Redesigned Homepage and Close Workflow
+
+- Task ID: TASK-004.
+- Status: Done.
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files changed:
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/verification.md`
+  - `_workflow/runs/dev/review.md`
+  - `_workflow/runs/dev/release-notes.md`
+  - `_workflow/runs/dev/summary.md`
+  - `_workflow/runs/dev/tasks.md`
+  - `.workflow/artifacts/polish-ui/spec.md`
+  - `.workflow/artifacts/polish-ui/task-plan.md`
+  - `client/test/booking-flow.test.jsx`
+- Applied skill: design-taste-frontend
+- Iteration 1 Build:
+  - Goal: Run integrated verification and fix in-scope issues.
+  - Red phase evidence: `npm test --prefix client` initially failed because `booking-flow.test.jsx` selected Tuesday, May 26, 2026, which was past on the current date of Wednesday, May 27, 2026.
+  - Green phase evidence: Updated the fixture to Wednesday, May 27, 2026; `npm test --prefix client` passed.
+  - Refactor phase evidence: `npm run lint --prefix client` and `npm run build --prefix client` passed after the fixture update.
+  - Test commands run: `npm test --prefix client`; `npm run lint --prefix client`; `npm run build --prefix client`.
+  - Verification command/result: Passed; 4 files and 31 tests passed, lint passed, production build passed.
+  - Review findings: Full-suite failure was a date-sensitive test fixture issue, not a homepage product regression.
+  - Acceptance status: Accepted.
+  - Remaining issues: Browser and final diff audit remained at that point.
+  - Next action: Complete browser/responsive verification and final diff audit.
+- Iteration 2 Refine:
+  - Goal: Complete browser/responsive verification and final diff audit.
+  - Red phase evidence: Initial CLI screenshot was captured before the remote hero image finished loading; temporary Playwright spec could not resolve `@playwright/test`.
+  - Green phase evidence: Retried browser screenshots with a wait period; desktop/mobile/small mobile first viewports rendered the hero image, dark palette, CTAs, and responsive layout.
+  - Refactor phase evidence: Removed generated `output/` and `test-results/` scratch folders and stopped local dev server processes `146484` and `149024`.
+  - Test commands run: browser screenshot commands against `http://127.0.0.1:5173/`; `git diff --stat`; `git diff`.
+  - Verification command/result: Passed with documented browser limitation that full-page screenshots do not trigger below-fold scroll reveal animations.
+  - Review findings: Diff matches homepage-only scope; no backend/API/database/admin/dependency/env changes.
+  - Acceptance status: Accepted with limitation documented.
+  - Remaining issues: Final artifact closeout remained at that point.
+  - Next action: Complete workflow artifacts and health check.
+- Iteration 3 Polish:
+  - Goal: Complete final artifacts and health check.
+  - Red phase evidence: Handoff and polish pointers still described TASK-004 as pending before closeout.
+  - Green phase evidence: Verification, review, release notes, summary, progress, tasks, handoff, and polish pointers were updated.
+  - Refactor phase evidence: Final artifact wording reviewed for scope accuracy, missing-test exceptions, scratch cleanup, and health status.
+  - Test commands run: final artifact review; `git status --short`.
+  - Verification command/result: Workflow health Passed.
+  - Review findings: No unresolved in-scope defects.
+  - Acceptance status: Accepted.
+  - Remaining issues: None blocking.
+  - Next action: User review or commit.
+- Acceptance Result:
+  - [x] Full client verification passes or blocker is documented.
+  - [x] Browser/responsive verification is completed or limitation documented.
+  - [x] Final diff audit is completed.
+  - [x] Review, verification, release notes, summary, handoff, and polish artifacts are updated.
+  - [x] Workflow health is recorded.
+- Final Diff Audit:
+  - `git diff --stat`: completed.
+  - `git diff`: completed.
+  - Diff matches the saved spec and task plan.
+  - No unrelated product code was touched.
+  - Generated scratch output was removed.
+  - No secrets or sensitive values were added.
+- Final workflow health: Passed.
+
 ## 2026-05-26 - TASK-001: Add square priced service tiles on the homepage
 
 - Request: Update the homepage Featured services section so all six image tiles are same-size squares, arranged horizontally across desktop, with visible starting prices.

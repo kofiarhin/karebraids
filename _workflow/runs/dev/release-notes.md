@@ -1,60 +1,63 @@
 # Release Notes
 
-- Request: Homepage Featured services square price row.
-- Applied skill: design-taste-frontend
+## Request
+
+Redesign the KareBraids homepage based on the approved dark luxury mockup.
 
 ## User-Facing Changes
 
-- The homepage Featured services section now shows all six services as same-size square image tiles.
-- Desktop shows the six service tiles horizontally in one row, reducing the height of the services section.
-- Each service image now displays a starting price:
-  - Knotless Braids: From £80
-  - Box Braids: From £70
-  - Cornrows: From £35
-  - Twists: From £65
-  - Stitch Braids: From £45
-  - Kids Braids: From £30
-- Mobile keeps the service tiles square in a compact two-column layout without page-level horizontal overflow.
+- Replaced the homepage with a dark luxury editorial layout for a premium African braiding studio in London.
+- Added slim sticky navigation with desktop links, booking CTA, and mobile drawer.
+- Added hero, trust strip, signature styles, why choose, gallery preview, testimonial, final booking CTA, and expanded footer sections.
+- Signature Styles now uses exactly the five approved mockup services:
+  - Knotless Braids - From £120
+  - Boho Braids - From £150
+  - Stitch Braids - From £130
+  - Twists / Locs - From £140
+  - Cornrows - From £100
+- Preserved booking conversion links to `/booking` and gallery link to `/gallery`.
 
 ## Developer Changes
 
-- Added `fromPrice` to the static `services` content.
-- Rendered service price badges and accessible service/price labels in the homepage service tile markup.
-- Updated service tile CSS for square sizing, desktop horizontal layout, responsive mobile layout, and dark-theme badge readability.
-- Added focused frontend test coverage.
+- Added modular homepage/shared components under `client/src/components/`.
+- Added homepage data constants in `client/src/constants/homepage.js`.
+- Added locked dark luxury palette and responsive homepage CSS in `client/src/index.css`.
+- Updated homepage tests and a date-sensitive booking-flow fixture.
 
 ## New Routes/APIs
 
-none
+None.
 
 ## New Env Vars
 
-none
+None.
 
 ## Database/Schema Changes
 
-none
+None.
 
 ## Dependencies Added/Removed
 
-none
+None.
 
 ## Test Commands Run
 
 - `npm test --prefix client -- site-pages.test.jsx`
-- `npm run lint --prefix client`
 - `npm test --prefix client`
+- `npm run lint --prefix client`
 - `npm run build --prefix client`
-- Playwright CLI browser verification against Vite preview.
+- Browser screenshot checks against local Vite server.
+- `git diff --stat`
+- `git diff`
 
 ## Known Limitations
 
-- Starting prices are display-only and are not wired into booking calculations.
+- Full-page CLI screenshots do not scroll, so they do not trigger every below-fold reveal animation. The reveal behavior is DOM-backed and tested by structure/CSS guardrails; no user-facing blocker was found.
 
 ## Follow-Up Work
 
-- Optional: add starting prices to the booking service selection if desired.
+- Optional visual regression setup if design QA needs repeatable screenshot baselines.
 
 ## Suggested Commit Message
 
-`update homepage service tiles with starting prices`
+`redesign KareBraids homepage with dark luxury layout`
