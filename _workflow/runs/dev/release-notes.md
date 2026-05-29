@@ -1,63 +1,55 @@
-# Release Notes
+# Release Notes: Gallery Figma Redesign
 
-## Request
-
-Redesign the KareBraids homepage based on the approved dark luxury mockup.
+- Request: Redesign the KareBraids gallery page to match the supplied Figma-style dark premium gallery reference.
+- Status: Needs Human Review pending verification.
+- Applied skill: design-taste-frontend
 
 ## User-Facing Changes
 
-- Replaced the homepage with a dark luxury editorial layout for a premium African braiding studio in London.
-- Added slim sticky navigation with desktop links, booking CTA, and mobile drawer.
-- Added hero, trust strip, signature styles, why choose, gallery preview, testimonial, final booking CTA, and expanded footer sections.
-- Signature Styles now uses exactly the five approved mockup services:
-  - Knotless Braids - From £120
-  - Boho Braids - From £150
-  - Stitch Braids - From £130
-  - Twists / Locs - From £140
-  - Cornrows - From £100
-- Preserved booking conversion links to `/booking` and gallery link to `/gallery`.
+- Gallery page title changed to centered uppercase `GALLERY`.
+- Gallery image wall changed to a clean responsive square grid.
+- Gallery card captions are visually hidden.
+- Gallery modal styling changed to a dark translucent backdrop with a centered light/cream image panel.
+- Modal copy is visually hidden for the new design.
 
 ## Developer Changes
 
-- Added modular homepage/shared components under `client/src/components/`.
-- Added homepage data constants in `client/src/constants/homepage.js`.
-- Added locked dark luxury palette and responsive homepage CSS in `client/src/index.css`.
-- Updated homepage tests and a date-sensitive booking-flow fixture.
+- Updated `Gallery.jsx` page hero markup.
+- Added final cascade-safe gallery/grid/modal CSS overrides in `index.css`.
+- Updated focused page tests for the new gallery design.
+- Added modal backdrop-click focus-restoration test.
 
 ## New Routes/APIs
 
-None.
+none
 
 ## New Env Vars
 
-None.
+none
 
 ## Database/Schema Changes
 
-None.
+none
 
 ## Dependencies Added/Removed
 
-None.
+none
 
 ## Test Commands Run
 
-- `npm test --prefix client -- site-pages.test.jsx`
-- `npm test --prefix client`
-- `npm run lint --prefix client`
-- `npm run build --prefix client`
-- Browser screenshot checks against local Vite server.
-- `git diff --stat`
-- `git diff`
+- `npm run test --prefix client -- site-pages.test.jsx`: failed first for expected Red evidence.
+- `npm run test --prefix client -- site-pages.test.jsx`: failed on stale old-heading assertion, then assertion was updated.
+- Subsequent command runs timed out due terminal executor issue.
 
 ## Known Limitations
 
-- Full-page CLI screenshots do not scroll, so they do not trigger every below-fold reveal animation. The reveal behavior is DOM-backed and tested by structure/CSS guardrails; no user-facing blocker was found.
+- `npm run lint --prefix client`, `npm run test --prefix client`, and `npm run build --prefix client` have not been completed yet in this run.
+- Final diff audit has not been completed yet because terminal commands timed out.
 
 ## Follow-Up Work
 
-- Optional visual regression setup if design QA needs repeatable screenshot baselines.
+- Rerun focused tests, lint, full tests, build, and git diff audit when terminal execution is healthy.
 
 ## Suggested Commit Message
 
-`redesign KareBraids homepage with dark luxury layout`
+`redesign gallery page with square grid and light modal`

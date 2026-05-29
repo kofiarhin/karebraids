@@ -20,13 +20,8 @@ export function Gallery() {
 
   return (
     <section className="gallery-page dark-gallery-page">
-      <div className="page-hero-copy narrow">
-        <p className="eyebrow">Craftsmanship preview</p>
-        <h1>Braid Gallery</h1>
-        <p>
-          Explore shape, texture, and finish. Each style can be tailored by length, parting, colour,
-          and appointment location.
-        </p>
+      <div className="gallery-title-wrap">
+        <h1>GALLERY</h1>
       </div>
       <div aria-label="Gallery image wall" className="gallery-grid" role="region">
         {galleryItems.map((item, index) => (

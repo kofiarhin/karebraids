@@ -1,5 +1,176 @@
 # Progress
 
+## 2026-05-28 - Intake and Spec Setup: Gallery Figma Redesign
+
+- Request: Redesign the KareBraids gallery page to match the supplied Figma-style dark premium reference with centered `GALLERY` title, clean square grid, and light centered modal overlay.
+- Branch: `dev`.
+- Worktree: `C:/Users/laura.bolas/projects/karebraids/dev`.
+- Artifact root: `_workflow/runs/dev/`.
+- Workflow path: `polish-ui`.
+- Execution mode: `complete-workflow`.
+- Dirty worktree check before spec:
+  - `git status --short` returned no output.
+- Repo context inspected:
+  - `.agents/skills/grill-me/SKILL.md`
+  - `.agents/skills/design-taste-frontend/SKILL.md`
+  - `RUN_WORKFLOW.md`
+  - `docs/PROJECT_CONTEXT.md`
+  - `docs/ARCHITECTURE.md`
+  - `docs/VERIFY.md`
+  - `_workflow/runs/dev/handoff.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/summary.md`
+  - `client/package.json`
+  - `client/src/pages/Gallery.jsx`
+  - `client/src/components/GalleryModal.jsx`
+  - `client/src/constants/content.js`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+  - `client/test/gallery-modal.test.jsx`
+- Intake questions asked:
+  - None. The latest prompt gives concrete target UI, affected files, accessibility constraints, and verification commands.
+- Answers received:
+  - None.
+- Shared understanding:
+  - Gallery-only frontend redesign for `/gallery`.
+  - Preserve existing gallery modal state and accessibility behavior.
+  - Prefer CSS hiding for captions/modal copy.
+  - Keep backend, API, booking, admin, database, deployment, env, dependency, route, and gallery data changes out of scope.
+- Frontend taste skill:
+  - Applied before spec because the request touches frontend UI, JSX, CSS, responsive behavior, modal visual design, and accessibility.
+  - Applied skill: design-taste-frontend
+- Current phase: Spec approval gate.
+- Request file synced: `_workflow/runs/dev/request.md`
+- Handoff file updated: `_workflow/runs/dev/handoff.md`
+- Spec file created: `_workflow/runs/dev/spec.md`
+- Task plan status: Not generated; pending explicit spec approval.
+- Implementation status: Not started.
+
+## 2026-05-28 - Spec Approval and Task Planning: Gallery Figma Redesign
+
+- User approval received: `approve spec`.
+- Spec file approved: `_workflow/runs/dev/spec.md`.
+- Task plan created: `_workflow/runs/dev/tasks.md`.
+- Detailed spec completeness: Complete; all required detailed spec sections are present before planning.
+- Progress and summary files read before planning:
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/summary.md`
+  - `_workflow/runs/dev/handoff.md`
+- Planned executable tasks:
+  - `TASK-001: Add the centered gallery title and square image grid`
+  - `TASK-002: Restyle the gallery modal while preserving close and focus behavior`
+  - `TASK-003: Verify gallery redesign and close workflow`
+- Frontend taste skill:
+  - Applied skill: design-taste-frontend
+- Dirty worktree before implementation:
+  - Existing dirty files are run-scoped workflow artifacts from intake/planning: `_workflow/runs/dev/handoff.md`, `_workflow/runs/dev/progress.md`, `_workflow/runs/dev/request.md`, `_workflow/runs/dev/spec.md`, `_workflow/runs/dev/tasks.md`.
+  - No implementation-file overlap risk observed before starting TASK-001.
+- Current phase: TASK-001 Ready for Iteration 1 Build.
+
+## 2026-05-28 - TASK-001/TASK-002 Implementation Checkpoint: Gallery Redesign Needs Verification
+
+- Task IDs: TASK-001 and TASK-002.
+- Status: Needs Human Review.
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Needs Human Review.
+- Files changed:
+  - `client/src/pages/Gallery.jsx`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx`
+  - `client/test/gallery-modal.test.jsx`
+  - `_workflow/runs/dev/tasks.md`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
+- Applied skill: design-taste-frontend
+
+### TASK-001 Iteration 1 Build Evidence
+
+- Goal: Establish failing test evidence for the new gallery title/grid expectations and implement the smallest page/grid change.
+- Changes made: Updated `site-pages.test.jsx` to expect `.gallery-title-wrap`, `GALLERY`, square-grid CSS hooks, and hidden captions; replaced the old hero copy in `Gallery.jsx`; appended cascade-safe square-gallery CSS overrides in `index.css`.
+- Test plan: `npm run test --prefix client -- site-pages.test.jsx`.
+- Red phase evidence: Command failed because `.gallery-title-wrap` was absent and the new square-grid CSS hooks were absent.
+- Green phase evidence: Partial. After implementation the new title/grid checks passed, but the same suite found one stale old-heading assertion elsewhere.
+- Refactor phase evidence: Updated that stale old-heading assertion to `GALLERY`; rerun timed out.
+- Test commands run:
+  - `npm run test --prefix client -- site-pages.test.jsx`: failed as expected for Red evidence.
+  - `npm run test --prefix client -- site-pages.test.jsx`: failed on stale old-heading assertion after implementation.
+  - `npm run test --prefix client -- site-pages.test.jsx`: timed out after 120 seconds.
+  - `npm run test --prefix client -- site-pages.test.jsx`: timed out after 240 seconds.
+- Verification result: Needs Human Review because the terminal executor timed out and then stopped accepting even trivial commands.
+- Review findings: `Gallery.jsx` preserved `selectedItem`, `activeTriggerRef`, `openModal`, `closeModal`, button rendering, `aria-label`, and `GalleryModal` usage.
+- Acceptance status: Partially met pending verification rerun.
+
+### TASK-001 Iteration 2 Refine Evidence
+
+- Goal: Harden responsive/masonry override details and preserve accessible button labels.
+- Changes made: CSS resets all gallery aspect modifiers to `grid-column: auto`, `grid-row: auto`, `aspect-ratio: 1 / 1`, and includes 900px/560px responsive column overrides.
+- Test plan: focused page/CSS tests.
+- Red phase evidence: Stale old-heading assertion failure after navigation to `/gallery`.
+- Green phase evidence: Not observed because reruns timed out.
+- Refactor phase evidence: Not observed because terminal executor became unavailable.
+- Test commands run: see Iteration 1 timeout evidence.
+- Verification result: Needs Human Review.
+- Review findings: CSS is scoped to gallery/modal selectors and does not target `.gallery-mosaic`.
+- Acceptance status: Partially met pending verification rerun.
+
+### TASK-001 Iteration 3 Polish Evidence
+
+- Goal: Run focused verification and design-taste review for the gallery grid.
+- Changes made: Not reached due terminal executor timeout.
+- Test plan: focused tests plus code-surface review.
+- Red phase evidence: Not reached.
+- Green phase evidence: Not reached.
+- Refactor phase evidence: Not reached.
+- Test commands run: Not completed.
+- Verification result: Needs Human Review.
+- Review findings: Code-surface review only; no automated final proof available.
+- Acceptance status: Partially met pending verification.
+
+### TASK-002 Iteration Evidence
+
+- Goal: Restyle modal overlay while preserving existing modal interaction behavior.
+- Changes made: Added CSS expectations for the light modal treatment, added a backdrop-click focus-restoration modal test, and appended CSS overrides for dark backdrop, light/cream modal panel, contained image, hidden modal copy, and accessible close button styling.
+- Test plan:
+  - `npm run test --prefix client -- site-pages.test.jsx`
+  - `npm run test --prefix client -- gallery-modal.test.jsx`
+- Red phase evidence: Not observed because terminal executor was unavailable before these new tests could be run.
+- Green phase evidence: Not observed.
+- Refactor phase evidence: Not observed.
+- Test commands run: Not completed after executor timeout.
+- Verification result: Needs Human Review.
+- Review findings: `GalleryModal.jsx` was not changed, so Escape listener, body class handling, backdrop click, close-button click, and focus restoration logic are preserved from existing implementation.
+- Acceptance status: Partially met pending verification.
+
+### Acceptance Result
+
+- [x] Gallery page renders a centered `.gallery-title-wrap` with heading text `GALLERY`.
+- [x] Existing gallery state, trigger ref, open/close functions, `GalleryModal` usage, and button `aria-label`s are preserved in code.
+- [x] Gallery grid is 3 columns on desktop, 2 columns at tablet breakpoint, and 1 column on mobile in CSS.
+- [x] Gallery tiles are square, use `object-fit: cover`, and aspect modifier classes no longer create masonry spans in CSS.
+- [x] Gallery card captions are not visible in CSS.
+- [x] Modal backdrop is dark/translucent and modal surface is centered, light/cream, rectangular, and contains the image in CSS.
+- [x] Modal copy is not visible in CSS while dialog labelling markup remains.
+- [x] Modal implementation still closes through Escape, backdrop click, and close button, and focus restoration code is unchanged.
+- [~] `npm run lint --prefix client`, `npm run test --prefix client`, and `npm run build --prefix client` were not completed because the terminal executor timed out.
+- [x] Scope is limited to the gallery redesign, focused tests, and workflow artifacts.
+- [x] Applied skill: design-taste-frontend is recorded.
+
+### Failure Recovery Notes
+
+- After the initial expected Red failure and the stale assertion failure, repeated command attempts timed out:
+  - Focused test rerun timed out after 120 seconds.
+  - Focused test rerun timed out after 240 seconds.
+  - Process inspection and `taskkill` attempts timed out.
+  - `Get-Date` timed out, confirming the shell executor was unavailable rather than a normal test failure.
+
+### Next Step
+
+- When terminal execution is healthy, run:
+  - `npm run test --prefix client -- site-pages.test.jsx`
+  - `npm run test --prefix client -- gallery-modal.test.jsx`
+  - `npm run lint --prefix client`
+  - `npm run test --prefix client`
+  - `npm run build --prefix client`
+
 ## 2026-05-26 - Intake and Spec Setup: Public Page Polish
 
 - Request: Polish the public KareBraids UI across the homepage, about page, gallery page, and booking page.

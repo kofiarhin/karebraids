@@ -1,36 +1,18 @@
-# Task Plan: KareBraids Dark Luxury Homepage Redesign
+# Task Plan: Redesign KareBraids Gallery Page
 
 - Spec file used: `_workflow/runs/dev/spec.md`
-- Planning date: 2026-05-27
-- Spec approval: Approved by user message `approve spec and proceed`
-- Execution mode: `complete-workflow`
-- Workflow path: `polish-ui`
-- Applied skill: design-taste-frontend
-- Progress files read:
-  - `_workflow/runs/dev/handoff.md`
-  - `_workflow/runs/dev/progress.md`
-  - `_workflow/runs/dev/summary.md`
-- Supporting docs/code read:
-  - `RUN_WORKFLOW.md`
-  - `docs/PROJECT_CONTEXT.md`
-  - `docs/ARCHITECTURE.md`
-  - `docs/VERIFY.md`
-  - `client/package.json`
-  - `client/src/App.jsx`
-  - `client/src/components/Layout.jsx`
-  - `client/src/pages/Home.jsx`
-  - `client/src/constants/content.js`
-  - `client/src/index.css`
-  - `client/test/site-pages.test.jsx`
+- Planning date: 2026-05-28
+- User approval received: `approve spec`
+- Progress files read: `_workflow/runs/dev/progress.md`
+- Summary files read: `_workflow/runs/dev/summary.md`
+- Handoff read: `_workflow/runs/dev/handoff.md`
 - Detailed spec sections used:
   - Section 5 Current State Analysis
   - Section 6 Desired End State
   - Section 7 Scope
   - Section 9 Functional Requirements
-  - Section 10 Non-Functional Requirements
   - Section 11 Affected Surfaces
   - Section 12 Dependency And Integration Map
-  - Section 13 Data And State Impact
   - Section 14 UX / API / Workflow Expectations
   - Section 15 Execution Strategy
   - Section 16 Verification Strategy
@@ -38,242 +20,183 @@
   - Section 18 Edge Cases And Failure Modes
   - Section 19 Risks And Mitigations
   - Section 20 Assumptions
-  - Section 21 Open Questions
   - Section 22 Task Extraction Notes
-
-## Planning Notes
-
-- Dirty worktree before implementation contains only active workflow artifact changes from the approved spec phase.
-- Planned implementation files:
-  - `client/src/pages/Home.jsx`
-  - `client/src/components/Layout.jsx`
-  - `client/src/components/home/*`
-  - `client/src/constants/homepage.js`
-  - `client/src/index.css`
-  - `client/test/site-pages.test.jsx`
-- Backend, API, database, admin behavior, env, deployment, package dependencies, and booking logic are out of scope.
-- Framer Motion is not installed; implementation uses CSS-only motion.
+- Applied skill: design-taste-frontend
 
 ## Task List
 
-### TASK-001: Build the modular homepage content structure
+### TASK-001: Add the centered gallery title and square image grid
 
-- Status: Done
-- Objective: Replace the old homepage structure with modular, data-driven homepage sections that render the approved mockup content and preserve route links.
-- Priority: P0
-- Parallel-safe: no
-- Depends on: approved spec
-- Blocks: TASK-002, TASK-003, TASK-004
+- Status: Needs Human Review
+- Objective: Replace the old gallery hero copy with the requested centered `GALLERY` title and make the gallery image wall a responsive square grid with hidden visible card captions.
 - Files likely affected:
+  - `client/src/pages/Gallery.jsx`
+  - `client/src/index.css`
   - `client/test/site-pages.test.jsx`
-  - `client/src/pages/Home.jsx`
-  - `client/src/components/Layout.jsx`
-  - `client/src/components/home/*`
-  - `client/src/constants/homepage.js`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
 - Checklist:
-  - [ ] Add/update failing tests for new homepage header, hero, trust strip, services, gallery preview, testimonial, CTA, and footer content.
-  - [ ] Add homepage constants for services, trust items, value blocks, testimonial, footer links, and image assignments.
-  - [ ] Create reusable components: `Header`, `Hero`, `TrustStrip`, `SectionHeading`, `ServiceCard`, `WhyChoose`, `GalleryPreview`, `TestimonialSection`, `BookingCTA`, `Footer`.
-  - [ ] Wire homepage sections in `Home.jsx`.
-  - [ ] Preserve `/booking` and `/gallery` CTA routes.
-- Iteration 1 Build:
-  - Goal: Establish failing tests for approved homepage content and implement the minimum modular structure.
-  - Changes made: Updated homepage tests for the approved mockup content, created homepage constants, extracted `Header` and `Footer`, created homepage section components, and rewired `Home.jsx`.
-  - Test plan: `npm test --prefix client -- site-pages.test.jsx`.
-  - Red phase evidence: Focused suite failed with 8 homepage failures because the old nav, hero, six-service row, old prices, old testimonial/CTA, and missing locked palette hooks were still present.
-  - Green phase evidence: Focused suite passed with 18 tests after implementing modular homepage structure and constants.
-  - Refactor phase evidence: Focused suite reran and passed with 18 tests after review.
-  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`.
-  - Verification command/result: Passed.
-  - Review findings: Route links remain `/booking` and `/gallery`; homepage data is outside UI components.
-  - Acceptance status: Met.
-  - Remaining issues: Visual and responsive hardening remain for TASK-002 and TASK-003.
-  - Next action: Continue to Iteration 2.
-- Iteration 2 Refine:
-  - Goal: Refine component/data boundaries and route compatibility.
-  - Changes made: Reviewed component boundaries and ran lint; no behavior changes required.
-  - Test plan: `npm test --prefix client -- site-pages.test.jsx`.
-  - Red phase evidence: Missing-test exception for boundary review; the failing content/structure tests were already captured in Iteration 1 and no new behavior was introduced.
-  - Green phase evidence: `npm run lint --prefix client` passed.
-  - Refactor phase evidence: Component diff reviewed for data/UI separation.
-  - Test commands run: `npm run lint --prefix client`.
-  - Verification command/result: Passed.
-  - Review findings: `Layout` now delegates shared shell to `Header`/`Footer`; homepage section components are small and data-driven.
-  - Acceptance status: Met.
-  - Remaining issues: CSS visual polish remains.
-  - Next action: Continue to Iteration 3.
-- Iteration 3 Polish:
-  - Goal: Polish structure semantics and run focused lint/test verification.
-  - Changes made: Verification-only polish pass; no additional product behavior changes.
-  - Test plan: `npm test --prefix client -- site-pages.test.jsx`; `npm run lint --prefix client`.
-  - Red phase evidence: Missing-test exception for verification-only polish; no new behavior was added after Iteration 2.
-  - Green phase evidence: Focused homepage/site suite passed with 18 tests.
-  - Refactor phase evidence: Focused suite reran after lint/review and passed with 18 tests.
-  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`; `npm run lint --prefix client`.
-  - Verification command/result: Passed.
-  - Review findings: Scope stayed homepage/shared shell only; no API, backend, booking logic, env, deployment, or dependency changes.
-  - Acceptance status: Met.
-  - Remaining issues: TASK-002 visual polish and TASK-003 responsive/a11y browser hardening remain.
-  - Next action: Continue to TASK-002.
+  - [x] Add or update failing tests for `GALLERY`, `.gallery-title-wrap`, square grid hooks, and hidden card captions.
+  - [x] Replace gallery hero copy markup with requested title wrapper.
+  - [x] Keep selected item state, trigger ref, open/close functions, gallery buttons, `aria-label`, and `GalleryModal`.
+  - [x] Override `.gallery-grid` and all `.gallery-card` aspect classes to remove masonry spans and enforce square tiles.
+  - [x] Add tablet and mobile grid column rules.
+  - [~] Verify focused tests: Red phase and first recovery run completed, but terminal executor then timed out repeatedly before final focused verification could complete.
+- Iteration plan:
+  - Iteration 1 Build:
+    - Goal: Establish Red evidence for the new title/grid expectations and implement the smallest page/grid change.
+    - Changes made: Updated `site-pages.test.jsx` for new gallery title/grid expectations; updated `Gallery.jsx` and `index.css`.
+    - Test plan: `npm run test --prefix client -- site-pages.test.jsx`
+    - Red phase evidence: `npm run test --prefix client -- site-pages.test.jsx` failed because `.gallery-title-wrap` and new square grid CSS hooks were absent.
+    - Green phase evidence: Partial; after implementation, the new gallery title/grid assertions passed, but one stale old-heading assertion failed later in the same suite.
+    - Refactor phase evidence: Stale old-heading assertion was updated to `GALLERY`, but reruns timed out.
+    - Test commands run: `npm run test --prefix client -- site-pages.test.jsx`.
+    - Verification command/result: Needs Human Review; final focused rerun timed out twice.
+    - Review findings: Code-surface review shows existing state/open/close functions and gallery button `aria-label`s remain unchanged.
+    - Acceptance status: Partially met pending verification rerun.
+    - Remaining issues: Terminal executor timed out on all commands, including `Get-Date`.
+    - Next action: Rerun `npm run test --prefix client -- site-pages.test.jsx`.
+  - Iteration 2 Refine:
+    - Goal: Harden responsive/masonry override details and preserve accessible button labels.
+    - Changes made: Updated stale mobile-navigation assertion from old `Braid Gallery` heading to new `GALLERY` heading.
+    - Test plan: focused page/CSS tests.
+    - Red phase evidence: Focused suite failed on the stale `/braid gallery/i` assertion after navigation to `/gallery`.
+    - Green phase evidence: Not observed; rerun timed out.
+    - Refactor phase evidence: Not observed; terminal executor became unavailable.
+    - Test commands run: `npm run test --prefix client -- site-pages.test.jsx`.
+    - Verification command/result: Needs Human Review due command timeout.
+    - Review findings: The stale assertion update matches approved title copy.
+    - Acceptance status: Partially met pending verification rerun.
+    - Remaining issues: Verification unavailable.
+    - Next action: Rerun focused page suite.
+  - Iteration 3 Polish:
+    - Goal: Run focused verification and design-taste review for the gallery grid.
+    - Changes made: Not reached due terminal executor timeout.
+    - Test plan: focused tests plus code-surface review.
+    - Red phase evidence: Not reached.
+    - Green phase evidence: Not reached.
+    - Refactor phase evidence: Not reached.
+    - Test commands run: Not completed.
+    - Verification command/result: Needs Human Review due terminal executor timeout.
+    - Review findings: Code-surface review only.
+    - Acceptance status: Partially met pending verification.
+    - Remaining issues: Verification unavailable.
+    - Next action: Rerun focused page suite.
+- Test plan:
+  - `npm run test --prefix client -- site-pages.test.jsx`
+- Red phase evidence: To be recorded.
+- Green phase evidence: To be recorded.
+- Refactor phase evidence: To be recorded.
+- Test commands run: To be recorded.
 - Acceptance criteria:
-  - [x] Homepage renders the requested section structure and copy.
-  - [x] Homepage renders exactly the five confirmed services/prices.
-  - [x] Header/footer are componentized and route links remain correct.
-  - [x] Homepage data lives in constants outside UI components.
-  - [x] Existing non-home routes still render through `Layout`.
-- Acceptance result: Done.
+  - [ ] Gallery page renders `.gallery-title-wrap` with heading text `GALLERY`.
+  - [ ] Gallery items remain buttons with `aria-label`.
+  - [ ] Desktop grid is 3 columns; tablet is 2; mobile is 1.
+  - [ ] Tiles are square and aspect modifier classes no longer create masonry spans.
+  - [ ] Card captions are not visible.
+  - [ ] Applied skill: design-taste-frontend is recorded.
+- Acceptance result:
+  - [x] Gallery page renders `.gallery-title-wrap` with heading text `GALLERY`.
+  - [x] Gallery items remain buttons with `aria-label`.
+  - [x] Desktop grid is 3 columns; tablet is 2; mobile is 1 in CSS.
+  - [x] Tiles are square and aspect modifier classes no longer create masonry spans in CSS.
+  - [x] Card captions are not visible in CSS.
+  - [x] Applied skill: design-taste-frontend is recorded.
+  - [~] Automated verification is pending because the terminal executor timed out.
 - Verification commands:
-  - `npm test --prefix client -- site-pages.test.jsx`
-  - `npm run lint --prefix client`
-- Stop condition: Stop if shared layout refactor breaks route rendering or mobile nav behavior in a way that cannot be fixed in scope.
-- Out-of-scope items: Styling perfection, browser verification, backend/API changes.
+  - `npm run test --prefix client -- site-pages.test.jsx`
+- Stop condition: Stop if page state/focus logic must be rewritten or if unrelated public pages are affected.
+- Out-of-scope items: Modal visual redesign beyond any necessary grid CSS side effect; data/routes/backend/admin/booking changes.
 
-### TASK-002: Apply the locked dark luxury visual system
+### TASK-002: Restyle the gallery modal while preserving close and focus behavior
 
-- Status: Done
-- Objective: Style the new homepage with the locked dark palette, editorial typography, cinematic image treatments, cards, dividers, hover states, and CSS-only motion.
-- Priority: P0
-- Parallel-safe: no
-- Depends on: TASK-001
-- Blocks: TASK-003, TASK-004
+- Status: Needs Human Review
+- Objective: Make the gallery modal match the Figma-style dark translucent backdrop and centered light/cream image container while keeping Escape/backdrop/close-button close behavior and focus restoration.
 - Files likely affected:
   - `client/src/index.css`
   - `client/test/site-pages.test.jsx`
-  - `client/src/components/home/*`
+  - `client/test/gallery-modal.test.jsx`
+  - `_workflow/runs/dev/progress.md`
+  - `_workflow/runs/dev/handoff.md`
 - Checklist:
-  - [ ] Add/update CSS guardrail tests for locked palette, dark homepage shell, service card hover scale, and responsive layout hooks.
-  - [ ] Apply locked palette tokens.
-  - [ ] Implement hero split layout and image overlay.
-  - [ ] Implement trust strip, signature styles, why choose, gallery, testimonial, CTA, and footer visual treatments.
-  - [ ] Add CSS-only fade/slide reveal and hover transitions with reduced-motion support.
-- Iteration 1 Build:
-  - Goal: Establish failing visual guardrail tests and apply first-pass locked palette/styles.
-  - Changes made: Added visual guardrail assertions for service overlays, locked focus styling, and responsive hooks; added focus and mobile CSS refinements.
-  - Test plan: `npm test --prefix client -- site-pages.test.jsx`.
-  - Red phase evidence: Focused suite failed because `.luxury-homepage .btn:focus-visible`, bronze focus outline, and `@media (max-width: 760px)` responsive hooks were absent.
-  - Green phase evidence: Focused suite passed with 18 tests after adding focus and responsive CSS.
-  - Refactor phase evidence: Focused suite reran and passed.
-  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`.
-  - Verification command/result: Passed.
-  - Review findings: CSS uses locked tokens and transform/opacity hover/reveal hooks.
-  - Acceptance status: Met.
-  - Remaining issues: Small mobile and browser verification remain.
-  - Next action: Continue to Iteration 2.
-- Iteration 2 Refine:
-  - Goal: Refine image hierarchy, dividers, hover/focus states, and typography.
-  - Changes made: Reviewed the visual CSS layer and route components; no additional code changes were required.
-  - Test plan: `npm test --prefix client -- site-pages.test.jsx`.
-  - Red phase evidence: Missing-test exception for review-only refinement; Iteration 1 captured the visual Red failure and no new behavior was introduced.
-  - Green phase evidence: `npm run lint --prefix client` passed.
-  - Refactor phase evidence: Visual CSS selector scope reviewed for homepage/shared-shell impact.
-  - Test commands run: `npm run lint --prefix client`.
-  - Verification command/result: Passed.
-  - Review findings: Styling stayed scoped to `.luxury-*` selectors and shared shell controls.
-  - Acceptance status: Met.
-  - Remaining issues: Browser verification remains for TASK-004.
-  - Next action: Continue to Iteration 3.
-- Iteration 3 Polish:
-  - Goal: Run focused tests and lint after visual polish.
-  - Changes made: Verification-only polish pass.
-  - Test plan: `npm test --prefix client -- site-pages.test.jsx`; `npm run lint --prefix client`.
-  - Red phase evidence: Missing-test exception for verification-only polish.
-  - Green phase evidence: Focused suite passed with 18 tests and lint passed.
-  - Refactor phase evidence: Focused suite reran and passed after lint.
-  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`; `npm run lint --prefix client`.
-  - Verification command/result: Passed.
-  - Review findings: No Framer Motion import or dependency change was introduced.
-  - Acceptance status: Met.
-  - Remaining issues: Responsive/accessibility hardening remains for TASK-003.
-  - Next action: Continue to TASK-003.
+  - [x] Add or update failing tests for light modal CSS, contained image, hidden modal copy, and retained close/focus behavior.
+  - [x] Override modal backdrop, modal panel, modal image, copy, and close-button styles.
+  - [x] Preserve modal dialog labelling and interaction behavior in markup.
+  - [~] Verify focused modal tests: blocked by terminal executor timeout.
+- Iteration plan:
+  - Iteration 1 Build:
+    - Goal: Establish Red evidence for new modal visual CSS hooks and implement modal surface/backdrop styling.
+    - Changes made: Added CSS regression expectations for the light modal treatment and added modal CSS overrides.
+    - Test plan: `npm run test --prefix client -- site-pages.test.jsx`
+    - Red phase evidence: Not observed; terminal executor was unavailable before this focused Red run could complete.
+    - Green phase evidence: Not observed.
+    - Refactor phase evidence: Not observed.
+    - Test commands run: Attempted command execution after prior test timeout, but even `Get-Date` timed out.
+    - Verification command/result: Needs Human Review due terminal executor timeout.
+    - Review findings: CSS-surface review shows backdrop, modal panel, image, copy, and close-button overrides are present.
+    - Acceptance status: Partially met pending verification.
+    - Remaining issues: Verification unavailable.
+    - Next action: Rerun focused page and modal suites.
+  - Iteration 2 Refine:
+    - Goal: Verify modal accessibility behavior with Escape, close button, and focus restoration.
+    - Changes made: Added a backdrop-click focus-restoration test in `gallery-modal.test.jsx`.
+    - Test plan: `npm run test --prefix client -- gallery-modal.test.jsx`
+    - Red phase evidence: Not observed due terminal executor timeout.
+    - Green phase evidence: Not observed.
+    - Refactor phase evidence: Not observed.
+    - Test commands run: Not completed.
+    - Verification command/result: Needs Human Review.
+    - Review findings: `GalleryModal.jsx` interaction code was not changed.
+    - Acceptance status: Partially met pending verification.
+    - Remaining issues: Verification unavailable.
+    - Next action: Rerun `npm run test --prefix client -- gallery-modal.test.jsx`.
+  - Iteration 3 Polish:
+    - Goal: Run focused modal verification and review cascade/accessibility risk.
+    - Changes made: Not reached due terminal executor timeout.
+    - Test plan: focused page and modal tests.
+    - Red phase evidence: Not reached.
+    - Green phase evidence: Not reached.
+    - Refactor phase evidence: Not reached.
+    - Test commands run: Not completed.
+    - Verification command/result: Needs Human Review.
+    - Review findings: Code-surface review only.
+    - Acceptance status: Partially met pending verification.
+    - Remaining issues: Verification unavailable.
+    - Next action: Rerun focused modal and page tests.
+- Test plan:
+  - `npm run test --prefix client -- site-pages.test.jsx`
+  - `npm run test --prefix client -- gallery-modal.test.jsx`
+- Red phase evidence: To be recorded.
+- Green phase evidence: To be recorded.
+- Refactor phase evidence: To be recorded.
+- Test commands run: To be recorded.
 - Acceptance criteria:
-  - [x] Homepage uses the locked colour system and remains uniformly dark.
-  - [x] Visual hierarchy matches the dark luxury editorial direction.
-  - [x] Bronze is used sparingly and no bright/white sections appear.
-  - [x] Hover/focus/reveal motion uses transform/opacity and honors reduced motion.
-- Acceptance result: Done.
+  - [ ] Modal backdrop is dark/translucent.
+  - [ ] Modal panel is centered, rectangular, light/cream, and contains the image.
+  - [ ] Modal copy is not visible.
+  - [ ] Close button remains accessible.
+  - [ ] Modal closes by Escape, backdrop click, and close button.
+  - [ ] Focus returns to clicked gallery item after close.
+  - [ ] Applied skill: design-taste-frontend is recorded.
+- Acceptance result:
+  - [x] Modal backdrop is dark/translucent in CSS.
+  - [x] Modal panel is centered, rectangular, light/cream, and contains the image in CSS.
+  - [x] Modal copy is not visible in CSS.
+  - [x] Close button remains accessible in markup.
+  - [x] Modal close implementation remains unchanged for Escape, backdrop click, and close button.
+  - [x] Focus restoration implementation remains unchanged.
+  - [x] Applied skill: design-taste-frontend is recorded.
+  - [~] Automated verification is pending because the terminal executor timed out.
 - Verification commands:
-  - `npm test --prefix client -- site-pages.test.jsx`
-  - `npm run lint --prefix client`
-- Stop condition: Stop if the locked palette cannot be applied without causing unreadable text or broad shared-page regressions.
-- Out-of-scope items: Exact browser screenshots, backend/API changes.
+  - `npm run test --prefix client -- gallery-modal.test.jsx`
+  - `npm run test --prefix client -- site-pages.test.jsx`
+- Stop condition: Stop if hiding modal copy breaks dialog accessibility and cannot be corrected in scope.
+- Out-of-scope items: Gallery data changes, modal architecture rewrite, new dependencies.
 
-### TASK-003: Harden responsive and accessibility behavior
+### TASK-003: Verify gallery redesign and close workflow
 
-- Status: Done
-- Objective: Prove mobile, keyboard, focus, semantic, and no-overflow behavior for the redesigned homepage and shared header/footer.
-- Priority: P1
-- Parallel-safe: no
-- Depends on: TASK-002
-- Blocks: TASK-004
-- Files likely affected:
-  - `client/src/index.css`
-  - `client/src/components/home/*`
-  - `client/test/site-pages.test.jsx`
-- Checklist:
-  - [ ] Add/update tests for mobile drawer nav links and accessible section landmarks.
-  - [ ] Ensure meaningful images have alt text and decorative images are hidden.
-  - [ ] Ensure mobile buttons are full-width where requested.
-  - [ ] Ensure service cards use mobile-safe grid or horizontal behavior.
-  - [ ] Verify focus-visible states and keyboard-safe drawer behavior.
-- Iteration 1 Build:
-  - Goal: Add failing accessibility/responsive expectations and implement required fixes.
-  - Changes made: Added mobile drawer expectations for Services/Contact and smallest-phone CSS guardrails; added 480px homepage fallback rules.
-  - Test plan: `npm test --prefix client -- site-pages.test.jsx`.
-  - Red phase evidence: Focused suite failed because `@media (max-width: 480px)`, one-column trust/value fallback, signature-grid edge padding, and narrow header rule were absent.
-  - Green phase evidence: Focused suite passed with 19 tests after adding 480px fallback CSS.
-  - Refactor phase evidence: Focused suite reran and passed.
-  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`.
-  - Verification command/result: Passed.
-  - Review findings: Mobile drawer exposes Services and Contact; Services anchors to `#signature-styles`.
-  - Acceptance status: Met.
-  - Remaining issues: Browser verification remains.
-  - Next action: Continue to Iteration 2.
-- Iteration 2 Refine:
-  - Goal: Refine smallest viewport behavior and reduced-motion support.
-  - Changes made: Reviewed 760px and 480px CSS fallbacks; no additional code changes were required.
-  - Test plan: `npm test --prefix client -- site-pages.test.jsx`.
-  - Red phase evidence: Missing-test exception for review-only refinement; Iteration 1 captured the responsive Red failure and no new behavior was introduced.
-  - Green phase evidence: `npm run lint --prefix client` passed.
-  - Refactor phase evidence: Responsive CSS reviewed for body-width constraints and full-width mobile CTAs.
-  - Test commands run: `npm run lint --prefix client`.
-  - Verification command/result: Passed.
-  - Review findings: Reduced-motion support remains in the existing global media query; new transitions use transform/opacity.
-  - Acceptance status: Met.
-  - Remaining issues: Browser verification remains.
-  - Next action: Continue to Iteration 3.
-- Iteration 3 Polish:
-  - Goal: Run full focused route test/lint after responsive/a11y polish.
-  - Changes made: Verification-only polish pass.
-  - Test plan: `npm test --prefix client -- site-pages.test.jsx`; `npm run lint --prefix client`.
-  - Red phase evidence: Missing-test exception for verification-only polish.
-  - Green phase evidence: Focused suite passed with 19 tests and lint passed.
-  - Refactor phase evidence: Focused suite reran after lint and passed.
-  - Test commands run: `npm test --prefix client -- site-pages.test.jsx`; `npm run lint --prefix client`.
-  - Verification command/result: Passed.
-  - Review findings: Header/mobile drawer accessibility tests remain passing.
-  - Acceptance status: Met.
-  - Remaining issues: Full verification and browser checks remain for TASK-004.
-  - Next action: Continue to TASK-004.
-- Acceptance criteria:
-  - [x] Header/mobile drawer remains accessible and responsive.
-  - [x] Homepage has semantic sections and accessible CTAs/images.
-  - [x] Mobile layouts stack or scroll safely with no intended horizontal body overflow.
-  - [x] Focus-visible and reduced-motion behavior are present.
-- Acceptance result: Done.
-- Verification commands:
-  - `npm test --prefix client -- site-pages.test.jsx`
-  - `npm run lint --prefix client`
-- Stop condition: Stop if mobile or keyboard behavior cannot be proven with tests and browser checks.
-- Out-of-scope items: New E2E test framework dependencies, backend/API changes.
-
-### TASK-004: Verify redesigned homepage and close workflow
-
-- Status: Done
-- Objective: Run full automated and browser verification, complete diff audit, review, release notes, summary, handoff, and workflow health check.
-- Priority: P1
-- Parallel-safe: no
-- Depends on: TASK-003
-- Blocks: none
+- Status: Needs Human Review
+- Objective: Run requested full client verification, audit the diff, and complete workflow review, release notes, summary, handoff, and health check.
 - Files likely affected:
   - `_workflow/runs/dev/progress.md`
   - `_workflow/runs/dev/handoff.md`
@@ -281,67 +204,74 @@
   - `_workflow/runs/dev/review.md`
   - `_workflow/runs/dev/release-notes.md`
   - `_workflow/runs/dev/summary.md`
-  - `.workflow/artifacts/polish-ui/*`
 - Checklist:
-  - [x] Run full client tests.
-  - [x] Run lint.
-  - [x] Run build.
-  - [x] Run desktop and mobile browser checks when available.
-  - [x] Run `git diff --stat` and `git diff`.
-  - [x] Complete review, verification, release notes, summary, and handoff.
-  - [x] Complete workflow health check.
-- Iteration 1 Build:
-  - Goal: Run integrated verification and fix in-scope issues.
-  - Changes made: Updated `booking-flow.test.jsx` date fixture from Tuesday, May 26, 2026 to Wednesday, May 27, 2026 because the current date made the old selection past/unavailable.
-  - Test plan: `npm test --prefix client`; `npm run lint --prefix client`; `npm run build --prefix client`.
-  - Red phase evidence: `npm test --prefix client` initially failed in `booking-flow.test.jsx` because Tuesday, May 26, 2026 was no longer selectable on May 27, 2026.
-  - Green phase evidence: `npm test --prefix client` passed after moving the test fixture to Wednesday, May 27, 2026.
-  - Refactor phase evidence: `npm run lint --prefix client` and `npm run build --prefix client` passed after the fixture-only update.
-  - Test commands run: `npm test --prefix client`; `npm run lint --prefix client`; `npm run build --prefix client`.
-  - Verification command/result: Passed; 4 test files and 31 tests passed, lint passed, and Vite production build passed.
-  - Review findings: Full-suite failure was unrelated to the homepage redesign and caused by a time-sensitive test fixture; no product code change was needed.
-  - Acceptance status: Accepted for integrated automated verification.
-  - Remaining issues: Browser and diff audit remained for Iteration 2 at that point.
-  - Next action: Complete browser/responsive verification and final diff audit.
-- Iteration 2 Refine:
-  - Goal: Complete browser/responsive verification and final diff audit.
-  - Changes made: Started local Vite server, captured desktop/mobile/small viewport browser screenshots, verified the hero, dark palette, responsive structure, image loading, and no obvious first-viewport overlap; removed generated screenshot/test scratch after audit.
-  - Test plan: Browser desktop/mobile homepage checks; `git diff --stat`; `git diff`.
-  - Red phase evidence: Initial screenshot capture was taken before the remote hero image finished loading; a Playwright test-run attempt also could not resolve `@playwright/test` from the temporary scratch spec.
-  - Green phase evidence: Retried browser screenshots with a wait period and confirmed the cinematic hero image rendered on desktop, mobile, and small mobile viewports; automated browser test dependency issue was documented instead of adding a new dependency.
-  - Refactor phase evidence: Removed generated `output/` and `test-results/` scratch folders and stopped the local dev server process.
-  - Test commands run: `git diff --stat`; `git diff`; Playwright CLI screenshot commands against `http://127.0.0.1:5173/`.
-  - Verification command/result: Passed with documented browser limitation; full-page screenshots do not scroll and therefore do not trigger all scroll-entry reveal states, but first viewport and core responsive layout were visually checked.
-  - Review findings: Diff matches homepage-only scope; no backend/API/database/dependency/env changes.
-  - Acceptance status: Accepted with browser reveal limitation documented.
-  - Remaining issues: Final artifacts remained for Iteration 3 at that point.
-  - Next action: Complete review, release notes, summary, handoff, and health check.
-- Iteration 3 Polish:
-  - Goal: Complete final artifacts and health check.
-  - Changes made: Created/updated verification, review, release notes, summary, progress, handoff, and polish pointer artifacts.
-  - Test plan: Artifact completeness and workflow health review.
-  - Red phase evidence: Handoff and polish pointers still described TASK-004 as pending before closeout artifact updates.
-  - Green phase evidence: Artifacts were updated to reflect completed TASK-004 verification and closeout.
-  - Refactor phase evidence: Final artifact wording reviewed for scope accuracy, missing-test exceptions, and generated scratch cleanup.
-  - Test commands run: Final artifact review; `git status --short`.
-  - Verification command/result: Workflow health recorded as Passed.
-  - Review findings: No unresolved in-scope defects; full-page reveal screenshot limitation documented.
-  - Acceptance status: Accepted.
-  - Remaining issues: None blocking.
-  - Next action: User review and commit.
-- Acceptance criteria:
-  - [x] Full client verification passes or blocker is documented.
-  - [x] Browser/responsive verification is completed or limitation documented.
-  - [x] Final diff audit is completed.
-  - [x] Review, verification, release notes, summary, handoff, and polish artifacts are updated.
-  - [x] Workflow health is recorded.
-- Acceptance result: Done.
-- Verification commands:
-  - `npm test --prefix client`
+  - [ ] Run `npm run lint --prefix client`.
+  - [ ] Run `npm run test --prefix client`.
+  - [ ] Run `npm run build --prefix client`.
+  - [ ] Run final `git diff --stat` and `git diff`.
+  - [ ] Create/update verification, review, release notes, summary, and handoff.
+  - [ ] Record workflow health.
+- Iteration plan:
+  - Iteration 1 Build:
+    - Goal: Run the requested full verification and recover only in-scope failures.
+    - Changes made: To be recorded.
+    - Test plan: lint, full tests, build.
+    - Red phase evidence: To be recorded.
+    - Green phase evidence: To be recorded.
+    - Refactor phase evidence: To be recorded.
+    - Test commands run: To be recorded.
+    - Verification command/result: To be recorded.
+    - Review findings: To be recorded.
+    - Acceptance status: To be recorded.
+    - Remaining issues: To be recorded.
+    - Next action: To be recorded.
+  - Iteration 2 Refine:
+    - Goal: Complete final diff audit and scope/security review.
+    - Changes made: To be recorded.
+    - Test plan: `git diff --stat`, `git diff`, `git status --short`.
+    - Red phase evidence: To be recorded.
+    - Green phase evidence: To be recorded.
+    - Refactor phase evidence: To be recorded.
+    - Test commands run: To be recorded.
+    - Verification command/result: To be recorded.
+    - Review findings: To be recorded.
+    - Acceptance status: To be recorded.
+    - Remaining issues: To be recorded.
+    - Next action: To be recorded.
+  - Iteration 3 Polish:
+    - Goal: Complete artifacts and workflow health check.
+    - Changes made: To be recorded.
+    - Test plan: artifact completeness review.
+    - Red phase evidence: To be recorded.
+    - Green phase evidence: To be recorded.
+    - Refactor phase evidence: To be recorded.
+    - Test commands run: To be recorded.
+    - Verification command/result: To be recorded.
+    - Review findings: To be recorded.
+    - Acceptance status: To be recorded.
+    - Remaining issues: To be recorded.
+    - Next action: To be recorded.
+- Test plan:
   - `npm run lint --prefix client`
+  - `npm run test --prefix client`
   - `npm run build --prefix client`
-  - Browser checks
+- Red phase evidence: To be recorded.
+- Green phase evidence: To be recorded.
+- Refactor phase evidence: To be recorded.
+- Test commands run: To be recorded.
+- Acceptance criteria:
+  - [ ] Requested lint/test/build commands pass or blockers are documented.
+  - [ ] Final diff audit is complete.
+  - [ ] Review, verification, release notes, summary, handoff, and health check are complete.
+  - [ ] Scope is limited to the approved gallery redesign.
+  - [ ] Applied skill: design-taste-frontend is recorded.
+- Acceptance result: To be recorded.
+- Verification commands:
+  - `npm run lint --prefix client`
+  - `npm run test --prefix client`
+  - `npm run build --prefix client`
   - `git diff --stat`
   - `git diff`
-- Stop condition: Stop if full verification or browser checks expose unresolved in-scope defects.
-- Out-of-scope items: Product changes beyond verification fixes.
+  - `git status --short`
+- Stop condition: Stop with `Needs Human Review` if requested verification cannot run or fails for an out-of-scope reason.
+- Out-of-scope items: New product changes after TASK-001/TASK-002 unless needed to recover in-scope verification failures.

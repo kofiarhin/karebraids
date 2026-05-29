@@ -1,65 +1,56 @@
-# Active Request: KareBraids Dark Luxury Homepage Redesign
+# Request: Redesign KareBraids Gallery Page
 
-Redesign the KareBraids homepage based on the approved dark luxury mockup.
+Redesign the KareBraids gallery page to match the Figma reference: dark premium page, centered `GALLERY` title, clean 3-column square image grid, and centered light modal overlay.
 
-Tech stack:
-- React + Vite
-- Tailwind CSS
-- Framer Motion if already installed; otherwise keep animations CSS-only
-- Keep components modular
-- Keep API/data logic outside UI components
-- Mobile-first and fully responsive
+Repo context:
+- React + Vite app in `client/`
+- Current route is already wired in `client/src/App.jsx`
+- Current page: `client/src/pages/Gallery.jsx`
+- Current modal: `client/src/components/GalleryModal.jsx`
+- Gallery data: `client/src/constants/content.js`
+- Global styles: `client/src/index.css`
 
-Brand direction:
-- Premium African braiding studio in London
-- Dark luxury
-- Warm editorial
-- Feminine
-- Cinematic
-- Clean conversion-focused
-- Salon and mobile braiding services
+Requested implementation:
 
-Locked colour system:
-- Background / Espresso Noir: `#171311`
-- Surface / Smoked Cocoa: `#221C19`
-- Primary Accent / Burnished Bronze: `#B78652`
-- Primary Text / Warm Ivory: `#F5EEE8`
-- Secondary Text / Muted Sand: `#B7A89C`
-- Olive Accent: `#6C6A4F`
-- Clay Accent: `#A05C3F`
-- Border: `rgba(245, 238, 232, 0.10)`
+1. Update `client/src/pages/Gallery.jsx`:
+   - Keep existing `selectedItem` state, `activeTriggerRef`, `openModal`, and `closeModal` behavior.
+   - Replace the current page hero copy with:
 
-Homepage sections:
-1. Header / Navigation
-2. Hero Section
-3. Trust Strip
-4. Signature Styles Section
-5. Why Choose KareBraids
-6. Gallery Preview
-7. Testimonials
-8. Final Booking CTA
-9. Footer
+     ```jsx
+     <div className="gallery-title-wrap">
+       <h1>GALLERY</h1>
+     </div>
+     ```
 
-Confirmed decision:
-- Use the five mockup services exactly on the redesigned homepage and treat the old six-service homepage row as superseded for the homepage only:
-  - Knotless Braids - From £120
-  - Boho Braids - From £150
-  - Stitch Braids - From £130
-  - Twists / Locs - From £140
-  - Cornrows - From £100
+   - Keep rendering `galleryItems` as buttons.
+   - Keep `GalleryModal` usage.
+   - Remove visible card caption text from markup only if CSS hiding is not enough; prefer CSS hiding.
 
-Implementation requirements:
-- Create reusable components: `Header`, `Hero`, `TrustStrip`, `SectionHeading`, `ServiceCard`, `WhyChoose`, `GalleryPreview`, `TestimonialSection`, `BookingCTA`, `Footer`.
-- Use local arrays for services, trust items, values, and footer links.
-- Store image data in constants.
-- Use semantic HTML.
-- Add accessible alt text.
-- Use focus states for links/buttons.
-- Keep files clean and production-ready.
+2. Update `client/src/index.css`:
+   - Override the existing gallery styles so the page resembles the Figma:
+     - dark canvas
+     - centered title
+     - 3-column grid on desktop
+     - square image tiles
+     - no masonry spans
+     - no visible captions
+     - responsive 2 columns on tablet, 1 column on mobile
+   - Replace/override current `.gallery-grid`, `.gallery-card`, `.gallery-card.feature`, `.gallery-card.tall`, `.gallery-card.wide`, `.gallery-card.medium`, `.gallery-card.compact` styles.
+   - Modal should match the Figma overlay:
+     - dark translucent backdrop
+     - centered large light/cream rectangle
+     - image contained inside
+     - close button remains accessible
+     - hide modal copy for this design.
 
-Out of scope:
-- Backend/API/database changes.
-- Booking form logic changes.
-- Admin dashboard changes.
-- New dependencies unless already installed and necessary.
-- Light or white homepage sections.
+3. Preserve accessibility:
+   - Buttons must keep `aria-label`.
+   - Modal must still close on Escape/backdrop/close button.
+   - Focus should return to clicked gallery item after closing.
+
+4. Run:
+   - `npm run lint --prefix client`
+   - `npm run test --prefix client`
+   - `npm run build --prefix client`
+
+Return the changed files and summarize exactly what changed.

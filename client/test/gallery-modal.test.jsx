@@ -46,6 +46,20 @@ describe('gallery modal', () => {
     await waitFor(() => expect(galleryItem).toHaveFocus())
   })
 
+  it('closes from a backdrop click and returns focus to the gallery item', async () => {
+    const user = userEvent.setup()
+    renderGallery()
+    const galleryItem = screen.getByRole('button', { name: /handcrafted detail/i })
+
+    await user.click(galleryItem)
+    expect(screen.getByRole('dialog', { name: /handcrafted detail/i })).toBeInTheDocument()
+
+    await user.click(document.querySelector('.modal-backdrop'))
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    await waitFor(() => expect(galleryItem).toHaveFocus())
+  })
+
   it('opens a newly added gallery image from a concise card label', async () => {
     const user = userEvent.setup()
     renderGallery()

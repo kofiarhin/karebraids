@@ -203,21 +203,38 @@ describe('KareBraids pages', () => {
     const { container } = renderRoute('/gallery')
 
     expect(container.querySelector('.gallery-page')).toHaveClass('dark-gallery-page')
-    expect(screen.getByRole('heading', { name: /braid gallery/i })).toBeInTheDocument()
+    expect(container.querySelector('.gallery-title-wrap')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'GALLERY' })).toBeInTheDocument()
+    expect(screen.queryByText(/craftsmanship preview/i)).not.toBeInTheDocument()
     expect(container.querySelectorAll('.gallery-card')).toHaveLength(9)
     expect(screen.getByRole('region', { name: /gallery image wall/i })).toHaveClass(
       'gallery-grid',
     )
   })
 
-  it('defines a refined gallery card and modal treatment', () => {
+  it('defines the square Figma-style gallery grid treatment', () => {
     const styles = homeStyles()
 
-    expect(styles).toContain('.dark-brand-shell .gallery-card::before')
-    expect(styles).toContain('linear-gradient(180deg, rgba(36, 20, 8, 0), rgba(36, 20, 8, 0.62)')
-    expect(styles).toContain('.dark-gallery-modal::before')
-    expect(styles).toContain('grid-auto-rows: 10.5rem;')
-    expect(styles).toContain('background: rgba(36, 20, 8, 0.5);')
+    expect(styles).toContain('.gallery-title-wrap')
+    expect(styles).toContain('grid-template-columns: repeat(3, minmax(0, 1fr));')
+    expect(styles).toContain('aspect-ratio: 1 / 1;')
+    expect(styles).toContain('grid-column: auto;')
+    expect(styles).toContain('grid-row: auto;')
+    expect(styles).toContain('.gallery-card span {\n  display: none;')
+    expect(styles).toContain('@media (max-width: 900px)')
+    expect(styles).toContain('grid-template-columns: repeat(2, minmax(0, 1fr));')
+    expect(styles).toContain('@media (max-width: 560px)')
+  })
+
+  it('defines the light Figma-style gallery modal treatment', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('background: rgba(18, 14, 12, 0.78);')
+    expect(styles).toContain('backdrop-filter: blur(2px);')
+    expect(styles).toContain('width: min(90vw, 52rem);')
+    expect(styles).toContain('background: #f5f1ee;')
+    expect(styles).toContain('object-fit: contain;')
+    expect(styles).toContain('.modal-copy {\n  display: none;')
   })
 
   it('defines a refined booking flow treatment', () => {
@@ -289,6 +306,6 @@ describe('KareBraids pages', () => {
     )
 
     expect(screen.queryByRole('navigation', { name: /mobile navigation/i })).not.toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /braid gallery/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'GALLERY' })).toBeInTheDocument()
   })
 })

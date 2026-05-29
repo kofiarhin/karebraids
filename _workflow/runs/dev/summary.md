@@ -1,5 +1,84 @@
 # Workflow Summary
 
+## 2026-05-28 - KareBraids Gallery Figma Redesign
+
+- Request: Redesign the KareBraids gallery page to match the supplied Figma-style dark premium gallery reference.
+- Spec file used: `_workflow/runs/dev/spec.md`
+- Detailed spec completeness: Complete; all required detailed spec sections were present before planning.
+- Task plan used: `_workflow/runs/dev/tasks.md`
+- Review file used: `_workflow/runs/dev/review.md`
+- Release notes file used: `_workflow/runs/dev/release-notes.md`
+- Applied skill: design-taste-frontend
+
+## Tasks Completed
+
+- No task reached `Done` because final automated verification could not complete.
+- TASK-001: Implemented page title/grid changes, status `Needs Human Review`.
+- TASK-002: Implemented modal visual changes and tests, status `Needs Human Review`.
+- TASK-003: Final verification/closeout, status `Needs Human Review`.
+
+## Iteration Evidence Summary
+
+- TASK-001 Iteration 1 captured expected Red evidence for missing new title/grid CSS hooks.
+- TASK-001 implementation changed the page heading and grid CSS.
+- A stale old-heading assertion was found and updated.
+- Final focused verification timed out repeatedly.
+- TASK-002 test and CSS changes were applied but not verified because terminal execution became unavailable.
+
+## Files Changed
+
+- `client/src/pages/Gallery.jsx`
+- `client/src/index.css`
+- `client/test/site-pages.test.jsx`
+- `client/test/gallery-modal.test.jsx`
+- `_workflow/runs/dev/*`
+
+## Verification Run
+
+- `npm run test --prefix client -- site-pages.test.jsx`: failed as expected for Red evidence.
+- `npm run test --prefix client -- site-pages.test.jsx`: failed on stale old-heading assertion after implementation.
+- `npm run test --prefix client -- site-pages.test.jsx`: timed out after 120 seconds.
+- `npm run test --prefix client -- site-pages.test.jsx`: timed out after 240 seconds.
+- `Get-Date`: timed out, confirming terminal executor unavailability.
+
+## Acceptance Results
+
+- [x] Gallery page renders a centered `.gallery-title-wrap` with heading text `GALLERY`.
+- [x] Existing gallery state, trigger ref, open/close functions, `GalleryModal` usage, and button `aria-label`s are preserved in code.
+- [x] Gallery grid is 3 columns on desktop, 2 columns at tablet breakpoint, and 1 column on mobile in CSS.
+- [x] Gallery tiles are square, use `object-fit: cover`, and aspect modifier classes no longer create masonry spans in CSS.
+- [x] Gallery card captions are not visible in CSS.
+- [x] Modal backdrop is dark/translucent and modal surface is centered, light/cream, rectangular, and contains the image in CSS.
+- [x] Modal copy is not visible in CSS while dialog labelling markup remains.
+- [x] Modal implementation still closes through Escape, backdrop click, and close button, and focus restoration code is unchanged.
+- [~] Requested lint/test/build verification is pending because terminal execution timed out.
+
+## Failure Recovery Notes
+
+- The expected Red-phase failure was captured before implementation.
+- A stale old-heading assertion was corrected.
+- Terminal executor then timed out on test reruns, process inspection, `taskkill`, and `Get-Date`.
+
+## Final Diff Audit
+
+- Not completed because terminal execution timed out.
+
+## Unresolved Issues
+
+- Focused and full automated verification must still be run.
+- Final git diff audit must still be run.
+
+## Next Recommended Work
+
+- Rerun:
+  - `npm run test --prefix client -- site-pages.test.jsx`
+  - `npm run test --prefix client -- gallery-modal.test.jsx`
+  - `npm run lint --prefix client`
+  - `npm run test --prefix client`
+  - `npm run build --prefix client`
+  - `git diff --stat`
+  - `git diff`
+
 ## 2026-05-26 - Homepage Featured Services Square Price Row
 
 - Request: Make homepage service images the same square size, arrange them horizontally, and show starting prices so visitors do not need to scroll as much.
