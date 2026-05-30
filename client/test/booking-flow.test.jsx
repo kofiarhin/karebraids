@@ -32,8 +32,18 @@ async function chooseService(user) {
   await user.click(screen.getByRole('button', { name: /knotless braids/i }))
 }
 
-async function chooseWednesdayMay272026(user) {
-  await user.click(screen.getByRole('button', { name: /select wednesday, may 27, 2026/i }))
+async function chooseAvailableAppointmentDate(user) {
+  const dateButton = screen.getAllByRole('button', { name: /^select /i })[0]
+  const readableDate = dateButton.getAttribute('aria-label').replace(/^Select /, '')
+  const date = new Date(readableDate)
+  const selectedDate = [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+  ].join('-')
+
+  await user.click(dateButton)
+  return selectedDate
 }
 
 describe('booking flow', () => {
@@ -98,13 +108,13 @@ describe('booking flow', () => {
     renderBooking()
 
     await chooseService(user)
-    await chooseWednesdayMay272026(user)
+    const selectedDate = await chooseAvailableAppointmentDate(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
 
     await screen.findByRole('button', { name: /10:00/i })
     expect(bookingService.getAvailability).toHaveBeenCalledWith({
       service: 'Knotless Braids',
-      date: '2026-05-27',
+      date: selectedDate,
     })
     await user.click(screen.getByRole('button', { name: /10:00/i }))
     await user.type(screen.getByLabelText(/full name/i), 'Amara Okafor')
@@ -117,7 +127,7 @@ describe('booking flow', () => {
     expect(bookingService.createBooking).toHaveBeenCalledWith(
       expect.objectContaining({
         service: 'Knotless Braids',
-        date: '2026-05-27',
+        date: selectedDate,
         time: '10:00',
       }),
       expect.any(Object),
@@ -137,7 +147,7 @@ describe('booking flow', () => {
     renderBooking()
 
     await chooseService(user)
-    await chooseWednesdayMay272026(user)
+    await chooseAvailableAppointmentDate(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
     await user.click(await screen.findByRole('button', { name: /10:00/i }))
     await user.type(screen.getByLabelText(/full name/i), 'Amara Okafor')
@@ -158,7 +168,7 @@ describe('booking flow', () => {
     renderBooking()
 
     await chooseService(user)
-    await chooseWednesdayMay272026(user)
+    await chooseAvailableAppointmentDate(user)
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
 
     expect(await screen.findByText(/no appointments are available/i)).toBeInTheDocument()

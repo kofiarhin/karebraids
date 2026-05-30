@@ -110,18 +110,18 @@ describe('KareBraids pages', () => {
   it('defines the locked dark luxury homepage design hooks', () => {
     const styles = homeStyles()
 
-    expect(styles).toContain('--espresso-noir: #171311;')
-    expect(styles).toContain('--smoked-cocoa: #221C19;')
-    expect(styles).toContain('--burnished-bronze: #B78652;')
-    expect(styles).toContain('--warm-ivory: #F5EEE8;')
+    expect(styles).toContain('--color-page-background: #171311;')
+    expect(styles).toContain('--color-card-background: #221c19;')
+    expect(styles).toContain('--color-accent-gold: #b78652;')
+    expect(styles).toContain('--color-text-primary: #f5eee8;')
     expect(styles).toContain('.luxury-homepage')
     expect(styles).toContain('.gallery-feature-grid')
     expect(styles).toContain('.gallery-feature-card:hover img')
     expect(styles).toContain('transform: scale(1.06);')
     expect(styles).toContain('.gallery-feature-card::before')
-    expect(styles).toContain('rgba(23, 19, 17, 0.78)')
+    expect(styles).toContain('var(--theme-espresso-a078)')
     expect(styles).toContain('.luxury-homepage .btn:focus-visible')
-    expect(styles).toContain('outline: 3px solid rgba(183, 134, 82, 0.45);')
+    expect(styles).toContain('outline: 3px solid var(--theme-gold-a045);')
     expect(styles).toContain('@media (max-width: 760px)')
     expect(styles).toContain('.gallery-feature-grid {\n    grid-template-columns: 1fr;')
     expect(styles).toContain('.gallery-feature-card:nth-child(2),\n  .gallery-feature-card:nth-child(5) {\n    transform: none;')
@@ -177,7 +177,7 @@ describe('KareBraids pages', () => {
     expect(styles).toContain('.dark-brand-shell .page-hero-copy')
     expect(styles).toContain('.dark-brand-shell .about-page::before')
     expect(styles).toContain('.dark-brand-shell .about-image::before')
-    expect(styles).toContain('linear-gradient(180deg, rgba(255, 250, 246, 0.13)')
+    expect(styles).toContain('linear-gradient(180deg, var(--theme-cream-highlight-a013)')
   })
 
   it('keeps refined public page treatments mobile-safe', () => {
@@ -231,10 +231,10 @@ describe('KareBraids pages', () => {
   it('defines the light Figma-style gallery modal treatment', () => {
     const styles = homeStyles()
 
-    expect(styles).toContain('background: rgba(18, 14, 12, 0.78);')
+    expect(styles).toContain('background: var(--theme-modal-ink-a078);')
     expect(styles).toContain('backdrop-filter: blur(2px);')
     expect(styles).toContain('width: min(90vw, 52rem);')
-    expect(styles).toContain('background: #f5f1ee;')
+    expect(styles).toContain('background: var(--theme-modal-cream-solid);')
     expect(styles).toContain('object-fit: contain;')
     expect(styles).toContain('.modal-copy {\n  display: none;')
   })
@@ -245,8 +245,8 @@ describe('KareBraids pages', () => {
     expect(styles).toContain('.dark-brand-shell .booking-panel::before')
     expect(styles).toContain('.dark-brand-shell .booking-service::after')
     expect(styles).toContain('.dark-brand-shell .field-group:focus-within')
-    expect(styles).toContain('background: rgba(255, 250, 246, 0.08);')
-    expect(styles).toContain('box-shadow: inset 0 1px 0 rgba(255, 250, 246, 0.08);')
+    expect(styles).toContain('background: var(--theme-cream-highlight-a008);')
+    expect(styles).toContain('box-shadow: inset 0 1px 0 var(--theme-cream-highlight-a008);')
   })
 
   it('opens and closes the mobile navigation drawer', async () => {

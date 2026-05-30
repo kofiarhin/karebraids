@@ -39,3 +39,45 @@
 
 ## Next Recommended Work
 - Create a separate task to stabilize booking-flow date fixtures.
+
+# Summary: Unified KareBraids Semantic Color System
+
+- Request: Centralize and apply one semantic dark-luxury KareBraids palette across the full public and Admin UI.
+- Spec file used: `_workflow/runs/work/spec.md`
+- Detailed spec status: Complete with all required sections; explicitly approved before task generation.
+- Task plan used: `_workflow/runs/work/tasks.md`
+- Review file used: `_workflow/runs/work/review.md`
+- Release notes file used: `_workflow/runs/work/release-notes.md`
+- Tasks completed: TASK-001, TASK-002, TASK-003.
+- Applied skill: design-taste-frontend
+
+## Iteration Evidence Summary
+- TASK-001: token-contract Red, centralized theme Green, compatibility/suite refactor verified.
+- TASK-002: Booking/Admin operational contract Red, semantic surface and state Green, combined suite reviewed.
+- TASK-003: stale Booking fixture Red, future-date helper Green, lint recovery and full regression verified, local preview smoke completed.
+
+## Files Changed
+- Centralized theme and color-rule migration in `client/src/index.css`.
+- Added strict theme contract in `client/test/theme-tokens.test.jsx`.
+- Updated public stylesheet assertions in `client/test/site-pages.test.jsx`.
+- Stabilized future-date Booking regression fixtures in `client/test/booking-flow.test.jsx`.
+- Updated run-scoped workflow and polish artifacts.
+
+## Verification Run
+- Frontend Vitest, frontend lint, production build, backend Jest, whitespace check, strict literal scan, unresolved-variable scan, local-preview asset smoke, status, and diff audit passed.
+- Screenshot unavailable due absent browser automation tooling; code-surface fallback completed.
+
+## Acceptance Results
+- All approved criteria met.
+
+## Failure Recovery Notes
+- Repaired stale May 27, 2026 test fixture and two follow-on test-only lint issues without changing application behavior.
+
+## Final Diff Audit
+- Scope matches approved spec. No junk, sensitive values, unrelated production edits, or unresolved theme variables detected.
+
+## Unresolved Issues
+- None blocking. Optional unused starter SVG cleanup and stylesheet modularization remain separate maintenance opportunities.
+
+## Next Recommended Work
+- Commit the verified scoped changes and record the PR.

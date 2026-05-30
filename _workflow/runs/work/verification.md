@@ -1,30 +1,21 @@
-# Verification: Homepage Gallery Feature
+# Verification: Unified KareBraids Semantic Color System
 
-Applied skill: design-taste-frontend
-
-## Passed
-- `npm run test --prefix client -- site-pages.test.jsx` — passed, 20 tests.
+## Passed Checks
+- `npm run test --prefix client` — passed: 5 files, 37 tests.
 - `npm run lint --prefix client` — passed.
-- `npm run build --prefix client` — passed, Vite production bundle generated successfully.
+- `npm run build --prefix client` — passed.
+- `npm run test:server` — passed: 4 suites, 24 tests.
 - `git diff --check` — passed.
-- `rg -n "#signature-styles|signatureServices|GalleryPreview|ServiceCard|homepageImages\.(services|gallery)|signature-section|signature-grid|service-card|luxury-gallery-preview|gallery-mosaic|gallery-preview-copy" client/src` — no stale production references.
-- `curl --fail --silent --show-error http://127.0.0.1:5173/` — passed while local Vite dev server was running.
-- `curl --fail --silent --show-error http://127.0.0.1:5173/src/components/home/GalleryFeature.jsx | rg -n "galleryItems|View Full Gallery|View Gallery|to=\"/gallery\""` — passed.
+- Python selector/component color-literal scan — passed: 0 violations outside centralized `:root`.
+- Python unresolved CSS-variable scan — passed: 0 missing theme variables excluding runtime `--index`.
+- `npm run preview --prefix client -- --host 127.0.0.1` plus curl root/CSS/JS asset smoke — passed.
+- `git diff --stat` and `git diff` — completed.
 
-## Warning
-- `npm run test --prefix client` — attempted; 3 booking-flow tests fail outside this scope because they select Wednesday, May 27, 2026, which is in the past relative to Saturday, May 30, 2026.
-- Screenshot capture — unavailable because this environment has no Chromium executable and no Playwright module. Code-surface and served-app smoke review used as fallback.
+## Visual Review
+- Applied skill: design-taste-frontend
+- Screenshot attempt limitation: no Chromium, Chrome, Firefox, or Playwright module is installed in the container.
+- Fallback used: code-surface review plus built local-preview HTML/CSS/JS asset smoke.
 
-## Workflow Health Check
-- [x] Run-scoped request synced; root `WORK_REQUEST.md` left untouched.
-- [x] Handoff exists and reflects latest state.
-- [x] Detailed spec contains required sections.
-- [x] Spec approval gate shown and explicit approval recorded before task planning.
-- [x] Approved-spec-derived task plan exists.
-- [x] Progress, review, release notes, summary, and verification artifacts exist.
-- [x] Three iterations and TDD-first evidence recorded.
-- [x] Final diff audit, dirty-worktree check, acceptance results, and verification documented.
-- [x] Scope respected; no decision record needed for this routine UI slice.
-- [~] Full suite includes unrelated stale May 27 booking-fixture failures.
-
-Final health status: `Partial` due the documented unrelated repository-wide stale-date booking-test limitation.
+## Recovery Notes
+- Fixed stale test-only May 27, 2026 Booking date fixture by dynamically selecting an enabled future date.
+- Fixed two test-only lint errors caused by unused dynamic-date assignments.
