@@ -16,7 +16,7 @@ export function Hero() {
         </p>
         <div className="hero-actions">
           <Button to="/booking">Book Appointment</Button>
-          <a className="btn btn-secondary" href="#signature-styles">
+          <a className="btn btn-secondary" href="/gallery">
             <span>View Styles</span>
           </a>
         </div>

@@ -10,14 +10,6 @@ export const homepageImages = {
     { src: galleryItems[7].image },
     { src: galleryItems[8].image },
   ],
-  services: [
-    galleryItems[0],
-    galleryItems[7],
-    galleryItems[4],
-    galleryItems[5],
-    galleryItems[1],
-  ],
-  gallery: [galleryItems[8], galleryItems[6], galleryItems[3], galleryItems[2]],
   testimonial: {
     src: galleryItems[7].image,
     alt: 'Jasmine A. client portrait',
@@ -26,7 +18,7 @@ export const homepageImages = {
 
 export const navItems = [
   { label: 'Home', href: '/', type: 'route' },
-  { label: 'Services', href: '#signature-styles', type: 'anchor' },
+  { label: 'Services', href: '/gallery', type: 'route' },
   { label: 'Gallery', href: '/gallery', type: 'route' },
   { label: 'About', href: '/about', type: 'route' },
   { label: 'Booking', href: '/booking', type: 'route' },
@@ -38,39 +30,6 @@ export const trustItems = [
   { title: 'Salon & Mobile Services', icon: 'house' },
   { title: 'Protective Styling Experts', icon: 'shield' },
   { title: 'Client First Care', icon: 'heart' },
-]
-
-export const signatureServices = [
-  {
-    title: 'Knotless Braids',
-    price: 'From \u00a3120',
-    image: homepageImages.services[0].image,
-    alt: 'Knotless braids style inspiration',
-  },
-  {
-    title: 'Boho Braids',
-    price: 'From \u00a3150',
-    image: homepageImages.services[1].image,
-    alt: 'Boho braids style inspiration',
-  },
-  {
-    title: 'Stitch Braids',
-    price: 'From \u00a3130',
-    image: homepageImages.services[2].image,
-    alt: 'Stitch braids style inspiration',
-  },
-  {
-    title: 'Twists / Locs',
-    price: 'From \u00a3140',
-    image: homepageImages.services[3].image,
-    alt: 'Twists and locs style inspiration',
-  },
-  {
-    title: 'Cornrows',
-    price: 'From \u00a3100',
-    image: homepageImages.services[4].image,
-    alt: 'Cornrows style inspiration',
-  },
 ]
 
 export const valueItems = [

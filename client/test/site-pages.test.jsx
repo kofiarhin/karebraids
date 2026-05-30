@@ -49,12 +49,12 @@ describe('KareBraids pages', () => {
     expect(screen.getByText(/luxury african hair braiding/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /luxury braiding, crafted with care/i })).toBeInTheDocument()
     expect(screen.getByText(/premium salon and mobile braiding services across london/i)).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /view styles/i })).toHaveAttribute('href', '#signature-styles')
+    expect(screen.getByRole('link', { name: /view styles/i })).toHaveAttribute('href', '/gallery')
     expect(screen.getByText(/500\+ happy clients/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/karebraids trust highlights/i)).toHaveTextContent(/london based/i)
-    expect(screen.getByText(/signature styles/i)).toBeInTheDocument()
+    expect(screen.queryByText(/signature styles/i)).not.toBeInTheDocument()
     expect(screen.getByText(/why choose karebraids/i)).toBeInTheDocument()
-    expect(screen.getByText(/gallery preview/i)).toBeInTheDocument()
+    expect(screen.getByText(/our work/i)).toBeInTheDocument()
     expect(screen.getByText(/client love/i)).toBeInTheDocument()
     expect(screen.getByText(/ready for your next style/i)).toBeInTheDocument()
     expect(screen.getByRole('contentinfo')).toHaveTextContent(/mon - sat: 8am - 7pm/i)
@@ -68,28 +68,30 @@ describe('KareBraids pages', () => {
       'src',
       galleryItems[0].image,
     )
-    expect(screen.getByRole('img', { name: /salon braiding detail/i })).toHaveAttribute(
-      'src',
-      galleryItems.find((item) => item.id === 'process-detail').image,
-    )
+    expect(screen.getByRole('img', { name: galleryItems[2].title })).toHaveAttribute('src', galleryItems[2].image)
     expect(screen.getByRole('img', { name: /jasmine a. client portrait/i })).toBeInTheDocument()
-    expect(container.querySelectorAll('.gallery-mosaic img')).toHaveLength(4)
+    expect(container.querySelectorAll('.gallery-feature-card img')).toHaveLength(6)
+    expect(container.querySelectorAll('.gallery-feature-card')).toHaveLength(6)
+    container.querySelectorAll('.gallery-feature-card').forEach((card, index) => {
+      expect(card).toHaveAttribute('href', '/gallery')
+      expect(within(card).getByRole('img', { name: galleryItems[index].title })).toHaveAttribute('loading', 'lazy')
+      expect(within(card).getByText(galleryItems[index].title)).toBeInTheDocument()
+      expect(within(card).getByText(/view gallery/i)).toBeInTheDocument()
+    })
     container.querySelectorAll('.client-avatar-stack img').forEach((image) => {
       expect(image).toHaveAttribute('alt', '')
       expect(image).toHaveAttribute('aria-hidden', 'true')
     })
   })
 
-  it('shows the five approved mockup signature styles and prices only', () => {
-    renderRoute('/')
+  it('replaces homepage signature cards with only the first six gallery items', () => {
+    const { container } = renderRoute('/')
 
-    expect(screen.getByLabelText('Knotless Braids, From \u00a3120')).toBeInTheDocument()
-    expect(screen.getByLabelText('Boho Braids, From \u00a3150')).toBeInTheDocument()
-    expect(screen.getByLabelText('Stitch Braids, From \u00a3130')).toBeInTheDocument()
-    expect(screen.getByLabelText('Twists / Locs, From \u00a3140')).toBeInTheDocument()
-    expect(screen.getByLabelText('Cornrows, From \u00a3100')).toBeInTheDocument()
-    expect(screen.queryByLabelText(/kids braids/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/box braids/i)).not.toBeInTheDocument()
+    expect(container.querySelector('.signature-section')).not.toBeInTheDocument()
+    expect(container.querySelector('.gallery-mosaic')).not.toBeInTheDocument()
+    expect(container.querySelectorAll('.gallery-feature-card')).toHaveLength(6)
+    expect(container.querySelector('.signature-grid')).not.toBeInTheDocument()
+    expect(screen.queryByText(galleryItems[6].title)).not.toBeInTheDocument()
   })
 
   it('renders the requested value, gallery, testimonial, and booking CTA copy', () => {
@@ -97,8 +99,8 @@ describe('KareBraids pages', () => {
 
     expect(screen.getByText(/neat, lightweight and flawless every time/i)).toBeInTheDocument()
     expect(screen.getByText(/we come to you - home, hotel or workplace/i)).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /see the finish before you book/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /view gallery/i })).toHaveAttribute('href', '/gallery')
+    expect(screen.getByRole('heading', { name: /protective styles crafted with precision/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /view full gallery/i })).toHaveAttribute('href', '/gallery')
     expect(screen.getByText(/my braids were neat, lightweight and lasted beautifully/i)).toBeInTheDocument()
     expect(screen.getByText(/jasmine a\./i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /let's get you booked/i })).toBeInTheDocument()
@@ -113,15 +115,16 @@ describe('KareBraids pages', () => {
     expect(styles).toContain('--burnished-bronze: #B78652;')
     expect(styles).toContain('--warm-ivory: #F5EEE8;')
     expect(styles).toContain('.luxury-homepage')
-    expect(styles).toContain('.signature-grid')
-    expect(styles).toContain('.service-card:hover img')
-    expect(styles).toContain('transform: scale(1.04);')
-    expect(styles).toContain('.service-card::before')
+    expect(styles).toContain('.gallery-feature-grid')
+    expect(styles).toContain('.gallery-feature-card:hover img')
+    expect(styles).toContain('transform: scale(1.06);')
+    expect(styles).toContain('.gallery-feature-card::before')
     expect(styles).toContain('rgba(23, 19, 17, 0.78)')
     expect(styles).toContain('.luxury-homepage .btn:focus-visible')
     expect(styles).toContain('outline: 3px solid rgba(183, 134, 82, 0.45);')
     expect(styles).toContain('@media (max-width: 760px)')
-    expect(styles).toContain('.signature-grid {\n    display: flex;')
+    expect(styles).toContain('.gallery-feature-grid {\n    grid-template-columns: 1fr;')
+    expect(styles).toContain('.gallery-feature-card:nth-child(2),\n  .gallery-feature-card:nth-child(5) {\n    transform: none;')
   })
 
   it('keeps decorative homepage imagery quiet for assistive technology', () => {
@@ -145,11 +148,9 @@ describe('KareBraids pages', () => {
     screen.getAllByRole('link', { name: /book appointment/i }).forEach((link) => {
       expect(link).toHaveAttribute('href', '/booking')
     })
-    screen.getAllByRole('link', { name: /book this style/i }).forEach((link) => {
-      expect(link).toHaveAttribute('href', '/booking')
-    })
-    expect(screen.getByRole('link', { name: /view all services/i })).toHaveAttribute('href', '/booking')
-    expect(screen.getByRole('link', { name: /view gallery/i })).toHaveAttribute('href', '/gallery')
+    expect(screen.getByRole('navigation', { name: /main navigation/i }).querySelector('a[href="/gallery"]')).toHaveTextContent(/services/i)
+    expect(screen.getByRole('link', { name: /view styles/i })).toHaveAttribute('href', '/gallery')
+    expect(screen.getByRole('link', { name: /view full gallery/i })).toHaveAttribute('href', '/gallery')
   })
 
   it('defines smallest-phone fallbacks for the luxury homepage', () => {
@@ -157,7 +158,8 @@ describe('KareBraids pages', () => {
 
     expect(styles).toContain('@media (max-width: 480px)')
     expect(styles).toContain('.luxury-trust-strip,\n  .value-row {\n    grid-template-columns: 1fr;')
-    expect(styles).toContain('.signature-grid {\n    margin-inline: -0.5rem;')
+    expect(styles).toContain('.gallery-feature-card:nth-child(3n) {\n    min-height: 21rem;')
+    expect(styles).toContain('.gallery-feature-section {\n    width: min(100% - 1rem, 1240px);')
     expect(styles).toContain('.site-header {\n    width: min(100% - 1rem, 1240px);')
   })
 
@@ -269,7 +271,7 @@ describe('KareBraids pages', () => {
     expect(within(mobileNav).getByRole('link', { name: /^booking$/i })).toHaveClass('primary')
     expect(within(mobileNav).getByRole('link', { name: /^services$/i })).toHaveAttribute(
       'href',
-      '#signature-styles',
+      '/gallery',
     )
     expect(document.body).toHaveClass('mobile-nav-open')
 
