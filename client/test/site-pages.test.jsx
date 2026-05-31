@@ -69,7 +69,7 @@ describe('KareBraids pages', () => {
       galleryItems[0].image,
     )
     expect(screen.getByRole('img', { name: galleryItems[2].title })).toHaveAttribute('src', galleryItems[2].image)
-    expect(screen.getByRole('img', { name: /jasmine a. client portrait/i })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /ama k. testimonial portrait/i })).toBeInTheDocument()
     expect(container.querySelectorAll('.gallery-feature-card img')).toHaveLength(6)
     expect(container.querySelectorAll('.gallery-feature-card')).toHaveLength(6)
     container.querySelectorAll('.gallery-feature-card').forEach((card, index) => {
@@ -101,10 +101,63 @@ describe('KareBraids pages', () => {
     expect(screen.getByText(/we come to you - home, hotel or workplace/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /protective styles crafted with precision/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /view full gallery/i })).toHaveAttribute('href', '/gallery')
-    expect(screen.getByText(/my braids were neat, lightweight and lasted beautifully/i)).toBeInTheDocument()
-    expect(screen.getByText(/jasmine a\./i)).toBeInTheDocument()
+    expect(screen.getByText(/my knotless braids were so neat and lightweight/i)).toBeInTheDocument()
+    expect(screen.getByText(/ama k\./i)).toBeInTheDocument()
+    expect(screen.getByText('01 / 05')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /let's get you booked/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /book your appointment/i })).toHaveAttribute('href', '/booking')
+  })
+
+
+  it('navigates testimonial slides manually and loops infinitely in both directions', async () => {
+    const user = userEvent.setup()
+    renderRoute('/')
+
+    const previousButton = screen.getByRole('button', { name: /previous testimonial/i })
+    const nextButton = screen.getByRole('button', { name: /next testimonial/i })
+
+    expect(screen.getByText(/ama k\./i)).toBeInTheDocument()
+    expect(screen.getByText('01 / 05')).toBeInTheDocument()
+
+    await user.click(previousButton)
+    expect(screen.getByText(/aaliyah m\./i)).toBeInTheDocument()
+    expect(screen.getByText('05 / 05')).toBeInTheDocument()
+
+    await user.click(nextButton)
+    expect(screen.getByText(/ama k\./i)).toBeInTheDocument()
+    expect(screen.getByText('01 / 05')).toBeInTheDocument()
+
+    await user.click(nextButton)
+    expect(screen.getByText(/nia o\./i)).toBeInTheDocument()
+    expect(screen.getByText('02 / 05')).toBeInTheDocument()
+  })
+
+
+  it('selects testimonials directly through accessible avatar controls', async () => {
+    const user = userEvent.setup()
+    const { container } = renderRoute('/')
+
+    const sadeButton = screen.getByRole('button', { name: /show testimonial from sade b\./i })
+    expect(container.querySelectorAll('.testimonial-indicator')).toHaveLength(5)
+    expect(screen.getByRole('button', { name: /show testimonial from ama k\./i })).toHaveAttribute('aria-current', 'true')
+
+    await user.click(sadeButton)
+
+    expect(screen.getByText(/professional, gentle, and very detailed/i)).toBeInTheDocument()
+    expect(screen.getByText(/sade b\./i)).toBeInTheDocument()
+    expect(screen.getByText('04 / 05')).toBeInTheDocument()
+    expect(sadeButton).toHaveAttribute('aria-current', 'true')
+  })
+
+
+  it('renders fallback initials when a testimonial has no avatar image', async () => {
+    const user = userEvent.setup()
+    const { container } = renderRoute('/')
+
+    await user.click(screen.getByRole('button', { name: /show testimonial from aaliyah m\./i }))
+
+    expect(screen.getByText(/aaliyah m\./i)).toBeInTheDocument()
+    expect(container.querySelector('.testimonial-avatar-fallback')).toHaveTextContent('AM')
   })
 
   it('defines the locked dark luxury homepage design hooks', () => {
@@ -121,6 +174,13 @@ describe('KareBraids pages', () => {
     expect(styles).toContain('.gallery-feature-card::before')
     expect(styles).toContain('var(--theme-espresso-a078)')
     expect(styles).toContain('.luxury-homepage .btn:focus-visible')
+    expect(styles).toContain('.testimonial-indicators')
+    expect(styles).toContain('.testimonial-indicator.is-active')
+    expect(styles).toContain('.testimonial-content')
+    expect(styles).toContain('.client-love-lede')
+    expect(styles).toContain('animation: testimonial-reveal 320ms cubic-bezier(0.16, 1, 0.3, 1);')
+    expect(styles).toContain('@keyframes testimonial-reveal')
+    expect(styles).toContain('.testimonial-content {\n    animation: none;')
     expect(styles).toContain('outline: 3px solid var(--theme-gold-a045);')
     expect(styles).toContain('@media (max-width: 760px)')
     expect(styles).toContain('.gallery-feature-grid {\n    grid-template-columns: 1fr;')

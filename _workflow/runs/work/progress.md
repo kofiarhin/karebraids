@@ -178,3 +178,65 @@
 - Acceptance status: All approved criteria met.
 - Blockers: none.
 - Next step: Final artifacts, health check, commit, PR record.
+
+## 2026-05-31 — Planning: Premium Homepage Testimonial Carousel
+- Explicit spec approval recorded before task generation: `approve spec`.
+- Created approved-spec-derived `_workflow/runs/work/tasks.md` with one vertical slice: `TASK-001`.
+- Dirty worktree protection: only current-run workflow artifacts were modified before implementation; no overlap risk.
+- Applied skill: design-taste-frontend
+- Next step: TASK-001 Iteration 1 Build Red.
+
+## 2026-05-31 — TASK-001 Iteration 1 Build
+- Status: In Progress; Build iteration completed.
+- Goal: Establish array-driven manual testimonial navigation and bidirectional wrapping.
+- Applied skill: design-taste-frontend
+- Files changed: `client/test/site-pages.test.jsx`, `client/src/constants/homepage.js`, `client/src/components/home/TestimonialSection.jsx`.
+- Test plan: Update homepage assertions for the supplied first testimonial, new portrait, `01 / 05` counter, forward navigation, forward wrap, and reverse wrap before implementation.
+- Red phase evidence: `npm run test --prefix client -- site-pages.test.jsx` failed with 3 expected failures because the new portrait, supplied first testimonial/counter, and manual loop behavior did not exist.
+- Green phase evidence: Added `homepageTestimonials`, local active-index state, modulo previous/next handlers, active card rendering, rating stars, and zero-padded counter. First Green rerun found invalid `galleryItems[9]`; targeted recovery switched Aaliyah to the required initials fallback. Second Green rerun found a duplicate `contentinfo` landmark from an internal `<footer>`; targeted recovery changed it to a neutral `<div>`. Exact suite then passed: 21 tests.
+- Refactor phase evidence: Kept isolated UI state local, retained a small `formatSlideNumber` helper, and reran the exact targeted suite successfully after semantic cleanup.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx` (expected Red failure, two targeted recovery reruns, final pass).
+- Verification command/result: `npm run test --prefix client -- site-pages.test.jsx` passed: 21 tests.
+- Review findings: Manual arrow controls are deterministic, dependency-free, and scoped to the homepage testimonial section.
+- Acceptance status: Core manual carousel, data array, counter, stars, and wrap behavior met; direct indicators and visual polish remained.
+- Failure recovery notes: Corrected missing gallery index with fallback initials and removed nested landmark regression.
+- Next action: Iteration 2 Refine Red.
+
+## 2026-05-31 — TASK-001 Iteration 2 Refine
+- Status: In Progress; Refine iteration completed.
+- Goal: Add direct avatar selection, active semantics, and premium responsive visual treatment.
+- Applied skill: design-taste-frontend
+- Files changed: `client/test/site-pages.test.jsx`, `client/src/components/home/TestimonialSection.jsx`, `client/src/index.css`.
+- Test plan: Add accessible avatar-selection and scoped CSS hook assertions first, observe failure, then render indicators from the shared data and add scoped luxury styles.
+- Red phase evidence: `npm run test --prefix client -- site-pages.test.jsx` failed with 2 expected failures because direct avatar controls and `.testimonial-indicators` style hooks did not exist.
+- Green phase evidence: Added five generated avatar/initial indicator buttons with descriptive labels, `aria-current`, direct selection, active visuals, visible focus treatment, a rounded layered card, support copy, counter footer, and gold accents. Targeted suite passed: 22 tests.
+- Refactor phase evidence: Reviewed the CSS cascade and retained existing `@media (max-width: 760px)` split-to-stack behavior; all new selectors remain scoped to testimonial UI. Targeted suite remained passing.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx` (expected Red failure, Green pass).
+- Verification command/result: `npm run test --prefix client -- site-pages.test.jsx` passed: 22 tests.
+- Review findings: Indicator buttons are data-driven, keyboard accessible, visibly active, and consistent with the existing dark luxury palette.
+- Acceptance status: Direct selection, active highlight, premium layout, focus treatment, and responsive stack met; reduced-motion hardening remained.
+- Next action: Iteration 3 Polish Red.
+
+## 2026-05-31 — TASK-001 Iteration 3 Polish
+- Status: Done; lifecycle completed through Verified and Reviewed.
+- Goal: Harden initials fallback, calm transition behavior, reduced-motion support, and full-project verification.
+- Applied skill: design-taste-frontend
+- Files changed: `client/test/site-pages.test.jsx`, `client/src/index.css`, `client/test/booking-flow.test.jsx`.
+- Test plan: Add fallback initials and transition/reduced-motion assertions first; observe failure; add scoped animation hardening; run targeted suite, full frontend suite, lint, build, dev smoke, backend Jest, whitespace audit, and diff audit.
+- Red phase evidence: `npm run test --prefix client -- site-pages.test.jsx` failed 1 expected CSS assertion because fallback rendering already worked but transition keyframes and reduced-motion override did not exist.
+- Green phase evidence: Added `testimonial-reveal` transition and reduced-motion override. Targeted suite passed: 23 tests. Full frontend suite initially exposed 3 unrelated booking fixture failures because the current calendar month had no remaining selectable non-Sunday dates; targeted recovery updated the helper to navigate to the next month only when required. Full frontend suite passed: 40 tests.
+- Refactor phase evidence: Vite build initially warned that the reduced-motion block had been inserted into a selector list. Moved the block beside carousel styles, reran targeted Vitest, lint, and build; all passed without the CSS optimizer warning.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, `npm run dev`, `npm test`, `git diff --check`, `git diff --stat`, `git diff`.
+- Verification command/result: Targeted Vitest passed: 23 tests. Full frontend Vitest passed: 40 tests. ESLint passed. Vite production build passed without optimizer warning. Root backend Jest passed: 24 tests. Root `npm run dev` started Vite at `http://localhost:5173/`; root server process could not start because this environment lacks `nodemon`.
+- Review findings: No autoplay, timer, external carousel package, API, or backend behavior was added. Screenshot automation is unavailable in the provided tools, so visual verification used code-surface review plus Vite startup/build.
+- Acceptance status:
+  - [x] Five supplied testimonials exist in array data with name, review, rating, and avatar path or initials fallback.
+  - [x] Carousel changes only through accessible manual controls and wraps in both directions.
+  - [x] Accessible avatar controls activate any testimonial and expose active state.
+  - [x] Counter, dark luxury card, gold stars, quote icon, premium spacing, and calm transitions exist.
+  - [x] Desktop split and mobile stack remain implemented.
+  - [x] Targeted/full frontend verification, lint, build, and backend Jest pass; dev startup limitation documented.
+- Failure recovery notes: Stabilized aged booking-flow fixtures by navigating forward only when the current month has no selectable date; fixed CSS reduced-motion insertion location after Vite warning.
+- Review result: Scoped implementation accepted.
+- Blockers: none.
+- Next step: final review, release notes, summary, handoff, health check, commit, and PR record.

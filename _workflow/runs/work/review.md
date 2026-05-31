@@ -1,40 +1,49 @@
-# Review: Unified KareBraids Semantic Color System
+# Review: Premium Homepage Testimonial Carousel
 
-- Request: Centralize a cohesive KareBraids dark-luxury color system and migrate public, shared, Booking, drawer, modal, and Admin UI styling without changing behavior.
-- Spec file used: `_workflow/runs/work/spec.md`
-- Task plan used: `_workflow/runs/work/tasks.md`
-- Tasks reviewed: TASK-001, TASK-002, TASK-003
-- Applied skill: design-taste-frontend
+## Request
+Replace the static homepage testimonial with a premium manual-only five-item carousel that preserves the KareBraids dark luxury split layout.
 
-## Bugs Found And Recovered
-- Existing Booking Vitest fixture hardcoded May 27, 2026. Since the current date is May 30, 2026, three Booking tests could no longer select that past date. Replaced the test helper with dynamic enabled future-date selection; production logic remains unchanged.
-- First final lint rerun exposed two unused dynamic-date assignments in test-only branches. Removed the unused assignments and reran lint successfully.
+## Spec File Used
+`_workflow/runs/work/spec.md`
+
+## Task Plan Used
+`_workflow/runs/work/tasks.md`
+
+## Tasks Reviewed
+- `TASK-001: Add a manual-only premium homepage testimonial carousel` — Done.
+
+## Bugs Found
+- Initial Aaliyah avatar path referenced a non-existent gallery index. Fixed by using the required initials fallback.
+- Internal carousel wrapper initially used `<footer>`, adding a duplicate `contentinfo` landmark. Fixed by using a neutral `<div>`.
+- Full frontend verification found aged booking-flow fixture behavior when the current month contains no remaining selectable non-Sunday date. Fixed the test helper to move to the next month only when needed.
+- Vite build found a malformed CSS insertion position for reduced motion. Moved the scoped media block beside testimonial styles and rebuilt cleanly.
 
 ## Scope Creep Check
-- No layout, spacing, typography, interaction, animation, component-structure, route, API, database, backend, authentication, or dependency changes.
-- `client/dist/` is ignored build output and remains excluded from version control.
-- Starter `client/src/assets/react.svg` and `client/src/assets/vite.svg` contain embedded asset colors but are untouched, unused starter assets rather than component styling surfaces.
+- Carousel implementation is limited to homepage testimonial constants, component markup/state, scoped CSS, and relevant homepage tests.
+- `client/test/booking-flow.test.jsx` changed only to repair an unrelated time-sensitive test-fixture issue discovered during required full verification.
+- No API, database, dependency, environment, booking implementation, or backend behavior changed.
 
 ## Final Diff Audit
-- Ran `git diff --stat` and `git diff`.
-- Scoped implementation changes: `client/src/index.css`, frontend Vitest files, run-scoped workflow artifacts, and polish evidence.
-- Tests added/updated for changed styling contract and date-stable regression proof.
-- No generated junk, secrets, or sensitive values added.
-- Strict app styling scan reports zero selector/component color literals outside the centralized `:root` token layer.
-- Unresolved theme-variable scan reports zero missing values excluding runtime reveal variable `--index`.
+- Ran `git diff --stat`, `git diff`, and `git diff --check`.
+- Diff matches the approved spec and required workflow artifact updates.
+- No generated `client/dist/` files are tracked.
+- No temporary files, credentials, tokens, or secrets were added.
+- Tests were updated before implementation and include manual arrows, wrap behavior, direct selection, counter, fallback initials, and CSS hardening expectations.
+
+## Failure Recovery Notes
+- Recorded per iteration in `_workflow/runs/work/progress.md`.
 
 ## Missing Tests
-- None for approved scope. Token contract, public renders, drawer interaction, Booking flow, Admin flow, modal coverage, lint, build, server tests, source scan, and smoke check were completed.
+- None for approved behavior. Browser screenshot automation is unavailable in the provided tools; code-surface review and Vite startup/build are documented fallback evidence.
 
 ## Security Concerns
-- None. No auth, secrets, backend, API, env, or data handling changes.
+- None. Existing gallery images are reused as representative avatars without storing personal data.
 
 ## Architecture Concerns
-- `client/src/index.css` remains a large layered stylesheet. The new centralized semantic theme is maintainable, but a future non-functional cleanup could split CSS by concern while retaining the root token source of truth.
+- None. Active index remains local UI state; no global state or server-state layer is warranted.
 
 ## Follow-Up Tasks
-- Optional: remove unused Vite/React starter SVG assets in a separate cleanup request.
-- Optional: split stylesheet modules in a separate behavior-preserving maintenance request.
+- Optional: install root `nodemon` dependency if full Express hot-reload startup is expected in this environment.
 
 ## Final Review Verdict
-Passed. The complete styling surface uses the centralized KareBraids dark-luxury token system with restrained semantic operational states and preserved application behavior.
+Passed. Applied skill: design-taste-frontend

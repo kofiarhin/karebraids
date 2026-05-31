@@ -10,10 +10,6 @@ export const homepageImages = {
     { src: galleryItems[7].image },
     { src: galleryItems[8].image },
   ],
-  testimonial: {
-    src: galleryItems[7].image,
-    alt: 'Jasmine A. client portrait',
-  },
 }
 
 export const navItems = [
@@ -55,11 +51,43 @@ export const valueItems = [
   },
 ]
 
-export const testimonial = {
-  quote:
-    "My braids were neat, lightweight and lasted beautifully. Kare truly knows what she's doing!",
-  name: 'Jasmine A.',
-}
+export const homepageTestimonials = [
+  {
+    name: 'Ama K.',
+    review: 'My knotless braids were so neat and lightweight. The whole experience felt calm, professional, and premium.',
+    rating: 5,
+    avatar: galleryItems[7].image,
+    initials: 'AK',
+  },
+  {
+    name: 'Nia O.',
+    review: 'KareBraids took her time with my hair and the finish was beautiful. I got compliments for weeks.',
+    rating: 5,
+    avatar: galleryItems[5].image,
+    initials: 'NO',
+  },
+  {
+    name: 'Zuri A.',
+    review: 'The braids were clean, comfortable, and lasted really well. I felt looked after from start to finish.',
+    rating: 5,
+    avatar: galleryItems[8].image,
+    initials: 'ZA',
+  },
+  {
+    name: 'Sade B.',
+    review: 'Professional, gentle, and very detailed. My goddess braids came out exactly how I wanted.',
+    rating: 5,
+    avatar: galleryItems[6].image,
+    initials: 'SB',
+  },
+  {
+    name: 'Aaliyah M.',
+    review: 'Booking was easy and the service was excellent. My hair looked flawless and felt secure without being tight.',
+    rating: 5,
+    avatar: null,
+    initials: 'AM',
+  },
+]
 
 export const footerGroups = [
   {

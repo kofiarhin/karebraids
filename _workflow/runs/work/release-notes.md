@@ -1,19 +1,46 @@
-# Release Notes: Unified KareBraids Semantic Color System
+# Release Notes: Premium Homepage Testimonial Carousel
 
-- Request: Unify KareBraids colors across public, Booking, drawer, modal, and Admin surfaces.
-- User-facing changes:
-  - Booking, mobile drawer, and Admin now match the existing Home/Gallery/About espresso-and-cream dark-luxury aesthetic.
-  - Gold is restrained to accent usage; mobile Booking navigation no longer presents a bright orange active surface.
-  - Admin status, loading, success, warning, info, and error surfaces retain distinct muted operational colors.
-- Developer changes:
-  - Added one centralized semantic `:root` color system and reusable alpha/media-treatment token set in `client/src/index.css`.
-  - Added strict Vitest contract coverage preventing selector-rule color literals outside the centralized theme.
-  - Stabilized Booking-flow tests with dynamic future-date selection.
-- New routes/APIs: none.
-- New env vars: none.
-- Database/schema changes: none.
-- Dependencies added/removed: none.
-- Test commands run: frontend Vitest, frontend lint, frontend production build, backend Jest, whitespace audit, source scans, local preview smoke.
-- Known limitations: screenshot capture unavailable because container browser automation tooling is absent.
-- Follow-up work: optional unused starter SVG cleanup; optional stylesheet modularization.
-- Suggested commit message: `feat: unify KareBraids semantic color system`
+## Request
+Add a premium manual-only testimonial carousel to the KareBraids homepage.
+
+## User-Facing Changes
+- Replaced the static testimonial card with five supplied testimonials.
+- Added manual previous/next arrows with infinite wrap, direct avatar selection, active-state highlights, `01 / 05` counter, initials fallback, gold stars, and calm motion with reduced-motion support.
+- Preserved dark luxury desktop split layout and mobile stacking.
+
+## Developer Changes
+- Centralized homepage testimonial content in one array.
+- Added local React active-index state and accessibility-focused controls.
+- Added Vitest interaction and CSS-surface coverage.
+- Stabilized booking-flow test date selection when the current month has no remaining selectable appointment day.
+
+## New Routes/APIs
+none
+
+## New Env Vars
+none
+
+## Database/Schema Changes
+none
+
+## Dependencies Added/Removed
+none
+
+## Test Commands Run
+- `npm run test --prefix client -- site-pages.test.jsx`
+- `npm run test --prefix client`
+- `npm run lint --prefix client`
+- `npm run build --prefix client`
+- `npm run dev`
+- `npm test`
+- `git diff --check`
+
+## Known Limitations
+- Root `npm run dev` launches Vite successfully, but the Express watcher cannot launch in this environment because `nodemon` is not installed.
+- Browser screenshot automation is unavailable in the provided tools.
+
+## Follow-Up Work
+- Optional: add root `nodemon` dependency if development server hot reload should be supported by a clean install.
+
+## Suggested Commit Message
+`feat: add premium homepage testimonial carousel`

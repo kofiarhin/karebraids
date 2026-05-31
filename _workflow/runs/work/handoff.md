@@ -1,28 +1,36 @@
-# Workflow Handoff: Unified KareBraids Semantic Color System
+# Workflow Handoff: Premium Homepage Testimonial Carousel
 
 ## Current State
-- Current phase: complete; committed and PR record created
+- Current phase: complete; ready to commit and create PR record
 - Current branch: `work`
 - Current worktree: `/workspace/karebraids`
 - Run id: `work`
 - Artifact root: `_workflow/runs/work/`
-- Last completed task: TASK-003
+- Last completed task: TASK-001
 - Current task: none
 - Current iteration: none
 - Blockers: none
-- Dirty worktree protection: checked before implementation and after final verification; only scoped files are changed; ignored `client/dist/` build output excluded
-- Verification status: frontend Vitest, lint, build, backend Jest, whitespace audit, strict scans, local preview smoke, and diff audit passed
+- Dirty worktree protection: checked before implementation and after verification; scoped files only; ignored Vite build output excluded
+- Verification status: targeted/full frontend Vitest, ESLint, Vite build, backend Jest, dev startup smoke, whitespace audit, and diff audit completed; Vite startup passed, Express watcher limited by missing `nodemon`
 - Acceptance status: all approved criteria met
 - Workflow health: Passed
 - Applied skill: design-taste-frontend
 
 ## Completed Outcome
-- Added centralized semantic `:root` palette and reusable alpha/media-treatment tokens.
-- Migrated selector-rule color literals to centralized variables.
-- Unified public, drawer, Booking, modal, Admin, table, form, and feedback styling around espresso/cream/bronze dark luxury roles.
-- Kept gold accent-only and preserved distinct restrained success/warning/error/info states.
-- Added strict token contract coverage and stabilized future-date Booking tests.
+- Added five supplied homepage testimonials as array-driven content with rating, avatar, and initials fallback metadata.
+- Added manual-only looped arrows, direct avatar selection, active state, `01 / 05` counter, gold stars, quote treatment, smooth transition, and reduced-motion fallback.
+- Preserved desktop split composition and mobile stacking.
+- Added interaction and CSS-surface tests and stabilized date-sensitive booking test fixture behavior discovered during full verification.
+
+## Final Artifacts
+- Request: `_workflow/runs/work/request.md`
+- Spec: `_workflow/runs/work/spec.md`
+- Tasks: `_workflow/runs/work/tasks.md`
+- Progress: `_workflow/runs/work/progress.md`
+- Review: `_workflow/runs/work/review.md`
+- Release notes: `_workflow/runs/work/release-notes.md`
+- Summary: `_workflow/runs/work/summary.md`
 
 ## Resume State
-- exact next action: none; scoped changes committed and PR record created
-- safe to continue automatically: no further workflow work remains
+- Exact next action: commit scoped changes and create PR record.
+- Safe to continue automatically: yes.

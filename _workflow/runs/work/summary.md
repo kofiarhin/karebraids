@@ -81,3 +81,70 @@
 
 ## Next Recommended Work
 - Commit the verified scoped changes and record the PR.
+
+# 2026-05-31 Summary: Premium Homepage Testimonial Carousel
+
+## Request
+Replace the homepage static testimonial with a premium manual-only five-item carousel.
+
+## Spec File Used
+`_workflow/runs/work/spec.md`
+
+## Detailed Spec Completeness
+Complete. All required detailed spec sections were present before planning; no repair was required.
+
+## Task Plan Used
+`_workflow/runs/work/tasks.md`
+
+## Review File Used
+`_workflow/runs/work/review.md`
+
+## Tasks Completed
+- `TASK-001: Add a manual-only premium homepage testimonial carousel` — Done through Build, Refine, and Polish.
+
+## Iteration Evidence Summary
+- Build: TDD-first manual arrow/counter/wrap behavior with targeted recovery for fallback image and semantic landmark issues.
+- Refine: TDD-first avatar indicator selection, active semantics, and premium CSS treatment.
+- Polish: TDD-first fallback and motion hardening, reduced-motion support, aged booking-fixture stabilization during full verification, and CSS optimizer warning recovery.
+- Applied skill: design-taste-frontend
+
+## Files Changed
+- `_workflow/runs/work/progress.md`
+- `_workflow/runs/work/tasks.md`
+- `_workflow/runs/work/review.md`
+- `_workflow/runs/work/release-notes.md`
+- `_workflow/runs/work/summary.md`
+- `_workflow/runs/work/handoff.md`
+- `client/src/components/home/TestimonialSection.jsx`
+- `client/src/constants/homepage.js`
+- `client/src/index.css`
+- `client/test/site-pages.test.jsx`
+- `client/test/booking-flow.test.jsx`
+
+## Verification Run
+- Targeted homepage Vitest: passed, 23 tests.
+- Full client Vitest: passed, 40 tests.
+- Client ESLint: passed.
+- Client Vite build: passed without optimizer warning.
+- Backend Jest: passed, 24 tests.
+- Root dev startup: Vite passed at `http://localhost:5173/`; Express watcher limited by missing `nodemon`.
+- Diff whitespace audit: passed.
+
+## Acceptance Results
+All approved criteria met. Manual-only looping, avatar direct selection, active state, zero-padded counter, dark luxury card, smooth reduced-motion-aware transition, data array, and responsive layout are complete.
+
+## Failure Recovery Notes
+See `_workflow/runs/work/progress.md` and `_workflow/runs/work/review.md`.
+
+## Final Diff Audit
+Scoped diff reviewed with `git diff --stat`, `git diff`, and `git diff --check`. No secrets, generated junk, dependencies, API changes, or unrelated implementation changes added.
+
+## Release Notes File Used
+`_workflow/runs/work/release-notes.md`
+
+## Unresolved Issues
+- Environment-only: root Express watcher cannot start because `nodemon` is unavailable.
+- Tooling-only: browser screenshot automation is unavailable.
+
+## Next Recommended Work
+Optionally install/configure `nodemon` for clean-install root development startup.

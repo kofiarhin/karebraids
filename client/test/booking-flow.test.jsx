@@ -33,6 +33,10 @@ async function chooseService(user) {
 }
 
 async function chooseAvailableAppointmentDate(user) {
+  if (!screen.queryAllByRole('button', { name: /^select /i }).length) {
+    await user.click(screen.getByRole('button', { name: /next appointment month/i }))
+  }
+
   const dateButton = screen.getAllByRole('button', { name: /^select /i })[0]
   const readableDate = dateButton.getAttribute('aria-label').replace(/^Select /, '')
   const date = new Date(readableDate)
