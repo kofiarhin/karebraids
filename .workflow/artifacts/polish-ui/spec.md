@@ -1,10 +1,12 @@
-# Polish-UI Spec Pointer: KareBraids Dark Luxury Homepage Redesign
+# Polish UI Spec: Booking Dark Luxury Alignment
+Date: 2026-05-31
+Status: Approved
 
-- Active run spec: `_workflow/runs/dev/spec.md`
-- Date: 2026-05-27
-- Workflow path: `polish-ui`
-- Scope: Homepage-only dark luxury redesign based on the approved mockup.
-- Status: Approved and implemented.
-- Applied skill: design-taste-frontend
+Applied skill: design-taste-frontend
 
-Use `_workflow/runs/dev/spec.md` as the authoritative detailed spec for this run.
+- Restyle `/booking` only.
+- Preserve all behavior and tablet/desktop sidebar.
+- Cards: `rgba(255, 255, 255, 0.02)` background and `1px solid rgba(255, 255, 255, 0.08)` border.
+- Active/selected: `#D4A373` border and `rgba(212, 163, 115, 0.05)` background.
+- Hover: border brightening only.
+- Mobile: compact horizontal progress above content; summary below content.

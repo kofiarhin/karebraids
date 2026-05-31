@@ -227,7 +227,13 @@ export function Booking() {
             {workflowSteps.map((item, index) => (
               <div
                 aria-current={item.id === step ? 'step' : undefined}
-                className={index <= currentStepIndex ? 'step-pill active' : 'step-pill'}
+                className={
+                  index === currentStepIndex
+                    ? 'step-pill active'
+                    : index < currentStepIndex
+                      ? 'step-pill completed'
+                      : 'step-pill'
+                }
                 key={item.id}
               >
                 <span>{String(index + 1).padStart(2, '0')}</span>

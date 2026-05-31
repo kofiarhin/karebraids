@@ -1,4 +1,4 @@
-# Active Workflow Request
+# Active Workflow Request: Polish KareBraids Booking Page Dark Luxury UI
 
 ## Source
 Latest direct user prompt, clarified through grill-me intake and explicitly confirmed by the user.
@@ -6,5 +6,17 @@ Latest direct user prompt, clarified through grill-me intake and explicitly conf
 ## Execution Mode
 `complete-workflow`
 
+## Classification
+`polish-ui`
+
 ## Normalized Request
-Replace the KareBraids homepage single testimonial with a premium, manually controlled carousel of five supplied Afro-centric testimonials. Preserve the existing dark luxury split layout with left-side label, headline, and supporting copy and a large right-side card on desktop; stack the card below the heading on mobile. Store testimonials in an array with `name`, `review`, `rating: 5`, and an avatar path or fallback initials. Add accessible previous/next arrows, clickable accessible avatar indicators, active-state styling, a zero-padded `01 / 05` counter, quote icon, gold stars, calm smooth transitions, and bidirectional infinite looping. Testimonials must change only through explicit visitor interaction: no auto-advance. Keep the implementation modular and dependency-free, add/update Vitest coverage TDD-first, and verify frontend startup, tests, lint, and build.
+Update `/booking` so it matches the calm premium dark luxury language of Home and Gallery while preserving the existing service → date → time → details → confirmation flow, hooks, API behavior, routing, navbar, Home, and Gallery. Remove brown dashboard-style booking gradients, glow panels, and large brown fills. Use quiet dark transparent booking cards with `rgba(255, 255, 255, 0.02)` backgrounds, `1px solid rgba(255, 255, 255, 0.08)` borders, and sparse `#D4A373` active accents. Keep the tablet/desktop sidebar. On mobile, place a compact horizontal progress row above active content and move request summary below active content.
+
+## Shared Understanding Handoff
+- Goal: presentation-only booking UI polish.
+- Confirmed mobile decision: compact horizontal progress above the form; summary below form.
+- Confirmed tablet/desktop decision: preserve sidebar layout.
+- In scope: booking JSX presentation if needed, booking CSS, targeted Vitest, workflow evidence.
+- Out of scope: backend, hooks, API contracts, schema, services, routing, navbar, Home, Gallery, dependencies, unrelated cleanup.
+- Assumptions: responsive CSS ordering can preserve one summary instance; semantic alerts may retain restrained state tint.
+- Remaining open questions: none blocking.

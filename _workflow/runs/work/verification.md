@@ -1,21 +1,18 @@
-# Verification: Unified KareBraids Semantic Color System
+# Verification: Booking Page Dark Luxury Alignment
+Date: 2026-05-31
+
+Applied skill: design-taste-frontend
 
 ## Passed Checks
-- `npm run test --prefix client` — passed: 5 files, 37 tests.
+- `npm run test --prefix client -- booking-flow.test.jsx` — passed, 7 tests.
+- `npm run test --prefix client -- booking-flow.test.jsx theme-tokens.test.jsx` — passed, 11 tests.
+- `npm run test --prefix client` — passed, 42 tests.
 - `npm run lint --prefix client` — passed.
 - `npm run build --prefix client` — passed.
-- `npm run test:server` — passed: 4 suites, 24 tests.
-- `git diff --check` — passed.
-- Python selector/component color-literal scan — passed: 0 violations outside centralized `:root`.
-- Python unresolved CSS-variable scan — passed: 0 missing theme variables excluding runtime `--index`.
-- `npm run preview --prefix client -- --host 127.0.0.1` plus curl root/CSS/JS asset smoke — passed.
-- `git diff --stat` and `git diff` — completed.
+- `npm run test:server` — passed, 24 tests.
+- `git diff --check` and `git diff --cached --check` — passed.
+- `git diff --cached --stat`, full `git diff --cached`, unstaged `git diff --stat`, and sensitive-value scan — passed; scoped files only.
+- Local Vite HTTP smoke with `curl http://127.0.0.1:5173/` — passed.
 
-## Visual Review
-- Applied skill: design-taste-frontend
-- Screenshot attempt limitation: no Chromium, Chrome, Firefox, or Playwright module is installed in the container.
-- Fallback used: code-surface review plus built local-preview HTML/CSS/JS asset smoke.
-
-## Recovery Notes
-- Fixed stale test-only May 27, 2026 Booking date fixture by dynamically selecting an enabled future date.
-- Fixed two test-only lint errors caused by unused dynamic-date assignments.
+## Visual Evidence
+Browser automation executables are unavailable. Used approved code-surface review fallback. Final CSS explicitly removes the booking panel glow, applies approved transparent surfaces, preserves sparse gold active state, and orders mobile progress → content → summary.

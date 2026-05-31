@@ -1,17 +1,18 @@
-# Polish UI Verification
+# Verification: Booking Page Dark Luxury Alignment
+Date: 2026-05-31
 
-- Applied skill: design-taste-frontend
-- Surface: Homepage Featured services section.
-- Result: Passed.
+Applied skill: design-taste-frontend
 
-## Evidence
+## Passed Checks
+- `npm run test --prefix client -- booking-flow.test.jsx` — passed, 7 tests.
+- `npm run test --prefix client -- booking-flow.test.jsx theme-tokens.test.jsx` — passed, 11 tests.
+- `npm run test --prefix client` — passed, 42 tests.
+- `npm run lint --prefix client` — passed.
+- `npm run build --prefix client` — passed.
+- `npm run test:server` — passed, 24 tests.
+- `git diff --check` and `git diff --cached --check` — passed.
+- `git diff --cached --stat`, full `git diff --cached`, unstaged `git diff --stat`, and sensitive-value scan — passed; scoped files only.
+- Local Vite HTTP smoke with `curl http://127.0.0.1:5173/` — passed.
 
-- Desktop 1440x1100: six 180x180 square service tiles in one horizontal row, no horizontal overflow.
-- Mobile 390x844: six 182x182 square service tiles in a compact two-column layout, no horizontal overflow.
-- Price badges visible for all services.
-- Console warnings/errors: 0.
-- Automated verification passed:
-  - `npm test --prefix client -- site-pages.test.jsx`
-  - `npm run lint --prefix client`
-  - `npm test --prefix client`
-  - `npm run build --prefix client`
+## Visual Evidence
+Browser automation executables are unavailable. Used approved code-surface review fallback. Final CSS explicitly removes the booking panel glow, applies approved transparent surfaces, preserves sparse gold active state, and orders mobile progress → content → summary.

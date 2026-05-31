@@ -1,18 +1,21 @@
-# Release Notes: Premium Homepage Testimonial Carousel
+# Release Notes: Booking Page Dark Luxury Alignment
+Date: 2026-05-31
+
+Applied skill: design-taste-frontend
 
 ## Request
-Add a premium manual-only testimonial carousel to the KareBraids homepage.
+Align KareBraids Booking with Home/Gallery dark luxury styling.
 
 ## User-Facing Changes
-- Replaced the static testimonial card with five supplied testimonials.
-- Added manual previous/next arrows with infinite wrap, direct avatar selection, active-state highlights, `01 / 05` counter, initials fallback, gold stars, and calm motion with reduced-motion support.
-- Preserved dark luxury desktop split layout and mobile stacking.
+- Removed final-cascade brown Booking gradients and dashboard glow treatment.
+- Added quiet transparent booking cards with thin borders and restrained gold states.
+- Kept only the current booking step gold-accented; completed steps remain quiet.
+- On mobile, placed compact horizontal progress above active content and request summary below content.
+- Hardened narrow-phone progress scrolling and calendar spacing.
 
 ## Developer Changes
-- Centralized homepage testimonial content in one array.
-- Added local React active-index state and accessibility-focused controls.
-- Added Vitest interaction and CSS-surface coverage.
-- Stabilized booking-flow test date selection when the current month has no remaining selectable appointment day.
+- Added centralized Booking glass/accent tokens and booking CSS contract tests.
+- Preserved existing hooks and state flow.
 
 ## New Routes/APIs
 none
@@ -27,20 +30,13 @@ none
 none
 
 ## Test Commands Run
-- `npm run test --prefix client -- site-pages.test.jsx`
-- `npm run test --prefix client`
-- `npm run lint --prefix client`
-- `npm run build --prefix client`
-- `npm run dev`
-- `npm test`
-- `git diff --check`
+See `_workflow/runs/work/verification.md`.
 
 ## Known Limitations
-- Root `npm run dev` launches Vite successfully, but the Express watcher cannot launch in this environment because `nodemon` is not installed.
-- Browser screenshot automation is unavailable in the provided tools.
+Screenshot capture unavailable because browser automation tooling is not installed.
 
 ## Follow-Up Work
-- Optional: add root `nodemon` dependency if development server hot reload should be supported by a clean install.
+Optional browser visual-regression tooling.
 
 ## Suggested Commit Message
-`feat: add premium homepage testimonial carousel`
+`polish booking page dark luxury ui`

@@ -1,10 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { readFileSync } from 'node:fs'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
 import * as bookingService from '../src/services/bookingService.js'
+
+const bookingStyles = () => readFileSync('src/index.css', 'utf8')
 
 vi.mock('../src/services/bookingService.js', () => ({
   createBooking: vi.fn(),
@@ -70,6 +73,27 @@ describe('booking flow', () => {
     vi.clearAllMocks()
   })
 
+  it('defines the calm dark booking surface and clarified mobile content order', () => {
+    const styles = bookingStyles()
+
+    expect(styles).toContain('.dark-brand-shell .booking-panel::before {\n  display: none;')
+    expect(styles).toContain('--booking-surface-glass: rgba(255, 255, 255, 0.02);')
+    expect(styles).toContain('background: var(--booking-surface-glass);')
+    expect(styles).toContain('--booking-border-glass: rgba(255, 255, 255, 0.08);')
+    expect(styles).toContain('border: 1px solid var(--booking-border-glass);')
+    expect(styles).toContain('.booking-step-list {\n    order: 1;')
+    expect(styles).toContain('.booking-panel {\n    order: 2;')
+    expect(styles).toContain('.booking-live-card {\n    order: 3;')
+  })
+
+  it('keeps the compact booking progress and calendar comfortable on narrow phones', () => {
+    const styles = bookingStyles()
+
+    expect(styles).toContain('@media (max-width: 480px) {\n  .booking-step-list {\n    scroll-snap-type: x proximity;')
+    expect(styles).toContain('.step-pill small {\n    display: none;')
+    expect(styles).toContain('.calendar-weekdays,\n  .calendar-grid {\n    gap: 0.2rem;')
+  })
+
   it('prevents Sunday selection before showing appointment times', async () => {
     const user = userEvent.setup()
     const { container } = renderBooking()
@@ -105,6 +129,9 @@ describe('booking flow', () => {
     expect(within(stepList).getByText('Service').closest('.step-pill')).not.toHaveAttribute(
       'aria-current',
     )
+    expect(within(stepList).getByText('Date').closest('.step-pill')).toHaveClass('active')
+    expect(within(stepList).getByText('Service').closest('.step-pill')).toHaveClass('completed')
+    expect(within(stepList).getByText('Service').closest('.step-pill')).not.toHaveClass('active')
   })
 
   it('submits a valid booking and shows confirmation', async () => {

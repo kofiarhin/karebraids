@@ -240,3 +240,66 @@
 - Review result: Scoped implementation accepted.
 - Blockers: none.
 - Next step: final review, release notes, summary, handoff, health check, commit, and PR record.
+
+# 2026-05-31 — Booking Page Dark Luxury Alignment — TASK-001 Complete
+- Status: Done.
+- Lifecycle transition: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`.
+- Applied skill: design-taste-frontend
+- Files changed: `client/src/pages/Booking.jsx`, `client/src/index.css`, `client/test/booking-flow.test.jsx`, run-scoped workflow artifacts, and `.workflow/artifacts/polish-ui/` evidence.
+
+## Iteration 1 Build
+- Goal: Establish the approved transparent booking surfaces and mobile progress → content → summary ordering contract.
+- Changes made: Added a CSS contract test, disabled the booking-panel glow, added scoped glass surfaces, removed service-card ornament, restrained hover fills, and used responsive ordering through the existing summary wrapper.
+- Test plan: Add desired contract assertion first; observe failure; add smallest scoped style override; rerun.
+- Red phase evidence: Initial harness path failed because Vite did not expose a file-scheme `import.meta.url`; corrected fixture path. Exact targeted rerun then failed because no no-glow override, approved glass surface, border contract, or mobile ordering rules existed.
+- Green phase evidence: `npm run test --prefix client -- booking-flow.test.jsx` passed 6 tests after the minimal scoped override.
+- Refactor phase evidence: Kept one summary instance and used CSS ordering rather than duplicate responsive markup; API and state flow stayed untouched.
+- Test commands run: `npm run test --prefix client -- booking-flow.test.jsx`.
+- Verification command/result: Targeted Booking Vitest passed.
+- Review findings: Primary booking panels no longer use dashboard gradients or glow in the final cascade.
+- Acceptance status: Build criteria met.
+- Remaining issues: Completed steps still shared the `active` class with the current step.
+- Next action: Separate current and completed visual semantics in Refine.
+
+## Iteration 2 Refine
+- Goal: Ensure gold remains limited to the current step and selected date rather than every completed step.
+- Changes made: Added a failing step-class assertion, changed Booking step class assignment to distinguish `active` from `completed`, and added a quiet completed-state style.
+- Test plan: Require current Date to be `active`, previous Service to be `completed`, and previous Service not to remain `active`.
+- Red phase evidence: Targeted Booking Vitest failed because prior Service still rendered `step-pill active` after service selection.
+- Green phase evidence: `npm run test --prefix client -- booking-flow.test.jsx` passed 6 tests after the class refinement.
+- Refactor phase evidence: Preserved existing `aria-current` behavior and step transitions; only visual class semantics changed.
+- Test commands run: `npm run test --prefix client -- booking-flow.test.jsx`.
+- Verification command/result: Targeted Booking Vitest passed.
+- Review findings: Current step uses the intentional gold treatment; completed steps remain quiet.
+- Acceptance status: Refine criteria met.
+- Remaining issues: Add narrow-phone hardening.
+- Next action: Polish narrow progress and calendar spacing.
+
+## Iteration 3 Polish
+- Goal: Harden compact progress and calendar readability on narrow phones, then complete full verification.
+- Changes made: Added failing narrow-phone CSS assertions, scroll snapping, shorter compact pills, hidden pill detail copy below 480px, and tighter small-phone calendar spacing. Centralized approved booking literals into root tokens after full-suite recovery.
+- Test plan: Require narrow-phone snap behavior, compact pill detail hiding, and tighter calendar grid gaps; then run the complete verification matrix.
+- Red phase evidence: Targeted Booking Vitest failed because no `max-width: 480px` Booking hardening block existed.
+- Green phase evidence: Targeted Booking Vitest passed 7 tests after hardening.
+- Refactor phase evidence: Full suite initially failed the repository literal guard because approved booking values were directly embedded in selector rules, and lint rejected `process` in the fixture helper. Centralized the approved values as root booking tokens and switched fixture reading to `readFileSync('src/index.css', 'utf8')`. Combined targeted recovery passed 11 tests; ESLint and whitespace checks passed.
+- Test commands run: `npm run test --prefix client -- booking-flow.test.jsx`, `npm run test --prefix client -- booking-flow.test.jsx theme-tokens.test.jsx`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, `npm run test:server`, `git diff --check`, Vite local HTTP smoke with `curl`.
+- Verification command/result: Full client Vitest passed 42 tests; lint passed; Vite build passed; backend Jest passed 24 tests; whitespace audit passed; local Vite HTTP smoke passed.
+- Review findings: Browser automation is unavailable, so final taste review used approved code-surface fallback. No brown booking-panel gradient or glow remains in the final cascade; mobile ordering and smallest-phone hardening are explicit.
+- Acceptance status: Complete.
+- Remaining issues: Screenshot could not be captured because no browser automation executable is installed.
+- Next action: Final diff audit, commit, PR record.
+
+## Acceptance Result
+- [x] Cohesive dark Booking surface aligned with Home/Gallery.
+- [x] Brown dashboard gradients, fills, and panel glow removed from final booking cascade.
+- [x] Primary booking cards use approved transparent surface and border tokens.
+- [x] Active/selected cards use requested sparse gold treatment.
+- [x] Hover brightens border without brown fill.
+- [x] Tablet/desktop sidebar preserved.
+- [x] Mobile progress sits above content and summary below content without overflow.
+- [x] Existing booking, route, shared-page, API, and business logic regressions pass.
+
+## Failure Recovery Notes
+- Corrected initial test fixture path issue before collecting valid Red evidence.
+- Centralized approved booking color literals after the full theme-token suite identified selector-rule literal violations.
+- Removed ESLint `process` usage from the fixture helper.

@@ -278,6 +278,13 @@
   --theme-shadow-deep-a032: rgba(11, 8, 7, 0.32);
   --theme-warm-ivory-a014: rgba(245, 238, 232, 0.14);
   --theme-espresso-a058: rgba(23, 19, 17, 0.58);
+
+  /* Booking-specific glass surface roles mirror the approved dark-luxury contract. */
+  --booking-surface-glass: rgba(255, 255, 255, 0.02);
+  --booking-border-glass: rgba(255, 255, 255, 0.08);
+  --booking-accent-gold: #D4A373;
+  --booking-accent-selected: rgba(212, 163, 115, 0.05);
+  --booking-accent-hover: rgba(212, 163, 115, 0.58);
 }
 
 * {
@@ -4049,4 +4056,126 @@ button:disabled,
   border-color: var(--color-border-strong);
   background: var(--color-state-warning-surface);
   color: var(--color-state-warning);
+}
+
+/* Booking page: calm dark-luxury alignment with Home and Gallery */
+.dark-booking-page {
+  background: var(--brand-950);
+}
+
+.dark-brand-shell .booking-panel::before {
+  display: none;
+}
+
+.dark-brand-shell .booking-hero-note,
+.dark-brand-shell .step-pill,
+.dark-brand-shell .booking-live-card,
+.dark-brand-shell .booking-panel,
+.dark-brand-shell .booking-calendar,
+.dark-brand-shell .booking-service,
+.dark-brand-shell .slot-button,
+.dark-brand-shell .calendar-day,
+.dark-brand-shell .calendar-nav-button,
+.dark-brand-shell .field-group input,
+.dark-brand-shell .field-group textarea,
+.dark-brand-shell .confirmation-cues span {
+  border: 1px solid var(--booking-border-glass);
+  background: var(--booking-surface-glass);
+  box-shadow: none;
+}
+
+.dark-brand-shell .step-pill.active,
+.dark-brand-shell .step-pill[aria-current="step"],
+.dark-brand-shell .calendar-day.selected {
+  border-color: var(--booking-accent-gold);
+  background: var(--booking-accent-selected);
+  color: var(--text-primary);
+}
+
+.dark-brand-shell .booking-service:hover,
+.dark-brand-shell .slot-button:hover,
+.dark-brand-shell .calendar-day:hover,
+.dark-brand-shell .calendar-nav-button:hover {
+  border-color: var(--booking-accent-hover);
+  background: var(--booking-surface-glass);
+}
+
+.dark-brand-shell .booking-service::after {
+  display: none;
+}
+
+.dark-brand-shell .calendar-day.selected span {
+  color: var(--booking-accent-gold);
+}
+
+@media (max-width: 840px) {
+  .booking-workspace {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .booking-summary {
+    display: contents;
+  }
+
+  .booking-step-list {
+    order: 1;
+    display: flex;
+    gap: 0.55rem;
+    overflow-x: auto;
+    padding-bottom: 0.2rem;
+    scrollbar-width: thin;
+  }
+
+  .booking-panel {
+    order: 2;
+  }
+
+  .booking-live-card {
+    order: 3;
+  }
+
+  .step-pill {
+    min-width: min(10.5rem, 42vw);
+  }
+}
+
+.dark-brand-shell .step-pill.completed {
+  border-color: var(--booking-border-glass);
+  background: var(--booking-surface-glass);
+}
+
+.dark-brand-shell .step-pill.completed span {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 480px) {
+  .booking-step-list {
+    scroll-snap-type: x proximity;
+  }
+
+  .step-pill {
+    min-width: 7rem;
+    scroll-snap-align: start;
+    padding: 0.75rem;
+  }
+
+  .step-pill small {
+    display: none;
+  }
+
+  .calendar-weekdays,
+  .calendar-grid {
+    gap: 0.2rem;
+  }
+
+  .calendar-day {
+    min-height: 2.7rem;
+    padding: 0.15rem;
+  }
+
+  .calendar-day span {
+    width: 1.95rem;
+    height: 1.95rem;
+  }
 }

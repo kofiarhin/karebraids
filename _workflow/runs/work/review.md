@@ -1,49 +1,40 @@
-# Review: Premium Homepage Testimonial Carousel
+# Review: Booking Page Dark Luxury Alignment
+Date: 2026-05-31
+
+Applied skill: design-taste-frontend
 
 ## Request
-Replace the static homepage testimonial with a premium manual-only five-item carousel that preserves the KareBraids dark luxury split layout.
+Align Booking with Home/Gallery dark luxury visuals while preserving behavior and implementing clarified mobile ordering.
 
-## Spec File Used
-`_workflow/runs/work/spec.md`
-
-## Task Plan Used
-`_workflow/runs/work/tasks.md`
+## Spec And Plan
+- Spec: `_workflow/runs/work/spec.md`
+- Plan: `_workflow/runs/work/tasks.md`
 
 ## Tasks Reviewed
-- `TASK-001: Add a manual-only premium homepage testimonial carousel` — Done.
+- TASK-001: Done through Build, Refine, Polish.
 
-## Bugs Found
-- Initial Aaliyah avatar path referenced a non-existent gallery index. Fixed by using the required initials fallback.
-- Internal carousel wrapper initially used `<footer>`, adding a duplicate `contentinfo` landmark. Fixed by using a neutral `<div>`.
-- Full frontend verification found aged booking-flow fixture behavior when the current month contains no remaining selectable non-Sunday date. Fixed the test helper to move to the next month only when needed.
-- Vite build found a malformed CSS insertion position for reduced motion. Moved the scoped media block beside testimonial styles and rebuilt cleanly.
+## Bugs Found And Recovered
+- Test fixture initially used an incompatible URL path; corrected before valid Red collection.
+- Full theme-token suite rejected selector-rule color literals; centralized approved Booking values in root tokens.
+- ESLint rejected `process`; fixture helper now uses relative `readFileSync` consistent with client Vitest cwd.
 
 ## Scope Creep Check
-- Carousel implementation is limited to homepage testimonial constants, component markup/state, scoped CSS, and relevant homepage tests.
-- `client/test/booking-flow.test.jsx` changed only to repair an unrelated time-sensitive test-fixture issue discovered during required full verification.
-- No API, database, dependency, environment, booking implementation, or backend behavior changed.
+No scope creep. No API, hooks, schema, dependencies, routing, navbar, Home, or Gallery implementation changes.
 
 ## Final Diff Audit
-- Ran `git diff --stat`, `git diff`, and `git diff --check`.
-- Diff matches the approved spec and required workflow artifact updates.
-- No generated `client/dist/` files are tracked.
-- No temporary files, credentials, tokens, or secrets were added.
-- Tests were updated before implementation and include manual arrows, wrap behavior, direct selection, counter, fallback initials, and CSS hardening expectations.
-
-## Failure Recovery Notes
-- Recorded per iteration in `_workflow/runs/work/progress.md`.
+Completed with `git diff --cached --stat`, `git diff --cached --name-status`, full `git diff --cached`, `git diff --cached --check`, unstaged `git diff --stat`, and a sensitive-value scan. Only scoped Booking production files, Booking tests, run-scoped workflow files, and polish-ui evidence are included. No secrets, junk, dependency changes, generated build artifacts, or unstaged changes were found.
 
 ## Missing Tests
-- None for approved behavior. Browser screenshot automation is unavailable in the provided tools; code-surface review and Vite startup/build are documented fallback evidence.
+None blocking. Added presentation, mobile hardening, and completed/current state coverage while preserving interaction regressions.
 
 ## Security Concerns
-- None. Existing gallery images are reused as representative avatars without storing personal data.
+None. No payload, credential, or backend changes.
 
 ## Architecture Concerns
-- None. Active index remains local UI state; no global state or server-state layer is warranted.
+None. API/business logic remains outside UI components.
 
-## Follow-Up Tasks
-- Optional: install root `nodemon` dependency if full Express hot-reload startup is expected in this environment.
+## Follow-up Tasks
+Optional only: add browser automation tooling for screenshot-based visual regression capture.
 
 ## Final Review Verdict
-Passed. Applied skill: design-taste-frontend
+Passed using automated checks and approved code-surface visual fallback.

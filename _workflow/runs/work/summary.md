@@ -148,3 +148,53 @@ Scoped diff reviewed with `git diff --stat`, `git diff`, and `git diff --check`.
 
 ## Next Recommended Work
 Optionally install/configure `nodemon` for clean-install root development startup.
+
+# 2026-05-31 Summary: Booking Page Dark Luxury Alignment
+
+## Request
+Align Booking with Home/Gallery dark luxury UI while preserving behavior and implementing compact mobile progress above content with summary below content.
+
+## Spec File Used
+`_workflow/runs/work/spec.md`
+
+## Detailed Spec Completeness
+Complete. All 22 required sections were present before approved planning.
+
+## Task Plan Used
+`_workflow/runs/work/tasks.md`
+
+## Review File Used
+`_workflow/runs/work/review.md`
+
+## Tasks Completed
+- TASK-001: Align booking flow with shared dark luxury styling — Done through Build, Refine, Polish.
+
+## Iteration Evidence Summary
+- Build: TDD-first transparent surface and mobile ordering contract.
+- Refine: TDD-first current-versus-completed step visual semantics.
+- Polish: TDD-first narrow-phone hardening and full-suite token/lint recovery.
+- Applied skill: design-taste-frontend
+
+## Files Changed
+Scoped Booking JSX, Booking CSS, Booking Vitest, run-scoped artifacts, and polish-ui evidence.
+
+## Verification Run
+Full client Vitest, lint, build, backend Jest, whitespace audit, local Vite HTTP smoke, and code-surface visual review passed.
+
+## Acceptance Results
+All approved criteria met.
+
+## Failure Recovery Notes
+Corrected test fixture path, centralized selector literals, and removed lint-invalid fixture `process` access.
+
+## Final Diff Audit
+Scoped audit completed before commit. No API, schema, dependency, route, Home, Gallery, navbar, secret, or generated-build changes included.
+
+## Release Notes File Used
+`_workflow/runs/work/release-notes.md`
+
+## Unresolved Issues
+Screenshot unavailable due missing browser automation tooling; approved code-surface fallback completed.
+
+## Next Recommended Work
+Optional browser screenshot automation for future visual regression capture.

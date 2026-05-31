@@ -1,11 +1,4 @@
-# Polish UI Summary
+# Booking Polish Summary
+Applied skill: design-taste-frontend
 
-- Applied skill: design-taste-frontend
-- Request: Homepage Featured services square price row.
-- Status: Complete.
-
-## Completed
-
-- Added visible starting prices.
-- Converted service tiles to same-size square image cards.
-- Verified desktop one-row layout and mobile no-overflow behavior.
+Booking now uses calm dark transparent surfaces, restrained gold states, clarified mobile ordering, and narrow-phone hardening. Existing behavior is preserved. Full automated checks and code-surface review passed.
