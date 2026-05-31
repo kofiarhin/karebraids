@@ -39,6 +39,8 @@
   --color-state-info: #84939c;
   --color-state-info-surface: rgba(92, 111, 122, 0.24);
 
+  --about-surface-glass: rgba(255, 255, 255, 0.02);
+  --about-border-glass: rgba(255, 255, 255, 0.08);
   --theme-shadow-black-a045: rgba(0, 0, 0, 0.45);
   --theme-cream-highlight-a0105: rgba(255, 250, 246, 0.105);
   --theme-cream-highlight-a015: rgba(255, 250, 246, 0.15);
@@ -4177,5 +4179,42 @@ button:disabled,
   .calendar-day span {
     width: 1.95rem;
     height: 1.95rem;
+  }
+}
+
+/* About page: minimal editorial dark-luxury alignment with Home, Gallery, and Booking */
+.dark-about-page {
+  background: var(--brand-950);
+}
+
+.dark-brand-shell .dark-about-page .page-hero-copy {
+  border: 1px solid var(--about-border-glass);
+  background: var(--about-surface-glass);
+  box-shadow: none;
+}
+
+.dark-brand-shell .dark-about-page .about-image img {
+  border: 1px solid var(--about-border-glass);
+  background: transparent;
+  box-shadow: none;
+}
+
+.dark-brand-shell .dark-about-page::before,
+.dark-brand-shell .dark-about-page .about-image::before,
+.dark-brand-shell .dark-about-page .about-image::after {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .dark-brand-shell .dark-about-page {
+    gap: 1rem;
+  }
+
+  .dark-brand-shell .dark-about-page .page-hero-copy {
+    padding: 1rem;
+  }
+
+  .dark-brand-shell .dark-about-page .about-image img {
+    height: min(24rem, 115vw);
   }
 }

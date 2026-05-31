@@ -1,16 +1,5 @@
-# Booking Page UI Discovery And Taste Audit
-Date: 2026-05-31
-
-Applied skill: design-taste-frontend
-
-## Baseline Capture
-Browser automation is unavailable in the configured tools. Using approved code-surface review fallback.
-
-## Findings
-- Booking dark overrides use cocoa/espresso gradients for primary panels and active steps.
-- `.booking-panel::before` adds a dashboard-style glow.
-- Hover states add cocoa fill rather than quiet border brightening.
-- Mobile stacks the entire sidebar above content and keeps a two-column step block; summary therefore appears above the active form.
-
-## Direction
-Use unified dark background, requested transparent surfaces, sparse gold states, no dashboard glow, and mobile order progress → active content → summary.
+# About Page Polish UI Audit
+- Heavy About-specific background panels identified in `.about-page::before`, `.about-image::before`, and `.about-image::after`.
+- Founder story inherited a gradient public-page panel that felt dashboard-like.
+- Recommended treatment: shared dark background, subtle 2% white surface, 8% white border, no panel shadows, disabled About backing pseudo-elements, compact phone spacing.
+- Applied skill: design-taste-frontend

@@ -1,4 +1,4 @@
-# Workflow Handoff: Booking Page Dark Luxury Alignment
+# Workflow Handoff: About Page Dark Luxury Alignment
 
 ## Current State
 - Current phase: complete; ready to commit and create PR record.
@@ -11,16 +11,16 @@
 - Current task: none.
 - Current iteration: none.
 - Blockers: none.
-- Verification status: full client Vitest, lint, build, backend Jest, whitespace, HTTP smoke, and code-surface review passed.
+- Verification status: targeted/full client Vitest, lint, build, backend Jest, whitespace, HTTP smoke, selector scan, scoped audit, and code-surface review passed.
 - Acceptance status: all approved criteria met.
 - Workflow health: Passed.
 - Applied skill: design-taste-frontend
 
 ## Token / Resume State
-- current phase: final diff audit, commit, PR record.
-- last completed safe checkpoint: TASK-001 Done with artifacts current.
-- files already changed: scoped Booking JSX, CSS, Vitest, run-scoped and polish-ui artifacts.
-- files planned next: none before audit/commit.
-- tests already run: see `_workflow/runs/work/verification.md`.
-- exact next action: stage, audit full diff, commit, create PR record.
-- whether it is safe to continue automatically: yes.
+- Current phase: final diff audit, commit, PR record.
+- Last completed safe checkpoint: TASK-001 Done with artifacts current.
+- Production files changed: `client/src/index.css`.
+- Test files changed: `client/test/site-pages.test.jsx`.
+- Screenshot: unavailable due absent browser automation tooling; code-surface fallback passed.
+- Exact next action: update polish artifacts, run final audit/status, stage, commit, create PR record.
+- Whether it is safe to continue automatically: yes.

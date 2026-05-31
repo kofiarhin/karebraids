@@ -198,3 +198,53 @@ Screenshot unavailable due missing browser automation tooling; approved code-sur
 
 ## Next Recommended Work
 Optional browser screenshot automation for future visual regression capture.
+
+# 2026-05-31 Summary: About Page Dark Luxury Alignment
+
+## Request
+Align About with Home/Gallery/Booking dark-luxury styling while removing heavy panels and preserving behavior.
+
+## Spec File Used
+`_workflow/runs/work/spec.md`
+
+## Detailed Spec Completeness
+Complete. All 22 required sections were present before approved planning.
+
+## Task Plan Used
+`_workflow/runs/work/tasks.md`
+
+## Review File Used
+`_workflow/runs/work/review.md`
+
+## Tasks Completed
+- TASK-001: Align About founder story with shared dark-luxury styling — Done through Build, Refine, and Polish.
+
+## Iteration Evidence Summary
+- Build: TDD-first minimal About surface, image border, and backing-panel removal.
+- Refine: TDD-first narrow-phone spacing cleanup.
+- Polish: TDD-first compact mobile image height and centralized-theme failure recovery.
+- Applied skill: design-taste-frontend
+
+## Files Changed
+Scoped About CSS, public-page Vitest contract, run-scoped workflow artifacts, and polish-ui evidence.
+
+## Verification Run
+Targeted and full client Vitest, lint, build, backend Jest, whitespace audit, HTTP smoke, browser-tool scan, selector scan, scoped name audit, and final diff audit completed.
+
+## Acceptance Results
+All approved criteria met.
+
+## Failure Recovery Notes
+Centralized About RGBA values into `:root` tokens after strict theme-token regression failure.
+
+## Final Diff Audit
+Scoped diff reviewed. No unrelated implementation, route, API, schema, dependency, navbar, CTA, secret, or generated-build changes included.
+
+## Release Notes File Used
+`_workflow/runs/work/release-notes.md`
+
+## Unresolved Issues
+Screenshot unavailable due missing browser automation tooling; allowed code-surface review fallback completed.
+
+## Next Recommended Work
+Optional browser screenshot automation for future visual-regression evidence.

@@ -303,3 +303,62 @@
 - Corrected initial test fixture path issue before collecting valid Red evidence.
 - Centralized approved booking color literals after the full theme-token suite identified selector-rule literal violations.
 - Removed ESLint `process` usage from the fixture helper.
+
+# 2026-05-31 — About Page Dark Luxury Alignment
+
+## TASK-001 Iteration 1 Build
+- Status: In Progress; Build completed.
+- Goal: Replace heavy About founder-story panels with a minimal dark editorial surface.
+- Applied skill: design-taste-frontend
+- Files changed: `client/test/site-pages.test.jsx`, `client/src/index.css`.
+- Test plan: Replace stale About pseudo-element styling assertions with the requested transparent surface, subtle image border, and disabled backing-panel contract before changing CSS.
+- Red phase evidence: `npm run test --prefix client -- site-pages.test.jsx` failed with 1 expected failure because `.dark-about-page` minimal surface styles and pseudo-element disabling rules did not exist.
+- Green phase evidence: Added scoped late-cascade About styles using shared dark page background, minimal story surface, subtle image border, no shadows, and disabled About backing pseudo-elements. Targeted suite passed: 23 tests.
+- Refactor phase evidence: Reviewed the base About cascade, retained existing JSX and two-column layout, ran `git diff --check`, and reran targeted Vitest successfully: 23 tests.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx`; `git diff --check`.
+- Verification command/result: Targeted Vitest passed after implementation and after refactor.
+- Review findings: About-only late selectors avoid mutations to Home, Gallery, Services, and Booking implementation.
+- Acceptance status: Core minimal surface, subtle image border, shared dark background, and removed backing panels met.
+- Remaining issues: Small-phone spacing and image-height refinement remained.
+- Next action: Iteration 2 Refine Red.
+
+## TASK-001 Iteration 2 Refine
+- Status: In Progress; Refine completed.
+- Goal: Tighten the smallest-phone editorial stack without changing layout structure.
+- Applied skill: design-taste-frontend
+- Files changed: `client/test/site-pages.test.jsx`, `client/src/index.css`.
+- Test plan: Assert an About-only `max-width: 480px` gap and founder-card padding rule before implementation.
+- Red phase evidence: `npm run test --prefix client -- site-pages.test.jsx` failed with 1 expected failure because the narrow-phone About gap and padding rules did not exist.
+- Green phase evidence: Added About-only `gap: 1rem` and founder-card `padding: 1rem` at `max-width: 480px`. Targeted suite passed: 23 tests.
+- Refactor phase evidence: Kept the existing generic `max-width: 840px` one-column layout and added only a narrow-phone refinement. `git diff --check` passed.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx`; `git diff --check`.
+- Verification command/result: Targeted Vitest and whitespace audit passed.
+- Review findings: Mobile-first stack remains intact and the smaller viewport receives calmer spacing.
+- Acceptance status: Mobile readability criterion met; smallest-phone image height remained to polish.
+- Remaining issues: Compact founder-image height and full regression verification remained.
+- Next action: Iteration 3 Polish Red.
+
+## TASK-001 Iteration 3 Polish
+- Status: Done; lifecycle completed through Verified and Reviewed.
+- Goal: Constrain founder image on smallest phones, recover centralized-theme compliance, and complete regression verification.
+- Applied skill: design-taste-frontend
+- Files changed: `client/test/site-pages.test.jsx`, `client/src/index.css`, run-scoped artifacts, polish artifacts.
+- Test plan: Assert a smallest-phone founder-image height before implementation, then run targeted and full frontend tests, lint, build, backend Jest, whitespace check, local Vite smoke, browser-tool scan, CSS scan, status, and diff audit.
+- Red phase evidence: `npm run test --prefix client -- site-pages.test.jsx` failed with 1 expected failure because the compact mobile founder-image height did not exist.
+- Green phase evidence: Added `height: min(24rem, 115vw)` within the About-only 480px media rule. Targeted suite passed: 23 tests.
+- Refactor phase evidence: Full client Vitest initially found the centralized-theme literal guard because the new RGBA values lived in selectors. Recovery centralized them as `--about-surface-glass` and `--about-border-glass` in `:root`, updated the CSS contract to assert token resolution, and reran full client Vitest successfully: 42 tests. Targeted Vitest remained passing: 23 tests.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx`; `npm run test --prefix client`; `npm run lint --prefix client`; `npm run build --prefix client`; `npm run test:server`; `git diff --check`; local Vite `curl --fail --silent --show-error http://127.0.0.1:5173/about`; browser-tool scan; About selector scan; `git diff --stat`; `git diff`.
+- Verification command/result: Full client Vitest passed 42 tests; lint passed; build passed; backend Jest passed 24 tests; whitespace audit passed; local HTTP smoke passed; browser automation unavailable; code-surface review passed.
+- Review findings: Effective About card values match the requested RGBA treatment through centralized tokens. About pseudo-element backing cards are disabled. Image has a border only. Existing JSX, routes, navbar, CTA, Home, Gallery, Services, and Booking implementation are unchanged.
+- Acceptance status:
+  - [x] No heavy About-specific brown/grey panels remain.
+  - [x] Founder story uses requested subtle surface and border.
+  - [x] Image has subtle border only without backing card.
+  - [x] Shared dark background remains cohesive.
+  - [x] Gold remains restrained.
+  - [x] Mobile remains clean and readable.
+  - [x] Existing content, route, navbar, and CTA behavior remain intact.
+  - [x] Home, Gallery, Services, and Booking implementation remain unaffected.
+- Failure recovery notes: Centralized the requested About RGBA literals after strict theme-token regression test failure; reran exact failing full suite successfully.
+- Blockers: None. Screenshot capture unavailable because no browser automation binary is installed.
+- Next step: Final artifacts, audit, commit, and PR record.

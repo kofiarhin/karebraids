@@ -1,93 +1,93 @@
-# Detailed Spec: Polish KareBraids Booking Page Dark Luxury UI
+# Detailed Spec: About Page Dark Luxury Alignment
 
 ## 1. Metadata
 - Spec filename: `_workflow/runs/work/spec.md`
 - Date: 2026-05-31
-- Request ID / slug: `polish-booking-page-dark-luxury-ui`
-- Request source: Latest direct prompt plus grill-me clarification.
+- Request ID / slug: `about-page-dark-luxury-alignment`
+- Request source: direct user prompt normalized into `_workflow/runs/work/request.md`
 - Execution mode: `complete-workflow`
-- Request classification: `polish-ui`
-- Scope level: Small frontend refinement.
-- Risk level: Low to moderate.
+- Request classification: frontend UI polish
+- Scope level: narrow About-page-specific CSS and tests
+- Risk level: low to moderate because styles are centralized
 
 ## 2. Original Request
-- Raw user request: Align Booking with Home/Gallery dark luxury styling, remove brown panels/gradients, preserve booking behavior, and make mobile clean.
-- Normalized request: Restyle `/booking` with quiet transparent dark cards and sparse gold accents; retain desktop/tablet sidebar; place mobile horizontal progress above active form and summary below it.
-- Source prompt / `<artifact-root>/request.md` reference: `_workflow/runs/work/request.md`.
+- Raw user request: Align About with Home/Gallery/Booking dark luxury styling; remove heavy brown/grey panels; preserve content, layout, mobile responsiveness, routing, navbar, CTA, and unrelated pages.
+- Normalized request: Use subtle transparent About surfaces and remove overlapping About backing panels without changing behavior.
+- Source prompt / `<artifact-root>/request.md` reference: `_workflow/runs/work/request.md`
 
 ## 3. Questions And Answers
-- Questions asked: Should mobile progress sit above active content and summary below it while desktop/tablet keep the sidebar?
-- Answers received: Yes.
-- Questions skipped: Repo inspection resolved architecture and test conventions.
+- Questions asked: None; repository inspection resolved the implementation surface.
+- Answers received: User approved this saved spec with `approve spec`.
+- Questions skipped: Repo-discoverable CSS, route, content, and responsive behavior questions.
 - Remaining open questions: None blocking.
 
 ## 4. Problem Definition
-- Problem being solved: Booking has cocoa gradients, glow, and dashboard-like blocks that do not match calmer public pages.
-- Why it matters: Booking is a key conversion route and should feel cohesive.
-- Current pain point: Visually busy brown-heavy booking presentation.
-- Expected value: Calm premium continuity and clearer mobile flow.
+- Problem being solved: About founder-story surfaces are too heavy and dashboard-like.
+- Why it matters: About should remain cohesive with premium public pages.
+- Current pain point: Brown/grey gradients and overlapping cards distract from editorial content.
+- Expected value: Calm, cohesive, premium About presentation.
 
 ## 5. Current State Analysis
-- Existing behavior: Local React state drives service, date, time, details, and confirmation steps.
-- Existing architecture/components: `Booking.jsx` composes `useAvailability` and `useCreateBooking`; API logic remains outside UI.
-- Existing files/modules likely involved: `client/src/pages/Booking.jsx`, `client/src/index.css`, `client/test/booking-flow.test.jsx`.
-- Existing data flow: TanStack Query hooks fetch slots and submit bookings.
-- Existing API/UI/CLI/workflow behavior: `/booking` is registered through `App.jsx` and shared `Layout`.
-- Existing tests or verification coverage: Booking Vitest covers calendar, active semantics, submission, API errors, and empty slots.
+- Existing behavior: `About.jsx` renders static founder copy, `/booking` CTA, and image in a responsive two-column section.
+- Existing architecture/components: React Router page, shared Button, centralized `client/src/index.css`.
+- Existing files/modules likely involved: `client/src/index.css`, `client/test/site-pages.test.jsx`.
+- Existing data flow: Static copy; founder image from `galleryItems[2].image`.
+- Existing API/UI/CLI/workflow behavior: No API impact; mobile stacks at `max-width: 840px`.
+- Existing tests or verification coverage: About render and old pseudo-element styling assertions exist.
 
 ## 6. Desired End State
-- Expected final behavior: Existing flow unchanged on a cohesive dark surface.
-- User-facing outcome: Transparent cards, thin borders, sparse gold, calm hierarchy, clean mobile order.
-- Developer-facing outcome: Scoped booking CSS contract and regression coverage.
-- System/workflow outcome: No server or API changes.
-- Backward compatibility expectations: Preserve booking flow and unrelated routes.
+- Expected final behavior: Preserve structure and content with requested subtle founder card and minimally bordered image.
+- User-facing outcome: About visually aligns with Home/Gallery/Booking.
+- Developer-facing outcome: About-specific CSS contract protects against heavy backing panels.
+- System/workflow outcome: Routing and mobile behavior remain intact.
+- Backward compatibility expectations: No unrelated implementation changes.
 
 ## 7. Scope
-- In scope: Booking presentation markup if necessary, scoped CSS, mobile ordering, Vitest assertions, workflow artifacts.
-- Out of scope: Backend, data, hooks, API, routing, navbar, Home, Gallery, dependencies.
-- Non-goals: New steps, animation systems, or broad retheme.
-- Explicit boundaries: Keep API/business logic out of UI components.
+- In scope: About-specific CSS, Vitest contract updates, run-scoped and polish artifacts.
+- Out of scope: Copy, image, JSX, route, navbar, API, schema, dependency, or unrelated page changes unless a concrete test requires a minimal exception.
+- Non-goals: Shared design-system refactor or new decoration.
+- Explicit boundaries: Scope CSS to `.dark-about-page`.
 
 ## 8. Users And Use Cases
-- Primary users: Prospective clients on mobile and desktop.
-- Secondary users: Maintainers validating consistency.
-- Main use cases: Select service/date/time, enter details, submit, view confirmation.
-- Edge use cases: Disabled dates, no slots, errors, narrow phones.
+- Primary users: Prospective clients reading founder story.
+- Secondary users: Returning public-site visitors.
+- Main use cases: Read story, view image, use booking CTA and navbar.
+- Edge use cases: Narrow phone and keyboard navigation.
 
 ## 9. Functional Requirements
-- Required behaviors: Preserve all existing booking states and assistive semantics; responsive reorder only presentation.
-- Inputs: Existing form and booking interactions.
-- Outputs: Existing summary, errors, availability, confirmation.
-- State changes: None intentional.
-- Error states: Preserve validation, API errors, empty, loading.
+- Required behaviors: Preserve About content, route, CTA, navbar, and mobile stack.
+- Inputs: `/about` route.
+- Outputs: Minimal dark-luxury About UI.
+- State changes: None.
+- Error states: Not applicable.
 - Permissions/auth expectations: Not applicable.
 
 ## 10. Non-Functional Requirements
-- Performance expectations: No dependency or network additions.
-- Reliability expectations: Existing regressions pass.
-- Security/privacy expectations: No API or secret changes.
-- Accessibility expectations: Preserve labels, buttons, `aria-current`, disabled states, focus visibility, contrast.
-- Maintainability expectations: Scoped booking selectors.
-- DX expectations: Add Vitest presentation contract.
+- Performance expectations: No runtime additions.
+- Reliability expectations: No unrelated public-page regressions.
+- Security/privacy expectations: No sensitive data impact.
+- Accessibility expectations: Preserve readable contrast, heading, alt text, and focus behavior.
+- Maintainability expectations: Narrow CSS selectors and tests.
+- DX expectations: Vitest, lint, and build remain green.
 
 ## 11. Affected Surfaces
-- Files likely affected: `client/src/pages/Booking.jsx`, `client/src/index.css`, `client/test/booking-flow.test.jsx`.
-- Directories likely affected: `client/src/pages/`, `client/src/`, `client/test/`, `_workflow/runs/work/`, `.workflow/artifacts/polish-ui/`.
-- UI surfaces: Booking hero note, sidebar/progress, summary, panel, service cards, calendar, slots, fields, states, confirmation.
+- Files likely affected: `client/src/index.css`, `client/test/site-pages.test.jsx`, workflow artifacts.
+- Directories likely affected: `client/src`, `client/test`, `_workflow/runs/work`, `.workflow/artifacts/polish-ui`.
+- UI surfaces: `/about`.
 - API routes: None.
-- Components: Booking page only.
+- Components: Existing About and Button remain unchanged.
 - Services: None.
 - Database/schema: None.
 - Config/env vars: None.
-- Tests: Frontend Vitest.
-- Docs: Workflow artifacts only.
-- Workflow artifacts: Run-scoped and polish-ui artifacts.
+- Tests: About CSS contract.
+- Docs: Workflow artifacts.
+- Workflow artifacts: request, spec, tasks, progress, handoff, review, release notes, summary, verification, polish artifacts.
 
 ## 12. Dependency And Integration Map
-- Internal dependencies: Booking component, Button, constants, existing hooks, shared Layout.
-- External packages/services: Existing stack only.
-- Integration points: `/booking`, availability and create hooks.
-- Ordering constraints: Test first, minimal CSS/markup, verify, refine, polish.
+- Internal dependencies: About classes, shared stylesheet cascade, responsive rule, Button route.
+- External packages/services: Existing React, Router, Vitest only.
+- Integration points: Shared public shell.
+- Ordering constraints: TDD-first contract before CSS.
 - Migration/setup requirements: None.
 
 ## 13. Data And State Impact
@@ -95,75 +95,68 @@
 - Database changes: None.
 - State management changes: None.
 - Cache/session/local storage impact: None.
-- Backward compatibility impact: Presentation only.
+- Backward compatibility impact: None.
 
 ## 14. UX / API / Workflow Expectations
-- UX expectations: unified dark surface; cards use `rgba(255, 255, 255, 0.02)` and `1px solid rgba(255, 255, 255, 0.08)`; active/selected use `#D4A373` and `rgba(212, 163, 115, 0.05)`; hover only brightens border; desktop/tablet sidebar; mobile progress above and summary below content.
-- API contract expectations: No changes.
-- CLI/workflow behavior: Vitest, lint, build, backend Jest, diff audit.
-- Error handling expectations: Preserve behavior with calm state visuals.
-- Empty/loading/success/failure states: Preserve content and function.
+- UX expectations: Shared dark background; story card `rgba(255, 255, 255, 0.02)` with `1px solid rgba(255, 255, 255, 0.08)`; subtle image border; no overlapping cards; restrained gold; clean mobile stack.
+- API contract expectations: Not applicable.
+- CLI/workflow behavior: TDD-first Build -> Refine -> Polish.
+- Error handling expectations: Not applicable.
+- Empty/loading/success/failure states: Static content; not applicable.
 
 ## 15. Execution Strategy
-- Recommended implementation approach: Add CSS/markup contract test first, make minimal scoped override, refine active and hover treatments, harden mobile layout and cascade.
-- Suggested sequencing: One vertical task through Build, Refine, Polish.
-- Safe rollout/migration approach: CSS-scoped update with regression suite.
-- Files to inspect before editing: Booking JSX, index CSS, booking tests.
-- Decisions to avoid until more evidence exists: No broad retheme, dependency, hook, or API edits.
+- Recommended implementation approach: Replace stale test expectations, append narrow About overrides after legacy CSS, remove backing pseudo-elements, retain layout.
+- Suggested sequencing: Build surface contract; Refine responsive contract; Polish full checks and audit.
+- Safe rollout/migration approach: CSS-only scoped override.
+- Files to inspect before editing: About.jsx, index.css, site-pages.test.jsx, handoff, progress, summary.
+- Decisions to avoid until more evidence exists: JSX and shared token changes.
 
 ## 16. Verification Strategy
-- Required automated checks: Targeted and full client Vitest, client lint, client build, backend Jest, `git diff --check`.
-- Required manual checks: Code-surface responsive and cascade review; screenshot if browser automation is available.
-- Test types needed: CSS/markup contract plus existing interaction regressions.
-- Build/lint/typecheck expectations: Lint and build pass; no standalone typecheck script.
-- Acceptance evidence required: Per-iteration Red/Green/Refactor evidence.
-- Proof of completion: Acceptance checked, diff audited, artifacts current.
+- Required automated checks: targeted and full client Vitest, client lint/build, server Jest, `git diff --check`.
+- Required manual checks: local HTTP smoke; screenshot if browser automation exists, otherwise code-surface review.
+- Test types needed: CSS contract and page render regression.
+- Build/lint/typecheck expectations: lint and build pass.
+- Acceptance evidence required: CSS contract, route/content render, mobile stack, scoped diff.
+- Proof of completion: Checks recorded in verification artifact.
 
 ## 17. Acceptance Criteria
-- [ ] Cohesive dark Booking surface aligned with Home/Gallery.
-- [ ] Brown dashboard gradients, fills, and panel glow removed.
-- [ ] Primary booking cards use requested transparent surface and border.
-- [ ] Active/selected cards use requested sparse gold treatment.
-- [ ] Hover brightens border without brown fill.
-- [ ] Tablet/desktop sidebar preserved.
-- [ ] Mobile progress sits above content and summary below content without overflow.
-- [ ] Existing booking, route, shared-page, API, and business logic regressions pass.
+- [ ] No heavy About-specific brown/grey panels remain.
+- [ ] Founder story uses requested subtle surface and border.
+- [ ] Image has subtle border only without backing card.
+- [ ] Shared dark background remains cohesive.
+- [ ] Gold remains restrained.
+- [ ] Mobile remains clean and readable.
+- [ ] Existing content, route, navbar, and CTA behavior remain intact.
+- [ ] Home, Gallery, Services, and Booking implementation remain unaffected.
 
 ## 18. Edge Cases And Failure Modes
-- Edge cases: Narrow phones, confirmation step, disabled dates, no slots, form errors.
-- Failure modes: Legacy CSS wins cascade; summary order remains wrong; broad selectors leak.
-- Regression risks: Booking behavior and shared shell visuals.
-- Recovery expectations: Scoped fix and rerun exact failing command.
+- Edge cases: Narrow width and stylesheet cascade order.
+- Failure modes: Legacy pseudo-elements remain effective; broad selector regresses another page.
+- Regression risks: Shared stylesheet mutation.
+- Recovery expectations: Narrow late overrides and exact-command reruns.
 
 ## 19. Risks And Mitigations
-- Technical risks: Overlapping CSS. Mitigation: scoped late overrides and audit.
-- Product/UX risks: Too much gold or insufficient contrast. Mitigation: restrained state use.
-- Security risks: None expected.
-- Scope risks: Global token changes alter unrelated routes. Mitigation: do not retheme globally.
-- Mitigation plan: TDD-first contract, regression suite, diff review.
+- Technical risks: Layered stylesheet. Mitigation: About-specific late selectors and contract tests.
+- Product/UX risks: Card becomes too flat. Mitigation: retain requested subtle border.
+- Security risks: None.
+- Scope risks: Unrelated refactor. Mitigation: final diff audit.
+- Mitigation plan: TDD-first verification and scoped CSS.
 
 ## 20. Assumptions
-- Explicit assumptions: Site radii remain reusable; state-specific alert tint may remain restrained; CSS ordering avoids duplicate content.
+- Explicit assumptions: Existing content/layout/CTA are approved; CSS-only change is sufficient; browser screenshot automation may be unavailable.
 - Confidence level: High.
-- What to revisit if assumptions are wrong: breakpoint or semantic state tint.
+- What to revisit if assumptions are wrong: Pause before JSX changes.
 
 ## 21. Open Questions
 - Blocking questions: None.
-- Non-blocking questions: Screenshot depends on available browser tooling.
-- Execution impact: Use code-surface fallback if unavailable.
+- Non-blocking questions: Browser automation availability.
+- Execution impact: Use allowed code-surface fallback if unavailable.
 
 ## 22. Task Extraction Notes
-- Suggested vertical task boundaries: One Booking presentation slice.
-- Suggested first task: `TASK-001: Align booking flow with shared dark luxury styling`.
-- Suggested task ordering: Single task through Build, Refine, Polish.
-- Areas that should not become separate tasks: Backend, hooks, unrelated global cleanup.
-- How the 3-pass Build -> Refine -> Polish loop should apply: Build surface/mobile contract, Refine state restraint/readability, Polish cascade/overflow/full verification.
+- Suggested vertical task boundaries: One About UI alignment task.
+- Suggested first task: `TASK-001: Align About founder story with shared dark-luxury styling`.
+- Suggested task ordering: Single task through three iterations.
+- Areas that should not become separate tasks: Shared tokens, copy, routes, unrelated pages.
+- How the 3-pass Build -> Refine -> Polish loop should apply: Build surfaces; Refine responsive/restraint contract; Polish full verification and audit.
 
-## Frontend Taste Application
 Applied skill: design-taste-frontend
-
-## Dirty Worktree Protection
-- Initial `git status --short`: clean.
-- Existing dirty files: none.
-- Planned production files: Booking JSX, index CSS, booking test.
-- Overlap risk: none.

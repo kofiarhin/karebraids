@@ -1,12 +1,9 @@
-# Booking After-State Code-Surface Review
-Applied skill: design-taste-frontend
-
-- Unified dark Booking page background exists.
-- Booking panel glow is disabled.
-- Primary Booking cards use approved transparent tokens and no box shadow.
-- Active/selected treatment uses sparse gold tokens.
-- Hover retains glass surface and brightens only border.
-- Desktop/tablet sidebar structure remains.
-- Mobile order is progress → content → summary.
-- Below 480px, progress snaps horizontally and calendar spacing tightens.
-- Screenshot unavailable because browser automation tooling is not installed.
+# About Page Code-Surface Review
+- Screenshot unavailable: no browser automation binary is installed.
+- Shared dark background: passed.
+- Founder story `rgba(255, 255, 255, 0.02)` effective token surface: passed.
+- Founder story and image `1px solid rgba(255, 255, 255, 0.08)` effective token borders: passed.
+- Brown/grey overlapping About backing panels disabled: passed.
+- Existing gold usage remains restrained and unchanged: passed.
+- Mobile stack, 480px spacing, and compact image height: passed.
+- Applied skill: design-taste-frontend

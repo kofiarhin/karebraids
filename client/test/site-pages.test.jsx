@@ -230,23 +230,25 @@ describe('KareBraids pages', () => {
     expect(screen.getByRole('heading', { name: /meet karen/i })).toBeInTheDocument()
   })
 
-  it('defines a refined shared public page treatment for home and about', () => {
+  it('defines a minimal dark-luxury About founder story treatment', () => {
     const styles = homeStyles()
 
-    expect(styles).toContain('--surface-lift')
-    expect(styles).toContain('.dark-brand-shell .page-hero-copy')
-    expect(styles).toContain('.dark-brand-shell .about-page::before')
-    expect(styles).toContain('.dark-brand-shell .about-image::before')
-    expect(styles).toContain('linear-gradient(180deg, var(--theme-cream-highlight-a013)')
+    expect(styles).toContain('--about-surface-glass: rgba(255, 255, 255, 0.02);')
+    expect(styles).toContain('--about-border-glass: rgba(255, 255, 255, 0.08);')
+    expect(styles).toContain('.dark-brand-shell .dark-about-page .page-hero-copy {\n  border: 1px solid var(--about-border-glass);\n  background: var(--about-surface-glass);')
+    expect(styles).toContain('.dark-brand-shell .dark-about-page .about-image img {\n  border: 1px solid var(--about-border-glass);')
+    expect(styles).toContain('.dark-brand-shell .dark-about-page::before,\n.dark-brand-shell .dark-about-page .about-image::before,\n.dark-brand-shell .dark-about-page .about-image::after {\n  display: none;')
   })
 
   it('keeps refined public page treatments mobile-safe', () => {
     const styles = homeStyles()
 
     expect(styles).toContain('@media (max-width: 840px)')
-    expect(styles).toContain('.dark-brand-shell .about-page::before {\n    display: none;')
     expect(styles).toContain('.dark-brand-shell .page-hero-copy {\n    padding: clamp(1.1rem, 5vw, 1.5rem);')
     expect(styles).toContain('.dark-brand-shell .home-hero .hero-copy::before {\n    inset: -0.75rem;')
+    expect(styles).toContain('@media (max-width: 480px) {\n  .dark-brand-shell .dark-about-page {\n    gap: 1rem;')
+    expect(styles).toContain('.dark-brand-shell .dark-about-page .page-hero-copy {\n    padding: 1rem;')
+    expect(styles).toContain('.dark-brand-shell .dark-about-page .about-image img {\n    height: min(24rem, 115vw);')
   })
 
   it('prevents the mobile hero carousel zoom from creating horizontal overflow', () => {

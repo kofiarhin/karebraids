@@ -1,4 +1,2 @@
-# Booking Polish Summary
-Applied skill: design-taste-frontend
-
-Booking now uses calm dark transparent surfaces, restrained gold states, clarified mobile ordering, and narrow-phone hardening. Existing behavior is preserved. Full automated checks and code-surface review passed.
+# About Page Polish UI Summary
+About now follows the shared dark-luxury system with calm transparent surfaces, border-only imagery, no overlapping background cards, and mobile-safe spacing.

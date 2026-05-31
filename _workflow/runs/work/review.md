@@ -1,40 +1,44 @@
-# Review: Booking Page Dark Luxury Alignment
-Date: 2026-05-31
-
-Applied skill: design-taste-frontend
+# Review: About Page Dark Luxury Alignment
 
 ## Request
-Align Booking with Home/Gallery dark luxury visuals while preserving behavior and implementing clarified mobile ordering.
+Align About with Home/Gallery/Booking dark-luxury styling while removing heavy brown/grey panels and preserving behavior.
 
-## Spec And Plan
-- Spec: `_workflow/runs/work/spec.md`
-- Plan: `_workflow/runs/work/tasks.md`
+## Spec File Used
+`_workflow/runs/work/spec.md`
+
+## Task Plan Used
+`_workflow/runs/work/tasks.md`
 
 ## Tasks Reviewed
-- TASK-001: Done through Build, Refine, Polish.
+- TASK-001: Align About founder story with shared dark-luxury styling — Done.
 
-## Bugs Found And Recovered
-- Test fixture initially used an incompatible URL path; corrected before valid Red collection.
-- Full theme-token suite rejected selector-rule color literals; centralized approved Booking values in root tokens.
-- ESLint rejected `process`; fixture helper now uses relative `readFileSync` consistent with client Vitest cwd.
+## Bugs Found
+- Full suite caught selector-level RGBA literals violating centralized theme rules. Fixed by moving values into `:root` tokens.
 
 ## Scope Creep Check
-No scope creep. No API, hooks, schema, dependencies, routing, navbar, Home, or Gallery implementation changes.
+Passed. Production implementation diff is limited to `client/src/index.css`; regression coverage is limited to `client/test/site-pages.test.jsx`. No JSX, route, navbar, CTA, Home, Gallery, Services, Booking, backend, schema, dependency, or secret change was made.
 
 ## Final Diff Audit
-Completed with `git diff --cached --stat`, `git diff --cached --name-status`, full `git diff --cached`, `git diff --cached --check`, unstaged `git diff --stat`, and a sensitive-value scan. Only scoped Booking production files, Booking tests, run-scoped workflow files, and polish-ui evidence are included. No secrets, junk, dependency changes, generated build artifacts, or unstaged changes were found.
+- Ran `git diff --stat`, `git diff`, `git diff --check`, and scoped implementation-name audit.
+- Changes match approved spec.
+- No generated junk, sensitive values, unrelated implementation changes, or temporary artifacts are staged for commit.
+
+## Failure Recovery Notes
+Centralized requested About surface literals after theme-token guard failure and reran exact suite successfully.
 
 ## Missing Tests
-None blocking. Added presentation, mobile hardening, and completed/current state coverage while preserving interaction regressions.
+None for scoped behavior.
 
 ## Security Concerns
-None. No payload, credential, or backend changes.
+None.
 
 ## Architecture Concerns
-None. API/business logic remains outside UI components.
+None. Tokens remain centralized; selectors remain About-specific.
 
-## Follow-up Tasks
-Optional only: add browser automation tooling for screenshot-based visual regression capture.
+## Follow-Up Tasks
+Optional browser screenshot automation setup for future visual-regression evidence.
 
 ## Final Review Verdict
-Passed using automated checks and approved code-surface visual fallback.
+Passed.
+
+Applied skill: design-taste-frontend

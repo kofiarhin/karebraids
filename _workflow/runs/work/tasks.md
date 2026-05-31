@@ -1,64 +1,68 @@
-# Task Plan: Polish KareBraids Booking Page Dark Luxury UI
+# Task Plan: About Page Dark Luxury Alignment
 
 ## Plan Metadata
 - Spec file used: `_workflow/runs/work/spec.md`
 - Planning date: 2026-05-31
-- Explicit spec approval: User replied `approve spec` before this task plan was generated.
+- Explicit approval: User replied `approve spec` before task generation.
 - Progress and summary files read: `_workflow/runs/work/progress.md`, `_workflow/runs/work/summary.md`.
-- Detailed spec sections used: affected surfaces, dependency map, data impact, UX expectations, strategy, verification, criteria, edge cases, risks, assumptions, open questions, extraction notes.
-- Applied skill: design-taste-frontend
+- Spec sections used: affected surfaces, dependency map, data impact, UX expectations, execution strategy, verification strategy, acceptance criteria, edge cases, risks, assumptions, open questions, and task extraction notes.
 
-## TASK-001: Align booking flow with shared dark luxury styling
+## TASK-001: Align About founder story with shared dark-luxury styling
 - Status: Done
-- Objective: Restyle the existing Booking route into one calm dark luxury surface and implement clarified mobile ordering without changing booking behavior.
-- Files affected: `client/src/pages/Booking.jsx`, `client/src/index.css`, `client/test/booking-flow.test.jsx`.
-
-### Checklist
-- [x] Add failing presentation contract assertion first.
-- [x] Remove brown booking gradients and panel glow in the final cascade.
-- [x] Apply transparent card and restrained gold state treatments.
-- [x] Preserve desktop/tablet sidebar and implement mobile progress/content/summary order.
-- [x] Run Build, Refine, Polish Red -> Green -> Refactor loops.
-- [x] Run full verification and final taste review.
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Objective: Remove heavy About-only panels and render a subtle editorial founder story surface while preserving behavior and responsive structure.
+- Files affected: `client/src/index.css`, `client/test/site-pages.test.jsx`, workflow and polish artifacts.
+- Checklist:
+  - [x] Replace stale heavy-panel contract assertions.
+  - [x] Add requested subtle story surface and border through centralized tokens.
+  - [x] Remove About backing pseudo-elements.
+  - [x] Retain subtle image border and shared dark page background.
+  - [x] Prove mobile stack and scope safety.
 
 ### Iteration 1 Build
-- Goal: Approved transparent surfaces and mobile order contract.
-- Changes made: Scoped glass override, no-glow rule, responsive ordering.
-- Test plan: CSS contract test first.
-- Red phase evidence: Valid targeted failure observed after fixture-path recovery.
-- Green phase evidence: Targeted Booking Vitest passed 6 tests.
-- Refactor phase evidence: One summary instance preserved through CSS ordering.
+- Goal: Add failing surface contract and implement minimal About CSS.
+- Changes made: Added About-only minimal background, card, image, and pseudo-element disabling rules.
+- Test plan: Assert subtle card surface, image border, and disabled backing panels first.
+- Red phase evidence: Targeted Vitest failed with 1 expected missing-contract assertion.
+- Green phase evidence: Targeted Vitest passed 23 tests after CSS implementation.
+- Refactor phase evidence: Reviewed cascade, retained JSX/layout, passed whitespace and targeted rerun.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx`; `git diff --check`.
 - Verification command/result: Passed.
-- Review findings: Minimal scoped conversion.
-- Acceptance status: Met.
-- Remaining issues: Completed step visual state.
-- Next action: Refine.
+- Review findings: Scoped CSS only.
+- Acceptance status: Build criteria met.
+- Remaining issues: Narrow-phone cleanup.
+- Next action: Iteration 2 Refine.
 
 ### Iteration 2 Refine
-- Goal: Gold only on current/selected state.
-- Changes made: Distinguished `active` and `completed` classes.
-- Test plan: Step-class test first.
-- Red phase evidence: Previous Service remained `active` and failed assertion.
-- Green phase evidence: Targeted Booking Vitest passed 6 tests.
-- Refactor phase evidence: `aria-current` and flow preserved.
+- Goal: Prove mobile spacing remains calm and readable.
+- Changes made: Added About-only 480px gap and card-padding adjustments.
+- Test plan: Assert narrow-phone gap and padding first.
+- Red phase evidence: Targeted Vitest failed with 1 expected mobile-contract assertion.
+- Green phase evidence: Targeted Vitest passed 23 tests.
+- Refactor phase evidence: Reused existing 840px stack; whitespace passed.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx`; `git diff --check`.
 - Verification command/result: Passed.
-- Review findings: Quiet completed state.
-- Acceptance status: Met.
-- Remaining issues: Narrow phone hardening.
-- Next action: Polish.
+- Review findings: Mobile structure preserved.
+- Acceptance status: Responsive criteria met.
+- Remaining issues: Small-phone image hardening and full verification.
+- Next action: Iteration 3 Polish.
 
 ### Iteration 3 Polish
-- Goal: Small-phone readability and complete verification.
-- Changes made: Snap progress, compact pill copy, tighter calendar, centralized approved literal tokens.
-- Test plan: Narrow-phone CSS assertion first; complete matrix afterward.
-- Red phase evidence: Missing small-phone rule failed targeted Vitest.
-- Green phase evidence: Targeted Booking Vitest passed 7 tests.
-- Refactor phase evidence: Recovered theme-token guard and lint fixture helper; full checks passed.
-- Verification command/result: Full client 42 tests, lint, build, backend 24 tests, whitespace, and HTTP smoke passed.
-- Review findings: Code-surface final taste review passed; screenshot tooling unavailable.
-- Acceptance status: Met.
+- Goal: Harden smallest-phone image size and complete regressions.
+- Changes made: Added compact mobile image height; centralized RGBA values as `--about-surface-glass` and `--about-border-glass` after strict token-guard recovery.
+- Test plan: Assert compact image height first, then run full checks.
+- Red phase evidence: Targeted Vitest failed with 1 expected mobile-image assertion.
+- Green phase evidence: Targeted Vitest passed 23 tests.
+- Refactor phase evidence: Full suite exposed selector literals; centralized tokens and reran full suite successfully: 42 tests.
+- Test commands run: targeted/full client Vitest, client lint/build, server Jest, whitespace, HTTP smoke, selector scan, browser-tool scan, diff audit.
+- Verification command/result: Passed; screenshot unavailable due missing browser binary.
+- Review findings: Scoped About-only implementation with code-surface visual fallback passed.
+- Acceptance status: All criteria met.
 - Remaining issues: None blocking.
 - Next action: Commit and PR record.
 
-### Acceptance Result
-- [x] All approved spec criteria met.
+- Acceptance result: All approved criteria `[x]`.
+- Stop condition: None reached.
+- Out-of-scope items respected: JSX, routes, API, schema, dependencies, shared design refactor, and unrelated page implementation.
+
+Applied skill: design-taste-frontend

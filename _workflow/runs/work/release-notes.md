@@ -1,21 +1,17 @@
-# Release Notes: Booking Page Dark Luxury Alignment
-Date: 2026-05-31
-
-Applied skill: design-taste-frontend
+# Release Notes: About Page Dark Luxury Alignment
 
 ## Request
-Align KareBraids Booking with Home/Gallery dark luxury styling.
+Polish the About page to match shared dark-luxury public styling.
 
 ## User-Facing Changes
-- Removed final-cascade brown Booking gradients and dashboard glow treatment.
-- Added quiet transparent booking cards with thin borders and restrained gold states.
-- Kept only the current booking step gold-accented; completed steps remain quiet.
-- On mobile, placed compact horizontal progress above active content and request summary below content.
-- Hardened narrow-phone progress scrolling and calendar spacing.
+- Removed heavy About-page brown/grey backing panels.
+- Replaced founder-story materiality with a subtle transparent dark surface and border.
+- Simplified founder image to a border-only treatment.
+- Tightened smallest-phone spacing and founder-image height.
 
 ## Developer Changes
-- Added centralized Booking glass/accent tokens and booking CSS contract tests.
-- Preserved existing hooks and state flow.
+- Added centralized `--about-surface-glass` and `--about-border-glass` tokens.
+- Updated About visual contract coverage.
 
 ## New Routes/APIs
 none
@@ -36,7 +32,7 @@ See `_workflow/runs/work/verification.md`.
 Screenshot capture unavailable because browser automation tooling is not installed.
 
 ## Follow-Up Work
-Optional browser visual-regression tooling.
+Optional browser screenshot automation setup.
 
 ## Suggested Commit Message
-`polish booking page dark luxury ui`
+`Polish About page dark luxury styling`
