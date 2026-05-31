@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
-import { galleryItems } from '../src/constants/content.js'
+import { galleryItems, services } from '../src/constants/content.js'
 
 const originalMatchMedia = window.matchMedia
 const testDirectory = path.dirname(fileURLToPath(import.meta.url))
@@ -208,7 +208,7 @@ describe('KareBraids pages', () => {
     screen.getAllByRole('link', { name: /book appointment/i }).forEach((link) => {
       expect(link).toHaveAttribute('href', '/booking')
     })
-    expect(screen.getByRole('navigation', { name: /main navigation/i }).querySelector('a[href="/gallery"]')).toHaveTextContent(/services/i)
+    expect(within(screen.getByRole('navigation', { name: /main navigation/i })).getByRole('link', { name: /^services$/i })).toHaveAttribute('href', '/services')
     expect(screen.getByRole('link', { name: /view styles/i })).toHaveAttribute('href', '/gallery')
     expect(screen.getByRole('link', { name: /view full gallery/i })).toHaveAttribute('href', '/gallery')
   })
@@ -261,6 +261,78 @@ describe('KareBraids pages', () => {
     const styles = homeStyles()
 
     expect(styles).toContain('.dark-brand-shell .home-hero .hero-copy::before {\n    inset: -0.35rem;')
+  })
+
+  it('renders a dedicated categorized services page with booking CTAs', () => {
+    const { container } = renderRoute('/services')
+
+    expect(container.querySelector('.services-page')).toHaveClass('dark-services-page')
+    expect(screen.getByRole('heading', { level: 1, name: /signature braid services/i })).toBeInTheDocument()
+    expect(screen.getByText(/salon appointment or a mobile service/i)).toBeInTheDocument()
+    ;['Braids', 'Cornrows', 'Twists & Locs', 'Kids Styles'].forEach((category) => {
+      expect(screen.getByRole('heading', { level: 2, name: category })).toBeInTheDocument()
+    })
+    expect(container.querySelectorAll('.service-card')).toHaveLength(services.length)
+    container.querySelectorAll('.service-card').forEach((card) => {
+      expect(within(card).getByRole('img')).toHaveAttribute('loading', 'lazy')
+      expect(within(card).getByRole('link', { name: /book appointment/i })).toHaveAttribute('href', '/booking')
+      expect(card.querySelector('a[href="/gallery"]')).not.toBeInTheDocument()
+    })
+    expect(screen.getByRole('link', { name: /reserve your appointment/i })).toHaveAttribute('href', '/booking')
+  })
+
+  it('keeps enriched shared service data compatible with booking consumers', () => {
+    expect(services.length).toBeGreaterThanOrEqual(6)
+    services.forEach((service) => {
+      expect(service).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+          category: expect.any(String),
+          title: expect.any(String),
+          description: expect.any(String),
+          image: expect.any(String),
+          duration: expect.any(String),
+          fromPrice: expect.stringMatching(/^From £/),
+        }),
+      )
+      expect(galleryItems.map((item) => item.image)).toContain(service.image)
+    })
+  })
+
+  it('renders featured services before the homepage gallery preview', () => {
+    const { container } = renderRoute('/')
+    const featuredServices = container.querySelector('.featured-services-section')
+    const galleryPreview = container.querySelector('.gallery-feature-section')
+
+    expect(featuredServices).toBeInTheDocument()
+    expect(featuredServices.compareDocumentPosition(galleryPreview) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(featuredServices.querySelectorAll('.featured-service-card').length).toBeGreaterThanOrEqual(3)
+    expect(within(featuredServices).getByRole('link', { name: /explore all services/i })).toHaveAttribute('href', '/services')
+  })
+
+  it('routes footer service browsing links to the services page', () => {
+    renderRoute('/')
+
+    const servicesGroup = screen.getByRole('contentinfo').querySelector('.footer-column')
+    servicesGroup.querySelectorAll('a').forEach((link) => {
+      expect(link).toHaveAttribute('href', '/services')
+    })
+  })
+
+  it('defines narrow-phone and tactile services browsing refinements', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('.service-card .text-link:active,\n.featured-services-section .btn:active {')
+    expect(styles).toContain('transform: scale(0.98);')
+    expect(styles).toContain('@media (max-width: 480px) {\n  .dark-services-page,\n  .featured-services-section {')
+    expect(styles).toContain('.services-booking-cta .btn {\n    width: 100%;')
+  })
+
+  it('disables services card motion when reduced motion is requested', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('@media (prefers-reduced-motion: reduce) {\n  .service-card,\n  .service-card .text-link,\n  .featured-services-section .btn {')
+    expect(styles).toContain('transition-duration: 0.01ms;')
   })
 
   it('renders the gallery page', () => {
@@ -333,7 +405,7 @@ describe('KareBraids pages', () => {
     expect(within(mobileNav).getByRole('link', { name: /^booking$/i })).toHaveClass('primary')
     expect(within(mobileNav).getByRole('link', { name: /^services$/i })).toHaveAttribute(
       'href',
-      '/gallery',
+      '/services',
     )
     expect(document.body).toHaveClass('mobile-nav-open')
 

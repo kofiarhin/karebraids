@@ -4218,3 +4218,309 @@ button:disabled,
     height: min(24rem, 115vw);
   }
 }
+
+/* Dedicated Services discovery */
+.dark-services-page,
+.featured-services-section {
+  width: min(100% - 2rem, 1240px);
+  margin-inline: auto;
+}
+
+.dark-services-page {
+  display: grid;
+  gap: clamp(4rem, 8vw, 7rem);
+  padding-block: clamp(2rem, 5vw, 4.5rem) clamp(4rem, 8vw, 7rem);
+}
+
+.services-hero,
+.services-booking-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.88fr);
+  gap: clamp(1.5rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.services-hero-copy,
+.services-intro,
+.service-category,
+.service-card-copy,
+.services-booking-cta > div,
+.featured-services-intro {
+  display: grid;
+  gap: 1rem;
+}
+
+.services-hero-copy h1,
+.services-intro h2,
+.services-booking-cta h2,
+.featured-services-intro h2 {
+  color: var(--warm-ivory);
+  line-height: 0.98;
+}
+
+.services-hero-copy h1 {
+  max-width: 11ch;
+  font-size: clamp(3.3rem, 7vw, 6.8rem);
+}
+
+.services-hero-copy > p:not(.eyebrow),
+.services-intro > p:not(.eyebrow),
+.services-booking-cta p,
+.featured-services-intro > p:not(.eyebrow),
+.service-card-copy > p {
+  color: var(--muted-sand);
+  line-height: 1.7;
+}
+
+.services-hero-copy .btn,
+.services-booking-cta .btn {
+  justify-self: start;
+}
+
+.services-hero-image,
+.service-card-image {
+  overflow: hidden;
+  border: 1px solid var(--theme-gold-a032);
+  background: var(--smoked-cocoa);
+}
+
+.services-hero-image {
+  min-height: 34rem;
+  border-radius: 48% 48% 1.5rem 1.5rem;
+}
+
+.services-hero-image img,
+.service-card-image img,
+.featured-service-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.services-intro {
+  max-width: 46rem;
+  padding-left: clamp(0rem, 9vw, 8rem);
+}
+
+.services-intro h2,
+.services-booking-cta h2,
+.featured-services-intro h2 {
+  font-size: clamp(2.35rem, 5vw, 4.4rem);
+}
+
+.services-catalog {
+  display: grid;
+  gap: clamp(4rem, 7vw, 6rem);
+}
+
+.service-category-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--luxury-border);
+  padding-bottom: 1rem;
+}
+
+.service-category-heading h2 {
+  color: var(--warm-ivory);
+  font-size: clamp(2.3rem, 5vw, 4rem);
+}
+
+.service-grid,
+.featured-services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.service-card {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.84fr) minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--luxury-border);
+  border-radius: 1.2rem;
+  background: var(--theme-gold-a008);
+  transition: border-color 220ms ease, transform 220ms ease;
+}
+
+.service-card:hover {
+  border-color: var(--theme-gold-a038);
+  transform: translateY(-0.2rem);
+}
+
+.service-card-image {
+  min-height: 20rem;
+  border-width: 0 1px 0 0;
+  border-radius: 0;
+}
+
+.service-card-copy {
+  align-content: space-between;
+  padding: 1.25rem;
+}
+
+.service-card-heading,
+.service-card-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.service-card-heading h3 {
+  color: var(--warm-ivory);
+  font-size: 1.55rem;
+}
+
+.service-card-heading p,
+.service-card-footer span,
+.featured-service-card p,
+.featured-service-card span {
+  color: var(--burnished-bronze);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.service-card-footer {
+  align-items: center;
+  border-top: 1px solid var(--luxury-border);
+  padding-top: 0.95rem;
+}
+
+.service-card .text-link,
+.featured-services-section .btn {
+  color: var(--burnished-bronze);
+}
+
+.services-booking-cta {
+  border: 1px solid var(--luxury-border);
+  border-radius: 1.4rem;
+  background: linear-gradient(135deg, var(--theme-cocoa-a096), var(--theme-espresso-a096));
+  padding: clamp(1.4rem, 5vw, 3rem);
+}
+
+.featured-services-section {
+  display: grid;
+  gap: 1.5rem;
+  padding-block: clamp(3rem, 7vw, 5rem);
+}
+
+.featured-services-intro {
+  max-width: 44rem;
+}
+
+.featured-services-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.featured-service-card {
+  position: relative;
+  min-height: 26rem;
+  overflow: hidden;
+  border: 1px solid var(--luxury-border);
+  border-radius: 1.2rem;
+  background: var(--smoked-cocoa);
+}
+
+.featured-service-card::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 42%, var(--theme-espresso-deep-a07));
+  content: "";
+}
+
+.featured-service-card div {
+  position: absolute;
+  z-index: 1;
+  right: 1.1rem;
+  bottom: 1.1rem;
+  left: 1.1rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.featured-service-card h3 {
+  color: var(--warm-ivory);
+  font-size: 1.7rem;
+}
+
+.featured-services-section .btn {
+  justify-self: start;
+}
+
+.dark-services-page a:focus-visible,
+.featured-services-section a:focus-visible {
+  outline: 3px solid var(--theme-gold-a045);
+  outline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .services-hero,
+  .services-booking-cta,
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .services-hero-image {
+    min-height: 28rem;
+  }
+}
+
+@media (max-width: 680px) {
+  .dark-services-page,
+  .featured-services-section {
+    width: min(100% - 1rem, 1240px);
+  }
+
+  .featured-services-grid,
+  .service-card {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-service-card {
+    min-height: 21rem;
+  }
+
+  .service-card-image {
+    min-height: 16rem;
+    border-width: 0 0 1px;
+  }
+
+  .service-card-heading,
+  .service-card-footer {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+
+.service-card .text-link:active,
+.featured-services-section .btn:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 480px) {
+  .dark-services-page,
+  .featured-services-section {
+    width: min(100% - 1rem, 1240px);
+  }
+
+  .services-booking-cta .btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card,
+  .service-card .text-link,
+  .featured-services-section .btn {
+    transition-duration: 0.01ms;
+  }
+
+  .service-card:hover,
+  .service-card .text-link:active,
+  .featured-services-section .btn:active {
+    transform: none;
+  }
+}

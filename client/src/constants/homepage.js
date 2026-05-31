@@ -14,7 +14,7 @@ export const homepageImages = {
 
 export const navItems = [
   { label: 'Home', href: '/', type: 'route' },
-  { label: 'Services', href: '/gallery', type: 'route' },
+  { label: 'Services', href: '/services', type: 'route' },
   { label: 'Gallery', href: '/gallery', type: 'route' },
   { label: 'About', href: '/about', type: 'route' },
   { label: 'Booking', href: '/booking', type: 'route' },
@@ -93,10 +93,10 @@ export const footerGroups = [
   {
     title: 'Services',
     links: [
-      { label: 'Knotless Braids', href: '/booking' },
-      { label: 'Boho Braids', href: '/booking' },
-      { label: 'Stitch Braids', href: '/booking' },
-      { label: 'Twists / Locs', href: '/booking' },
+      { label: 'Knotless Braids', href: '/services' },
+      { label: 'Boho Braids', href: '/services' },
+      { label: 'Stitch Braids', href: '/services' },
+      { label: 'Twists / Locs', href: '/services' },
     ],
   },
   {

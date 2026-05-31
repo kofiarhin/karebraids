@@ -533,3 +533,120 @@
 - [x] Footer and About locked boundaries unchanged.
 - [x] No dependency, env-var, secret, config, deployment, or generated-junk changes.
 - [x] Screenshot attempt documented with allowed code-surface fallback.
+
+# 2026-05-31 Dedicated Services Page — TASK-001
+- Status: Done.
+- Lifecycle transition: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`.
+- Objective: Add the shared Services discovery journey from Home and navigation through `/services` to Booking.
+- Files changed: `client/src/App.jsx`, `client/src/pages/Services.jsx`, `client/src/constants/content.js`, `client/src/constants/homepage.js`, `client/src/pages/Home.jsx`, `client/src/components/home/FeaturedServices.jsx`, `client/src/index.css`, `client/test/site-pages.test.jsx`.
+- Applied skill: design-taste-frontend
+
+## Iteration 1 Build
+- Goal: Establish the complete visible Services journey and preserve title-based shared-data consumers.
+- Changes made: Added failing public-page contracts; enriched shared content with stable IDs, categories, Gallery-backed images, durations, and prices; added `/services`, categorized cards, Home Featured Services before Gallery preview, and corrected Header/mobile/Footer browsing hrefs.
+- Test plan: Focused public-page Vitest.
+- Red phase evidence: `npm run test --prefix client -- site-pages.test.jsx` failed 6 expected tests for missing route, missing enriched fields, missing Home section, stale Header/mobile hrefs, and stale Footer hrefs.
+- Green phase evidence: After implementation, focused Vitest reduced to one test ambiguity because category and card both correctly used `Cornrows`.
+- Refactor phase evidence: Narrowed the test to level-two category headings and slugged category IDs for valid accessible references; focused Vitest passed 27 tests.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx` (expected Red), `npm run test --prefix client -- site-pages.test.jsx` (one ambiguity), `npm run test --prefix client -- site-pages.test.jsx` (27 passed).
+- Verification command/result: Focused public-page route/data/UI contracts passed.
+- Review findings: Shared titles remain stable for Booking/Admin; service cards route only to Booking; Gallery remains separate.
+- Acceptance status: Build criteria met.
+- Remaining issues: Add narrow-phone tactile feedback.
+- Next action: Iteration 2 Refine.
+
+## Iteration 2 Refine
+- Goal: Add smallest-phone and tactile CTA hardening.
+- Changes made: Added active-state scale feedback and a 480px fallback that makes the bottom Booking CTA full-width while retaining compact page gutters.
+- Test plan: Add CSS source regression assertions and rerun focused Vitest.
+- Red phase evidence: Focused Vitest failed the new CSS contract because tactile and 480px refinements did not yet exist.
+- Green phase evidence: Focused Vitest passed 28 tests after scoped CSS additions.
+- Refactor phase evidence: Reused existing selectors and tokens; no new theme values or dependency changes.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx` (expected Red), `npm run test --prefix client -- site-pages.test.jsx` (28 passed).
+- Verification command/result: Responsive/tactile contracts passed.
+- Review findings: CTA remains keyboard-focusable and gains touch feedback; narrow-phone conversion CTA is easier to activate.
+- Acceptance status: Refine criteria met.
+- Remaining issues: Reduced-motion fallback.
+- Next action: Iteration 3 Polish.
+
+## Iteration 3 Polish
+- Goal: Respect reduced-motion preferences and prove aggregate regression safety.
+- Changes made: Added reduced-motion transition minimization and transform suppression for new Services interactions.
+- Test plan: Add reduced-motion source contract; run focused/full frontend, lint, backend root tests, build, and whitespace audit.
+- Red phase evidence: Focused Vitest failed the new reduced-motion CSS contract before implementation.
+- Green phase evidence: Focused Vitest passed 29 tests; full client Vitest passed 55 tests; lint passed; root `npm test` passed 29 backend Jest tests; client production build passed; whitespace audit passed.
+- Refactor phase evidence: Reduced-motion fallback is grouped in one scoped media query with no broad behavior changes.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx` (expected Red), `npm run test --prefix client -- site-pages.test.jsx`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm test`, `npm run build --prefix client`, `git diff --check`.
+- Verification command/result: Aggregate TASK-001 verification passed.
+- Review findings: Dark Afro-luxury token system is reused; responsive grid, semantic headings/sections, meaningful alts, focus treatment, tactile feedback, and reduced-motion support are present.
+- Acceptance status: Complete.
+- Remaining issues: Screenshot/tool smoke and final audit pending TASK-002.
+- Next action: TASK-002.
+
+## Acceptance Result
+- [x] `/services` route renders a dedicated Services page.
+- [x] Desktop/mobile Services nav links use `/services`; Gallery remains `/gallery`.
+- [x] Shared services expose all required keys with existing Gallery-backed images.
+- [x] Booking/Admin title compatibility is preserved and full regressions pass.
+- [x] Home Featured Services renders before Gallery preview.
+- [x] Services includes hero, salon/mobile explanation, four categories, complete image cards, card Booking CTAs, and final Booking CTA.
+- [x] Gallery remains portfolio-only; no service cards link to Gallery; no detail pages exist.
+- [x] Footer service browsing links prefer `/services`.
+- [x] Scoped responsive, accessible, reduced-motion-aware styling is present.
+- [x] Focused/full Vitest, lint, root tests, build, and diff check passed.
+
+# 2026-05-31 Dedicated Services Page — TASK-002
+- Status: Done.
+- Lifecycle transition: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`.
+- Objective: Complete regression audit and release artifacts.
+- Files changed: Run-scoped workflow artifacts only during this task.
+
+## Iteration 1 Build
+- Goal: Prove aggregate checks and local route availability.
+- Changes made: No implementation changes required.
+- Test plan: Run focused/full client Vitest, lint, root Jest through requested `npm test`, client build, whitespace audit, start local Vite, and curl `/services`.
+- Red phase evidence: Not applicable; audit-only task.
+- Green phase evidence: Focused Vitest passed 29 tests; full client Vitest passed 55 tests; lint passed; root `npm test` passed 29 backend Jest tests; client build passed; diff check passed; local `/services` HTTP smoke passed.
+- Refactor phase evidence: Not applicable.
+- Test commands run: `npm run test --prefix client -- site-pages.test.jsx`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm test`, `npm run build --prefix client`, `git diff --check`, `npm run dev --prefix client -- --host 127.0.0.1`, `curl --fail --silent --show-error http://127.0.0.1:5173/services`.
+- Verification command/result: Aggregate and local route checks passed.
+- Review findings: Requested root test and client build commands passed; additional client suite and lint proof passed.
+- Acceptance status: Complete.
+- Remaining issues: Screenshot-tool check pending.
+- Next action: Diff/scope audit.
+
+## Iteration 2 Refine
+- Goal: Audit final diff scope, secrets, packages, environment changes, and generated junk.
+- Changes made: No implementation changes required.
+- Test plan: Inspect status, stat, full diff, file list, package/config surface, suspicious additions, and tracked dist output.
+- Red phase evidence: Not applicable; audit-only task.
+- Green phase evidence: Diff matches approved Services scope. No package, lockfile, env, backend, deployment, generated dist, suspicious secret, or unrelated implementation changes detected.
+- Refactor phase evidence: Not applicable.
+- Test commands run: `git status --short`, `git diff --stat`, `git diff`, `git diff --name-only`, `git diff --name-only -- package.json package-lock.json client/package.json client/package-lock.json .env .env.example`, `git diff --unified=0 | rg '^\\+.*(API_KEY|SECRET|TOKEN|PASSWORD|mongodb(\\+srv)?://|BEGIN [A-Z ]+PRIVATE KEY)' || true`, `git status --short | rg '(^|/)dist/' || true`.
+- Verification command/result: Scope/security audit passed.
+- Review findings: New untracked Services/FeaturedServices files are intentional; all other changes are scoped implementation, tests, and run artifacts.
+- Acceptance status: Complete.
+- Remaining issues: Browser tooling absent.
+- Next action: Code-surface visual fallback and health check.
+
+## Iteration 3 Polish
+- Goal: Attempt screenshot evidence, complete visual fallback, and close workflow health.
+- Changes made: No implementation changes required.
+- Test plan: Check installed browser automation commands; inspect semantic JSX and scoped CSS; complete release artifacts.
+- Red phase evidence: Not applicable; audit-only task.
+- Green phase evidence: No Chromium, Chrome, Firefox, or Playwright executable exists. Code-surface fallback confirmed editorial split hero, salon/mobile explanation, categorized grids, image cards, responsive stacking, narrow-phone CTA width, visible focus styles, tactile states, reduced-motion fallback, meaningful alts, and semantic sections/headings.
+- Refactor phase evidence: Not applicable.
+- Test commands run: `command -v chromium || command -v chromium-browser || command -v google-chrome || command -v playwright || command -v firefox || true`.
+- Verification command/result: Code-surface visual review passed; screenshot capture unavailable due environment limitation.
+- Review findings: Applied skill: design-taste-frontend. UI preserves existing premium Afro-luxury language without a standalone theme.
+- Acceptance status: Complete.
+- Remaining issues: Screenshot evidence unavailable in this container.
+- Next action: Commit and PR record.
+
+## Acceptance Result
+- [x] Aggregate verification matrix passed.
+- [x] `/services` local route smoke passed.
+- [x] Diff matches approved spec and contains no unrelated implementation changes.
+- [x] No package, lockfile, env, backend, generated-dist, or suspicious secret additions exist.
+- [x] Screenshot attempt documented; approved code-surface fallback passed.
+- [x] Review, release notes, summary, handoff, and health records completed.

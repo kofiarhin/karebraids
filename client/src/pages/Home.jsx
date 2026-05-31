@@ -1,4 +1,5 @@
 import { BookingCTA } from '../components/home/BookingCTA.jsx'
+import { FeaturedServices } from '../components/home/FeaturedServices.jsx'
 import { GalleryFeature } from '../components/home/GalleryFeature.jsx'
 import { Hero } from '../components/home/Hero.jsx'
 import { TestimonialSection } from '../components/home/TestimonialSection.jsx'
@@ -13,6 +14,7 @@ export function Home() {
     <div className="luxury-homepage">
       <Hero />
       <TrustStrip />
+      <FeaturedServices />
       <GalleryFeature />
       <WhyChoose />
       <TestimonialSection />

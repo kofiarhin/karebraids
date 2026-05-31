@@ -1,7 +1,7 @@
-# Review: Contact Page MVP
+# Review: Dedicated Services Page
 
 ## Request
-Add a dark-luxury `/contact` page and persisted `POST /api/contact` enquiry endpoint without changing Footer or About.
+Add a premium, conversion-focused `/services` page, enrich shared service content, preserve Booking, add Featured Services before Home Gallery preview, correct service-browsing links, and retain the Afro-luxury visual language.
 
 ## Spec File Used
 `_workflow/runs/work/spec.md`
@@ -10,38 +10,38 @@ Add a dark-luxury `/contact` page and persisted `POST /api/contact` enquiry endp
 `_workflow/runs/work/tasks.md`
 
 ## Tasks Reviewed
-- TASK-001 persisted Contact API — Done.
-- TASK-002 dark-luxury Contact page and route-safe Header link — Done.
-- TASK-003 regression audit and release artifacts — Done.
+- TASK-001: Shared Services discovery journey — Done through Build, Refine, Polish.
+- TASK-002: Regression audit and release artifacts — Done through Build, Refine, Polish.
 
 ## Bugs Found
-- Initial frontend verification assumed Contact page location text would be globally unique, but the locked Footer intentionally contains the same location. Test narrowed to Contact info card.
-- Initial frontend verification assumed service mock received only payload, but TanStack Query supplies mutation context as a second argument. Test narrowed to payload plus allowed context.
-- Tailwind arbitrary width utility was hardened to escape spaces with underscores before aggregate build.
+- Build test ambiguity: category and service card both correctly rendered `Cornrows`; fixed assertion to target level-two category headings.
+- Accessibility refactor: slugged generated category IDs so `aria-labelledby` references contain valid CSS/HTML-friendly values.
 
 ## Scope Creep Check
-Passed. No footer, About, auth, admin inbox, email sending, dependency, lockfile, env-var, deployment, or unrelated changes.
+Passed. Changes are limited to Services route/page, shared frontend content enrichment, nav/footer browsing href corrections, Home Featured Services insertion, scoped CSS, Vitest coverage, and run-scoped artifacts.
 
 ## Final Diff Audit
-Completed with `git diff --stat`, `git diff`, `git diff --check`, locked-file diff checks, and staged-diff review before commit. The diff matches the approved specification.
+- `git diff --stat` and `git diff` reviewed.
+- No unrelated backend, API, schema, environment, dependency, lockfile, deployment, or generated-dist changes.
+- No suspicious secret additions.
+- New `client/src/pages/Services.jsx` and `client/src/components/home/FeaturedServices.jsx` files are intentional.
+- Existing Gallery remains portfolio-only and Booking title compatibility remains intact.
 
 ## Failure Recovery Notes
-Only targeted test-harness refinements were required. No production regression recovery was needed.
+- Iteration 1 exact focused Vitest rerun recovered after narrowing the ambiguous heading assertion and slugging IDs.
+- No aggregate verification recovery was required.
 
 ## Missing Tests
-None for requested MVP behavior. Future spam controls and administrative inbox behavior remain out of scope.
+None for approved scope. New public-page tests cover route rendering, categories, CTA destinations, shared data shape/image reuse, Home ordering, Footer hrefs, mobile Header href, responsive tactile CSS, and reduced-motion CSS. Existing full suite covers Booking regressions.
 
 ## Security Concerns
-Public contact endpoint remains intentionally unauthenticated. Input is trimmed and required, email is validated, persisted records are not returned, and unexpected errors use a safe shared response. Rate limiting/spam prevention is a future hardening opportunity.
+None. Static frontend content only; no secrets, API changes, or user-data changes.
 
 ## Architecture Concerns
-None blocking. Contact UI API access stays in service/hook boundaries; backend route remains thin with centralized validation utility.
+None. Shared content remains centralized and static UI remains in focused page/home components.
 
-## Follow-Up Tasks
-- Optional future rate limiting/spam prevention.
-- Optional future email dispatch.
-- Optional future admin inbox.
-- Optional browser screenshot automation in the container.
+## Follow-up Tasks
+- Optional browser-based screenshot or visual regression tooling in an environment with a browser executable.
 
 ## Final Review Verdict
-Approved. Feature is MVP-ready and scoped.
+Passed. Approved scope is implemented, verified, responsive, accessible, and safe to release.

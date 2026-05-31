@@ -300,3 +300,54 @@ Screenshot capture unavailable because browser automation tooling is absent. Opt
 
 ## Next Recommended Work
 Deploy with existing MongoDB configuration, then optionally prioritize spam protection before promoting the contact form broadly.
+
+# 2026-05-31 Summary: Dedicated Services Page
+
+## Request
+Add a premium `/services` discovery page, enriched shared service content, Home Featured Services, corrected service-browsing links, and preserve Booking/Gallery behavior.
+
+## Spec File Used
+`_workflow/runs/work/spec.md`
+
+## Detailed Spec Completeness
+Complete. All 22 required sections were present before approved planning; the reused run folder was repaired to the current Services request before implementation.
+
+## Task Plan Used
+`_workflow/runs/work/tasks.md`
+
+## Review File Used
+`_workflow/runs/work/review.md`
+
+## Tasks Completed
+- TASK-001 shared Services discovery journey — Done through Build, Refine, Polish.
+- TASK-002 regression audit and release artifacts — Done through Build, Refine, Polish.
+
+## Iteration Evidence Summary
+- Build: TDD-first route/data/navigation/Home/Footer/card contracts, shared-content enrichment, visible Services journey, and category-ID refactor.
+- Refine: TDD-first narrow-phone CTA and tactile feedback hardening.
+- Polish: TDD-first reduced-motion fallback and full regression verification.
+- Applied skill: design-taste-frontend
+
+## Files Changed
+Services page/component, route, shared content/home constants, Home insertion, scoped CSS, public-page Vitest, and run-scoped workflow artifacts.
+
+## Verification Run
+Focused/full client Vitest, lint, requested root `npm test`, client build, whitespace audit, local `/services` HTTP smoke, scope/security audit, browser-tool scan, and code-surface visual fallback passed.
+
+## Acceptance Results
+All approved Services criteria met.
+
+## Failure Recovery Notes
+Narrowed a valid duplicate Cornrows heading test and slugged category IDs during Build refactor. No aggregate failures.
+
+## Final Diff Audit
+Scoped audit completed. No unrelated backend, API, schema, env, dependency, lockfile, deployment, generated-dist, or secret changes.
+
+## Release Notes File Used
+`_workflow/runs/work/release-notes.md`
+
+## Unresolved Issues
+Screenshot capture unavailable due missing browser automation tooling; approved code-surface fallback completed.
+
+## Next Recommended Work
+Optional browser screenshot automation for future visual regression evidence.

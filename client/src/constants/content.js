@@ -1,42 +1,3 @@
-export const services = [
-  {
-    title: 'Knotless Braids',
-    description: 'Lightweight braids with a natural finish and reduced scalp tension.',
-    duration: '4-6 hrs',
-    fromPrice: 'From \u00a380',
-  },
-  {
-    title: 'Box Braids',
-    description: 'Classic protective styling with clean parting and polished ends.',
-    duration: '4-7 hrs',
-    fromPrice: 'From \u00a370',
-  },
-  {
-    title: 'Cornrows',
-    description: 'Sleek rows for everyday wear, events, or base styling.',
-    duration: '1.5-3 hrs',
-    fromPrice: 'From \u00a335',
-  },
-  {
-    title: 'Twists',
-    description: 'Soft, elegant twists for flexible length and easy maintenance.',
-    duration: '3-5 hrs',
-    fromPrice: 'From \u00a365',
-  },
-  {
-    title: 'Stitch Braids',
-    description: 'Defined stitch parting for sculpted, camera-ready detail.',
-    duration: '2-4 hrs',
-    fromPrice: 'From \u00a345',
-  },
-  {
-    title: 'Kids Braids',
-    description: 'Gentle, age-appropriate styling with comfort as the priority.',
-    duration: '1.5-3 hrs',
-    fromPrice: 'From \u00a330',
-  },
-]
-
 export const galleryItems = [
   {
     id: 'copper-knotless',
@@ -121,6 +82,62 @@ export const galleryItems = [
   },
 ]
 
+export const services = [
+  {
+    id: 'knotless-braids',
+    category: 'Braids',
+    title: 'Knotless Braids',
+    description: 'Lightweight braids with a natural finish and reduced scalp tension.',
+    image: galleryItems[0].image,
+    duration: '4-6 hrs',
+    fromPrice: 'From £80',
+  },
+  {
+    id: 'box-braids',
+    category: 'Braids',
+    title: 'Box Braids',
+    description: 'Classic protective styling with clean parting and polished ends.',
+    image: galleryItems[5].image,
+    duration: '4-7 hrs',
+    fromPrice: 'From £70',
+  },
+  {
+    id: 'cornrows',
+    category: 'Cornrows',
+    title: 'Cornrows',
+    description: 'Sleek rows for everyday wear, events, or base styling.',
+    image: galleryItems[1].image,
+    duration: '1.5-3 hrs',
+    fromPrice: 'From £35',
+  },
+  {
+    id: 'stitch-braids',
+    category: 'Cornrows',
+    title: 'Stitch Braids',
+    description: 'Defined stitch parting for sculpted, camera-ready detail.',
+    image: galleryItems[4].image,
+    duration: '2-4 hrs',
+    fromPrice: 'From £45',
+  },
+  {
+    id: 'twists',
+    category: 'Twists & Locs',
+    title: 'Twists',
+    description: 'Soft, elegant twists for flexible length and easy maintenance.',
+    image: galleryItems[8].image,
+    duration: '3-5 hrs',
+    fromPrice: 'From £65',
+  },
+  {
+    id: 'kids-braids',
+    category: 'Kids Styles',
+    title: 'Kids Braids',
+    description: 'Gentle, age-appropriate styling with comfort as the priority.',
+    image: galleryItems[7].image,
+    duration: '1.5-3 hrs',
+    fromPrice: 'From £30',
+  },
+]
 export const testimonials = [
   {
     name: 'Nadine A.',
