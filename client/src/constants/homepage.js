@@ -18,7 +18,7 @@ export const navItems = [
   { label: 'Gallery', href: '/gallery', type: 'route' },
   { label: 'About', href: '/about', type: 'route' },
   { label: 'Booking', href: '/booking', type: 'route' },
-  { label: 'Contact', href: '#contact', type: 'anchor' },
+  { label: 'Contact', href: '/contact', type: 'route' },
 ]
 
 export const trustItems = [

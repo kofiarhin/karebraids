@@ -24,3 +24,20 @@
 - Screenshot: unavailable due absent browser automation tooling; code-surface fallback passed.
 - Exact next action: update polish artifacts, run final audit/status, stage, commit, create PR record.
 - Whether it is safe to continue automatically: yes.
+
+## Spec Approval
+- Approved explicitly by user on 2026-05-31 with: `approve spec`
+- Task plan: `_workflow/runs/work/tasks.md`
+
+## Workflow Health Check
+- Status: Passed
+- Request synced: yes
+- Detailed spec complete: yes
+- Explicit spec approval before task plan: yes
+- Task plan derived from spec: yes
+- Progress/handoff/review/verification/release-notes/summary complete: yes
+- TDD-first iteration evidence recorded: yes
+- Final diff audit and dirty worktree checks: completed
+- Acceptance results: complete
+- Scope respected: yes
+- Decisions file required: no; additive MVP follows existing architecture

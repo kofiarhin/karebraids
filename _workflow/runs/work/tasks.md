@@ -1,68 +1,89 @@
-# Task Plan: About Page Dark Luxury Alignment
+# Task Plan: Contact Page MVP
 
-## Plan Metadata
+## Planning Metadata
 - Spec file used: `_workflow/runs/work/spec.md`
 - Planning date: 2026-05-31
-- Explicit approval: User replied `approve spec` before task generation.
-- Progress and summary files read: `_workflow/runs/work/progress.md`, `_workflow/runs/work/summary.md`.
-- Spec sections used: affected surfaces, dependency map, data impact, UX expectations, execution strategy, verification strategy, acceptance criteria, edge cases, risks, assumptions, open questions, and task extraction notes.
+- Explicit approval recorded: user replied `approve spec`
+- Execution mode: `complete-workflow`
+- Progress file read: `_workflow/runs/work/progress.md`
+- Summary file read: `_workflow/runs/work/summary.md`
+- Handoff file read: `_workflow/runs/work/handoff.md`
+- Detailed spec sections used: 5 Current State Analysis, 7 Scope, 9 Functional Requirements, 11 Affected Surfaces, 12 Dependency And Integration Map, 13 Data And State Impact, 14 UX / API / Workflow Expectations, 15 Execution Strategy, 16 Verification Strategy, 17 Acceptance Criteria, 18 Edge Cases And Failure Modes, 19 Risks And Mitigations, 20 Assumptions, 21 Open Questions, and 22 Task Extraction Notes.
 
-## TASK-001: Align About founder story with shared dark-luxury styling
+## TASK-001: Add persisted Contact message API
 - Status: Done
-- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
-- Objective: Remove heavy About-only panels and render a subtle editorial founder story surface while preserving behavior and responsive structure.
-- Files affected: `client/src/index.css`, `client/test/site-pages.test.jsx`, workflow and polish artifacts.
+- Objective: Add a public validated `POST /api/contact` endpoint that trims and saves enquiries with `status: "new"` and timestamps.
+- Files likely affected: `server/app.js`, new `server/models/ContactMessage.js`, new `server/utils/contactValidation.js`, new `server/controllers/contactController.js`, new `server/routes/contactRoutes.js`, new `server/tests/contact.test.js`.
 - Checklist:
-  - [x] Replace stale heavy-panel contract assertions.
-  - [x] Add requested subtle story surface and border through centralized tokens.
-  - [x] Remove About backing pseudo-elements.
-  - [x] Retain subtle image border and shared dark page background.
-  - [x] Prove mobile stack and scope safety.
+  - [ ] Add Jest/Supertest tests before implementation.
+  - [ ] Add ContactMessage Mongoose schema with timestamps and default new status.
+  - [ ] Add required string trimming and email-format validation.
+  - [ ] Add thin controller and route.
+  - [ ] Mount `/api/contact` in Express app.
+  - [ ] Verify required response contract and safe error behavior.
+- Iteration 1 Build: Write requested endpoint tests first, observe Red, then add minimal endpoint/model implementation and refactor boundaries.
+- Iteration 2 Refine: Add whitespace-trimming contract test first, observe Red if needed, refine validator behavior, and refactor without expanding scope.
+- Iteration 3 Polish: Add persistence-error safety contract first, observe Red if needed, harden safe HTTP 500 behavior, and run aggregate backend verification.
+- Test plan: Focused `npx jest server/tests/contact.test.js --runInBand`, then `npm run test:server`.
+- Red phase evidence: Pending execution.
+- Green phase evidence: Pending execution.
+- Refactor phase evidence: Pending execution.
+- Test commands run: Pending execution.
+- Acceptance criteria: API saves trimmed requested values with new status/timestamps; returns required 201; rejects missing/invalid email with 400; exposes no internal error detail.
+- Acceptance result: Pending.
+- Verification commands: `npx jest server/tests/contact.test.js --runInBand`, `npm run test:server`.
+- Stop condition: Stop if API conventions conflict or targeted backend verification cannot pass.
+- Out-of-scope items: Email dispatch, inbox APIs, rate limiting packages, auth changes.
 
-### Iteration 1 Build
-- Goal: Add failing surface contract and implement minimal About CSS.
-- Changes made: Added About-only minimal background, card, image, and pseudo-element disabling rules.
-- Test plan: Assert subtle card surface, image border, and disabled backing panels first.
-- Red phase evidence: Targeted Vitest failed with 1 expected missing-contract assertion.
-- Green phase evidence: Targeted Vitest passed 23 tests after CSS implementation.
-- Refactor phase evidence: Reviewed cascade, retained JSX/layout, passed whitespace and targeted rerun.
-- Test commands run: `npm run test --prefix client -- site-pages.test.jsx`; `git diff --check`.
-- Verification command/result: Passed.
-- Review findings: Scoped CSS only.
-- Acceptance status: Build criteria met.
-- Remaining issues: Narrow-phone cleanup.
-- Next action: Iteration 2 Refine.
+## TASK-002: Add dark-luxury Contact page and route-safe header link
+- Status: Done
+- Objective: Add a mobile-first `/contact` page with dark-luxury form/info layout, service-backed submission states, and route-safe header Contact navigation while preserving Footer and About.
+- Applied skill: design-taste-frontend
+- Files likely affected: `client/src/App.jsx`, `client/src/constants/homepage.js`, `client/src/index.css`, new `client/src/constants/contact.js`, new `client/src/pages/Contact.jsx`, new `client/src/services/contactService.js`, new `client/src/hooks/mutations/useCreateContactMessage.js`, new `client/test/contact-page.test.jsx`.
+- Checklist:
+  - [ ] Add frontend Vitest/RTL behavior tests before implementation.
+  - [ ] Add `/contact` route and update header Contact item to route type.
+  - [ ] Add page-local replaceable contact details.
+  - [ ] Add service and TanStack Query mutation hook.
+  - [ ] Add labeled required form controls and client required-value validation.
+  - [ ] Add loading, failure, reset, and exact success replacement states.
+  - [ ] Add responsive Contact-scoped dark-luxury styles.
+  - [ ] Prove Footer and About files remain unchanged.
+- Iteration 1 Build: Add route, navigation, detail, required validation, service-backed success tests first; observe Red; add minimal page slice and refactor.
+- Iteration 2 Refine: Add loading/failure-state tests first; observe Red if needed; refine mutation state UX and refactor.
+- Iteration 3 Polish: Add responsive scoped styling contract test first; observe Red; polish dark-luxury composition and run aggregate client verification.
+- Test plan: Focused `npm run test --prefix client -- contact-page.test.jsx`, then complete client tests, lint, and build.
+- Red phase evidence: Pending execution.
+- Green phase evidence: Pending execution.
+- Refactor phase evidence: Pending execution.
+- Test commands run: Pending execution.
+- Acceptance criteria: `/contact` renders branded page in Layout; header routes correctly; page-local details render; form behaves as specified; scoped responsive styles exist; Footer/About untouched.
+- Acceptance result: Pending.
+- Verification commands: `npm run test --prefix client -- contact-page.test.jsx`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`.
+- Stop condition: Stop if Footer/About require edits or targeted frontend verification cannot pass.
+- Out-of-scope items: Footer edits, About edits, standalone theme, Redux, form library, new dependencies.
 
-### Iteration 2 Refine
-- Goal: Prove mobile spacing remains calm and readable.
-- Changes made: Added About-only 480px gap and card-padding adjustments.
-- Test plan: Assert narrow-phone gap and padding first.
-- Red phase evidence: Targeted Vitest failed with 1 expected mobile-contract assertion.
-- Green phase evidence: Targeted Vitest passed 23 tests.
-- Refactor phase evidence: Reused existing 840px stack; whitespace passed.
-- Test commands run: `npm run test --prefix client -- site-pages.test.jsx`; `git diff --check`.
-- Verification command/result: Passed.
-- Review findings: Mobile structure preserved.
-- Acceptance status: Responsive criteria met.
-- Remaining issues: Small-phone image hardening and full verification.
-- Next action: Iteration 3 Polish.
-
-### Iteration 3 Polish
-- Goal: Harden smallest-phone image size and complete regressions.
-- Changes made: Added compact mobile image height; centralized RGBA values as `--about-surface-glass` and `--about-border-glass` after strict token-guard recovery.
-- Test plan: Assert compact image height first, then run full checks.
-- Red phase evidence: Targeted Vitest failed with 1 expected mobile-image assertion.
-- Green phase evidence: Targeted Vitest passed 23 tests.
-- Refactor phase evidence: Full suite exposed selector literals; centralized tokens and reran full suite successfully: 42 tests.
-- Test commands run: targeted/full client Vitest, client lint/build, server Jest, whitespace, HTTP smoke, selector scan, browser-tool scan, diff audit.
-- Verification command/result: Passed; screenshot unavailable due missing browser binary.
-- Review findings: Scoped About-only implementation with code-surface visual fallback passed.
-- Acceptance status: All criteria met.
-- Remaining issues: None blocking.
-- Next action: Commit and PR record.
-
-- Acceptance result: All approved criteria `[x]`.
-- Stop condition: None reached.
-- Out-of-scope items respected: JSX, routes, API, schema, dependencies, shared design refactor, and unrelated page implementation.
-
-Applied skill: design-taste-frontend
+## TASK-003: Audit regression safety and complete release artifacts
+- Status: Done
+- Objective: Verify the complete additive feature, audit scope, capture visual evidence when available, and finalize workflow records.
+- Files likely affected: `_workflow/runs/work/progress.md`, `_workflow/runs/work/handoff.md`, `_workflow/runs/work/review.md`, `_workflow/runs/work/verification.md`, `_workflow/runs/work/release-notes.md`, `_workflow/runs/work/summary.md`.
+- Checklist:
+  - [ ] Run full server and client verification matrix.
+  - [ ] Run `git diff --check`, `git diff --stat`, and `git diff`.
+  - [ ] Confirm Footer and About implementation files unchanged.
+  - [ ] Confirm no env vars, packages, secrets, junk, or scope creep.
+  - [ ] Attempt visual screenshot capture if browser automation exists; otherwise record code-surface fallback.
+  - [ ] Complete health check and release artifacts.
+- Iteration 1 Build: Run aggregate tests/build/lint and recover only in-scope failures.
+- Iteration 2 Refine: Audit exact diff, footer/about boundaries, and secrets/junk.
+- Iteration 3 Polish: Complete code-surface visual review or screenshot, workflow health check, and artifacts.
+- Test plan: Aggregate commands and diff audit.
+- Red phase evidence: Not applicable; audit-only task.
+- Green phase evidence: Pending execution.
+- Refactor phase evidence: Not applicable; audit-only task.
+- Test commands run: Pending execution.
+- Acceptance criteria: Verification passes or limitations documented; diff is scoped; artifacts complete.
+- Acceptance result: Pending.
+- Verification commands: `npm run test:server`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, `git diff --check`, `git diff --stat`, `git diff`, `git status --short`.
+- Stop condition: Stop if verification fails without an in-scope recovery or diff reveals unrelated changes.
+- Out-of-scope items: Unrelated cleanup or refactors.

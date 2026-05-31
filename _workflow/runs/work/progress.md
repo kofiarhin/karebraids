@@ -362,3 +362,174 @@
 - Failure recovery notes: Centralized the requested About RGBA literals after strict theme-token regression test failure; reran exact failing full suite successfully.
 - Blockers: None. Screenshot capture unavailable because no browser automation binary is installed.
 - Next step: Final artifacts, audit, commit, and PR record.
+
+# 2026-05-31 Contact Page MVP — TASK-001
+- Status: Done.
+- Lifecycle transition: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`.
+- Objective: Add validated persisted Contact message API.
+- Files changed: `server/app.js`, `server/models/ContactMessage.js`, `server/utils/contactValidation.js`, `server/controllers/contactController.js`, `server/routes/contactRoutes.js`, `server/tests/contact.test.js`.
+
+## Iteration 1 Build
+- Goal: Establish requested valid-save, missing-required, and invalid-email API contracts before implementation.
+- Changes made: Added Jest/Supertest tests first, then added ContactMessage model, validation utility, controller, route, and `/api/contact` mount.
+- Test plan: Run focused Contact endpoint suite before and after implementation.
+- Red phase evidence: `npx jest server/tests/contact.test.js --runInBand` failed because `../models/ContactMessage` did not exist.
+- Green phase evidence: Focused Contact suite passed 3 tests after minimal endpoint implementation.
+- Refactor phase evidence: Kept route thin, validation in a utility, controller response narrow, and persistence explicit.
+- Test commands run: `npx jest server/tests/contact.test.js --runInBand`.
+- Verification command/result: Focused Contact Jest passed.
+- Review findings: Endpoint returns required 201 envelope and only persists required trimmed values plus status.
+- Acceptance status: Build criteria met.
+- Remaining issues: Add whitespace and safe failure-path hardening.
+- Next action: Refine validator edge-case coverage.
+
+## Iteration 2 Refine
+- Goal: Prove whitespace-only required values fail after trimming.
+- Changes made: Added whitespace-only message rejection test; implementation already satisfied the refined contract through central clean-string validation.
+- Test plan: Run focused Contact endpoint suite.
+- Red phase evidence: Explicit missing-test exception: no new failure was expected because Iteration 1 intentionally centralized trim-before-required validation. The new regression assertion passed immediately.
+- Green phase evidence: Focused Contact suite passed with whitespace-only coverage.
+- Refactor phase evidence: No code change needed; retained centralized validator rather than duplicating checks.
+- Test commands run: `npx jest server/tests/contact.test.js --runInBand`.
+- Verification command/result: Focused Contact Jest passed.
+- Review findings: Whitespace-only values are rejected consistently.
+- Acceptance status: Refine criteria met.
+- Remaining issues: Prove safe unexpected-error response.
+- Next action: Polish failure path.
+
+## Iteration 3 Polish
+- Goal: Prove unexpected persistence errors do not leak internal details and run aggregate backend verification.
+- Changes made: Added safe 500 response regression test using a rejected mocked model create call.
+- Test plan: Run focused Contact suite and full server Jest suite.
+- Red phase evidence: Explicit missing-test exception: shared Express error middleware already provides the intended safe 500 response; the new regression assertion passed immediately.
+- Green phase evidence: Focused Contact suite passed 5 tests; full backend suite passed 29 tests.
+- Refactor phase evidence: Reused existing shared Express error middleware rather than adding contact-specific error duplication.
+- Test commands run: `npx jest server/tests/contact.test.js --runInBand`, `npm run test:server`.
+- Verification command/result: Full backend Jest passed: 5 suites, 29 tests.
+- Review findings: Safe additive endpoint; no auth, config, dependency, or email behavior changes.
+- Acceptance status: Complete.
+- Remaining issues: None.
+- Next action: Start TASK-002 frontend slice.
+
+## Acceptance Result
+- [x] `POST /api/contact` exists.
+- [x] Valid trimmed values persist with `status: "new"`.
+- [x] Mongoose timestamps are enabled.
+- [x] Required fields and invalid email return HTTP 400.
+- [x] Required HTTP 201 response envelope is exact.
+- [x] Unexpected persistence errors use the safe shared HTTP 500 response.
+
+# 2026-05-31 Contact Page MVP — TASK-002
+- Status: Done.
+- Lifecycle transition: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`.
+- Applied skill: design-taste-frontend
+- Objective: Add dark-luxury Contact page and route-safe header link while preserving Footer and About.
+- Files changed: `client/src/App.jsx`, `client/src/constants/homepage.js`, `client/src/constants/contact.js`, `client/src/services/contactService.js`, `client/src/hooks/mutations/useCreateContactMessage.js`, `client/src/pages/Contact.jsx`, `client/test/contact-page.test.jsx`.
+
+## Iteration 1 Build
+- Goal: Establish route, header nav, details card, client validation, service-backed submission, reset, and success replacement contracts before UI implementation.
+- Changes made: Added Contact Vitest/RTL suite first, then added page-local constants, contact service, TanStack Query mutation hook, `/contact` App route, header nav route update, and minimal dark-luxury Contact page.
+- Test plan: Run focused Contact Vitest before and after implementation.
+- Red phase evidence: `npm run test --prefix client -- contact-page.test.jsx` failed because `../src/services/contactService.js` did not exist.
+- Green phase evidence: Initial recovery exposed test-harness assumptions: unchanged footer intentionally duplicates location and TanStack Query adds mutation context to service calls. Narrowed assertions to `.contact-info-card` and the first payload argument. Focused Contact Vitest then passed 3 tests.
+- Refactor phase evidence: API logic stays outside UI in a service and mutation hook; replaceable placeholders stay page-local; Header continues using existing nav mapping; Footer source remains untouched.
+- Test commands run: `npm run test --prefix client -- contact-page.test.jsx`.
+- Verification command/result: Focused Contact Vitest passed 3 tests.
+- Review findings: Additive route integrates through existing Layout; exact success copy and client reset path are present.
+- Acceptance status: Build criteria met.
+- Remaining issues: Add pending, API failure, mobile navigation, and responsive token contracts.
+- Next action: Refine interaction-state coverage.
+
+## Iteration 2 Refine
+- Goal: Prove pending and useful API-failure interaction states.
+- Changes made: Added pending button and rejected-service alert tests; added disabled pending styling to existing Button use.
+- Test plan: Keep the mutation unresolved for pending state; reject it for failure state.
+- Red phase evidence: Explicit missing-test exception: Build implementation already exposed TanStack Query `isPending` and service error mapping, so new regression assertions passed on first focused run.
+- Green phase evidence: Focused Contact Vitest passed with loading and failure coverage.
+- Refactor phase evidence: Reused `getApiErrorMessage` and existing Button component rather than duplicating request/error primitives.
+- Test commands run: `npm run test --prefix client -- contact-page.test.jsx`.
+- Verification command/result: Focused Contact Vitest passed.
+- Review findings: Loading button disables repeat submissions and failure remains inline and useful.
+- Acceptance status: Refine criteria met.
+- Remaining issues: Prove mobile route and responsive dark-token composition.
+- Next action: Polish navigation and responsive styling evidence.
+
+## Iteration 3 Polish
+- Goal: Prove mobile Contact navigation and dark-luxury responsive Tailwind composition, then run aggregate verification.
+- Changes made: Added mobile navigation interaction test and Contact source styling contract assertion; corrected arbitrary Tailwind width spacing syntax to `w-[min(100%_-_2rem,1180px)]`.
+- Test plan: Open mobile drawer, inspect `/contact` link, assert two-column desktop utility, sticky info card, espresso surface, and muted border tokens; run all client/backend checks.
+- Red phase evidence: Explicit missing-test exception: Build already used the intended mobile nav mapping and dark responsive utilities. Source review found and corrected the Tailwind arbitrary width spacing syntax before aggregate build.
+- Green phase evidence: Focused Contact Vitest passed 7 tests; full client Vitest passed 49 tests; lint passed; Vite build passed; full backend Jest passed 29 tests; `git diff --check` passed.
+- Refactor phase evidence: Kept responsive composition in Tailwind utility classes and reused existing design tokens; did not add broad global CSS rules.
+- Test commands run: `npm run test --prefix client -- contact-page.test.jsx`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, `npm run test:server`, `git diff --check`.
+- Verification command/result: Full aggregate checks passed.
+- Review findings: Page is mobile-first, becomes two columns on desktop, and maintains dark espresso/gold visual consistency without touching Footer/About.
+- Acceptance status: Complete.
+- Remaining issues: Screenshot evidence attempt pending tooling check.
+- Next action: TASK-003 final audit.
+
+## Acceptance Result
+- [x] `/contact` renders inside existing Layout with dark-luxury styling.
+- [x] Main and mobile Header Contact links route to `/contact`.
+- [x] Footer source remains unchanged and About source remains unchanged.
+- [x] Page-local replaceable information card values render.
+- [x] Four labeled required controls validate before submission.
+- [x] API access stays in service/hook files.
+- [x] Loading and useful failure states render.
+- [x] Success resets local form state and replaces form with exact required success card.
+- [x] Frontend focused and aggregate checks pass.
+
+# 2026-05-31 Contact Page MVP — TASK-003
+- Status: Done.
+- Lifecycle transition: `Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done`.
+- Objective: Audit regression safety and complete release artifacts.
+- Files changed: Run-scoped workflow records only.
+
+## Iteration 1 Build
+- Goal: Run aggregate verification matrix.
+- Changes made: No implementation changes required.
+- Test plan: Run server tests, client tests, lint, build, whitespace audit, and local Vite HTTP smoke.
+- Red phase evidence: Not applicable; audit-only task.
+- Green phase evidence: Full client Vitest passed 49 tests; lint passed; build passed; full backend Jest passed 29 tests; whitespace audit passed; Vite served `/contact` successfully.
+- Refactor phase evidence: Not applicable; no recovery changes needed.
+- Test commands run: `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, `npm run test:server`, `git diff --check`, `npm run dev --prefix client -- --host 127.0.0.1`, `curl --fail --silent --show-error http://127.0.0.1:5173/contact`.
+- Verification command/result: Aggregate checks passed.
+- Review findings: No verification recovery required.
+- Acceptance status: Complete.
+- Remaining issues: Browser screenshot capture tooling unavailable.
+- Next action: Diff audit.
+
+## Iteration 2 Refine
+- Goal: Audit scope, locked files, secrets, dependencies, environment changes, and generated junk.
+- Changes made: No implementation changes required.
+- Test plan: Inspect status, complete staged diff, Footer/About diff, and package/config surfaces.
+- Red phase evidence: Not applicable; audit-only task.
+- Green phase evidence: Footer/About diff empty. No package, lockfile, env, deployment, generated dist, secret, or unrelated implementation changes detected.
+- Refactor phase evidence: Not applicable.
+- Test commands run: `git status --short`, `git diff --name-only -- client/src/components/Footer.jsx client/src/pages/About.jsx`, `git diff --stat`, `git diff`.
+- Verification command/result: Scope audit passed.
+- Review findings: Additive Contact-only feature with locked boundaries preserved.
+- Acceptance status: Complete.
+- Remaining issues: Screenshot tooling unavailable.
+- Next action: Code-surface visual review and health check.
+
+## Iteration 3 Polish
+- Goal: Complete visual evidence fallback and workflow health check.
+- Changes made: No implementation changes required.
+- Test plan: Check installed browser commands; inspect Contact page utility classes and token reuse; finalize artifacts.
+- Red phase evidence: Not applicable; audit-only task.
+- Green phase evidence: No Chromium, Chrome, Firefox, or Playwright executable exists. Code-surface fallback confirmed mobile-first stack, desktop two-column Tailwind grid, sticky info card, existing espresso surfaces, gold accent tokens, existing typography hooks, accessible labels, and focused alerts.
+- Refactor phase evidence: Not applicable.
+- Test commands run: `command -v chromium || command -v chromium-browser || command -v google-chrome || command -v playwright || command -v firefox || true`.
+- Verification command/result: Code-surface visual review passed; screenshot capture unavailable due environment limitation.
+- Review findings: Contact page follows existing dark-luxury visual language without a standalone theme.
+- Acceptance status: Complete.
+- Remaining issues: Screenshot could not be captured in this container.
+- Next action: Commit and PR record.
+
+## Acceptance Result
+- [x] Full verification matrix passed.
+- [x] Diff matches approved spec.
+- [x] Footer and About locked boundaries unchanged.
+- [x] No dependency, env-var, secret, config, deployment, or generated-junk changes.
+- [x] Screenshot attempt documented with allowed code-surface fallback.

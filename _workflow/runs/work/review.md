@@ -1,7 +1,7 @@
-# Review: About Page Dark Luxury Alignment
+# Review: Contact Page MVP
 
 ## Request
-Align About with Home/Gallery/Booking dark-luxury styling while removing heavy brown/grey panels and preserving behavior.
+Add a dark-luxury `/contact` page and persisted `POST /api/contact` enquiry endpoint without changing Footer or About.
 
 ## Spec File Used
 `_workflow/runs/work/spec.md`
@@ -10,35 +10,38 @@ Align About with Home/Gallery/Booking dark-luxury styling while removing heavy b
 `_workflow/runs/work/tasks.md`
 
 ## Tasks Reviewed
-- TASK-001: Align About founder story with shared dark-luxury styling — Done.
+- TASK-001 persisted Contact API — Done.
+- TASK-002 dark-luxury Contact page and route-safe Header link — Done.
+- TASK-003 regression audit and release artifacts — Done.
 
 ## Bugs Found
-- Full suite caught selector-level RGBA literals violating centralized theme rules. Fixed by moving values into `:root` tokens.
+- Initial frontend verification assumed Contact page location text would be globally unique, but the locked Footer intentionally contains the same location. Test narrowed to Contact info card.
+- Initial frontend verification assumed service mock received only payload, but TanStack Query supplies mutation context as a second argument. Test narrowed to payload plus allowed context.
+- Tailwind arbitrary width utility was hardened to escape spaces with underscores before aggregate build.
 
 ## Scope Creep Check
-Passed. Production implementation diff is limited to `client/src/index.css`; regression coverage is limited to `client/test/site-pages.test.jsx`. No JSX, route, navbar, CTA, Home, Gallery, Services, Booking, backend, schema, dependency, or secret change was made.
+Passed. No footer, About, auth, admin inbox, email sending, dependency, lockfile, env-var, deployment, or unrelated changes.
 
 ## Final Diff Audit
-- Ran `git diff --stat`, `git diff`, `git diff --check`, and scoped implementation-name audit.
-- Changes match approved spec.
-- No generated junk, sensitive values, unrelated implementation changes, or temporary artifacts are staged for commit.
+Completed with `git diff --stat`, `git diff`, `git diff --check`, locked-file diff checks, and staged-diff review before commit. The diff matches the approved specification.
 
 ## Failure Recovery Notes
-Centralized requested About surface literals after theme-token guard failure and reran exact suite successfully.
+Only targeted test-harness refinements were required. No production regression recovery was needed.
 
 ## Missing Tests
-None for scoped behavior.
+None for requested MVP behavior. Future spam controls and administrative inbox behavior remain out of scope.
 
 ## Security Concerns
-None.
+Public contact endpoint remains intentionally unauthenticated. Input is trimmed and required, email is validated, persisted records are not returned, and unexpected errors use a safe shared response. Rate limiting/spam prevention is a future hardening opportunity.
 
 ## Architecture Concerns
-None. Tokens remain centralized; selectors remain About-specific.
+None blocking. Contact UI API access stays in service/hook boundaries; backend route remains thin with centralized validation utility.
 
 ## Follow-Up Tasks
-Optional browser screenshot automation setup for future visual-regression evidence.
+- Optional future rate limiting/spam prevention.
+- Optional future email dispatch.
+- Optional future admin inbox.
+- Optional browser screenshot automation in the container.
 
 ## Final Review Verdict
-Passed.
-
-Applied skill: design-taste-frontend
+Approved. Feature is MVP-ready and scoped.

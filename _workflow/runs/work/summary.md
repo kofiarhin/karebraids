@@ -248,3 +248,55 @@ Screenshot unavailable due missing browser automation tooling; allowed code-surf
 
 ## Next Recommended Work
 Optional browser screenshot automation for future visual-regression evidence.
+
+# 2026-05-31 Summary: Contact Page MVP
+
+## Request
+Add a dark-luxury `/contact` page and MongoDB-backed public enquiry endpoint while preserving Footer and About.
+
+## Spec File Used
+`_workflow/runs/work/spec.md`
+
+## Detailed Spec Completeness
+Complete. All 22 required detailed spec sections were present before planning. Explicit user approval was recorded before task generation.
+
+## Task Plan Used
+`_workflow/runs/work/tasks.md`
+
+## Review File Used
+`_workflow/runs/work/review.md`
+
+## Tasks Completed
+- TASK-001 persisted Contact API — Done through Build, Refine, Polish.
+- TASK-002 dark-luxury Contact page and route-safe Header link — Done through Build, Refine, Polish.
+- TASK-003 regression audit and release artifacts — Done.
+
+## Iteration Evidence Summary
+- Backend Build: requested Jest/Supertest contracts Red then Green; Refine: trim edge-case coverage; Polish: safe persistence-failure regression and full suite.
+- Frontend Build: missing service Red then complete route/form Green; Refine: loading/failure coverage; Polish: mobile navigation, responsive dark-token evidence, and full verification.
+- Final audit: regression matrix, diff review, locked-file check, HTTP smoke, screenshot-tool limitation, and code-surface fallback.
+- Applied skill: design-taste-frontend
+
+## Files Changed
+See final git diff and release notes. Additive Contact implementation, tests, and run-scoped workflow artifacts only.
+
+## Verification Run
+Backend focused/full Jest, frontend focused/full Vitest, client lint, client build, whitespace audit, locked-file audit, and local Vite `/contact` HTTP smoke passed.
+
+## Acceptance Results
+All approved Contact Page MVP criteria met. Footer and About remain unchanged.
+
+## Failure Recovery Notes
+Corrected frontend test-harness scoping/context assumptions and hardened Tailwind arbitrary width spacing syntax.
+
+## Final Diff Audit
+Scoped diff reviewed. No secrets, packages, env vars, deployment changes, generated junk, Footer edits, About edits, or unrelated changes detected.
+
+## Release Notes File Used
+`_workflow/runs/work/release-notes.md`
+
+## Unresolved Issues
+Screenshot capture unavailable because browser automation tooling is absent. Optional future spam prevention, email delivery, and admin inbox remain outside MVP scope.
+
+## Next Recommended Work
+Deploy with existing MongoDB configuration, then optionally prioritize spam protection before promoting the contact form broadly.
