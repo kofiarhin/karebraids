@@ -715,3 +715,63 @@
 - Root `WORK_REQUEST.md`: left manual compatibility-only.
 - Decisions file: not required; implementation follows existing architecture with additive public gallery route.
 - Final health: Passed.
+
+# 2026-06-02 KareBraids Service-Driven Gallery
+
+## TASK-001: Add backend service data and gallery endpoint contracts
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed: `server/data/services.json`, `server/controllers/galleryController.js`, `server/routes/galleryRoutes.js`, `server/tests/gallery.test.js`
+- Iteration 1 Build: Red `npm run test:server -- --runTestsByPath server/tests/gallery.test.js` failed because `/api/gallery/services` was 404 and old flat gallery had 20 items; Green created service JSON and endpoints; Refactor extracted preview/gallery helpers.
+- Iteration 2 Refine: verified unknown service fallback and selected-service review metadata.
+- Iteration 3 Polish: response shape reviewed to omit full image/review arrays from service previews.
+- Test commands run: `npm run test:server -- --runTestsByPath server/tests/gallery.test.js`, `npm run test:server`
+- Acceptance result: all criteria checked.
+- Verification result: passed.
+- Review result: no backend scope creep; no secrets.
+- Blockers: none.
+- Next step: frontend query/UI task.
+
+## TASK-002: Update frontend gallery service and query hooks
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed: `client/src/services/galleryService.js`, `client/src/hooks/queries/useGalleryItems.js`, `client/test/gallery-query.test.jsx`
+- Iteration 1 Build: Red frontend gallery tests expected new service hook behavior; Green added `getGallery`, `getGalleryItems`, `getGalleryServices`, `useGallery`, `useGalleryItems`, and `useGalleryServices`.
+- Iteration 2 Refine: normalized `limit` and `service` query keys and params.
+- Iteration 3 Polish: ensured paths use `/gallery` and `/gallery/services` under API base URL.
+- Test commands run: `npm run test --prefix client -- gallery-query.test.jsx`, `npm run test --prefix client`
+- Acceptance result: all criteria checked.
+- Verification result: passed.
+- Review result: API logic remains outside UI components.
+- Blockers: none.
+- Next step: frontend surfaces.
+
+## TASK-003: Render service-driven gallery and preview cards
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed: `client/src/pages/Gallery.jsx`, `client/src/components/home/BrowseByStyle.jsx`, `client/src/components/home/FeaturedServices.jsx`, `client/src/pages/Services.jsx`, `client/src/components/reviews/ReviewList.jsx`, `client/src/index.css`, frontend tests
+- Iteration 1 Build: Red frontend tests failed until Gallery requested `service`, displayed selected metadata/reviews, and preview cards used services.
+- Iteration 2 Refine: updated homepage/services mocks and regression tests for service-driven routes.
+- Iteration 3 Polish: added responsive selected-service intro/review styling and preserved modal tests.
+- Test commands run: `npm run test --prefix client -- gallery-query.test.jsx`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`
+- Acceptance result: all criteria checked.
+- Verification result: passed.
+- Review result: Applied skill: design-taste-frontend. Components remain accessible and reusable.
+- Blockers: none.
+- Next step: final review, release notes, summary, commit, PR.
+
+# 2026-06-02 Review Fixes: Birmingham Copy and Safe Service Preview Fallback
+
+## TASK-004: Apply merge review fixes
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed: customer-facing location copy, service preview helper, BrowseByStyle, FeaturedServices, Services, and related tests.
+- Iteration 1 Build: Red targeted frontend tests failed on London copy and missing `previewImage`; Green updated customer copy to Birmingham/West Midlands and added reusable preview fallback helper.
+- Iteration 2 Refine: fixed test specificity for multiple service card links and verified selected gallery behavior remained covered.
+- Iteration 3 Polish: searched for remaining London copy and ran full required verification.
+- Test commands run: `npm run test --prefix client -- gallery-query.test.jsx site-pages.test.jsx contact-page.test.jsx`, `npm run test:server`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`.
+- Acceptance result: [x] Birmingham/West Midlands copy shown; [x] missing preview images do not crash service cards; [x] existing gallery default/filtered behavior still works; [x] architecture unchanged.
+- Verification result: passed.
+- Review result: Applied skill: design-taste-frontend. API paths and backend `server/data/services.json` source of truth preserved.
+- Blockers: none.
+- Next step: commit and PR record.

@@ -1,15 +1,15 @@
-# Review: KareBraids Homepage and Gallery Architecture Redesign
+# Review: KareBraids Service-Driven Gallery
 
-- Request: redesign below-Hero homepage, centralize gallery metadata behind public API, add gallery filtering, service details, redirects, reviews display, and booking preselection.
-- Spec: `_workflow/runs/work/spec.md`
-- Tasks: `_workflow/runs/work/tasks.md`
-- Reviewed tasks: TASK-001 through TASK-004.
-- Bugs found and recovered: narrowed gallery test assertion to gallery region; fixed Vitest hoisted mock; centralized style lookup to satisfy Fast Refresh; memoized carousel callback for hook lint; updated superseded tests and date-relative booking test; all reruns pass.
-- Scope creep: none.
-- Final diff audit: implementation, tests, run artifacts, and polish UI evidence only. No Hero diff, binaries, dependencies, schema, env vars, secrets, deployment, or auth changes.
-- Missing tests: none for requested behavior. API failure/empty, filters, limits, redirects, preselection, swipe, modal regressions, and full suites are covered.
-- Security concerns: none; endpoint exposes intended public static metadata only.
-- Architecture concerns: none; API calls remain in service/hook boundary and server state remains in TanStack Query.
-- Screenshot limitation: tooling scan found no browser automation binary/package; code-surface fallback completed.
-- Follow-up tasks: optional CMS/gallery persistence and browser screenshot automation.
-- Verdict: approved for commit.
+- Request: Implement service-driven gallery system.
+- Spec file used: `_workflow/runs/work/spec.md`
+- Task plan used: `_workflow/runs/work/tasks.md`
+- Tasks reviewed: TASK-001, TASK-002, TASK-003
+- Bugs found: frontend test mocks needed updates for the new service hook exports; fixed in test files.
+- Scope creep check: no new dependencies, no deployment/config/auth changes, no database changes.
+- Final diff audit: `git diff --stat` and `git diff` completed before commit; changes matched service gallery spec.
+- Failure recovery notes: initial backend red test failed as expected; full frontend suite initially failed due outdated mocks and one legacy services-page assertion, then passed after in-scope updates.
+- Missing tests: none for requested behavior.
+- Security concerns: none; no secrets or credentials added.
+- Architecture concerns: legacy frontend constants still exist for unrelated marketing/legacy surfaces; requested gallery/service feature uses backend service data.
+- Follow-up tasks: consider redirecting legacy `style` query to `service`; consider adding new service ids to booking validation if booking preselection must support all eight service ids.
+- Final review verdict: Passed for implementation; workflow health Partial because explicit spec approval was not recorded before task planning.

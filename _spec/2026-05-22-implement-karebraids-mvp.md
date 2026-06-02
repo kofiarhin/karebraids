@@ -49,7 +49,7 @@
 - Explicit boundaries: Do not change deployment configuration; do not add secrets; do not hard-code frontend API URLs.
 
 ## 8. Users And Use Cases
-- Primary users: UK-based African women, primarily London, ages 18-45, looking for salon or mobile braiding.
+- Primary users: UK-based African women, primarily Birmingham and the West Midlands, ages 18-45, looking for salon or mobile braiding.
 - Secondary users: Karen/team reviewing incoming bookings in the database.
 - Main use cases: Learn about services, assess trust and craftsmanship, browse braid styles, submit booking details.
 - Edge use cases: Empty/no unavailable slots, image load failure, Sunday selection, duplicate booking slot, API/network failure.

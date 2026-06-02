@@ -1,33 +1,13 @@
-# Release Notes: KareBraids Homepage and Gallery Architecture Redesign
+# Release Notes: KareBraids Service-Driven Gallery
 
-## User-facing Changes
-- Rebuilt homepage below the unchanged Hero into a conversion-focused browsing and booking journey.
-- Added category browsing, transparent featured pricing, four-item Client Gallery, eight-item carousel, trust reasons, booking steps, and dual CTA.
-- Added filtered gallery URLs, six service detail pages, compatibility redirects, reusable reviews display, and style-specific booking preselection.
-
-## Developer Changes
-- Added backend-owned static gallery metadata and frontend TanStack Query gallery boundary.
-- Added reusable data-driven style profiles and review components.
-
-## New Routes / APIs
-- `GET /api/gallery`
-- `/services/:slug`
-- `/styles/:slug` compatibility redirect
-
-## Env Vars / Schema / Dependencies
+- Request: Implement KareBraids gallery/service feature.
+- User-facing changes: Gallery now shows all service images by default and selected service intro/reviews when opened with `/gallery?service=<service-id>`. Homepage and service preview cards use backend service preview images and route to filtered gallery pages.
+- Developer changes: Added backend service JSON data, service preview endpoint, filtered gallery responses, frontend gallery service functions, TanStack Query hooks, and tests.
+- New routes/APIs: `GET /api/gallery/services`; enhanced `GET /api/gallery?service=<service-id>`.
 - New env vars: none.
 - Database/schema changes: none.
 - Dependencies added/removed: none.
-
-## Verification
-- Server Jest, client Vitest, lint, build, whitespace, API smoke, Hero lock, security/scope audit passed.
-
-## Known Limitations
-- Gallery metadata remains static placeholder content and remote URLs.
-- Screenshot unavailable because browser automation tooling is absent.
-
-## Follow-up
-- Optional CMS persistence, verified review submission flow, and screenshot automation.
-
-## Suggested Commit
-`feat: redesign homepage and add gallery service architecture`
+- Test commands run: `npm run test:server -- --runTestsByPath server/tests/gallery.test.js`; `npm run test:server`; `npm run test --prefix client -- gallery-query.test.jsx`; `npm run test --prefix client`; `npm run lint --prefix client`; `npm run build --prefix client`.
+- Known limitations: sample Pexels URLs are placeholder content; legacy service detail constants remain for compatibility.
+- Follow-up work: decide on legacy `style` query redirect and booking validation for all eight service ids.
+- Suggested commit message: `Implement service-driven gallery feature`

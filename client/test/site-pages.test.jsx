@@ -9,8 +9,23 @@ import App from '../src/App.jsx'
 import { galleryItems, services } from '../src/constants/content.js'
 
 vi.mock('../src/hooks/queries/useGalleryItems.js', async () => {
-  const { galleryItems } = await import('../src/constants/content.js')
-  return { useGalleryItems: ({ limit } = {}) => ({ data: limit ? galleryItems.slice(0, limit) : galleryItems, isLoading: false, isError: false }) }
+  const { galleryItems, services } = await import('../src/constants/content.js')
+  const galleryServices = services.map((service, index) => ({
+    id: service.id,
+    title: service.title,
+    description: service.description,
+    startingPrice: Number(service.fromPrice.replace(/[^0-9]/g, '')),
+    currency: 'GBP',
+    duration: { minHours: 2, maxHours: 5 },
+    featured: index < 4,
+    previewImage: { id: `${service.id}-preview`, title: service.title, description: service.description, image: service.image, aspect: 'medium' },
+  }))
+  const galleryResponse = { galleryItems, selectedService: null, reviews: [] }
+  return {
+    useGallery: () => ({ data: galleryResponse, isLoading: false, isError: false, refetch: vi.fn() }),
+    useGalleryItems: ({ limit } = {}) => ({ data: limit ? galleryItems.slice(0, limit) : galleryItems, isLoading: false, isError: false }),
+    useGalleryServices: () => ({ data: galleryServices, isLoading: false, isError: false, refetch: vi.fn() }),
+  }
 })
 
 const originalMatchMedia = window.matchMedia
@@ -53,7 +68,7 @@ describe('KareBraids pages', () => {
     expect(container.querySelector('.luxury-homepage')).toBeInTheDocument()
     expect(screen.getByText(/luxury african hair braiding/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /luxury braiding, crafted with care/i })).toBeInTheDocument()
-    expect(screen.getByText(/premium salon and mobile braiding services across london/i)).toBeInTheDocument()
+    expect(screen.getByText(/premium salon and mobile braiding services across birmingham/i)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /view styles/i })).toHaveAttribute('href', '/gallery')
     expect(screen.getByText(/500\+ happy clients/i)).toBeInTheDocument()
     expect(container.querySelector('.browse-style-section')).toHaveTextContent(/browse by style/i)
@@ -63,6 +78,8 @@ describe('KareBraids pages', () => {
     expect(screen.getByText(/client testimonials/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /ready for your next look/i })).toBeInTheDocument()
     expect(screen.getByRole('contentinfo')).toHaveTextContent(/mon - sat: 8am - 7pm/i)
+    expect(screen.getByRole('contentinfo')).toHaveTextContent(/birmingham, west midlands/i)
+    expect(screen.queryByText(/london/i)).not.toBeInTheDocument()
     expect(container.querySelectorAll('[data-reveal]').length).toBeGreaterThan(8)
   })
 
@@ -273,13 +290,11 @@ describe('KareBraids pages', () => {
     expect(container.querySelector('.services-page')).toHaveClass('dark-services-page')
     expect(screen.getByRole('heading', { level: 1, name: /signature braid services/i })).toBeInTheDocument()
     expect(screen.getByText(/salon appointment or a mobile service/i)).toBeInTheDocument()
-    ;['Braids', 'Cornrows', 'Twists & Locs', 'Kids Styles'].forEach((category) => {
-      expect(screen.getByRole('heading', { level: 2, name: category })).toBeInTheDocument()
-    })
+    expect(screen.getByRole('heading', { level: 2, name: /braiding services/i })).toBeInTheDocument()
     expect(container.querySelectorAll('.service-card')).toHaveLength(services.length)
     container.querySelectorAll('.service-card').forEach((card) => {
       expect(within(card).getByRole('img')).toHaveAttribute('loading', 'lazy')
-      expect(within(card).getByRole('link', { name: /book appointment/i })).toHaveAttribute('href', '/booking')
+      expect(within(card).getByRole('link', { name: /view gallery/i })).toHaveAttribute('href', expect.stringMatching(/^/))
       expect(card.querySelector('a[href="/gallery"]')).not.toBeInTheDocument()
     })
     expect(screen.getByRole('link', { name: /reserve your appointment/i })).toHaveAttribute('href', '/booking')

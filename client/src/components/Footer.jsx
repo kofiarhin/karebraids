@@ -18,7 +18,7 @@ export function Footer() {
         <p className="eyebrow">KareBraids</p>
         <h2>Luxury African braiding with care at the centre.</h2>
         <p>
-          Premium salon and mobile braid appointments for polished protective styles across London.
+          Premium salon and mobile braid appointments for polished protective styles across Birmingham and the West Midlands.
         </p>
         <div className="footer-socials" aria-label="Social links">
           {socialLinks.map((link) => (
@@ -45,7 +45,7 @@ export function Footer() {
         <p>Mon - Sat: 8AM - 7PM</p>
         <p>
           <MapPin aria-hidden="true" size={18} weight="duotone" />
-          London, United Kingdom
+          Birmingham, West Midlands
         </p>
         <Button to="/booking">Book Appointment</Button>
       </div>

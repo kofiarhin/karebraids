@@ -1,21 +1,50 @@
-const galleryItems = require("../data/gallery.json");
+const services = require("../data/services.json");
 
 const positiveIntegerPattern = /^[1-9]\d*$/;
-const stylePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const servicePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-function getGallery(req, res) {
-  const { limit, style } = req.query;
+function toPreviewService(service) {
+  const { images, reviews, ...metadata } = service;
 
-  const hasValidStyle = typeof style === "string" && stylePattern.test(style);
-  const hasValidLimit = typeof limit === "string" && positiveIntegerPattern.test(limit);
-
-  const filteredItems = hasValidStyle
-    ? galleryItems.filter((item) => item.style === style)
-    : galleryItems;
-
-  const items = hasValidLimit ? filteredItems.slice(0, Number(limit)) : filteredItems;
-
-  return res.json({ galleryItems: items });
+  return {
+    ...metadata,
+    previewImage: images[0] ?? null,
+  };
 }
 
-module.exports = { getGallery };
+function toGalleryItem(service, image) {
+  return {
+    ...image,
+    serviceId: service.id,
+    serviceTitle: service.title,
+  };
+}
+
+function getLimitedItems(items, limit) {
+  const hasValidLimit = typeof limit === "string" && positiveIntegerPattern.test(limit);
+  return hasValidLimit ? items.slice(0, Number(limit)) : items;
+}
+
+function findService(serviceId) {
+  if (typeof serviceId !== "string" || !servicePattern.test(serviceId)) return null;
+  return services.find((service) => service.id === serviceId) ?? null;
+}
+
+function getGalleryServices(req, res) {
+  return res.json({ services: services.map(toPreviewService) });
+}
+
+function getGallery(req, res) {
+  const selectedService = findService(req.query.service);
+  const sourceServices = selectedService ? [selectedService] : services;
+  const galleryItems = sourceServices.flatMap((service) => service.images.map((image) => toGalleryItem(service, image)));
+  const items = getLimitedItems(galleryItems, req.query.limit);
+
+  return res.json({
+    galleryItems: items,
+    selectedService: selectedService ? toPreviewService(selectedService) : null,
+    reviews: selectedService ? selectedService.reviews : [],
+  });
+}
+
+module.exports = { getGallery, getGalleryServices };
