@@ -1,7 +1,17 @@
 import { Link } from 'react-router-dom'
-import { styleProfiles } from '../../constants/styles.js'
+import { useGalleryServices } from '../../hooks/queries/useGalleryItems.js'
+
+function formatPrice(service) {
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: service.currency,
+    maximumFractionDigits: 0,
+  }).format(service.startingPrice)
+}
 
 export function BrowseByStyle() {
+  const { data: services = [], isError, isLoading } = useGalleryServices()
+
   return (
     <section className="browse-style-section" aria-labelledby="browse-style-title">
       <div className="browse-style-intro" data-reveal>
@@ -9,14 +19,19 @@ export function BrowseByStyle() {
         <h2 id="browse-style-title">Start with the look you have in mind.</h2>
         <p>Explore client examples by category, then compare the service details before you book.</p>
       </div>
-      <div className="browse-style-grid">
-        {styleProfiles.map((style, index) => (
-          <Link aria-label={`${style.name}, ${style.count} styles, starting at ${style.startingPrice}`} className="browse-style-card" data-reveal key={style.slug} style={{ '--index': index }} to={`/gallery?style=${style.slug}`}>
-            <img alt={`${style.name} category`} loading="lazy" src={style.image} />
-            <span><strong>{style.name}</strong><small>{style.count} styles · From {style.startingPrice}</small></span>
-          </Link>
-        ))}
-      </div>
+      {isLoading ? <p className="gallery-query-state" role="status">Loading service styles...</p> : null}
+      {isError ? <p className="gallery-query-state" role="alert">Service styles are unavailable right now.</p> : null}
+      {!isLoading && !isError && services.length === 0 ? <p className="gallery-query-state" role="status">Service styles are coming soon.</p> : null}
+      {!isLoading && !isError && services.length > 0 ? (
+        <div className="browse-style-grid">
+          {services.map((service, index) => (
+            <Link aria-label={`${service.title}, starting at ${formatPrice(service)}`} className="browse-style-card" data-reveal key={service.id} style={{ '--index': index }} to={`/gallery?service=${service.id}`}>
+              <img alt={`${service.title} preview`} loading="lazy" src={service.previewImage.image} />
+              <span><strong>{service.title}</strong><small>From {formatPrice(service)}</small></span>
+            </Link>
+          ))}
+        </div>
+      ) : null}
     </section>
   )
 }

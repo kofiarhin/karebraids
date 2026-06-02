@@ -1,38 +1,67 @@
 const request = require("supertest");
 const app = require("../app");
 
-describe("gallery API", () => {
-  it("returns the complete backend-owned gallery by default", async () => {
+describe("service-driven gallery API", () => {
+  it("returns service previews with the first image as preview metadata", async () => {
+    const response = await request(app).get("/api/gallery/services");
+
+    expect(response.status).toBe(200);
+    expect(response.body.services).toHaveLength(8);
+    expect(response.body.services[0]).toEqual(
+      expect.objectContaining({
+        id: "knotless-braids",
+        title: "Knotless Braids",
+        currency: "GBP",
+        previewImage: expect.objectContaining({
+          id: expect.any(String),
+          image: expect.stringMatching(/^https:\/\/images\.pexels\.com\//),
+          aspect: expect.any(String),
+        }),
+      }),
+    );
+    expect(response.body.services[0].images).toBeUndefined();
+  });
+
+  it("returns all service images by default", async () => {
     const response = await request(app).get("/api/gallery");
 
     expect(response.status).toBe(200);
-    expect(response.body.galleryItems).toHaveLength(20);
+    expect(response.body.galleryItems).toHaveLength(80);
+    expect(response.body.selectedService).toBeNull();
+    expect(response.body.reviews).toEqual([]);
     expect(response.body.galleryItems[0]).toEqual(
       expect.objectContaining({
         id: expect.any(String),
-        title: expect.any(String),
-        description: expect.any(String),
-        image: expect.stringMatching(/^https:\/\//),
-        style: expect.any(String),
+        serviceId: "knotless-braids",
+        serviceTitle: "Knotless Braids",
+        image: expect.stringMatching(/^https:\/\/images\.pexels\.com\//),
       }),
     );
   });
 
-  it("returns the first four items for a valid positive integer limit", async () => {
-    const allItems = await request(app).get("/api/gallery");
-    const limited = await request(app).get("/api/gallery?limit=4");
+  it("returns selected service images, metadata, and reviews for a service query", async () => {
+    const response = await request(app).get("/api/gallery?service=boho-knotless-braids");
 
-    expect(limited.status).toBe(200);
-    expect(limited.body.galleryItems).toEqual(allItems.body.galleryItems.slice(0, 4));
+    expect(response.status).toBe(200);
+    expect(response.body.galleryItems).toHaveLength(10);
+    expect(response.body.galleryItems.every((item) => item.serviceId === "boho-knotless-braids")).toBe(true);
+    expect(response.body.selectedService).toEqual(
+      expect.objectContaining({
+        id: "boho-knotless-braids",
+        title: "Boho Knotless Braids",
+        previewImage: expect.objectContaining({ id: response.body.galleryItems[0].id }),
+      }),
+    );
+    expect(response.body.selectedService.images).toBeUndefined();
+    expect(response.body.reviews).toHaveLength(3);
   });
 
-  it.each(["abc", "0", "-1", "1.5", "", " 4 "])(
-    "returns the complete gallery for invalid limit %p",
-    async (limit) => {
-      const response = await request(app).get(`/api/gallery?limit=${encodeURIComponent(limit)}`);
+  it("falls back to all images for an unknown service query", async () => {
+    const response = await request(app).get("/api/gallery?service=unknown-style");
 
-      expect(response.status).toBe(200);
-      expect(response.body.galleryItems).toHaveLength(20);
-    },
-  );
+    expect(response.status).toBe(200);
+    expect(response.body.galleryItems).toHaveLength(80);
+    expect(response.body.selectedService).toBeNull();
+    expect(response.body.reviews).toEqual([]);
+  });
 });

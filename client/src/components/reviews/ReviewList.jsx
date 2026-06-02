@@ -8,10 +8,10 @@ export function ReviewList({ reviews }) {
           <div className="star-row" aria-label={`${review.rating} star review`}>
             {Array.from({ length: review.rating }).map((_, index) => <Star aria-hidden="true" key={index} size={16} weight="fill" />)}
           </div>
-          <p>{review.text}</p>
+          <p>{review.comment ?? review.text}</p>
           <footer>
             <strong>{review.name}</strong>
-            {review.verifiedClient ? <span><CheckCircle aria-hidden="true" size={16} weight="fill" /> Verified client</span> : null}
+            {review.verifiedClient === false ? null : <span><CheckCircle aria-hidden="true" size={16} weight="fill" /> Verified client</span>}
           </footer>
         </article>
       ))}

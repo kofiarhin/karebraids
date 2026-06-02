@@ -1,0 +1,834 @@
+[
+  {
+    "id": "knotless-braids",
+    "title": "Knotless Braids",
+    "description": "Lightweight knotless braids with a natural root finish, gentle tension, and flexible everyday styling.",
+    "startingPrice": 80,
+    "currency": "GBP",
+    "duration": {
+      "minHours": 4,
+      "maxHours": 6
+    },
+    "featured": true,
+    "images": [
+      {
+        "id": "knotless-braids-01",
+        "title": "Knotless Braids Preview",
+        "description": "knotless braids sample showing preview with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11515382/pexels-photo-11515382.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "feature"
+      },
+      {
+        "id": "knotless-braids-02",
+        "title": "Knotless Braids Side Detail",
+        "description": "knotless braids sample showing side detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/9385074/pexels-photo-9385074.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "knotless-braids-03",
+        "title": "Knotless Braids Length Finish",
+        "description": "knotless braids sample showing length finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/6976266/pexels-photo-6976266.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "knotless-braids-04",
+        "title": "Knotless Braids Parting Detail",
+        "description": "knotless braids sample showing parting detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/14883868/pexels-photo-14883868.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "knotless-braids-05",
+        "title": "Knotless Braids Studio Look",
+        "description": "knotless braids sample showing studio look with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/36441633/pexels-photo-36441633.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      },
+      {
+        "id": "knotless-braids-06",
+        "title": "Knotless Braids Fresh Install",
+        "description": "knotless braids sample showing fresh install with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/15576674/pexels-photo-15576674.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "knotless-braids-07",
+        "title": "Knotless Braids Soft Profile",
+        "description": "knotless braids sample showing soft profile with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/17218456/pexels-photo-17218456.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "knotless-braids-08",
+        "title": "Knotless Braids Clean Finish",
+        "description": "knotless braids sample showing clean finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815194/pexels-photo-11815194.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "knotless-braids-09",
+        "title": "Knotless Braids Movement Shot",
+        "description": "knotless braids sample showing movement shot with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/36742666/pexels-photo-36742666.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "knotless-braids-10",
+        "title": "Knotless Braids Final Polish",
+        "description": "knotless braids sample showing final polish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/8511174/pexels-photo-8511174.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "knotless-braids-review-1",
+        "name": "Ama K.",
+        "rating": 5,
+        "comment": "The parting was clean and the style still felt light after a full day."
+      },
+      {
+        "id": "knotless-braids-review-2",
+        "name": "Nia O.",
+        "rating": 5,
+        "comment": "The appointment felt calm, professional, and easy to understand from start to finish."
+      },
+      {
+        "id": "knotless-braids-review-3",
+        "name": "Tomi R.",
+        "rating": 5,
+        "comment": "My braids looked polished for weeks and the aftercare advice was clear."
+      }
+    ]
+  },
+  {
+    "id": "boho-knotless-braids",
+    "title": "Boho Knotless Braids",
+    "description": "Knotless braids finished with soft textured pieces for relaxed movement and a polished boho shape.",
+    "startingPrice": 95,
+    "currency": "GBP",
+    "duration": {
+      "minHours": 5,
+      "maxHours": 7
+    },
+    "featured": true,
+    "images": [
+      {
+        "id": "boho-knotless-braids-01",
+        "title": "Boho Knotless Braids Preview",
+        "description": "boho knotless braids sample showing preview with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815195/pexels-photo-11815195.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "feature"
+      },
+      {
+        "id": "boho-knotless-braids-02",
+        "title": "Boho Knotless Braids Side Detail",
+        "description": "boho knotless braids sample showing side detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815196/pexels-photo-11815196.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "boho-knotless-braids-03",
+        "title": "Boho Knotless Braids Length Finish",
+        "description": "boho knotless braids sample showing length finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815197/pexels-photo-11815197.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "boho-knotless-braids-04",
+        "title": "Boho Knotless Braids Parting Detail",
+        "description": "boho knotless braids sample showing parting detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815198/pexels-photo-11815198.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "boho-knotless-braids-05",
+        "title": "Boho Knotless Braids Studio Look",
+        "description": "boho knotless braids sample showing studio look with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815199/pexels-photo-11815199.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      },
+      {
+        "id": "boho-knotless-braids-06",
+        "title": "Boho Knotless Braids Fresh Install",
+        "description": "boho knotless braids sample showing fresh install with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815200/pexels-photo-11815200.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "boho-knotless-braids-07",
+        "title": "Boho Knotless Braids Soft Profile",
+        "description": "boho knotless braids sample showing soft profile with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815201/pexels-photo-11815201.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "boho-knotless-braids-08",
+        "title": "Boho Knotless Braids Clean Finish",
+        "description": "boho knotless braids sample showing clean finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815202/pexels-photo-11815202.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "boho-knotless-braids-09",
+        "title": "Boho Knotless Braids Movement Shot",
+        "description": "boho knotless braids sample showing movement shot with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815203/pexels-photo-11815203.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "boho-knotless-braids-10",
+        "title": "Boho Knotless Braids Final Polish",
+        "description": "boho knotless braids sample showing final polish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815204/pexels-photo-11815204.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "boho-knotless-braids-review-1",
+        "name": "Lola M.",
+        "rating": 5,
+        "comment": "The parting was clean and the style still felt light after a full day."
+      },
+      {
+        "id": "boho-knotless-braids-review-2",
+        "name": "Zuri A.",
+        "rating": 5,
+        "comment": "The appointment felt calm, professional, and easy to understand from start to finish."
+      },
+      {
+        "id": "boho-knotless-braids-review-3",
+        "name": "Sade B.",
+        "rating": 5,
+        "comment": "My braids looked polished for weeks and the aftercare advice was clear."
+      }
+    ]
+  },
+  {
+    "id": "fulani-braids",
+    "title": "Fulani Braids",
+    "description": "Face-framing braids with refined parting, optional bead accents, and a clean protective finish.",
+    "startingPrice": 85,
+    "currency": "GBP",
+    "duration": {
+      "minHours": 4,
+      "maxHours": 6
+    },
+    "featured": true,
+    "images": [
+      {
+        "id": "fulani-braids-01",
+        "title": "Fulani Braids Preview",
+        "description": "fulani braids sample showing preview with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815205/pexels-photo-11815205.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "feature"
+      },
+      {
+        "id": "fulani-braids-02",
+        "title": "Fulani Braids Side Detail",
+        "description": "fulani braids sample showing side detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815206/pexels-photo-11815206.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "fulani-braids-03",
+        "title": "Fulani Braids Length Finish",
+        "description": "fulani braids sample showing length finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815207/pexels-photo-11815207.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "fulani-braids-04",
+        "title": "Fulani Braids Parting Detail",
+        "description": "fulani braids sample showing parting detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815208/pexels-photo-11815208.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "fulani-braids-05",
+        "title": "Fulani Braids Studio Look",
+        "description": "fulani braids sample showing studio look with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815209/pexels-photo-11815209.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      },
+      {
+        "id": "fulani-braids-06",
+        "title": "Fulani Braids Fresh Install",
+        "description": "fulani braids sample showing fresh install with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815210/pexels-photo-11815210.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "fulani-braids-07",
+        "title": "Fulani Braids Soft Profile",
+        "description": "fulani braids sample showing soft profile with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815211/pexels-photo-11815211.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "fulani-braids-08",
+        "title": "Fulani Braids Clean Finish",
+        "description": "fulani braids sample showing clean finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815212/pexels-photo-11815212.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "fulani-braids-09",
+        "title": "Fulani Braids Movement Shot",
+        "description": "fulani braids sample showing movement shot with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815213/pexels-photo-11815213.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "fulani-braids-10",
+        "title": "Fulani Braids Final Polish",
+        "description": "fulani braids sample showing final polish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815214/pexels-photo-11815214.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "fulani-braids-review-1",
+        "name": "Imani R.",
+        "rating": 5,
+        "comment": "The parting was clean and the style still felt light after a full day."
+      },
+      {
+        "id": "fulani-braids-review-2",
+        "name": "Temi A.",
+        "rating": 5,
+        "comment": "The appointment felt calm, professional, and easy to understand from start to finish."
+      },
+      {
+        "id": "fulani-braids-review-3",
+        "name": "Fola B.",
+        "rating": 5,
+        "comment": "My braids looked polished for weeks and the aftercare advice was clear."
+      }
+    ]
+  },
+  {
+    "id": "stitch-braids",
+    "title": "Stitch Braids",
+    "description": "Defined stitch rows with crisp parting, sleek polish, and a structured camera-ready result.",
+    "startingPrice": 45,
+    "currency": "GBP",
+    "duration": {
+      "minHours": 2,
+      "maxHours": 4
+    },
+    "featured": true,
+    "images": [
+      {
+        "id": "stitch-braids-01",
+        "title": "Stitch Braids Preview",
+        "description": "stitch braids sample showing preview with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815215/pexels-photo-11815215.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "feature"
+      },
+      {
+        "id": "stitch-braids-02",
+        "title": "Stitch Braids Side Detail",
+        "description": "stitch braids sample showing side detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815216/pexels-photo-11815216.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "stitch-braids-03",
+        "title": "Stitch Braids Length Finish",
+        "description": "stitch braids sample showing length finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815217/pexels-photo-11815217.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "stitch-braids-04",
+        "title": "Stitch Braids Parting Detail",
+        "description": "stitch braids sample showing parting detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815218/pexels-photo-11815218.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "stitch-braids-05",
+        "title": "Stitch Braids Studio Look",
+        "description": "stitch braids sample showing studio look with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815219/pexels-photo-11815219.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      },
+      {
+        "id": "stitch-braids-06",
+        "title": "Stitch Braids Fresh Install",
+        "description": "stitch braids sample showing fresh install with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815220/pexels-photo-11815220.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "stitch-braids-07",
+        "title": "Stitch Braids Soft Profile",
+        "description": "stitch braids sample showing soft profile with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815221/pexels-photo-11815221.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "stitch-braids-08",
+        "title": "Stitch Braids Clean Finish",
+        "description": "stitch braids sample showing clean finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815222/pexels-photo-11815222.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "stitch-braids-09",
+        "title": "Stitch Braids Movement Shot",
+        "description": "stitch braids sample showing movement shot with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815223/pexels-photo-11815223.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "stitch-braids-10",
+        "title": "Stitch Braids Final Polish",
+        "description": "stitch braids sample showing final polish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815224/pexels-photo-11815224.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "stitch-braids-review-1",
+        "name": "Reni C.",
+        "rating": 5,
+        "comment": "The parting was clean and the style still felt light after a full day."
+      },
+      {
+        "id": "stitch-braids-review-2",
+        "name": "Maya L.",
+        "rating": 5,
+        "comment": "The appointment felt calm, professional, and easy to understand from start to finish."
+      },
+      {
+        "id": "stitch-braids-review-3",
+        "name": "Kemi O.",
+        "rating": 5,
+        "comment": "My braids looked polished for weeks and the aftercare advice was clear."
+      }
+    ]
+  },
+  {
+    "id": "cornrows",
+    "title": "Cornrows",
+    "description": "Classic cornrow styling with balanced tension, neat sections, and practical long-wear protection.",
+    "startingPrice": 35,
+    "currency": "GBP",
+    "duration": {
+      "minHours": 1.5,
+      "maxHours": 3
+    },
+    "featured": false,
+    "images": [
+      {
+        "id": "cornrows-01",
+        "title": "Cornrows Preview",
+        "description": "cornrows sample showing preview with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815225/pexels-photo-11815225.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "feature"
+      },
+      {
+        "id": "cornrows-02",
+        "title": "Cornrows Side Detail",
+        "description": "cornrows sample showing side detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815226/pexels-photo-11815226.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "cornrows-03",
+        "title": "Cornrows Length Finish",
+        "description": "cornrows sample showing length finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815227/pexels-photo-11815227.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "cornrows-04",
+        "title": "Cornrows Parting Detail",
+        "description": "cornrows sample showing parting detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815228/pexels-photo-11815228.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "cornrows-05",
+        "title": "Cornrows Studio Look",
+        "description": "cornrows sample showing studio look with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815229/pexels-photo-11815229.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      },
+      {
+        "id": "cornrows-06",
+        "title": "Cornrows Fresh Install",
+        "description": "cornrows sample showing fresh install with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815230/pexels-photo-11815230.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "cornrows-07",
+        "title": "Cornrows Soft Profile",
+        "description": "cornrows sample showing soft profile with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815231/pexels-photo-11815231.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "cornrows-08",
+        "title": "Cornrows Clean Finish",
+        "description": "cornrows sample showing clean finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815232/pexels-photo-11815232.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "cornrows-09",
+        "title": "Cornrows Movement Shot",
+        "description": "cornrows sample showing movement shot with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815233/pexels-photo-11815233.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "cornrows-10",
+        "title": "Cornrows Final Polish",
+        "description": "cornrows sample showing final polish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815234/pexels-photo-11815234.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "cornrows-review-1",
+        "name": "Aaliyah M.",
+        "rating": 5,
+        "comment": "The parting was clean and the style still felt light after a full day."
+      },
+      {
+        "id": "cornrows-review-2",
+        "name": "Yemi S.",
+        "rating": 5,
+        "comment": "The appointment felt calm, professional, and easy to understand from start to finish."
+      },
+      {
+        "id": "cornrows-review-3",
+        "name": "Dami T.",
+        "rating": 5,
+        "comment": "My braids looked polished for weeks and the aftercare advice was clear."
+      }
+    ]
+  },
+  {
+    "id": "tribal-braids",
+    "title": "Tribal Braids",
+    "description": "Pattern-led tribal braids combining statement parting, length, and protective styling detail.",
+    "startingPrice": 90,
+    "currency": "GBP",
+    "duration": {
+      "minHours": 4,
+      "maxHours": 7
+    },
+    "featured": false,
+    "images": [
+      {
+        "id": "tribal-braids-01",
+        "title": "Tribal Braids Preview",
+        "description": "tribal braids sample showing preview with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815235/pexels-photo-11815235.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "feature"
+      },
+      {
+        "id": "tribal-braids-02",
+        "title": "Tribal Braids Side Detail",
+        "description": "tribal braids sample showing side detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815236/pexels-photo-11815236.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "tribal-braids-03",
+        "title": "Tribal Braids Length Finish",
+        "description": "tribal braids sample showing length finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815237/pexels-photo-11815237.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "tribal-braids-04",
+        "title": "Tribal Braids Parting Detail",
+        "description": "tribal braids sample showing parting detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815238/pexels-photo-11815238.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "tribal-braids-05",
+        "title": "Tribal Braids Studio Look",
+        "description": "tribal braids sample showing studio look with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815239/pexels-photo-11815239.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      },
+      {
+        "id": "tribal-braids-06",
+        "title": "Tribal Braids Fresh Install",
+        "description": "tribal braids sample showing fresh install with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815240/pexels-photo-11815240.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "tribal-braids-07",
+        "title": "Tribal Braids Soft Profile",
+        "description": "tribal braids sample showing soft profile with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815241/pexels-photo-11815241.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "tribal-braids-08",
+        "title": "Tribal Braids Clean Finish",
+        "description": "tribal braids sample showing clean finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815242/pexels-photo-11815242.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "tribal-braids-09",
+        "title": "Tribal Braids Movement Shot",
+        "description": "tribal braids sample showing movement shot with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815243/pexels-photo-11815243.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "tribal-braids-10",
+        "title": "Tribal Braids Final Polish",
+        "description": "tribal braids sample showing final polish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815244/pexels-photo-11815244.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "tribal-braids-review-1",
+        "name": "Tara N.",
+        "rating": 5,
+        "comment": "The parting was clean and the style still felt light after a full day."
+      },
+      {
+        "id": "tribal-braids-review-2",
+        "name": "Bisi F.",
+        "rating": 5,
+        "comment": "The appointment felt calm, professional, and easy to understand from start to finish."
+      },
+      {
+        "id": "tribal-braids-review-3",
+        "name": "Esi W.",
+        "rating": 5,
+        "comment": "My braids looked polished for weeks and the aftercare advice was clear."
+      }
+    ]
+  },
+  {
+    "id": "feed-in-braids",
+    "title": "Feed-In Braids",
+    "description": "Sleek feed-in braids built gradually for a flat natural base and a polished finish.",
+    "startingPrice": 55,
+    "currency": "GBP",
+    "duration": {
+      "minHours": 2,
+      "maxHours": 5
+    },
+    "featured": false,
+    "images": [
+      {
+        "id": "feed-in-braids-01",
+        "title": "Feed-In Braids Preview",
+        "description": "feed-in braids sample showing preview with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815245/pexels-photo-11815245.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "feature"
+      },
+      {
+        "id": "feed-in-braids-02",
+        "title": "Feed-In Braids Side Detail",
+        "description": "feed-in braids sample showing side detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815246/pexels-photo-11815246.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "feed-in-braids-03",
+        "title": "Feed-In Braids Length Finish",
+        "description": "feed-in braids sample showing length finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815247/pexels-photo-11815247.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "feed-in-braids-04",
+        "title": "Feed-In Braids Parting Detail",
+        "description": "feed-in braids sample showing parting detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815248/pexels-photo-11815248.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "feed-in-braids-05",
+        "title": "Feed-In Braids Studio Look",
+        "description": "feed-in braids sample showing studio look with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815249/pexels-photo-11815249.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      },
+      {
+        "id": "feed-in-braids-06",
+        "title": "Feed-In Braids Fresh Install",
+        "description": "feed-in braids sample showing fresh install with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815250/pexels-photo-11815250.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "feed-in-braids-07",
+        "title": "Feed-In Braids Soft Profile",
+        "description": "feed-in braids sample showing soft profile with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815251/pexels-photo-11815251.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "feed-in-braids-08",
+        "title": "Feed-In Braids Clean Finish",
+        "description": "feed-in braids sample showing clean finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815252/pexels-photo-11815252.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "feed-in-braids-09",
+        "title": "Feed-In Braids Movement Shot",
+        "description": "feed-in braids sample showing movement shot with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815253/pexels-photo-11815253.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "feed-in-braids-10",
+        "title": "Feed-In Braids Final Polish",
+        "description": "feed-in braids sample showing final polish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815254/pexels-photo-11815254.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "feed-in-braids-review-1",
+        "name": "Mina P.",
+        "rating": 5,
+        "comment": "The parting was clean and the style still felt light after a full day."
+      },
+      {
+        "id": "feed-in-braids-review-2",
+        "name": "Ruth A.",
+        "rating": 5,
+        "comment": "The appointment felt calm, professional, and easy to understand from start to finish."
+      },
+      {
+        "id": "feed-in-braids-review-3",
+        "name": "Kara E.",
+        "rating": 5,
+        "comment": "My braids looked polished for weeks and the aftercare advice was clear."
+      }
+    ]
+  },
+  {
+    "id": "goddess-braids",
+    "title": "Goddess Braids",
+    "description": "Soft goddess braids with curled accents, smooth parting, and occasion-ready movement.",
+    "startingPrice": 100,
+    "currency": "GBP",
+    "duration": {
+      "minHours": 5,
+      "maxHours": 8
+    },
+    "featured": true,
+    "images": [
+      {
+        "id": "goddess-braids-01",
+        "title": "Goddess Braids Preview",
+        "description": "goddess braids sample showing preview with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815255/pexels-photo-11815255.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "feature"
+      },
+      {
+        "id": "goddess-braids-02",
+        "title": "Goddess Braids Side Detail",
+        "description": "goddess braids sample showing side detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815256/pexels-photo-11815256.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "goddess-braids-03",
+        "title": "Goddess Braids Length Finish",
+        "description": "goddess braids sample showing length finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815257/pexels-photo-11815257.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "goddess-braids-04",
+        "title": "Goddess Braids Parting Detail",
+        "description": "goddess braids sample showing parting detail with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815258/pexels-photo-11815258.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "goddess-braids-05",
+        "title": "Goddess Braids Studio Look",
+        "description": "goddess braids sample showing studio look with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815259/pexels-photo-11815259.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      },
+      {
+        "id": "goddess-braids-06",
+        "title": "Goddess Braids Fresh Install",
+        "description": "goddess braids sample showing fresh install with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815260/pexels-photo-11815260.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "goddess-braids-07",
+        "title": "Goddess Braids Soft Profile",
+        "description": "goddess braids sample showing soft profile with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815261/pexels-photo-11815261.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "tall"
+      },
+      {
+        "id": "goddess-braids-08",
+        "title": "Goddess Braids Clean Finish",
+        "description": "goddess braids sample showing clean finish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815262/pexels-photo-11815262.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "wide"
+      },
+      {
+        "id": "goddess-braids-09",
+        "title": "Goddess Braids Movement Shot",
+        "description": "goddess braids sample showing movement shot with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815263/pexels-photo-11815263.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "medium"
+      },
+      {
+        "id": "goddess-braids-10",
+        "title": "Goddess Braids Final Polish",
+        "description": "goddess braids sample showing final polish with neat protective styling detail.",
+        "image": "https://images.pexels.com/photos/11815264/pexels-photo-11815264.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        "aspect": "compact"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "goddess-braids-review-1",
+        "name": "Naomi J.",
+        "rating": 5,
+        "comment": "The parting was clean and the style still felt light after a full day."
+      },
+      {
+        "id": "goddess-braids-review-2",
+        "name": "Leah O.",
+        "rating": 5,
+        "comment": "The appointment felt calm, professional, and easy to understand from start to finish."
+      },
+      {
+        "id": "goddess-braids-review-3",
+        "name": "Mariam K.",
+        "rating": 5,
+        "comment": "My braids looked polished for weeks and the aftercare advice was clear."
+      }
+    ]
+  }
+]

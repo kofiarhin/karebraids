@@ -1,11 +1,37 @@
 import { useQuery } from '@tanstack/react-query'
-import { getGalleryItems } from '../../services/galleryService.js'
+import { getGallery, getGalleryItems, getGalleryServices } from '../../services/galleryService.js'
 
-export function useGalleryItems(options = {}) {
-  const limit = Number.isInteger(options.limit) && options.limit > 0 ? options.limit : undefined
+function normalizeLimit(limit) {
+  return Number.isInteger(limit) && limit > 0 ? limit : undefined
+}
+
+function normalizeService(service) {
+  return typeof service === 'string' && service.trim() ? service : null
+}
+
+export function useGallery(options = {}) {
+  const limit = normalizeLimit(options.limit)
+  const service = normalizeService(options.service)
 
   return useQuery({
-    queryKey: ['gallery-items', { limit }],
-    queryFn: () => getGalleryItems({ limit }),
+    queryKey: ['gallery', { limit, service }],
+    queryFn: () => getGallery({ limit, service }),
+  })
+}
+
+export function useGalleryItems(options = {}) {
+  const limit = normalizeLimit(options.limit)
+  const service = normalizeService(options.service)
+
+  return useQuery({
+    queryKey: ['gallery-items', { limit, service }],
+    queryFn: () => getGalleryItems({ limit, service }),
+  })
+}
+
+export function useGalleryServices() {
+  return useQuery({
+    queryKey: ['gallery-services'],
+    queryFn: getGalleryServices,
   })
 }

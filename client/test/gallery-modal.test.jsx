@@ -6,7 +6,7 @@ import App from '../src/App.jsx'
 
 vi.mock('../src/hooks/queries/useGalleryItems.js', async () => {
   const { galleryItems } = await import('../src/constants/content.js')
-  return { useGalleryItems: () => ({ data: galleryItems, isLoading: false, isError: false }) }
+  return { useGallery: () => ({ data: { galleryItems, selectedService: null, reviews: [] }, isLoading: false, isError: false, refetch: vi.fn() }) }
 })
 
 function renderGallery() {

@@ -4544,6 +4544,79 @@ button:disabled,
   text-transform: capitalize;
 }
 
+
+.gallery-service-intro,
+.gallery-service-reviews {
+  width: min(100%, 1040px);
+  margin: 2rem auto;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--luxury-border);
+  border-radius: 1.1rem;
+  background: var(--theme-cream-highlight-a0045);
+}
+
+.gallery-service-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.gallery-service-intro h2,
+.gallery-service-reviews h2 {
+  color: var(--warm-ivory);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+.gallery-service-intro p {
+  max-width: 48rem;
+  line-height: 1.7;
+}
+
+.gallery-service-intro dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(7rem, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--luxury-border);
+  border-radius: 0.85rem;
+  background: var(--luxury-border);
+}
+
+.gallery-service-intro dl div {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  background: var(--smoked-cocoa);
+}
+
+.gallery-service-intro dt {
+  color: var(--cream-muted);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gallery-service-intro dd {
+  margin: 0;
+  color: var(--warm-gold);
+  font-weight: 700;
+}
+
+.gallery-service-reviews {
+  margin-top: clamp(2rem, 5vw, 4rem);
+}
+
+@media (max-width: 900px) {
+  .gallery-service-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-service-intro .btn {
+    justify-self: start;
+  }
+}
+
 /* Reusable service detail architecture */
 .service-detail-page { width: min(100% - 2rem, 1240px); margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; color: var(--cream-muted); }
 .service-detail-hero, .service-detail-columns, .service-detail-cta { display: grid; gap: clamp(1.5rem, 4vw, 3rem); }
