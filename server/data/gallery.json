@@ -1,0 +1,182 @@
+[
+  {
+    "id": "copper-knotless",
+    "title": "Copper Knotless Braids",
+    "description": "Long knotless braids with a warm copper tone and a soft side sweep.",
+    "image": "https://images.pexels.com/photos/11515382/pexels-photo-11515382.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11515382/",
+    "style": "knotless-braids",
+    "aspect": "feature"
+  },
+  {
+    "id": "precision-cornrows",
+    "title": "Precision Cornrows",
+    "description": "Defined rows and neat braid fall for a clean protective style.",
+    "image": "https://images.pexels.com/photos/14883868/pexels-photo-14883868.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/14883868/",
+    "style": "cornrows",
+    "aspect": "medium"
+  },
+  {
+    "id": "salon-boho-session",
+    "title": "Boho Braiding Session",
+    "description": "Soft boho braids shaped with careful sectioning and a relaxed finish.",
+    "image": "https://images.pexels.com/photos/36441633/pexels-photo-36441633.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/36441633/",
+    "style": "boho-braids",
+    "aspect": "tall"
+  },
+  {
+    "id": "handcrafted-kids-detail",
+    "title": "Gentle Kids Braids",
+    "description": "Comfort-led kids braid work with neat tension and a polished finish.",
+    "image": "https://images.pexels.com/photos/15576674/pexels-photo-15576674.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/15576674/",
+    "style": "kids-braids",
+    "aspect": "medium"
+  },
+  {
+    "id": "studio-stitch-portrait",
+    "title": "Studio Stitch Braids",
+    "description": "Defined stitch detail with a polished studio-ready finish.",
+    "image": "https://images.pexels.com/photos/36742666/pexels-photo-36742666.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/36742666/",
+    "style": "stitch-braids",
+    "aspect": "wide"
+  },
+  {
+    "id": "long-fulani-finish",
+    "title": "Fulani Braid Finish",
+    "description": "Flowing Fulani-inspired braids styled for movement and everyday wear.",
+    "image": "https://images.pexels.com/photos/6976266/pexels-photo-6976266.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/6976266/",
+    "style": "fulani-braids",
+    "aspect": "tall"
+  },
+  {
+    "id": "knotless-process",
+    "title": "Knotless Process Detail",
+    "description": "A careful knotless installation with even sectioning and lightweight tension.",
+    "image": "https://images.pexels.com/photos/9385074/pexels-photo-9385074.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/9385074/",
+    "style": "knotless-braids",
+    "aspect": "medium"
+  },
+  {
+    "id": "kids-braided-pair",
+    "title": "Kids Braided Pair",
+    "description": "Two comfortable kids braid looks finished with clean sections.",
+    "image": "https://images.pexels.com/photos/8511174/pexels-photo-8511174.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/8511174/",
+    "style": "kids-braids",
+    "aspect": "compact"
+  },
+  {
+    "id": "boho-outdoor-profile",
+    "title": "Boho Outdoor Profile",
+    "description": "Warm outdoor portrait with soft boho braid detail framed by natural light.",
+    "image": "https://images.pexels.com/photos/17218456/pexels-photo-17218456.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/17218456/",
+    "style": "boho-braids",
+    "aspect": "wide"
+  },
+  {
+    "id": "stitch-side-profile",
+    "title": "Sculpted Stitch Profile",
+    "description": "Sleek stitch rows with clean edge detail and a precise silhouette.",
+    "image": "https://images.pexels.com/photos/11815194/pexels-photo-11815194.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815194/",
+    "style": "stitch-braids",
+    "aspect": "medium"
+  },
+  {
+    "id": "fulani-beaded-detail",
+    "title": "Fulani Beaded Detail",
+    "description": "Fulani-inspired braids with understated bead accents and a graceful finish.",
+    "image": "https://images.pexels.com/photos/11815195/pexels-photo-11815195.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815195/",
+    "style": "fulani-braids",
+    "aspect": "tall"
+  },
+  {
+    "id": "cornrow-crown",
+    "title": "Cornrow Crown",
+    "description": "Close cornrow patterning designed for a neat long-wear result.",
+    "image": "https://images.pexels.com/photos/11815196/pexels-photo-11815196.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815196/",
+    "style": "cornrows",
+    "aspect": "medium"
+  },
+  {
+    "id": "knotless-length",
+    "title": "Knotless Length",
+    "description": "Long knotless braids with a smooth natural fall and tidy parting.",
+    "image": "https://images.pexels.com/photos/11815197/pexels-photo-11815197.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815197/",
+    "style": "knotless-braids",
+    "aspect": "tall"
+  },
+  {
+    "id": "boho-texture",
+    "title": "Boho Texture",
+    "description": "Layered boho texture with soft movement and an effortless finish.",
+    "image": "https://images.pexels.com/photos/11815198/pexels-photo-11815198.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815198/",
+    "style": "boho-braids",
+    "aspect": "wide"
+  },
+  {
+    "id": "stitch-rows",
+    "title": "Stitch Row Detail",
+    "description": "Defined stitch rows arranged with balanced spacing and clean lines.",
+    "image": "https://images.pexels.com/photos/11815199/pexels-photo-11815199.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815199/",
+    "style": "stitch-braids",
+    "aspect": "medium"
+  },
+  {
+    "id": "cornrow-detail",
+    "title": "Cornrow Detail",
+    "description": "Precision cornrows shaped for comfort, structure, and everyday ease.",
+    "image": "https://images.pexels.com/photos/11815200/pexels-photo-11815200.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815200/",
+    "style": "cornrows",
+    "aspect": "compact"
+  },
+  {
+    "id": "fulani-profile",
+    "title": "Fulani Side Profile",
+    "description": "A polished Fulani-inspired look with face-framing braid detail.",
+    "image": "https://images.pexels.com/photos/11815201/pexels-photo-11815201.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815201/",
+    "style": "fulani-braids",
+    "aspect": "tall"
+  },
+  {
+    "id": "kids-ponytail",
+    "title": "Kids Braided Ponytail",
+    "description": "A gentle braided ponytail made for active days and easy upkeep.",
+    "image": "https://images.pexels.com/photos/11815202/pexels-photo-11815202.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815202/",
+    "style": "kids-braids",
+    "aspect": "medium"
+  },
+  {
+    "id": "knotless-updo",
+    "title": "Knotless Updo",
+    "description": "Versatile knotless braids gathered into an elevated protective updo.",
+    "image": "https://images.pexels.com/photos/11815203/pexels-photo-11815203.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815203/",
+    "style": "knotless-braids",
+    "aspect": "wide"
+  },
+  {
+    "id": "boho-length",
+    "title": "Boho Braid Length",
+    "description": "Soft boho braids with flowing length and a relaxed premium finish.",
+    "image": "https://images.pexels.com/photos/11815204/pexels-photo-11815204.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "source": "https://www.pexels.com/photo/11815204/",
+    "style": "boho-braids",
+    "aspect": "feature"
+  }
+]
