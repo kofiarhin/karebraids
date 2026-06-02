@@ -1,12 +1,3 @@
-# Active Request: Dedicated Services Page
+# Active Request: KareBraids Homepage and Gallery Architecture Redesign
 
-## Source
-Latest direct user prompt on 2026-05-31.
-
-## Execution Mode
-`complete-workflow`
-
-## Normalized Request
-Implement a dedicated, accessible, mobile-first `/services` discovery experience for KareBraids using the existing React/Vite architecture and dark Afro-luxury CSS system. Refactor shared services content to include stable IDs, required categories, existing gallery-backed images, duration, and from-price text while preserving Booking and Admin compatibility. Add a homepage Featured Services section before Gallery preview, correct Services navigation and footer browsing links to `/services`, keep Gallery portfolio-only, avoid detail pages, add Vitest coverage, and verify with root `npm test` and `npm run build --prefix client`.
-
-Applied skill: design-taste-frontend
+Implement the KareBraids homepage-below-Hero redesign, API-backed gallery source of truth, filtered gallery routing, canonical reusable `/services/:slug` pages with `/styles/:slug` compatibility redirects, reusable mock reviews, and `/booking?style=<slug>` preselection. Preserve the existing Hero exactly, reuse existing theme tokens and architecture patterns, use backend-owned remote placeholder URLs only, add TDD-first Vitest/Jest coverage, and avoid persistence or unrelated refactors.

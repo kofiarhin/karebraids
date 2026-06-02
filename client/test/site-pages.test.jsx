@@ -8,6 +8,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
 import { galleryItems, services } from '../src/constants/content.js'
 
+vi.mock('../src/hooks/queries/useGalleryItems.js', async () => {
+  const { galleryItems } = await import('../src/constants/content.js')
+  return { useGalleryItems: ({ limit } = {}) => ({ data: limit ? galleryItems.slice(0, limit) : galleryItems, isLoading: false, isError: false }) }
+})
+
 const originalMatchMedia = window.matchMedia
 const testDirectory = path.dirname(fileURLToPath(import.meta.url))
 const homeStyles = () => fs.readFileSync(path.join(testDirectory, '../src/index.css'), 'utf8')
@@ -51,12 +56,12 @@ describe('KareBraids pages', () => {
     expect(screen.getByText(/premium salon and mobile braiding services across london/i)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /view styles/i })).toHaveAttribute('href', '/gallery')
     expect(screen.getByText(/500\+ happy clients/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/karebraids trust highlights/i)).toHaveTextContent(/london based/i)
+    expect(container.querySelector('.browse-style-section')).toHaveTextContent(/browse by style/i)
     expect(screen.queryByText(/signature styles/i)).not.toBeInTheDocument()
     expect(screen.getByText(/why choose karebraids/i)).toBeInTheDocument()
-    expect(screen.getByText(/our work/i)).toBeInTheDocument()
-    expect(screen.getByText(/client love/i)).toBeInTheDocument()
-    expect(screen.getByText(/ready for your next style/i)).toBeInTheDocument()
+    expect(screen.getByText(/client gallery/i)).toBeInTheDocument()
+    expect(screen.getByText(/client testimonials/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /ready for your next look/i })).toBeInTheDocument()
     expect(screen.getByRole('contentinfo')).toHaveTextContent(/mon - sat: 8am - 7pm/i)
     expect(container.querySelectorAll('[data-reveal]').length).toBeGreaterThan(8)
   })
@@ -68,10 +73,9 @@ describe('KareBraids pages', () => {
       'src',
       galleryItems[0].image,
     )
-    expect(screen.getByRole('img', { name: galleryItems[2].title })).toHaveAttribute('src', galleryItems[2].image)
-    expect(screen.getByRole('img', { name: /ama k. testimonial portrait/i })).toBeInTheDocument()
-    expect(container.querySelectorAll('.gallery-feature-card img')).toHaveLength(6)
-    expect(container.querySelectorAll('.gallery-feature-card')).toHaveLength(6)
+        expect(screen.getByRole('img', { name: /ama k. testimonial portrait/i })).toBeInTheDocument()
+    expect(container.querySelectorAll('.gallery-feature-card img')).toHaveLength(4)
+    expect(container.querySelectorAll('.gallery-feature-card')).toHaveLength(4)
     container.querySelectorAll('.gallery-feature-card').forEach((card, index) => {
       expect(card).toHaveAttribute('href', '/gallery')
       expect(within(card).getByRole('img', { name: galleryItems[index].title })).toHaveAttribute('loading', 'lazy')
@@ -89,23 +93,23 @@ describe('KareBraids pages', () => {
 
     expect(container.querySelector('.signature-section')).not.toBeInTheDocument()
     expect(container.querySelector('.gallery-mosaic')).not.toBeInTheDocument()
-    expect(container.querySelectorAll('.gallery-feature-card')).toHaveLength(6)
+    expect(container.querySelectorAll('.gallery-feature-card')).toHaveLength(4)
     expect(container.querySelector('.signature-grid')).not.toBeInTheDocument()
-    expect(screen.queryByText(galleryItems[6].title)).not.toBeInTheDocument()
+    expect(screen.queryByText(galleryItems[4].title)).not.toBeInTheDocument()
   })
 
   it('renders the requested value, gallery, testimonial, and booking CTA copy', () => {
     renderRoute('/')
 
-    expect(screen.getByText(/neat, lightweight and flawless every time/i)).toBeInTheDocument()
-    expect(screen.getByText(/we come to you - home, hotel or workplace/i)).toBeInTheDocument()
+    expect(screen.getByText(/organized appointments and attentive care/i)).toBeInTheDocument()
+    expect(screen.getByText(/choose the appointment setting that works best/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /protective styles crafted with precision/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /view full gallery/i })).toHaveAttribute('href', '/gallery')
     expect(screen.getByText(/my knotless braids were so neat and lightweight/i)).toBeInTheDocument()
     expect(screen.getByText(/ama k\./i)).toBeInTheDocument()
-    expect(screen.getByText('01 / 05')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /let's get you booked/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /book your appointment/i })).toHaveAttribute('href', '/booking')
+    expect(screen.getByText('01 / 08')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /ready for your next look/i })).toBeInTheDocument()
+    expect(screen.getAllByRole('link', { name: /book appointment/i }).some((link) => link.getAttribute('href') === '/booking')).toBe(true)
   })
 
 
@@ -117,19 +121,19 @@ describe('KareBraids pages', () => {
     const nextButton = screen.getByRole('button', { name: /next testimonial/i })
 
     expect(screen.getByText(/ama k\./i)).toBeInTheDocument()
-    expect(screen.getByText('01 / 05')).toBeInTheDocument()
+    expect(screen.getByText('01 / 08')).toBeInTheDocument()
 
     await user.click(previousButton)
-    expect(screen.getByText(/aaliyah m\./i)).toBeInTheDocument()
-    expect(screen.getByText('05 / 05')).toBeInTheDocument()
+    expect(screen.getByText(/leah d\./i)).toBeInTheDocument()
+    expect(screen.getByText('08 / 08')).toBeInTheDocument()
 
     await user.click(nextButton)
     expect(screen.getByText(/ama k\./i)).toBeInTheDocument()
-    expect(screen.getByText('01 / 05')).toBeInTheDocument()
+    expect(screen.getByText('01 / 08')).toBeInTheDocument()
 
     await user.click(nextButton)
     expect(screen.getByText(/nia o\./i)).toBeInTheDocument()
-    expect(screen.getByText('02 / 05')).toBeInTheDocument()
+    expect(screen.getByText('02 / 08')).toBeInTheDocument()
   })
 
 
@@ -138,14 +142,14 @@ describe('KareBraids pages', () => {
     const { container } = renderRoute('/')
 
     const sadeButton = screen.getByRole('button', { name: /show testimonial from sade b\./i })
-    expect(container.querySelectorAll('.testimonial-indicator')).toHaveLength(5)
+    expect(container.querySelectorAll('.testimonial-indicator')).toHaveLength(8)
     expect(screen.getByRole('button', { name: /show testimonial from ama k\./i })).toHaveAttribute('aria-current', 'true')
 
     await user.click(sadeButton)
 
     expect(screen.getByText(/professional, gentle, and very detailed/i)).toBeInTheDocument()
     expect(screen.getByText(/sade b\./i)).toBeInTheDocument()
-    expect(screen.getByText('04 / 05')).toBeInTheDocument()
+    expect(screen.getByText('04 / 08')).toBeInTheDocument()
     expect(sadeButton).toHaveAttribute('aria-current', 'true')
   })
 

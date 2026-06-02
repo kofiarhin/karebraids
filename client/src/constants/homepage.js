@@ -29,64 +29,30 @@ export const trustItems = [
 ]
 
 export const valueItems = [
-  {
-    title: 'Salon Quality Finish',
-    text: 'Neat, lightweight and flawless every time.',
-    icon: 'sparkle',
-  },
-  {
-    title: 'Mobile Convenience',
-    text: 'We come to you - home, hotel or workplace.',
-    icon: 'map',
-  },
-  {
-    title: 'Protective Care First',
-    text: 'Healthy hair, gentle techniques and premium products.',
-    icon: 'shield',
-  },
-  {
-    title: 'Flexible Booking',
-    text: 'Easy online booking that fits your schedule.',
-    icon: 'calendar',
-  },
+  { title: 'Professional Service', text: 'Organized appointments and attentive care from consultation to finish.', icon: 'shield' },
+  { title: 'Reliable Appointments', text: 'Clear scheduling designed to respect your time.', icon: 'calendar' },
+  { title: 'Transparent Pricing', text: 'Visible starting prices so you can plan with confidence.', icon: 'price' },
+  { title: 'Quality Results', text: 'Clean sections, balanced tension, and polished long-wear styling.', icon: 'sparkle' },
+  { title: 'Mobile & Salon Options', text: 'Choose the appointment setting that works best for you.', icon: 'house' },
+  { title: 'Client-Focused Experience', text: 'Protective care and thoughtful communication at every step.', icon: 'heart' },
 ]
 
 export const homepageTestimonials = [
-  {
-    name: 'Ama K.',
-    review: 'My knotless braids were so neat and lightweight. The whole experience felt calm, professional, and premium.',
-    rating: 5,
-    avatar: galleryItems[7].image,
-    initials: 'AK',
-  },
-  {
-    name: 'Nia O.',
-    review: 'KareBraids took her time with my hair and the finish was beautiful. I got compliments for weeks.',
-    rating: 5,
-    avatar: galleryItems[5].image,
-    initials: 'NO',
-  },
-  {
-    name: 'Zuri A.',
-    review: 'The braids were clean, comfortable, and lasted really well. I felt looked after from start to finish.',
-    rating: 5,
-    avatar: galleryItems[8].image,
-    initials: 'ZA',
-  },
-  {
-    name: 'Sade B.',
-    review: 'Professional, gentle, and very detailed. My goddess braids came out exactly how I wanted.',
-    rating: 5,
-    avatar: galleryItems[6].image,
-    initials: 'SB',
-  },
-  {
-    name: 'Aaliyah M.',
-    review: 'Booking was easy and the service was excellent. My hair looked flawless and felt secure without being tight.',
-    rating: 5,
-    avatar: null,
-    initials: 'AM',
-  },
+  { name: 'Ama K.', review: 'My knotless braids were so neat and lightweight. The whole experience felt calm, professional, and premium.', rating: 5, avatar: galleryItems[7].image, initials: 'AK' },
+  { name: 'Nia O.', review: 'KareBraids took her time with my hair and the finish was beautiful. I got compliments for weeks.', rating: 5, avatar: galleryItems[5].image, initials: 'NO' },
+  { name: 'Zuri A.', review: 'The braids were clean, comfortable, and lasted really well. I felt looked after from start to finish.', rating: 5, avatar: galleryItems[8].image, initials: 'ZA' },
+  { name: 'Sade B.', review: 'Professional, gentle, and very detailed. My goddess braids came out exactly how I wanted.', rating: 5, avatar: galleryItems[6].image, initials: 'SB' },
+  { name: 'Aaliyah M.', review: 'Booking was easy and the service was excellent. My hair looked flawless without feeling tight.', rating: 5, avatar: null, initials: 'AM' },
+  { name: 'Imani R.', review: 'Every step felt organized and my appointment started exactly when expected.', rating: 5, avatar: galleryItems[3].image, initials: 'IR' },
+  { name: 'Tomi E.', review: 'The pricing was clear and the result looked polished for weeks.', rating: 5, avatar: galleryItems[1].image, initials: 'TE' },
+  { name: 'Leah D.', review: 'A premium, comfortable experience and a style that felt completely like me.', rating: 5, avatar: null, initials: 'LD' },
+]
+
+export const bookingSteps = [
+  { title: 'Choose A Style', text: 'Browse the options and select the look that suits you.' },
+  { title: 'Select Date & Time', text: 'Choose a convenient appointment slot.' },
+  { title: 'Confirm Booking', text: 'Share your details and submit your request.' },
+  { title: 'Enjoy Your Appointment', text: 'Arrive relaxed and leave with a polished protective style.' },
 ]
 
 export const footerGroups = [

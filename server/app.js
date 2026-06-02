@@ -3,6 +3,7 @@ const cors = require("cors");
 const adminRoutes = require("./routes/adminRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const galleryRoutes = require("./routes/galleryRoutes");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get("/api/health", async (req, res) => {
 
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/gallery", galleryRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use((req, res) => {

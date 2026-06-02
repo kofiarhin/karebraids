@@ -650,3 +650,68 @@
 - [x] No package, lockfile, env, backend, generated-dist, or suspicious secret additions exist.
 - [x] Screenshot attempt documented; approved code-surface fallback passed.
 - [x] Review, release notes, summary, handoff, and health records completed.
+
+## 2026-06-01 — Spec Approval and Planning
+- Explicit spec approval recorded before task generation: user replied `approve spec`.
+- Replaced stale prior-request task plan with `_workflow/runs/work/tasks.md` derived from the approved detailed spec.
+- Planned four sequential vertical tasks; TASK-001 is Ready.
+- Applied skill: design-taste-frontend
+- Next step: TASK-001 Iteration 1 Build Red.
+
+## 2026-06-01 — TASK-001 Done: Public Gallery API
+- Lifecycle: Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files: `server/constants/gallery.js`, `server/controllers/galleryController.js`, `server/routes/galleryRoutes.js`, `server/app.js`, `server/tests/gallery.test.js`.
+- Iteration 1 Build: Red `npm run test:server -- --runTestsByPath server/tests/gallery.test.js` failed with expected 404; Green added 20 remote URL-only backend records and public route; Refactor isolated positive-integer parsing in controller; focused suite passed.
+- Iteration 2 Refine: Red malformed-limit parameterized cases included `abc`, `0`, `-1`, `1.5`, empty, and whitespace; Green/Refactor confirmed full-list HTTP 200 fallback.
+- Iteration 3 Polish: full `npm run test:server` passed; HTTP smoke later proved 20/4/20 counts for all/limited/invalid requests.
+- Acceptance: [x] endpoint, metadata ownership, remote URLs, safe limits.
+- Review: scoped additive API; no persistence, auth, or secret impact.
+
+## 2026-06-01 — TASK-002 Done: API-backed Gallery Consumers
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files: `client/src/services/galleryService.js`, `client/src/hooks/queries/useGalleryItems.js`, `client/src/pages/Gallery.jsx`, `client/src/components/home/GalleryFeature.jsx`, CSS, gallery tests.
+- Iteration 1 Build: Red `npm run test --prefix client -- gallery-query.test.jsx` failed because the hook was unused and old constants rendered; Green added axios service, TanStack hook, all-item Gallery consumption, four-item Home consumption; Refactor normalized valid hook limits.
+- Iteration 2 Refine: Red known/invalid style assertions; Green added client-side known-style filtering and safe fallback; Refactor centralized known style lookup through shared profile metadata.
+- Iteration 3 Polish: Red error/empty-state assertion; Green added accessible loading/error/empty states and retained modal behavior; Refactor updated legacy modal harness to mock the API-backed hook.
+- Acceptance: [x] one API source of truth for both gallery UI surfaces, safe states, filter behavior, retained modal accessibility.
+
+## 2026-06-01 — TASK-003 Done: Service Details, Redirects, Reviews, Booking Preselection
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files: shared style config, `ServiceDetail`, `StyleRedirect`, reusable `ReviewList`, Router, Booking, CSS, service-detail tests.
+- Iteration 1 Build: Red detail-route tests failed on absent pages/routes; Green added six data-driven canonical details and valid compatibility redirects; Refactor centralized slug lookup.
+- Iteration 2 Refine: Red valid preselection test failed; Green initialized Booking from valid `style` query while preserving default flow; Refactor reused existing service ids/titles.
+- Iteration 3 Polish: detail accessibility/responsive code-surface review passed; reusable verified-client review metadata remains display-only as required.
+- Acceptance: [x] six pages, legacy redirect, listing fallback, reviews, CTA, booking query preselection.
+
+## 2026-06-01 — TASK-004 Done: Homepage Funnel and UI Polish
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files: Home composition, BrowseByStyle, FeaturedServices, GalleryFeature, TestimonialSection, WhyChoose, BookingSteps, BookingCTA, shared homepage config, CSS, homepage tests.
+- Applied skill: design-taste-frontend
+- Iteration 1 Build: Red homepage suite failed on missing Browse, steps, order, and eight-record carousel; Green recomposed below-Hero funnel and added reusable data-driven sections; Refactor separated visual exploration from service-learning links.
+- Iteration 2 Refine: Red swipe and interaction requirements reviewed; Green carousel autoplay, cleanup, controls, dots, hover/focus pause, and swipe added; Refactor memoized navigation callbacks.
+- Iteration 3 Polish: responsive/tactile/reduced-motion styles reviewed; locked Hero diff was empty; browser-tool scan found no screenshot tooling, so required code-surface fallback saved at `.workflow/artifacts/polish-ui/karebraids-homepage-redesign.md`.
+- Acceptance: [x] order, counts, CTAs, responsive behavior, accessible interactions, Hero lock.
+
+## 2026-06-01 — Final Verification and Diff Audit
+- Full client Vitest: 9 files, 67 tests passed.
+- Full server Jest: 6 suites, 37 tests passed.
+- Client lint: passed.
+- Client build: passed.
+- `git diff --check`: passed.
+- API smoke: `/api/gallery` -> 20, `?limit=4` -> 4, `?limit=abc` -> 20.
+- Hero diff: empty.
+- Screenshot: unavailable due no browser automation binary/package; code-surface fallback recorded.
+- Scope/security: no secrets, binaries, dependencies, DB schema, Hero changes, or unrelated refactors.
+
+## 2026-06-01 — Workflow Health Check
+- Request synced: yes.
+- Handoff current: yes.
+- Detailed spec: yes, all 22 required sections.
+- Spec approval gate: yes; explicit approval occurred before task planning.
+- Task plan: yes, derived from approved spec.
+- Progress/review/release-notes/summary: complete.
+- Iteration and TDD-first evidence: recorded for all code-changing tasks.
+- Final diff audit, dirty-worktree checks, acceptance results, verification, and scope checks: complete.
+- Root `WORK_REQUEST.md`: left manual compatibility-only.
+- Decisions file: not required; implementation follows existing architecture with additive public gallery route.
+- Final health: Passed.

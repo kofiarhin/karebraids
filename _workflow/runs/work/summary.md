@@ -351,3 +351,29 @@ Screenshot capture unavailable due missing browser automation tooling; approved 
 
 ## Next Recommended Work
 Optional browser screenshot automation for future visual regression evidence.
+
+# 2026-06-01 Summary: Homepage and Gallery Architecture Redesign
+
+## Request
+Redesign the homepage below the unchanged Hero; centralize gallery metadata behind an API; add filtered gallery browsing, service details, reviews display, redirects, and booking preselection.
+
+## Spec / Plan / Review / Release Notes
+- Spec: `_workflow/runs/work/spec.md` complete with all 22 sections and approved explicitly before planning.
+- Plan: `_workflow/runs/work/tasks.md`
+- Review: `_workflow/runs/work/review.md`
+- Release notes: `_workflow/runs/work/release-notes.md`
+
+## Completed Tasks
+TASK-001 through TASK-004 completed through Build -> Refine -> Polish with TDD-first evidence in progress history.
+
+## Files Changed
+Backend gallery API/data/tests; frontend gallery service/query consumers, homepage sections/config/styles/tests, service detail/review/redirect architecture, booking preselection, and run-scoped workflow artifacts.
+
+## Verification
+Full client Vitest 67 tests, server Jest 37 tests, lint, build, whitespace, API smoke, locked-Hero diff, scope/security audit passed. Screenshot tooling unavailable; documented UI code-surface fallback passed.
+
+## Acceptance / Diff Audit
+All approved criteria met. No Hero edit, secret, binary, dependency, schema, env, deployment, auth, or unrelated change detected.
+
+## Unresolved Issues / Next Work
+Optional CMS/gallery persistence, verified review submission flow, and browser screenshot automation.

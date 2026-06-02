@@ -9,6 +9,7 @@ import {
   WarningCircle,
 } from '@phosphor-icons/react'
 import { useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Button } from '../components/Button.jsx'
 import { services } from '../constants/content.js'
 import { useCreateBooking } from '../hooks/mutations/useCreateBooking.js'
@@ -102,8 +103,11 @@ function formatReadableDate(dateValue) {
 }
 
 export function Booking() {
-  const [form, setForm] = useState(initialForm)
-  const [step, setStep] = useState('service')
+  const [searchParams] = useSearchParams()
+  const requestedStyle = searchParams.get('style')
+  const preselectedService = services.find((service) => service.id === requestedStyle)
+  const [form, setForm] = useState(() => ({ ...initialForm, service: preselectedService?.title || '' }))
+  const [step, setStep] = useState(preselectedService ? 'date' : 'service')
   const [visibleMonth, setVisibleMonth] = useState(getInitialMonth)
   const [formError, setFormError] = useState('')
   const [confirmedBooking, setConfirmedBooking] = useState(null)

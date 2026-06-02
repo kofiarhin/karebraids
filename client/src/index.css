@@ -4524,3 +4524,64 @@ button:disabled,
     transform: none;
   }
 }
+
+/* API-backed gallery states */
+.gallery-query-state {
+  display: grid;
+  justify-items: start;
+  gap: 0.85rem;
+  margin: 1.5rem auto;
+  padding: 1.1rem;
+  border: 1px solid var(--luxury-border);
+  border-radius: 0.85rem;
+  color: var(--cream-muted);
+  background: var(--theme-cream-highlight-a0045);
+}
+
+.gallery-filter-note {
+  margin-top: 0.75rem;
+  color: var(--warm-gold);
+  text-transform: capitalize;
+}
+
+/* Reusable service detail architecture */
+.service-detail-page { width: min(100% - 2rem, 1240px); margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; color: var(--cream-muted); }
+.service-detail-hero, .service-detail-columns, .service-detail-cta { display: grid; gap: clamp(1.5rem, 4vw, 3rem); }
+.service-detail-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); align-items: center; }
+.service-detail-hero img, .service-detail-gallery img { width: 100%; object-fit: cover; border-radius: 1rem; }
+.service-detail-hero img { min-height: 28rem; max-height: 40rem; }
+.service-detail-hero h1, .service-detail-section h2, .service-detail-columns h2, .service-detail-cta h2 { color: var(--warm-ivory); }
+.service-detail-hero p, .service-detail-columns p, .service-detail-columns li { line-height: 1.75; }
+.service-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 3rem 0; border: 1px solid var(--luxury-border); background: var(--luxury-border); }
+.service-facts div { display: grid; gap: .4rem; padding: 1.25rem; background: var(--smoked-cocoa); }
+.service-facts span, .review-card span { color: var(--warm-gold); font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; }
+.service-detail-section { margin-top: clamp(3rem, 8vw, 6rem); }
+.service-detail-gallery, .review-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.service-detail-gallery img { aspect-ratio: 4 / 5; }
+.service-detail-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: clamp(3rem, 8vw, 6rem); }
+.review-card { display: grid; gap: 1rem; padding: 1.2rem; border: 1px solid var(--luxury-border); border-radius: .85rem; background: var(--theme-cream-highlight-a0045); }
+.review-card footer, .review-card footer span { display: flex; align-items: center; gap: .35rem; }
+.review-card footer { justify-content: space-between; }
+.service-detail-cta { grid-template-columns: 1fr auto; align-items: center; margin-top: clamp(3rem, 8vw, 6rem); padding: clamp(1.25rem, 4vw, 2rem); border: 1px solid var(--luxury-border); border-radius: 1rem; background: var(--smoked-cocoa); }
+@media (max-width: 720px) { .service-detail-hero, .service-detail-columns, .service-detail-cta { grid-template-columns: 1fr; } .service-detail-hero img { min-height: 20rem; } .service-facts, .service-detail-gallery, .review-list { grid-template-columns: 1fr; } }
+
+/* Homepage navigation-first redesign */
+.browse-style-section, .booking-steps-section { width: min(100% - 2rem, 1240px); margin: 0 auto; padding-block: clamp(3rem, 7vw, 5rem); }
+.browse-style-intro { max-width: 44rem; }
+.browse-style-grid, .booking-steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; padding: 0; }
+.browse-style-card { position: relative; min-height: 18rem; overflow: hidden; border: 1px solid var(--luxury-border); border-radius: 1rem; background: var(--smoked-cocoa); }
+.browse-style-card::after { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 38%, var(--theme-espresso-deep-a078)); content: ""; }
+.browse-style-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 320ms ease; }
+.browse-style-card:hover img, .browse-style-card:focus-visible img { transform: scale(1.05); }
+.browse-style-card span { position: absolute; z-index: 1; right: 1rem; bottom: 1rem; left: 1rem; display: grid; gap: .25rem; color: var(--warm-ivory); }
+.browse-style-card small { color: var(--warm-gold); }
+.booking-steps-grid { list-style: none; }
+.booking-step-card { padding: 1.2rem; border-top: 1px solid var(--warm-gold); color: var(--cream-muted); }
+.booking-step-card span { color: var(--warm-gold); font-size: .78rem; letter-spacing: .15em; }
+.booking-step-card h3 { margin-top: .8rem; color: var(--warm-ivory); }
+.booking-step-card p { line-height: 1.65; }
+.booking-cta-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.featured-service-card .text-link { color: var(--warm-gold); }
+@media (max-width: 900px) { .browse-style-grid, .booking-steps-grid, .featured-services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 680px) { .browse-style-section, .booking-steps-section { width: min(100% - 1rem, 1240px); } .browse-style-grid, .gallery-feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; } .browse-style-card { min-height: 13rem; } .browse-style-card span { right: .7rem; bottom: .7rem; left: .7rem; } .browse-style-card strong { font-size: .9rem; } .browse-style-card small { font-size: .7rem; } }
+@media (prefers-reduced-motion: reduce) { .browse-style-card img, .testimonial-content { transition-duration: .01ms; animation: none; } }

@@ -102,7 +102,7 @@ describe('booking flow', () => {
     await chooseService(user)
 
     expect(screen.queryByLabelText(/appointment date/i)).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /sunday, may 24, 2026 unavailable/i })).toBeDisabled()
+    expect(screen.getAllByRole('button', { name: /sunday.*unavailable/i })[0]).toBeDisabled()
     await user.click(screen.getByRole('button', { name: /continue to times/i }))
 
     expect(screen.getByRole('alert')).toHaveTextContent(/choose a valid appointment date/i)

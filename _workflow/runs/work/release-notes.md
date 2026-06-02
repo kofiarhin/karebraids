@@ -1,46 +1,33 @@
-# Release Notes: Dedicated Services Page
+# Release Notes: KareBraids Homepage and Gallery Architecture Redesign
 
-## Request
-Create a dedicated KareBraids Services browsing journey and preserve Gallery as portfolio-only inspiration.
-
-## User-Facing Changes
-- Added premium `/services` page with split hero, salon/mobile explanation, categorized service grids, image cards, duration, from-price guidance, and Booking CTAs.
-- Added Home Featured Services before Gallery preview.
-- Corrected Services navigation to `/services` while retaining Gallery `/gallery` navigation.
-- Updated Footer service-browsing shortcuts to `/services`.
-- Added mobile stacking, narrow-phone CTA sizing, focus treatment, tactile feedback, and reduced-motion support.
+## User-facing Changes
+- Rebuilt homepage below the unchanged Hero into a conversion-focused browsing and booking journey.
+- Added category browsing, transparent featured pricing, four-item Client Gallery, eight-item carousel, trust reasons, booking steps, and dual CTA.
+- Added filtered gallery URLs, six service detail pages, compatibility redirects, reusable reviews display, and style-specific booking preselection.
 
 ## Developer Changes
-- Enriched frontend shared service records with `id`, `category`, `image`, and existing metadata while keeping title compatibility.
-- Added focused Services and FeaturedServices React surfaces plus public-page Vitest contracts.
+- Added backend-owned static gallery metadata and frontend TanStack Query gallery boundary.
+- Added reusable data-driven style profiles and review components.
 
-## New Routes/APIs
-- Frontend route: `/services`
-- APIs: none
+## New Routes / APIs
+- `GET /api/gallery`
+- `/services/:slug`
+- `/styles/:slug` compatibility redirect
 
-## New Env Vars
-none
+## Env Vars / Schema / Dependencies
+- New env vars: none.
+- Database/schema changes: none.
+- Dependencies added/removed: none.
 
-## Database/Schema Changes
-none
-
-## Dependencies Added/Removed
-none
-
-## Test Commands Run
-- `npm run test --prefix client -- site-pages.test.jsx`
-- `npm run test --prefix client`
-- `npm run lint --prefix client`
-- `npm test`
-- `npm run build --prefix client`
-- `git diff --check`
-- Local Vite `/services` curl smoke
+## Verification
+- Server Jest, client Vitest, lint, build, whitespace, API smoke, Hero lock, security/scope audit passed.
 
 ## Known Limitations
-- Screenshot capture unavailable because the container has no Chromium, Chrome, Firefox, or Playwright executable. Code-surface visual review fallback passed.
+- Gallery metadata remains static placeholder content and remote URLs.
+- Screenshot unavailable because browser automation tooling is absent.
 
-## Follow-Up Work
-- Optional browser screenshot automation for future visual regression evidence.
+## Follow-up
+- Optional CMS persistence, verified review submission flow, and screenshot automation.
 
-## Suggested Commit Message
-`feat: add dedicated services discovery page`
+## Suggested Commit
+`feat: redesign homepage and add gallery service architecture`
