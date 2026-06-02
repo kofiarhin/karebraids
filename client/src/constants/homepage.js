@@ -22,7 +22,7 @@ export const navItems = [
 ]
 
 export const trustItems = [
-  { title: 'London Based', icon: 'map' },
+  { title: 'Birmingham Based', icon: 'map' },
   { title: 'Salon & Mobile Services', icon: 'house' },
   { title: 'Protective Styling Experts', icon: 'shield' },
   { title: 'Client First Care', icon: 'heart' },

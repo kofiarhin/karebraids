@@ -16,3 +16,11 @@
 - Unresolved issues: workflow health Partial because approval gate was bypassed; possible legacy style redirect and booking id follow-ups.
 - Next recommended work: add booking support for all service ids if desired.
 - Workflow health check: Partial.
+
+## 2026-06-02 Merge Review Fixes
+- Request: Address review fixes for Birmingham/West Midlands copy, safe service preview fallbacks, and regression coverage.
+- Files changed: customer-facing copy in frontend surfaces, `client/src/utils/servicePreview.js`, service card consumers, tests, and lightweight docs/workflow notes.
+- Verification run: `npm run test:server`; `npm run test --prefix client`; `npm run lint --prefix client`; `npm run build --prefix client`.
+- Acceptance results: all requested review fixes completed.
+- Final diff audit: completed with `git diff --stat` and `git diff` before commit.
+- Workflow health check: Partial due inherited non-interactive approval state from the prior implementation run.

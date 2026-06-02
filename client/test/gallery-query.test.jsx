@@ -6,7 +6,7 @@ import App from '../src/App.jsx'
 const { mockGalleryResponse, mockServices, mockState, useGallery, useGalleryItems, useGalleryServices } = vi.hoisted(() => {
   const mockServices = [
     { id: 'knotless-braids', title: 'Knotless Braids', description: 'Light braid finish.', startingPrice: 80, currency: 'GBP', duration: { minHours: 4, maxHours: 6 }, featured: true, previewImage: { id: 'knotless-preview', title: 'Knotless Preview', description: 'Preview', image: 'https://example.com/knotless.jpg', aspect: 'medium' } },
-    { id: 'boho-knotless-braids', title: 'Boho Knotless Braids', description: 'Soft boho finish.', startingPrice: 95, currency: 'GBP', duration: { minHours: 5, maxHours: 7 }, featured: true, previewImage: { id: 'boho-preview', title: 'Boho Preview', description: 'Preview', image: 'https://example.com/boho.jpg', aspect: 'wide' } },
+    { id: 'boho-knotless-braids', title: 'Boho Knotless Braids', description: 'Soft boho finish.', startingPrice: 95, currency: 'GBP', duration: { minHours: 5, maxHours: 7 }, featured: true, previewImage: null },
   ]
   const allItems = [
     { id: 'knotless-one', title: 'Knotless One', description: 'Light knotless braids.', image: 'https://example.com/1.jpg', aspect: 'medium', serviceId: 'knotless-braids', serviceTitle: 'Knotless Braids' },
@@ -80,5 +80,14 @@ describe('service-driven gallery surfaces', () => {
     const serviceLinks = screen.getAllByRole('link', { name: /browse knotless braids gallery/i })
     expect(serviceLinks[0]).toHaveAttribute('href', '/gallery?service=knotless-braids')
     expect(screen.getAllByRole('img', { name: /knotless braids preview/i })[0]).toHaveAttribute('src', mockServices[0].previewImage.image)
+    expect(screen.getAllByRole('img', { name: /boho knotless braids preview/i })[0]).toHaveAttribute('src', expect.stringContaining('pexels-photo'))
+  })
+
+  it('keeps service cards usable when preview metadata is missing', () => {
+    renderRoute('/services')
+
+    expect(screen.getByRole('heading', { name: /boho knotless braids/i })).toBeInTheDocument()
+    expect(screen.getAllByRole('link', { name: /view gallery/i }).some((link) => link.getAttribute('href') === '/gallery?service=boho-knotless-braids')).toBe(true)
+    expect(screen.getAllByRole('img', { name: /boho knotless braids protective braiding style/i })[0]).toHaveAttribute('src', expect.stringContaining('pexels-photo'))
   })
 })

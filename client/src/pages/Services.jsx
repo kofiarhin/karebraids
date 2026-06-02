@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useGalleryServices } from '../hooks/queries/useGalleryItems.js'
+import { getServicePreviewImage } from '../utils/servicePreview.js'
 
 function formatPrice(service) {
   return new Intl.NumberFormat('en-GB', {
@@ -33,7 +34,7 @@ export function Services() {
         </div>
         {heroService ? (
           <div className="services-hero-image">
-            <img alt="Close view of carefully crafted long braids" src={heroService.previewImage.image} />
+            <img alt="Close view of carefully crafted long braids" src={getServicePreviewImage(heroService)} />
           </div>
         ) : null}
       </section>
@@ -42,7 +43,7 @@ export function Services() {
         <p className="eyebrow">Salon & Mobile</p>
         <h2 id="services-intro-title">Premium care, wherever your appointment feels best.</h2>
         <p>
-          Choose a calm salon appointment or a mobile service across London. Every style begins
+          Choose a calm salon appointment or a mobile service across Birmingham and the West Midlands. Every style begins
           with a thoughtful consultation and a protective-care-first approach.
         </p>
       </section>
@@ -65,7 +66,7 @@ export function Services() {
             {services.map((service) => (
               <article className="service-card" key={service.id}>
                 <div className="service-card-image">
-                  <img alt={`${service.title} protective braiding style`} loading="lazy" src={service.previewImage.image} />
+                  <img alt={`${service.title} protective braiding style`} loading="lazy" src={getServicePreviewImage(service)} />
                 </div>
                 <div className="service-card-copy">
                   <div className="service-card-heading">

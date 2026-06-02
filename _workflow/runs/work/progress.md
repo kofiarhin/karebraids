@@ -759,3 +759,19 @@
 - Review result: Applied skill: design-taste-frontend. Components remain accessible and reusable.
 - Blockers: none.
 - Next step: final review, release notes, summary, commit, PR.
+
+# 2026-06-02 Review Fixes: Birmingham Copy and Safe Service Preview Fallback
+
+## TASK-004: Apply merge review fixes
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed: customer-facing location copy, service preview helper, BrowseByStyle, FeaturedServices, Services, and related tests.
+- Iteration 1 Build: Red targeted frontend tests failed on London copy and missing `previewImage`; Green updated customer copy to Birmingham/West Midlands and added reusable preview fallback helper.
+- Iteration 2 Refine: fixed test specificity for multiple service card links and verified selected gallery behavior remained covered.
+- Iteration 3 Polish: searched for remaining London copy and ran full required verification.
+- Test commands run: `npm run test --prefix client -- gallery-query.test.jsx site-pages.test.jsx contact-page.test.jsx`, `npm run test:server`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`.
+- Acceptance result: [x] Birmingham/West Midlands copy shown; [x] missing preview images do not crash service cards; [x] existing gallery default/filtered behavior still works; [x] architecture unchanged.
+- Verification result: passed.
+- Review result: Applied skill: design-taste-frontend. API paths and backend `server/data/services.json` source of truth preserved.
+- Blockers: none.
+- Next step: commit and PR record.

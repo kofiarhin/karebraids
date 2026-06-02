@@ -11,7 +11,7 @@ export function Hero() {
           Luxury braiding, crafted with <span>care.</span>
         </h1>
         <p className="hero-lede">
-          Premium salon and mobile braiding services across London. Beautiful styles. Healthy hair.
+          Premium salon and mobile braiding services across Birmingham and the West Midlands. Beautiful styles. Healthy hair.
           Exceptional care.
         </p>
         <div className="hero-actions">

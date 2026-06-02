@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useGalleryServices } from '../../hooks/queries/useGalleryItems.js'
+import { getServicePreviewImage } from '../../utils/servicePreview.js'
 
 function formatPrice(service) {
   return new Intl.NumberFormat('en-GB', {
@@ -31,7 +32,7 @@ export function FeaturedServices() {
         <div className="featured-services-grid">
           {featuredServices.map((service, index) => (
             <article className="featured-service-card" data-reveal key={service.id} style={{ '--index': index + 1 }}>
-              <img alt={`${service.title} preview`} loading="lazy" src={service.previewImage.image} />
+              <img alt={`${service.title} preview`} loading="lazy" src={getServicePreviewImage(service)} />
               <div>
                 <p>Starting at {formatPrice(service)} · {formatDuration(service.duration)}</p>
                 <h3>{service.title}</h3>

@@ -1,5 +1,5 @@
 export const contactDetails = {
-  location: 'London, United Kingdom',
+  location: 'Birmingham, West Midlands',
   hours: 'Mon - Sat: 8AM - 7PM',
   email: 'hello@karebraids.com',
   phone: '+44 7000 000 000',

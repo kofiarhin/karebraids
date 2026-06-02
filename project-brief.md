@@ -8,7 +8,7 @@
 
 ### Target Audience
 
-African women in the UK (primarily London), ages **18–45**.
+African women in the UK (primarily Birmingham and the West Midlands), ages **18–45**.
 
 ### Brand Positioning
 

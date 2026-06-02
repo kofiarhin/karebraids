@@ -75,3 +75,13 @@ workflow complete-workflow: Implement a backend-owned service-driven KareBraids 
 - Acceptance status: All implementation acceptance criteria checked.
 - Workflow health: Partial because explicit spec approval before task planning was not recorded.
 - Next step: Commit changes and create PR record.
+
+# 2026-06-02 Merge Review Fixes Resume Update
+
+- Phase: review fixes complete; ready to commit and create PR record.
+- Branch requested by user: `agent-zero/implement-karebraids-gallery-feature`; local checked-out branch: `work`.
+- Latest completed task: TASK-004 merge review fixes.
+- Verification: targeted frontend red/green check passed, full server tests passed, full client tests passed, client lint passed, client build passed.
+- Acceptance: Birmingham/West Midlands copy applied; safe service preview fallback added; gallery architecture, `server/data/services.json`, `/gallery`, and `/gallery/services` preserved.
+- Workflow health: Partial due inherited non-interactive approval state from the prior implementation run.
+- Applied skill: design-taste-frontend

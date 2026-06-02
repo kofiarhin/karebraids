@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useGalleryServices } from '../../hooks/queries/useGalleryItems.js'
+import { getServicePreviewImage } from '../../utils/servicePreview.js'
 
 function formatPrice(service) {
   return new Intl.NumberFormat('en-GB', {
@@ -26,7 +27,7 @@ export function BrowseByStyle() {
         <div className="browse-style-grid">
           {services.map((service, index) => (
             <Link aria-label={`${service.title}, starting at ${formatPrice(service)}`} className="browse-style-card" data-reveal key={service.id} style={{ '--index': index }} to={`/gallery?service=${service.id}`}>
-              <img alt={`${service.title} preview`} loading="lazy" src={service.previewImage.image} />
+              <img alt={`${service.title} preview`} loading="lazy" src={getServicePreviewImage(service)} />
               <span><strong>{service.title}</strong><small>From {formatPrice(service)}</small></span>
             </Link>
           ))}

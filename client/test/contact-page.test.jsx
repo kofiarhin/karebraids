@@ -56,7 +56,7 @@ describe('contact page', () => {
     expect(screen.getByRole('heading', { name: /let's talk about your next style/i })).toBeInTheDocument()
     expect(screen.getByRole('navigation', { name: /main navigation/i }).querySelector('a[href="/contact"]')).toHaveTextContent(/contact/i)
     const infoCard = container.querySelector('.contact-info-card')
-    expect(within(infoCard).getByText('London, United Kingdom')).toBeInTheDocument()
+    expect(within(infoCard).getByText('Birmingham, West Midlands')).toBeInTheDocument()
     expect(within(infoCard).getByText('Mon - Sat: 8AM - 7PM')).toBeInTheDocument()
     expect(within(infoCard).getByText('hello@karebraids.com')).toBeInTheDocument()
     expect(within(infoCard).getByText('+44 7000 000 000')).toBeInTheDocument()

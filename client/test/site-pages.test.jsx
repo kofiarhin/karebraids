@@ -68,7 +68,7 @@ describe('KareBraids pages', () => {
     expect(container.querySelector('.luxury-homepage')).toBeInTheDocument()
     expect(screen.getByText(/luxury african hair braiding/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /luxury braiding, crafted with care/i })).toBeInTheDocument()
-    expect(screen.getByText(/premium salon and mobile braiding services across london/i)).toBeInTheDocument()
+    expect(screen.getByText(/premium salon and mobile braiding services across birmingham/i)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /view styles/i })).toHaveAttribute('href', '/gallery')
     expect(screen.getByText(/500\+ happy clients/i)).toBeInTheDocument()
     expect(container.querySelector('.browse-style-section')).toHaveTextContent(/browse by style/i)
@@ -78,6 +78,8 @@ describe('KareBraids pages', () => {
     expect(screen.getByText(/client testimonials/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /ready for your next look/i })).toBeInTheDocument()
     expect(screen.getByRole('contentinfo')).toHaveTextContent(/mon - sat: 8am - 7pm/i)
+    expect(screen.getByRole('contentinfo')).toHaveTextContent(/birmingham, west midlands/i)
+    expect(screen.queryByText(/london/i)).not.toBeInTheDocument()
     expect(container.querySelectorAll('[data-reveal]').length).toBeGreaterThan(8)
   })
 
