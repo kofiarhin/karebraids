@@ -598,9 +598,9 @@ After workers finish, perform merge review:
 6. Run git diff --stat and git diff.
 7. Resolve safe in-scope conflicts or create follow-up tasks.
 8. Run final verification.
-9. Write <artifact-root>/review.md, <artifact-root>/release-notes.md, <artifact-root>/summary.md, update <artifact-root>/handoff.md, and complete the health check.
+9. Write <artifact-root>/review.md, run the Fallow Quality layer and write .workflow/fallow-audit.md, then write <artifact-root>/release-notes.md, <artifact-root>/summary.md, update <artifact-root>/handoff.md, and complete the health check.
 
-Health must be Partial or Failed if claims, locks, worker status, iteration evidence, merge review, or final verification are missing.
+Health must be Partial or Failed if claims, locks, worker status, iteration evidence, merge review, final verification, tests/lint/typecheck/build status, or the Fallow verdict/audit is missing.
 ```
 
 ## Parallel Health Check
@@ -779,3 +779,20 @@ Include:
 4. Known limitations.
 5. Suggested next improvement.
 ```
+
+
+## Fallow Quality Gate Prompt
+
+After tests/lint/typecheck/build and review, but before handoff, release notes, summary, and final health check, read `layers/fallow-quality/SKILL.md` and its `references/` files, then run:
+
+```bash
+npx fallow audit --format json --quiet --explain 2>/dev/null || true
+```
+
+If the primary command cannot produce parseable JSON, run the fallback:
+
+```bash
+npx fallow --format json --quiet --explain 2>/dev/null || true
+```
+
+Never use `2>&1`, always append `|| true`, treat exit code 2 as real failure, use the root JSON `kind` field, and create `.workflow/fallow-audit.md` with `PASSED`, `PARTIAL`, or `FAILED`. Do not run `fallow watch`, do not enable telemetry, and do not follow remote config `extends` content.

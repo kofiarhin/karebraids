@@ -36,6 +36,7 @@ Customize placeholders before using this in a production project. MERN is the de
   - `<artifact-root>/review.md`
   - `<artifact-root>/summary.md`
   - `<artifact-root>/release-notes.md`
+  - `.workflow/fallow-audit.md`
   - `_decisions/`
 - Reusable `polish-ui` workflow artifacts:
   - Use `.workflow/artifacts/polish-ui/` for polish-specific evidence and artifacts.
@@ -44,6 +45,13 @@ Customize placeholders before using this in a production project. MERN is the de
   - Reuse `.skills/design-taste-frontend/SKILL.md` before implementation for audit and after implementation for final UI review.
   - Record `Applied skill: design-taste-frontend` whenever the taste skill is applied.
   - Do not force screenshots when browser automation is unavailable; use code-surface review as the fallback.
+- Fallow Quality layer:
+  - Store the official Fallow skill locally at `layers/fallow-quality/SKILL.md` with references in `layers/fallow-quality/references/`.
+  - Apply Fallow as a mandatory JavaScript/TypeScript codebase intelligence layer after tests/lint/typecheck/build and review, but before handoff, release notes, and final health check.
+  - Use Fallow for cleanup opportunities, unused files/exports/types/dependencies, unlisted dependencies, duplicates, circular dependencies, re-export cycles, complexity hotspots, architecture boundary violations, feature flag patterns, opt-in security candidates, changed-code PR risk, refactoring targets, and health scores.
+  - Do not use Fallow as a TypeScript replacement, ESLint replacement, formatter, verified SAST/security scanner, or bundle size analyzer.
+  - Always run Fallow with machine-readable JSON, `--quiet`, `--explain`, `2>/dev/null`, and `|| true`; never use `2>&1`; treat exit code 2 as real failure.
+  - Create or refresh `.workflow/fallow-audit.md` with the required Fallow Audit sections and a `PASSED`, `PARTIAL`, or `FAILED` verdict.
 - Supporting docs:
   - `docs/PROJECT_CONTEXT.md`
   - `docs/ARCHITECTURE.md`
@@ -66,6 +74,7 @@ Customize placeholders before using this in a production project. MERN is the de
 8. Workflow requests must use the grill-me skill at `.agents/skills/grill-me/SKILL.md` as the default intake engine before any spec, task plan, or implementation work.
 
 9. Preserve the existing workflow sequence. Conditional frontend taste routing does not create a new default workflow or bypass intake, spec approval, task planning, task execution, verification, review, release notes, summary, or health check.
+9A. Keep the workflow order as Intake -> Spec -> Plan -> Implementation -> Verification -> Review -> Fallow Quality -> Handoff -> Release Notes -> Final Health Check. Fallow Quality runs after tests/lint/typecheck/build and review, but before handoff, release notes, and final health check.
 10. Load/apply `.skills/design-taste-frontend/SKILL.md` only when a task or work surface involves frontend UI code generation, JSX/TSX markup, CSS/Tailwind styling, UI redesign, or UI polish.
 11. Do not apply `.skills/design-taste-frontend/SKILL.md` for backend-only, API-only, database-only, auth-only, test-only, or docs-only tasks.
 12. For mixed frontend/backend tasks, apply `.skills/design-taste-frontend/SKILL.md` only to the frontend UI work. Backend, API, database, auth, test-only, and docs-only work proceeds without the taste skill.
@@ -113,7 +122,8 @@ Customize placeholders before using this in a production project. MERN is the de
 54. If `<artifact-root>/handoff.md` conflicts with `<artifact-root>/progress.md`, trust `<artifact-root>/progress.md` for completed task history and update handoff accordingly.
 55. Before final review and summary, run or document the final diff audit with `git diff --stat` and `git diff` when available.
 56. After all executable tasks are complete or a stop condition is reached, create a review file in `<artifact-root>/review.md`.
-57. After review, create release notes in `<artifact-root>/release-notes.md`.
+56A. After review, run the Fallow Quality layer and create `.workflow/fallow-audit.md` before handoff, release notes, summary, and final health check.
+57. After review and the Fallow Quality layer, create release notes in `<artifact-root>/release-notes.md`.
 58. After release notes are complete, create or append a summary in `<artifact-root>/summary.md` and update `<artifact-root>/handoff.md`.
 59. Record meaningful architecture or product decisions in `_decisions/`; do not create decision files for routine edits.
 60. Before the final response, run the workflow health check.
@@ -165,7 +175,8 @@ For a work request:
 
     Document whether the diff matches the saved spec, unrelated files were touched, workflow artifacts were updated correctly, tests were added or updated for changed behavior, scope creep occurred, generated junk or temporary files appeared, and sensitive values or secrets were accidentally added. If either command cannot run, document why.
 17. After all allowed tasks are complete or the workflow stops, create a review file in `<artifact-root>/review.md`.
-18. After the review, create release notes in `<artifact-root>/release-notes.md`.
+18. After the review, run the Fallow Quality layer and create `.workflow/fallow-audit.md`.
+18A. After the Fallow Quality layer, create release notes in `<artifact-root>/release-notes.md`.
 19. After release notes, create or append a summary in `<artifact-root>/summary.md`.
 20. Run the workflow health check and mark the result as `Passed`, `Partial`, or `Failed`.
 21. Check repository status again:
@@ -574,6 +585,10 @@ Before the final response, check:
 - Was the review created?
 - Was the summary created?
 - Were release notes created?
+- Did `.workflow/fallow-audit.md` exist?
+- Did the final health check verify `.workflow/spec.md`, `.workflow/task-plan.md`, `.workflow/handoff.md`, `.workflow/release-notes.md`, and `.workflow/fallow-audit.md`?
+- Were tests/lint/typecheck/build statuses recorded?
+- Was the Fallow verdict recorded?
 - Was required iteration evidence recorded for every executable task?
 - Was TDD-first evidence recorded for every code-changing task, including first-test Red evidence, expected failure when possible, Green verification, Refactor verification, and any justified missing-test exception?
 - Was the final diff audit completed or documented?
@@ -589,9 +604,9 @@ Final health status must be one of:
 - `Partial`
 - `Failed`
 
-`Passed` requires a synced `<artifact-root>/request.md`, root `WORK_REQUEST.md` left manual/compatibility-only, a detailed spec with every required section, explicit spec approval before task planning, a task plan derived from and citing or referencing the approved detailed spec, progress, handoff, review, summary, release notes, required iteration evidence for every executable task, required TDD-first evidence for every code-changing task or justified missing-test exceptions, final diff audit completed or documented, dirty worktree checked, acceptance results completed, verification run or documented, scope respected, and decisions recorded if needed.
+`Passed` requires a synced `<artifact-root>/request.md`, root `WORK_REQUEST.md` left manual/compatibility-only, a detailed spec with every required section, explicit spec approval before task planning, a task plan derived from and citing or referencing the approved detailed spec, progress, handoff, review, summary, release notes, `.workflow/fallow-audit.md` with a recorded Fallow verdict, recorded tests/lint/typecheck/build status, required iteration evidence for every executable task, required TDD-first evidence for every code-changing task or justified missing-test exceptions, final diff audit completed or documented, dirty worktree checked, acceptance results completed, verification run or documented, scope respected, and decisions recorded if needed.
 
-If release notes, final diff audit, dirty worktree check, required detailed spec sections, explicit spec approval before task planning, iteration evidence, TDD-first evidence for code-changing tasks, or acceptance results are missing, health must be `Partial` or `Failed` depending on severity. If `<artifact-root>/tasks.md` was generated before explicit approval or workflow execution continued without user confirmation, health must be `Partial` or `Failed` depending on severity. If any required artifact is missing, mark workflow health as `Failed`.
+If release notes, `.workflow/fallow-audit.md`, a Fallow verdict, tests/lint/typecheck/build status, final diff audit, dirty worktree check, required detailed spec sections, explicit spec approval before task planning, iteration evidence, TDD-first evidence for code-changing tasks, or acceptance results are missing, health must be `Partial` or `Failed` depending on severity. If `<artifact-root>/tasks.md` was generated before explicit approval or workflow execution continued without user confirmation, health must be `Partial` or `Failed` depending on severity. If any required artifact is missing, mark workflow health as `Failed`.
 
 ## Implementation Boundaries
 
