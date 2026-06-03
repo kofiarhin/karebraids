@@ -1,39 +1,49 @@
 # Review
 
-Request: Implement a single source of truth for KareBraids services across Home, Gallery, and Booking.
-Spec file used: `_workflow/runs/work/spec.md`
-Task plan used: `_workflow/runs/work/tasks.md`
-Tasks reviewed: TASK-001
+## Request
+Complete the single-source-of-truth service migration for gallery and booking service selection.
 
-## Bugs Found
-- Existing tests expected legacy gallery hook usage and content-owned services; updated tests/compatibility to reflect canonical data selectors.
-- CSS token test rejected new raw color literals; replaced with existing theme variables.
+## Spec file used
+`_workflow/runs/work/spec.md`
 
-## Scope Creep Check
-No backend, database, dependency, deployment, or unrelated feature changes were made.
+## Task plan used
+`_workflow/runs/work/tasks.md`
 
-## Final Diff Audit
-- `git diff --stat` and `git diff` were run.
+## Tasks reviewed
+- TASK-001: Migrate gallery and booking service selection to service query source — Done.
+
+## Bugs found
+- Initial targeted tests selected dropdown options before async query data rendered. Fixed by waiting for options.
+- Existing tests referenced removed `constants/content.js` gallery/service exports. Fixed to use canonical data helpers.
+
+## Scope creep check
+No scope creep found. Changes were limited to the requested client migration and tests.
+
+## Final diff audit
+- `git diff --stat` showed 9 changed files, all in requested client source/tests.
+- `git diff --check` passed.
 - Diff matches saved spec.
+- No unrelated files were touched.
 - Workflow artifacts were updated.
-- No secrets or credentials were added.
+- Tests were added/updated for changed behavior.
 - No generated junk or temporary files were added.
-- Tests were added/updated for Home, Gallery, Booking, modal preservation, and existing flows.
+- No sensitive values or secrets were added.
 
-## Failure Recovery Notes
-Initial test run failed; failures were classified as test expectation/compatibility/style-token issues and fixed in scope.
+## Failure recovery notes
+- Corrected prefixed Vitest targeted path usage.
+- Updated async assertions for hook-loaded service data.
 
-## Missing Tests
-None for requested acceptance criteria.
+## Missing tests
+None for requested scope.
 
-## Security Concerns
-None identified.
+## Security concerns
+None.
 
-## Architecture Concerns
-`constants/content.js` still exports derived compatibility data for legacy tests/surfaces, but it is no longer the authored source of service truth.
+## Architecture concerns
+None. Booking/Gallery now use the gallery query hook layer for server-state service data.
 
-## Follow-up Tasks
-Consider whether the backend gallery API should eventually read the same catalog or be removed from MVP routing if unused.
+## Follow-up tasks
+- Optional: add a browser screenshot workflow dependency if visual screenshot capture is required in future runs.
 
-## Final Review Verdict
+## Final review verdict
 Passed.

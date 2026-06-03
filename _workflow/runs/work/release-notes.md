@@ -1,39 +1,41 @@
 # Release Notes
 
-Request: Single source of truth for KareBraids services across Home, Gallery, and Booking.
+## Request
+Complete the single-source-of-truth service migration.
 
-## User-Facing Changes
-- Home featured services, gallery previews, Gallery filters, and Booking service choices now share one service catalog.
-- Gallery includes an accessible service filter with All Services and one option per gallery-enabled service.
-- Selecting a service filters images; services without images show: “No gallery images available for this service yet.”
-- Gallery images lazy-load and have fallback behavior if a source fails.
+## User-facing changes
+- Gallery service filtering now uses a service dropdown backed by the gallery services hook.
+- Booking links and booking preselection now use `?service=<id>`.
+- Gallery selected-service empty state now says: “No gallery images available for this service yet.”
 
-## Developer Changes
-- Added `client/src/data/services.js` with canonical service data and selectors.
-- Refactored service/profile compatibility to derive from canonical services.
-- Updated Vitest coverage for shared Home services, Gallery filtering/empty state, and Booking service options.
+## Developer changes
+- Removed service/gallery data dependency from `client/src/constants/content.js`.
+- Booking now sources service cards from `useGalleryServices()`.
+- Gallery now sources service options and gallery items through gallery query hooks.
+- Tests enforce dropdown rendering, URL/query behavior, booking hook service source, service query preselection, and no page imports from `constants/content.js`.
 
-## New Routes/APIs
+## New routes/APIs
 none
 
-## New Env Vars
+## New env vars
 none
 
-## Database/Schema Changes
+## Database/schema changes
 none
 
-## Dependencies Added/Removed
+## Dependencies added/removed
 none
 
-## Test Commands Run
-- `npm test --prefix client`
+## Test commands run
+- `npm run test:server`
+- `npm run test --prefix client`
 - `npm run build --prefix client`
 
-## Known Limitations
-- Existing backend contract still receives service name strings, by design for compatibility.
+## Known limitations
+- Screenshot capture was not produced because this container has no browser automation binary/tool available.
 
-## Follow-up Work
-- Decide whether future backend catalog endpoints should be generated from the same source.
+## Follow-up work
+none
 
-## Suggested Commit Message
-Implement canonical KareBraids services data source
+## Suggested commit message
+Complete single-source service migration

@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
 import * as bookingService from '../src/services/bookingService.js'
 import { getBookableServices } from '../src/data/services.js'
+import { useGalleryServices } from '../src/hooks/queries/useGalleryItems.js'
 
 const bookingStyles = () => readFileSync('src/index.css', 'utf8')
 
@@ -15,7 +16,11 @@ vi.mock('../src/services/bookingService.js', () => ({
   getAvailability: vi.fn(),
 }))
 
-function renderBooking() {
+vi.mock('../src/hooks/queries/useGalleryItems.js', () => ({
+  useGalleryServices: vi.fn(),
+}))
+
+function renderBooking(route = '/booking') {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false },
@@ -25,7 +30,7 @@ function renderBooking() {
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={['/booking']}>
+      <MemoryRouter initialEntries={[route]}>
         <App />
       </MemoryRouter>
     </QueryClientProvider>,
@@ -55,10 +60,14 @@ async function chooseAvailableAppointmentDate(user) {
 }
 
 describe('booking flow', () => {
-  it('renders booking service options from the shared services source', () => {
+  it('renders booking service options from useGalleryServices', () => {
+    const services = getBookableServices().slice(0, 2)
+    useGalleryServices.mockReturnValue({ data: services, isLoading: false, isError: false })
+
     renderBooking()
 
-    getBookableServices().forEach((service) => {
+    expect(useGalleryServices).toHaveBeenCalled()
+    services.forEach((service) => {
       expect(screen.getByRole('button', { name: new RegExp(service.name, 'i') })).toBeInTheDocument()
     })
   })
@@ -68,6 +77,7 @@ describe('booking flow', () => {
       slots: ['09:00', '10:00'],
       message: 'Appointments are available.',
     })
+    useGalleryServices.mockReturnValue({ data: getBookableServices(), isLoading: false, isError: false })
     bookingService.createBooking.mockResolvedValue({
       booking: {
         service: 'Knotless Braids',
@@ -101,6 +111,15 @@ describe('booking flow', () => {
     expect(styles).toContain('@media (max-width: 480px) {\n  .booking-step-list {\n    scroll-snap-type: x proximity;')
     expect(styles).toContain('.step-pill small {\n    display: none;')
     expect(styles).toContain('.calendar-weekdays,\n  .calendar-grid {\n    gap: 0.2rem;')
+  })
+
+  it('preselects a booking service from the service query parameter', () => {
+    useGalleryServices.mockReturnValue({ data: getBookableServices(), isLoading: false, isError: false })
+
+    renderBooking('/booking?service=stitch-braids')
+
+    expect(screen.getByText('Stitch Braids', { selector: 'dd' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /select date/i })).toBeInTheDocument()
   })
 
   it('prevents Sunday selection before showing appointment times', async () => {

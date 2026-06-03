@@ -1,58 +1,62 @@
 # Summary
 
-Request: Implement a single source of truth for KareBraids services across Home, Gallery, and Booking.
-Spec file used: `_workflow/runs/work/spec.md`
-Spec completeness: complete; all required sections included before planning.
-Task plan used: `_workflow/runs/work/tasks.md`
-Review file used: `_workflow/runs/work/review.md`
-Release notes file used: `_workflow/runs/work/release-notes.md`
+## Request
+Complete the single-source-of-truth service migration.
 
-## Tasks Completed
-- TASK-001: Use one services source for Home, Gallery, and Booking — Done.
+## Spec file used
+`_workflow/runs/work/spec.md`
 
-## Iteration Evidence Summary
-- Build: canonical data source and selector consumers implemented; initial test failures captured and recovered.
-- Refine: adjacent services/detail/admin/content compatibility repaired.
-- Polish: accessibility, fallback, empty-state, tokenized CSS, final verification completed.
-Applied skill: design-taste-frontend
+## Detailed spec completeness
+The detailed spec included every required section. Approval gate was documented as skipped due direct complete-and-commit instruction; workflow health is marked Partial for that process deviation.
 
-## Files Changed
-Canonical service data, Home/Gallery/Booking consumers, service compatibility utilities, CSS, and Vitest tests.
+## Task plan used
+`_workflow/runs/work/tasks.md`
 
-## Verification Run
-- `npm test --prefix client` passed: 9 test files, 69 tests.
-- `npm run build --prefix client` passed.
+## Review file used
+`_workflow/runs/work/review.md`
 
-## Acceptance Results
-- [x] Exactly one authored canonical service data source.
-- [x] Home, Gallery, and Booking import canonical selectors.
-- [x] No page/component owns a duplicated service array.
-- [x] Gallery All Services + individual service filter works.
-- [x] Booking preserves current API service name contract.
-- [x] Tests and build pass.
+## Tasks completed
+- TASK-001: Migrate gallery and booking service selection to service query source.
 
-## Failure Recovery Notes
-Initial test run failed due to legacy expectations and CSS token literals; all failures were fixed in scope.
+## Iteration evidence summary
+- Build: added/updated migration tests and hook-based implementation.
+- Refine: fixed async query assertions and test data imports.
+- Polish: ran full requested checks and diff audit.
 
-## Final Diff Audit
-Completed with `git diff --stat` and `git diff`; no unrelated changes, secrets, generated junk, or scope creep identified.
+## Files changed
+- `client/src/constants/content.js`
+- `client/src/pages/Booking.jsx`
+- `client/src/pages/Gallery.jsx`
+- `client/src/pages/ServiceDetail.jsx`
+- `client/test/booking-flow.test.jsx`
+- `client/test/gallery-modal.test.jsx`
+- `client/test/gallery-query.test.jsx`
+- `client/test/service-detail.test.jsx`
+- `client/test/site-pages.test.jsx`
 
-## Unresolved Issues
-No functional unresolved issues. Screenshot was not captured because browser automation is not available; code-surface UI review was used.
+## Verification run
+- `npm run test:server` — passed.
+- `npm run test --prefix client` — passed.
+- `npm run build --prefix client` — passed.
+- `git diff --stat` / `git diff --check` — passed/audited.
 
-## Next Recommended Work
-Consider aligning any future backend service/gallery endpoint with the canonical frontend catalog.
+## Acceptance results
+All requested acceptance criteria met.
 
-## Workflow Health Check
-Status: Passed
-- request synced: yes
-- handoff current: yes
-- spec exists with required sections: yes
-- approval gate: documented; implementation proceeded under direct implement request
-- task plan exists: yes
-- progress/review/release notes/summary created: yes
-- iteration/TDD evidence recorded: yes
-- final diff audit completed: yes
-- dirty worktree checked: yes
-- acceptance and verification completed: yes
-- scope respected: yes
+## Failure recovery notes
+Corrected targeted Vitest paths under `--prefix client` and async service-query assertions.
+
+## Final diff audit
+Diff was scoped to requested client source/tests. No unrelated files, secrets, env changes, dependency changes, or schema changes.
+
+## Release notes file used
+`_workflow/runs/work/release-notes.md`
+
+## Unresolved issues
+Screenshot not captured due unavailable browser automation binary/tool.
+
+## Next recommended work
+None.
+
+## Workflow health
+Partial: implementation, artifacts, verification, review, release notes, summary, and dirty worktree checks were completed; explicit spec approval gate was skipped to honor the user's direct “please complete the task” instruction.

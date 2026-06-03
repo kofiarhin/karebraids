@@ -1,16 +1,3 @@
-import { getBookableServices, getGalleryItems } from '../data/services.js'
-
-export const galleryItems = getGalleryItems()
-export const services = getBookableServices().map((service) => ({
-  id: service.id,
-  category: service.category,
-  title: service.name,
-  description: service.shortDescription,
-  image: service.image,
-  duration: service.durationLabel.replace(/hours/g, 'hrs'),
-  fromPrice: service.fromPrice,
-}))
-
 export const testimonials = [
   {
     name: 'Nadine A.',

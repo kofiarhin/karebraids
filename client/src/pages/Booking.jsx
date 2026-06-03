@@ -8,10 +8,10 @@ import {
   MapPin,
   WarningCircle,
 } from '@phosphor-icons/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Button } from '../components/Button.jsx'
-import { getBookableServices } from '../data/services.js'
+import { useGalleryServices } from '../hooks/queries/useGalleryItems.js'
 import { useCreateBooking } from '../hooks/mutations/useCreateBooking.js'
 import { useAvailability } from '../hooks/queries/useAvailability.js'
 import { getApiErrorMessage } from '../lib/api.js'
@@ -104,11 +104,14 @@ function formatReadableDate(dateValue) {
 
 export function Booking() {
   const [searchParams] = useSearchParams()
-  const requestedStyle = searchParams.get('style')
-  const bookableServices = useMemo(() => getBookableServices(), [])
-  const preselectedService = bookableServices.find((service) => service.id === requestedStyle || service.slug === requestedStyle)
-  const [form, setForm] = useState(() => ({ ...initialForm, service: preselectedService?.name || '' }))
-  const [step, setStep] = useState(preselectedService ? 'date' : 'service')
+  const requestedServiceId = searchParams.get('service')
+  const galleryServices = useGalleryServices()
+  const bookableServices = galleryServices.data || []
+  const preselectedService = bookableServices.find(
+    (service) => service.id === requestedServiceId || service.slug === requestedServiceId,
+  )
+  const [form, setForm] = useState(initialForm)
+  const [step, setStep] = useState('service')
   const [visibleMonth, setVisibleMonth] = useState(getInitialMonth)
   const [formError, setFormError] = useState('')
   const [confirmedBooking, setConfirmedBooking] = useState(null)
@@ -116,6 +119,13 @@ export function Booking() {
   const createBooking = useCreateBooking()
   const currentStepIndex = steps.indexOf(step)
   const today = todayString()
+
+  useEffect(() => {
+    if (!requestedServiceId || !preselectedService || form.service) return
+
+    setForm((current) => ({ ...current, service: preselectedService.name }))
+    setStep('date')
+  }, [form.service, preselectedService, requestedServiceId])
 
   const selectedService = useMemo(
     () => bookableServices.find((service) => service.name === form.service),

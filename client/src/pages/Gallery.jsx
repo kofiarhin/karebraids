@@ -1,13 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { GalleryModal } from '../components/GalleryModal.jsx'
-import {
-  SERVICE_IMAGE_FALLBACK,
-  getGalleryItems,
-  getGalleryItemsByServiceId,
-  getGalleryServices,
-  getServiceById,
-} from '../data/services.js'
+import { SERVICE_IMAGE_FALLBACK } from '../data/services.js'
+import { useGalleryItems, useGalleryServices } from '../hooks/queries/useGalleryItems.js'
 
 function formatPrice(service) {
   if (!service) return ''
@@ -49,12 +44,13 @@ export function Gallery() {
   const [selectedItem, setSelectedItem] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
   const activeTriggerRef = useRef(null)
-  const galleryServices = useMemo(() => getGalleryServices(), [])
+  const galleryServicesQuery = useGalleryServices()
+  const galleryServices = galleryServicesQuery.data || []
   const requestedService = searchParams.get('service')
-  const initialServiceId = galleryServices.some((service) => service.id === requestedService) ? requestedService : 'all'
-  const [selectedServiceId, setSelectedServiceId] = useState(initialServiceId)
-  const selectedService = selectedServiceId === 'all' ? null : getServiceById(selectedServiceId)
-  const galleryItems = selectedServiceId === 'all' ? getGalleryItems() : getGalleryItemsByServiceId(selectedServiceId)
+  const [selectedServiceId, setSelectedServiceId] = useState('all')
+  const selectedService = selectedServiceId === 'all' ? null : galleryServices.find((service) => service.id === selectedServiceId) || null
+  const galleryItemsQuery = useGalleryItems(selectedServiceId === 'all' ? {} : { service: selectedServiceId })
+  const galleryItems = galleryItemsQuery.data || []
 
   useEffect(() => {
     const nextServiceId = galleryServices.some((service) => service.id === requestedService) ? requestedService : 'all'
@@ -118,7 +114,7 @@ export function Gallery() {
             <div><dt>Starting price</dt><dd>{formatPrice(selectedService)}</dd></div>
             <div><dt>Duration</dt><dd>{selectedService.durationLabel}</dd></div>
           </dl>
-          <Link className="btn btn-primary" to={`/booking?style=${selectedService.id}`}>Book This Style</Link>
+          <Link className="btn btn-primary" to={`/booking?service=${selectedService.id}`}>Book This Style</Link>
         </section>
       ) : null}
 

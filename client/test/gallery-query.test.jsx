@@ -1,48 +1,98 @@
-import { render, screen, within } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { readFileSync, readdirSync } from 'node:fs'
+import { join } from 'node:path'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { MemoryRouter, useLocation } from 'react-router-dom'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
 import { getGalleryItems, getGalleryItemsByServiceId, getGalleryServices } from '../src/data/services.js'
+import * as galleryService from '../src/services/galleryService.js'
+
+vi.mock('../src/services/galleryService.js', () => ({
+  getGallery: vi.fn(),
+  getGalleryItems: vi.fn(),
+  getGalleryServices: vi.fn(),
+}))
+
+function LocationProbe() {
+  const location = useLocation()
+  return <span data-testid="location-probe">{location.pathname}{location.search}</span>
+}
 
 function renderRoute(route) {
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+
   return render(
-    <MemoryRouter initialEntries={[route]}>
-      <App />
-    </MemoryRouter>,
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={[route]}>
+        <App />
+        <LocationProbe />
+      </MemoryRouter>
+    </QueryClientProvider>,
   )
 }
 
 describe('service-driven gallery surfaces', () => {
-  it('renders the gallery service dropdown with all services and one option per gallery-enabled service', () => {
+  beforeEach(() => {
+    galleryService.getGalleryServices.mockResolvedValue(getGalleryServices())
+    galleryService.getGalleryItems.mockImplementation(({ service } = {}) =>
+      Promise.resolve(service ? getGalleryItemsByServiceId(service) : getGalleryItems()),
+    )
+  })
+
+  it('renders the gallery service dropdown with all services and one option per gallery-enabled service', async () => {
     renderRoute('/gallery')
 
-    const filter = screen.getByLabelText(/filter gallery by service/i)
+    const filter = await screen.findByLabelText(/filter gallery by service/i)
     expect(filter).toBeInTheDocument()
     expect(within(filter).getByRole('option', { name: /all services/i })).toHaveValue('all')
+    await screen.findByRole('option', { name: getGalleryServices()[0].name })
     getGalleryServices().forEach((service) => {
       expect(within(filter).getByRole('option', { name: service.name })).toHaveValue(service.id)
     })
   })
 
-  it('loads all gallery images by default without service intro', () => {
+  it('loads all gallery images by default without service intro', async () => {
     renderRoute('/gallery')
 
-    expect(within(screen.getByRole('region', { name: /gallery image wall/i })).getAllByRole('button')).toHaveLength(getGalleryItems().length)
+    await waitFor(() => expect(galleryService.getGalleryItems).toHaveBeenCalledWith({ limit: undefined, service: null }))
+    expect(within(await screen.findByRole('region', { name: /gallery image wall/i })).getAllByRole('button')).toHaveLength(getGalleryItems().length)
     expect(screen.queryByText(/selected service/i)).not.toBeInTheDocument()
   })
 
-  it('filters images when a service is selected', async () => {
+  it('changes the URL and API query when a service is selected', async () => {
     const user = userEvent.setup()
     const service = getGalleryServices().find((item) => getGalleryItemsByServiceId(item.id).length > 0)
     const serviceItems = getGalleryItemsByServiceId(service.id)
     renderRoute('/gallery')
 
-    await user.selectOptions(screen.getByLabelText(/filter gallery by service/i), service.id)
+    await screen.findByRole('option', { name: service.name })
+    await user.selectOptions(await screen.findByLabelText(/filter gallery by service/i), service.id)
 
+    expect(screen.getByTestId('location-probe')).toHaveTextContent(`/gallery?service=${service.id}`)
+    await waitFor(() => expect(galleryService.getGalleryItems).toHaveBeenCalledWith({ limit: undefined, service: service.id }))
     expect(screen.getByRole('heading', { name: service.name })).toBeInTheDocument()
-    expect(within(screen.getByRole('region', { name: /gallery image wall/i })).getAllByRole('button')).toHaveLength(serviceItems.length)
+    expect(within(await screen.findByRole('region', { name: /gallery image wall/i })).getAllByRole('button')).toHaveLength(serviceItems.length)
     serviceItems.forEach((item) => expect(screen.getByRole('button', { name: item.title })).toBeInTheDocument())
+  })
+
+  it('clears the URL when all services is selected', async () => {
+    const user = userEvent.setup()
+    renderRoute('/gallery?service=knotless-braids')
+
+    await user.selectOptions(await screen.findByLabelText(/filter gallery by service/i), 'all')
+
+    expect(screen.getByTestId('location-probe')).toHaveTextContent('/gallery')
+    await waitFor(() => expect(galleryService.getGalleryItems).toHaveBeenCalledWith({ limit: undefined, service: null }))
+  })
+
+  it('keeps pages from importing service lists from constants/content.js', () => {
+    const pageFiles = readdirSync('src/pages').filter((file) => file.endsWith('.jsx'))
+
+    pageFiles.forEach((file) => {
+      expect(readFileSync(join('src/pages', file), 'utf8')).not.toMatch(/constants\/content\.js/)
+    })
   })
 
   it('shows a polished empty state if a selected gallery-enabled service has no images', async () => {
@@ -50,9 +100,10 @@ describe('service-driven gallery surfaces', () => {
     const emptyService = getGalleryServices().find((service) => getGalleryItemsByServiceId(service.id).length === 0)
     renderRoute('/gallery')
 
-    await user.selectOptions(screen.getByLabelText(/filter gallery by service/i), emptyService.id)
+    await screen.findByRole('option', { name: emptyService.name })
+    await user.selectOptions(await screen.findByLabelText(/filter gallery by service/i), emptyService.id)
 
-    expect(screen.getByText('No gallery images available for this service yet.')).toBeInTheDocument()
+    expect(await screen.findByText('No gallery images available for this service yet.')).toBeInTheDocument()
     expect(screen.queryByRole('region', { name: /gallery image wall/i })).not.toBeInTheDocument()
   })
 })

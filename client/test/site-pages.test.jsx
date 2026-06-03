@@ -6,23 +6,46 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
-import { galleryItems, services } from '../src/constants/content.js'
+import { getBookableServices, getGalleryItems } from '../src/data/services.js'
+
+const galleryItems = getGalleryItems()
+const services = getBookableServices().map((service) => ({
+  id: service.id,
+  category: service.category,
+  title: service.name,
+  description: service.shortDescription,
+  image: service.image,
+  duration: service.durationLabel.replace(/hours/g, 'hrs'),
+  fromPrice: service.fromPrice,
+}))
 
 vi.mock('../src/hooks/queries/useGalleryItems.js', async () => {
-  const { galleryItems, services } = await import('../src/constants/content.js')
+  const { getBookableServices, getGalleryItems } = await import('../src/data/services.js')
+  const galleryItems = getGalleryItems()
+  const services = getBookableServices().map((service) => ({
+    id: service.id,
+    category: service.category,
+    title: service.name,
+    description: service.shortDescription,
+    image: service.image,
+    duration: service.durationLabel.replace(/hours/g, 'hrs'),
+    fromPrice: service.fromPrice,
+  }))
   const galleryServices = services.map((service, index) => ({
     id: service.id,
+    name: service.title,
     title: service.title,
+    shortDescription: service.description,
     description: service.description,
     startingPrice: Number(service.fromPrice.replace(/[^0-9]/g, '')),
     currency: 'GBP',
     duration: { minHours: 2, maxHours: 5 },
+    durationLabel: '2-5 hours',
     featured: index < 4,
     previewImage: { id: `${service.id}-preview`, title: service.title, description: service.description, image: service.image, aspect: 'medium' },
   }))
   const galleryResponse = { galleryItems, selectedService: null, reviews: [] }
   return {
-    useGallery: () => ({ data: galleryResponse, isLoading: false, isError: false, refetch: vi.fn() }),
     useGalleryItems: ({ limit } = {}) => ({ data: limit ? galleryItems.slice(0, limit) : galleryItems, isLoading: false, isError: false }),
     useGalleryServices: () => ({ data: galleryServices, isLoading: false, isError: false, refetch: vi.fn() }),
   }

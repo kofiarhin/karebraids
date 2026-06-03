@@ -24,7 +24,7 @@ describe('service detail architecture', () => {
     expect(screen.getByRole('heading', { name: /care tips/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /client reviews/i })).toBeInTheDocument()
     expect(screen.getAllByRole('link', { name: /book this style/i })).toHaveLength(2)
-    screen.getAllByRole('link', { name: /book this style/i }).forEach((link) => expect(link).toHaveAttribute('href', '/booking?style=knotless-braids'))
+    screen.getAllByRole('link', { name: /book this style/i }).forEach((link) => expect(link).toHaveAttribute('href', '/booking?service=knotless-braids'))
   })
 
   it('redirects a valid legacy style path to the canonical service detail page', () => {
@@ -39,10 +39,10 @@ describe('service detail architecture', () => {
     expect(screen.getByRole('heading', { level: 1, name: /signature braid services/i })).toBeInTheDocument()
   })
 
-  it('preselects a valid booking style query and preserves the booking wizard', () => {
-    renderRoute('/booking?style=stitch-braids')
+  it('preselects a valid booking service query and preserves the booking wizard', async () => {
+    renderRoute('/booking?service=stitch-braids')
 
-    expect(screen.getByText('Stitch Braids', { selector: 'dd' })).toBeInTheDocument()
+    expect(await screen.findByText('Stitch Braids', { selector: 'dd' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /select date/i })).toBeInTheDocument()
   })
 })

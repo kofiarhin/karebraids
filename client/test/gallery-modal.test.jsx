@@ -5,8 +5,11 @@ import { describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
 
 vi.mock('../src/hooks/queries/useGalleryItems.js', async () => {
-  const { galleryItems } = await import('../src/constants/content.js')
-  return { useGallery: () => ({ data: { galleryItems, selectedService: null, reviews: [] }, isLoading: false, isError: false, refetch: vi.fn() }) }
+  const { getGalleryItems, getGalleryServices } = await import('../src/data/services.js')
+  return {
+    useGalleryItems: () => ({ data: getGalleryItems(), isLoading: false, isError: false, refetch: vi.fn() }),
+    useGalleryServices: () => ({ data: getGalleryServices(), isLoading: false, isError: false, refetch: vi.fn() }),
+  }
 })
 
 function renderGallery() {

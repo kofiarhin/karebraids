@@ -17,7 +17,7 @@ export function ServiceDetail() {
           <p className="eyebrow">KareBraids Style Guide</p>
           <h1>{style.name}</h1>
           <p>{style.description}</p>
-          <Button to={`/booking?style=${style.slug}`}>Book This Style</Button>
+          <Button to={`/booking?service=${style.slug}`}>Book This Style</Button>
         </div>
       </section>
       <section className="service-facts" aria-label={`${style.name} appointment details`}>
@@ -37,7 +37,7 @@ export function ServiceDetail() {
       <section className="service-detail-section" aria-labelledby="style-reviews-title">
         <p className="eyebrow">Client Confidence</p><h2 id="style-reviews-title">Client Reviews</h2><ReviewList reviews={style.reviews} />
       </section>
-      <section className="service-detail-cta"><div><p className="eyebrow">Ready To Reserve?</p><h2>Book {style.name}</h2></div><Button to={`/booking?style=${style.slug}`}>Book This Style</Button></section>
+      <section className="service-detail-cta"><div><p className="eyebrow">Ready To Reserve?</p><h2>Book {style.name}</h2></div><Button to={`/booking?service=${style.slug}`}>Book This Style</Button></section>
     </article>
   )
 }
