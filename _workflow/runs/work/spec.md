@@ -1,160 +1,154 @@
-# Detailed Spec: KareBraids Service-Driven Gallery
-
 ## 1. Metadata
 - Spec filename: `_workflow/runs/work/spec.md`
 - Date: 2026-06-02
-- Request ID / slug: karebraids-service-driven-gallery
-- Request source: latest direct user prompt
+- Request ID / slug: single-source-services
+- Request source: latest user prompt
 - Execution mode: complete-workflow
-- Request classification: frontend/backend feature implementation
+- Request classification: frontend refactor + tests
 - Scope level: medium
 - Risk level: medium
 
 ## 2. Original Request
-- Raw user request: Implement the KareBraids gallery/service feature.
-- Normalized request: Build a service-driven gallery backed by backend service JSON, expose service preview and filtered gallery endpoints, and update frontend query/UI surfaces to use backend-owned data.
+- Raw user request: Implement a single source of truth for KareBraids services across Home, Gallery, and Booking.
+- Normalized request: Create canonical services data and selectors, refactor Home/Gallery/Booking, update tests, run client test/build.
 - Source prompt / `<artifact-root>/request.md` reference: `_workflow/runs/work/request.md`
 
 ## 3. Questions And Answers
-- Questions asked: none; request was sufficiently specific.
+- Questions asked: none; repo and prompt provided enough detail.
 - Answers received: not applicable.
-- Questions skipped: explicit approval gate skipped due non-interactive implementation turn.
-- Remaining open questions: legacy `style` query redirect and booking validation expansion.
+- Questions skipped: all, because remaining details are explicit or safely assumed.
+- Remaining open questions: none blocking.
 
 ## 4. Problem Definition
-- Problem being solved: Gallery data was not service-driven and frontend surfaces still depended on duplicated/static style data.
-- Why it matters: Service cards, gallery filters, and reviews need one backend source of truth.
-- Current pain point: Client filtering and static frontend data can drift from backend content.
-- Expected value: Cleaner API contracts and service-specific gallery/review pages.
+- Problem being solved: Service data is duplicated across content, gallery, booking, and UI surfaces.
+- Why it matters: Prevents drift in names, prices, booking availability, gallery filters, and service presentation.
+- Current pain point: Pages/components and compatibility files own service/gallery arrays independently.
+- Expected value: One maintainable source controls services everywhere.
 
 ## 5. Current State Analysis
-- Existing behavior: `/api/gallery` returned flat gallery items from `server/data/gallery.json`; frontend filtered `style` in React.
-- Existing architecture/components: Express gallery route/controller, React Gallery page, TanStack Query hook, API service module, homepage Browse/Featured cards.
-- Existing files/modules likely involved: server gallery controller/routes/tests/data and client gallery service/hooks/pages/home components/tests.
-- Existing data flow: frontend query called `/gallery`, got a flat list, optionally filtered client-side.
-- Existing API/UI/CLI/workflow behavior: no `/api/gallery/services`; no service metadata/reviews in filtered gallery responses.
-- Existing tests or verification coverage: Jest gallery tests and Vitest page/gallery/modal tests.
+- Existing behavior: Home and Services use gallery query hooks, Gallery uses `useGallery`, Booking imports `services` from content.
+- Existing architecture/components: React pages/components with Tailwind classes and API hooks in services/hooks.
+- Existing files/modules likely involved: required files plus home/service components, constants, tests.
+- Existing data flow: service/gallery data comes from `constants/content.js` and mocked gallery API hooks.
+- Existing API/UI/CLI/workflow behavior: Booking submits service name through `createBooking` and availability uses service/date.
+- Existing tests or verification coverage: Vitest RTL tests for gallery, booking, homepage, services, modal.
 
 ## 6. Desired End State
-- Expected final behavior: Backend owns services and images; frontend asks backend for all or selected service gallery results.
-- User-facing outcome: `/gallery` shows all looks; `/gallery?service=<id>` shows selected service intro, reviews, and filtered images.
-- Developer-facing outcome: API calls live in services/hooks and reusable components consume query hooks.
-- System/workflow outcome: Tests cover endpoint contracts and frontend routing/rendering.
-- Backward compatibility expectations: Existing modal behavior remains; legacy pages still render.
+- Expected final behavior: Canonical services selectors feed Home, Gallery, Booking, Services, and detail compatibility.
+- User-facing outcome: Same premium UI with functional service filter and empty state.
+- Developer-facing outcome: One data module for services and gallery images.
+- System/workflow outcome: Tests/build pass.
+- Backward compatibility expectations: Booking payload keeps existing `service` name.
 
 ## 7. Scope
-- In scope: service JSON, API endpoints, frontend service/query logic, gallery page behavior, preview cards, tests.
-- Out of scope: DB persistence, admin CMS, new dependencies, auth, deployment changes.
-- Non-goals: replacing booking flow or removing legacy service detail routes.
-- Explicit boundaries: do not duplicate new service gallery data in frontend.
+- In scope: canonical data, selector usage, tests, minor CSS for filter/empty/fallback.
+- Out of scope: backend, database, auth, deployment, dependency changes.
+- Non-goals: redesign the app.
+- Explicit boundaries: no new packages or API contract changes.
 
 ## 8. Users And Use Cases
-- Primary users: KareBraids clients browsing braid styles.
-- Secondary users: developer/admin maintaining sample gallery data.
-- Main use cases: browse all gallery images, choose a service card, view selected service gallery/reviews.
-- Edge use cases: unknown service query, loading/error/empty API states.
+- Primary users: clients browsing and booking braid styles.
+- Secondary users: developer/admin maintaining service catalog.
+- Main use cases: browse featured services, filter gallery, book a style.
+- Edge use cases: selected service has no images; image load fails; preselected booking style.
 
 ## 9. Functional Requirements
-- Required behaviors: endpoints return services, all gallery items, or selected service data; UI renders selected-service-only intro/reviews.
-- Inputs: `service` query param and optional positive `limit`.
-- Outputs: JSON service previews and gallery responses.
-- State changes: none persistent.
-- Error states: frontend displays retryable error states.
-- Permissions/auth expectations: public endpoints.
+- Required behaviors: selector exports, dropdown filters, booking reset date/time on service change, lazy gallery images, fallback image.
+- Inputs: route query service/style, dropdown selection, booking form values.
+- Outputs: rendered services/images and booking payload.
+- State changes: selected gallery service, selected booking service/date/time.
+- Error states: no gallery images empty state, failed image placeholder.
+- Permissions/auth expectations: none.
 
 ## 10. Non-Functional Requirements
-- Performance expectations: static JSON and simple flattening are sufficient.
-- Reliability expectations: unknown service query should not break gallery display.
-- Security/privacy expectations: no secrets or sensitive user data.
-- Accessibility expectations: card links/buttons have accessible names; modal focus behavior preserved.
-- Maintainability expectations: API logic outside components; reusable hooks.
-- DX expectations: Jest/Vitest coverage for API and UI behavior.
+- Performance expectations: local selectors are cheap; images lazy-load.
+- Reliability expectations: no duplicated arrays to drift.
+- Security/privacy expectations: no secrets.
+- Accessibility expectations: labelled select, meaningful alt text, modal Escape close remains.
+- Maintainability expectations: clear module/selector names.
+- DX expectations: tests document behavior.
 
 ## 11. Affected Surfaces
-- Files likely affected: `server/data/services.json`, gallery controller/routes/tests, frontend gallery service/hooks/pages/components/tests.
-- Directories likely affected: `server/`, `client/src/`, `client/test/`.
-- UI surfaces: gallery page, homepage Browse By Style, homepage Featured Services, services page.
-- API routes: `/api/gallery`, `/api/gallery/services`.
-- Components: Gallery, BrowseByStyle, FeaturedServices, Services, ReviewList.
-- Services: frontend gallery service module.
+- Files likely affected: `client/src/data/services.js`, pages/components/constants/tests/CSS.
+- Directories likely affected: `client/src`, `client/test`, `_workflow/runs/work`.
+- UI surfaces: Home, Gallery, Booking, Services, service detail compatibility.
+- API routes: none.
+- Components: GalleryModal and home service/gallery components.
+- Services: gallery service compatibility may use local selectors.
 - Database/schema: none.
 - Config/env vars: none.
-- Tests: Jest gallery tests and Vitest page/gallery tests.
+- Tests: Vitest RTL tests.
 - Docs: workflow artifacts.
 
 ## 12. Dependency And Integration Map
-- Internal dependencies: Express route -> controller -> service JSON; React UI -> TanStack hooks -> gallery service -> shared API client.
-- External packages/services: Pexels image URLs only; no new package.
-- Integration points: Vite env `VITE_API_URL` base URL, Express `/api/gallery` mount.
-- Ordering constraints: data first, backend endpoints/tests, frontend service/hooks, UI, tests.
+- Internal dependencies: App routes, query hooks, booking hooks, service preview utility.
+- External packages/services: existing React, React Router, TanStack Query, Phosphor.
+- Integration points: booking service expects name string.
+- Ordering constraints: data module first, then UI, then tests.
 - Migration/setup requirements: none.
 
 ## 13. Data And State Impact
-- Data models: static service JSON with service metadata, image arrays, review arrays.
+- Data models: canonical service shape with id/slug/name/category/priceFrom/duration/galleryImages.
 - Database changes: none.
-- State management changes: TanStack Query keys include service/limit.
+- State management changes: Gallery local selected service id; Booking form keeps service name.
 - Cache/session/local storage impact: none.
-- Backward compatibility impact: flat gallery response remains under `galleryItems`.
+- Backward compatibility impact: preserve booking route query and payload.
 
 ## 14. UX / API / Workflow Expectations
-- UX expectations: service intro/reviews only on selected service gallery; accessible gallery buttons and cards.
-- API contract expectations: preview endpoint omits large nested arrays; selected gallery includes metadata/reviews.
-- CLI/workflow behavior: tests/lint/build pass.
-- Error handling expectations: loading/error/empty states remain.
-- Empty/loading/success/failure states: covered in components/tests.
+- UX expectations: all services option, polished empty state, brand styles retained.
+- API contract expectations: booking submits stable service name.
+- CLI/workflow behavior: tests and build pass.
+- Error handling expectations: image failure falls back/placeholder; empty images message.
+- Empty/loading/success/failure states: local gallery no loading; empty state for filtered no images.
 
 ## 15. Execution Strategy
-- Recommended implementation approach: TDD endpoint tests, controller/data update, frontend hook tests, UI update, regression verification.
-- Suggested sequencing: backend first, frontend service/hooks second, UI third, final verification.
-- Safe rollout/migration approach: preserve `/api/gallery` response key and modal behavior.
-- Files to inspect before editing: gallery controller/routes/tests, Gallery page, gallery service/hook, homepage cards.
-- Decisions to avoid until more evidence exists: database persistence and admin editing.
+- Recommended implementation approach: create module, refactor import surfaces, then tests.
+- Suggested sequencing: data -> Home/Gallery/Booking -> compatibility -> tests -> verify.
+- Safe rollout/migration approach: keep old field compatibility where needed.
+- Files to inspect before editing: prompt-required files and dependent home/services tests.
+- Decisions to avoid until more evidence exists: backend API changes.
 
 ## 16. Verification Strategy
-- Required automated checks: targeted Jest, full Jest, targeted Vitest, full Vitest, frontend lint, frontend build.
-- Required manual checks: code-surface review for selected service rendering and routing.
-- Test types needed: API contract tests and UI integration tests.
-- Build/lint/typecheck expectations: lint and build pass.
-- Acceptance evidence required: test outputs and final diff audit.
-- Proof of completion: committed changes and PR record.
+- Required automated checks: `npm test --prefix client`, `npm run build --prefix client`.
+- Required manual checks: code review/diff audit.
+- Test types needed: RTL tests for Home/Gallery/Booking/modal.
+- Build/lint/typecheck expectations: Vite build pass.
+- Acceptance evidence required: test/build output and diff audit.
+- Proof of completion: committed changes and PR.
 
 ## 17. Acceptance Criteria
-- [x] `server/data/services.json` exists with eight required services.
-- [x] Each service has required metadata, 10 images, and 3 reviews.
-- [x] `GET /api/gallery/services` returns service previews.
-- [x] `GET /api/gallery` returns all service images.
-- [x] `GET /api/gallery?service=knotless-braids` returns selected service images, metadata, and reviews.
-- [x] Frontend gallery query uses `service` param and no client style filtering.
-- [x] Selected service intro/reviews render only for selected service.
-- [x] Preview cards route to `/gallery?service=<id>` and use preview images.
-- [x] Modal behavior remains preserved.
+- [ ] One canonical service data source exists.
+- [ ] Home, Gallery, Booking import selectors from it.
+- [ ] Gallery filter works for all + individual services and empty state.
+- [ ] Booking keeps API contract.
+- [ ] Tests/build pass.
 
 ## 18. Edge Cases And Failure Modes
-- Edge cases: unknown service, invalid limit, empty services, missing preview image.
-- Failure modes: API unavailable, stale frontend mocks, bad service id.
-- Regression risks: legacy tests expecting `style` query; modal focus behavior.
-- Recovery expectations: retry button where available and fallback all-gallery response for unknown service.
+- Edge cases: empty service gallery, bad image, invalid query slug.
+- Failure modes: tests expect old hook mocks, booking payload changes unexpectedly.
+- Regression risks: service detail imports old content, CSS missing for select.
+- Recovery expectations: adapt compatibility selectors and tests.
 
 ## 19. Risks And Mitigations
-- Technical risks: hardcoded sample Pexels ids may not be ideal production content; acceptable for sample data.
-- Product/UX risks: services page category grouping changed to backend-driven single service section; accepted for data-driven service source.
-- Security risks: none introduced.
-- Scope risks: booking validation for all new services deferred.
-- Mitigation plan: tests cover current requested surfaces and document follow-ups.
+- Technical risks: duplicated service profile arrays remain. Mitigation: derive profiles from canonical services.
+- Product/UX risks: style drift. Mitigation: reuse existing classes and colors.
+- Security risks: none.
+- Scope risks: services page also data-dependent. Mitigation: update affected adjacent surfaces.
+- Mitigation plan: run full tests/build.
 
 ## 20. Assumptions
-- Explicit assumptions: sample Pexels URLs are enough; unknown service can fall back to all images.
-- Confidence level: high for implementation, medium for product details.
-- What to revisit if assumptions are wrong: endpoint error contract and service categories.
+- Explicit assumptions: service name is backend booking value.
+- Confidence level: high.
+- What to revisit if assumptions are wrong: booking API payload mapping.
 
 ## 21. Open Questions
-- Blocking questions: none for implementation.
-- Non-blocking questions: legacy style redirect and booking service ids.
-- Execution impact: future cleanup only.
+- Blocking questions: none.
+- Non-blocking questions: whether future backend gallery API should coexist.
+- Execution impact: none.
 
 ## 22. Task Extraction Notes
-- Suggested vertical task boundaries: backend service data/API; frontend query/UI; verification/artifacts.
-- Suggested first task: Add service JSON and API tests.
-- Suggested task ordering: backend -> frontend hooks -> UI/tests -> final audit.
-- Areas that should not become separate tasks: visual redesign beyond requested behavior.
-- How the 3-pass Build -> Refine -> Polish loop should apply: each task records Red/Green/Refactor evidence and final verification.
+- Suggested vertical task boundaries: single vertical refactor task with tests.
+- Suggested first task: add canonical data and selector exports.
+- Suggested task ordering: data, UI consumers, tests, verification.
+- Areas that should not become separate tasks: backend changes.
+- How the 3-pass Build -> Refine -> Polish loop should apply: red tests, implementation, refine compatibility, polish review.

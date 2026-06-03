@@ -6,6 +6,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
 import * as bookingService from '../src/services/bookingService.js'
+import { getBookableServices } from '../src/data/services.js'
 
 const bookingStyles = () => readFileSync('src/index.css', 'utf8')
 
@@ -54,6 +55,14 @@ async function chooseAvailableAppointmentDate(user) {
 }
 
 describe('booking flow', () => {
+  it('renders booking service options from the shared services source', () => {
+    renderBooking()
+
+    getBookableServices().forEach((service) => {
+      expect(screen.getByRole('button', { name: new RegExp(service.name, 'i') })).toBeInTheDocument()
+    })
+  })
+
   beforeEach(() => {
     bookingService.getAvailability.mockResolvedValue({
       slots: ['09:00', '10:00'],

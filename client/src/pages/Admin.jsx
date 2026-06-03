@@ -16,10 +16,11 @@ import {
 } from '../hooks/mutations/useAdminBookingMutations.js'
 import { useAdminBookings } from '../hooks/queries/useAdminBookings.js'
 import { getApiErrorMessage } from '../lib/api.js'
-import { services } from '../constants/content.js'
+import { getBookableServices } from '../data/services.js'
 
 const ADMIN_TOKEN_KEY = 'karebraids-admin-token'
 const statuses = ['pending', 'confirmed', 'cancelled', 'completed']
+const services = getBookableServices()
 function normalizeBooking(booking) {
   return {
     service: booking?.service || 'Knotless Braids',
@@ -118,8 +119,8 @@ function BookingForm({ booking, isSaving, onCancelEdit, onSubmit }) {
           <span>Service</span>
           <select onChange={(event) => updateField('service', event.target.value)} value={form.service}>
             {services.map((service) => (
-              <option key={service.title} value={service.title}>
-                {service.title}
+              <option key={service.id} value={service.name}>
+                {service.name}
               </option>
             ))}
           </select>

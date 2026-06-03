@@ -11,7 +11,7 @@ import {
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Button } from '../components/Button.jsx'
-import { services } from '../constants/content.js'
+import { getBookableServices } from '../data/services.js'
 import { useCreateBooking } from '../hooks/mutations/useCreateBooking.js'
 import { useAvailability } from '../hooks/queries/useAvailability.js'
 import { getApiErrorMessage } from '../lib/api.js'
@@ -105,8 +105,9 @@ function formatReadableDate(dateValue) {
 export function Booking() {
   const [searchParams] = useSearchParams()
   const requestedStyle = searchParams.get('style')
-  const preselectedService = services.find((service) => service.id === requestedStyle)
-  const [form, setForm] = useState(() => ({ ...initialForm, service: preselectedService?.title || '' }))
+  const bookableServices = useMemo(() => getBookableServices(), [])
+  const preselectedService = bookableServices.find((service) => service.id === requestedStyle || service.slug === requestedStyle)
+  const [form, setForm] = useState(() => ({ ...initialForm, service: preselectedService?.name || '' }))
   const [step, setStep] = useState(preselectedService ? 'date' : 'service')
   const [visibleMonth, setVisibleMonth] = useState(getInitialMonth)
   const [formError, setFormError] = useState('')
@@ -117,8 +118,8 @@ export function Booking() {
   const today = todayString()
 
   const selectedService = useMemo(
-    () => services.find((service) => service.title === form.service),
-    [form.service],
+    () => bookableServices.find((service) => service.name === form.service),
+    [bookableServices, form.service],
   )
 
   const calendarDays = useMemo(() => buildCalendarDays(visibleMonth), [visibleMonth])
@@ -130,7 +131,7 @@ export function Booking() {
   }
 
   const selectService = (service) => {
-    setForm((current) => ({ ...current, service: service.title, time: '' }))
+    setForm((current) => ({ ...current, service: service.name, date: '', time: '' }))
     setFormError('')
     setStep('date')
   }
@@ -285,16 +286,16 @@ export function Booking() {
                 <p className="step-context">Start with the braid style you want reserved.</p>
               </div>
               <div className="booking-service-grid">
-                {services.map((service) => (
+                {bookableServices.map((service) => (
                   <button
                     className="booking-service"
-                    key={service.title}
+                    key={service.id}
                     onClick={() => selectService(service)}
                     type="button"
                   >
-                    <strong>{service.title}</strong>
-                    <span>{service.description}</span>
-                    <small>{service.duration}</small>
+                    <strong>{service.name}</strong>
+                    <span>{service.shortDescription}</span>
+                    <small>{service.durationLabel}</small>
                   </button>
                 ))}
               </div>
@@ -307,7 +308,7 @@ export function Booking() {
                 <p className="eyebrow">Step 2</p>
                 <h2>Select date</h2>
                 <p className="step-context">
-                  {selectedService?.title}. Monday to Saturday appointments.
+                  {selectedService?.name}. Monday to Saturday appointments.
                 </p>
               </div>
               <div className="booking-calendar" aria-label="Appointment calendar">

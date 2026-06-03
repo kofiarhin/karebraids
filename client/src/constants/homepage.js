@@ -1,4 +1,6 @@
-import { galleryItems } from './content.js'
+import { getGalleryItems } from '../data/services.js'
+
+const galleryItems = getGalleryItems()
 
 export const homepageImages = {
   hero: {

@@ -46,7 +46,7 @@ export function GalleryModal({ item, onClose }) {
         >
           <X aria-hidden="true" size={20} weight="bold" />
         </button>
-        <img alt={item.title} src={item.image} />
+        <img alt={item.alt || item.title} src={item.src || item.image} />
         <div className="modal-copy">
           <p className="eyebrow">KareBraids Gallery</p>
           <h2 id="gallery-modal-title">{item.title}</h2>

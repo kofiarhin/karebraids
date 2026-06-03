@@ -101,7 +101,7 @@
   --theme-espresso-deep-solid: #241408;
   --theme-cream-warm-a026: rgba(255, 238, 220, 0.26);
   --theme-cocoa-elevated-a08: rgba(72, 49, 30, 0.8);
-  --theme-shadow-black-a02: rgba(0, 0, 0, 0.2);
+  --theme-shadow-black-a02: var(--theme-shadow-black-a02);
   --theme-gold-a038: rgba(183, 134, 82, 0.38);
   --theme-gold-a012: rgba(183, 134, 82, 0.12);
   --theme-espresso-deep-a068: rgba(36, 20, 8, 0.68);
@@ -4658,3 +4658,67 @@ button:disabled,
 @media (max-width: 900px) { .browse-style-grid, .booking-steps-grid, .featured-services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 680px) { .browse-style-section, .booking-steps-section { width: min(100% - 1rem, 1240px); } .browse-style-grid, .gallery-feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; } .browse-style-card { min-height: 13rem; } .browse-style-card span { right: .7rem; bottom: .7rem; left: .7rem; } .browse-style-card strong { font-size: .9rem; } .browse-style-card small { font-size: .7rem; } }
 @media (prefers-reduced-motion: reduce) { .browse-style-card img, .testimonial-content { transition-duration: .01ms; animation: none; } }
+
+.gallery-filter-panel {
+  width: min(100%, 34rem);
+  margin: 0 auto 2rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: var(--color-overlay-dark);
+  box-shadow: 0 24px 60px var(--theme-shadow-black-a02);
+}
+
+.gallery-filter-panel label {
+  display: block;
+  margin: 0 1rem 0.45rem;
+  color: var(--theme-cream-highlight-a072);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gallery-filter-panel select {
+  width: 100%;
+  min-height: 3rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-text-primary);
+  color: var(--brand-950);
+  font-weight: 800;
+  padding: 0 1.1rem;
+}
+
+.gallery-filter-panel select:focus-visible {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 4px;
+}
+
+.gallery-empty-state {
+  max-width: 42rem;
+  margin-inline: auto;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, var(--surface-lift), var(--theme-gold-a01));
+}
+
+.gallery-image-placeholder {
+  display: grid;
+  min-height: 100%;
+  place-items: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--theme-gold-a02), var(--color-surface-elevated-strong));
+  color: var(--theme-cream-highlight-a086);
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .gallery-filter-panel {
+    border-radius: 1.25rem;
+  }
+}

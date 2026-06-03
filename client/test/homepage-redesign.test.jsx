@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
+import { getFeaturedServices } from '../src/data/services.js'
 
 const { useGalleryItems, useGalleryServices } = vi.hoisted(() => {
   const galleryItems = Array.from({ length: 5 }, (_, index) => ({ id: `gallery-${index}`, title: `Gallery ${index}`, description: 'Client braid look.', image: `https://example.com/${index}.jpg`, aspect: 'medium', serviceId: 'knotless-braids', serviceTitle: 'Knotless Braids' }))
@@ -17,6 +18,15 @@ vi.mock('../src/hooks/queries/useGalleryItems.js', () => ({ useGalleryItems, use
 function renderHome() { return render(<MemoryRouter><App /></MemoryRouter>) }
 
 describe('homepage below-hero redesign', () => {
+  it('renders featured services from the shared services source', () => {
+    renderHome()
+    const featuredSection = document.querySelector('.featured-services-section')
+
+    getFeaturedServices().forEach((service) => {
+      expect(within(featuredSection).getByRole('heading', { name: service.name })).toBeInTheDocument()
+    })
+  })
+
   it('renders the requested conversion sections in order with six style links and four gallery items', () => {
     const { container } = renderHome()
     const sections = [...container.querySelectorAll('.luxury-homepage > section')]

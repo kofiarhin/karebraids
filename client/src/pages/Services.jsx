@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useGalleryServices } from '../hooks/queries/useGalleryItems.js'
+import { getGalleryServices } from '../data/services.js'
 import { getServicePreviewImage } from '../utils/servicePreview.js'
 
 function formatPrice(service) {
@@ -10,12 +10,8 @@ function formatPrice(service) {
   }).format(service.startingPrice)
 }
 
-function formatDuration(duration) {
-  return `${duration.minHours}-${duration.maxHours} hrs`
-}
-
 export function Services() {
-  const { data: services = [], isError, isLoading, refetch } = useGalleryServices()
+  const services = getGalleryServices()
   const heroService = services[0]
 
   return (
@@ -48,15 +44,7 @@ export function Services() {
         </p>
       </section>
 
-      {isLoading ? <p className="gallery-query-state" role="status">Loading services...</p> : null}
-      {isError ? (
-        <div className="gallery-query-state" role="alert">
-          <p>We could not load services right now.</p>
-          <button className="btn btn-secondary" onClick={() => refetch()} type="button">Try Again</button>
-        </div>
-      ) : null}
-
-      {!isLoading && !isError && services.length > 0 ? (
+      {services.length > 0 ? (
         <section className="service-category" aria-labelledby="service-category-braids">
           <div className="service-category-heading">
             <p className="eyebrow">Explore Styles</p>
@@ -66,16 +54,16 @@ export function Services() {
             {services.map((service) => (
               <article className="service-card" key={service.id}>
                 <div className="service-card-image">
-                  <img alt={`${service.title} protective braiding style`} loading="lazy" src={getServicePreviewImage(service)} />
+                  <img alt={`${service.name} protective braiding style`} loading="lazy" src={getServicePreviewImage(service)} />
                 </div>
                 <div className="service-card-copy">
                   <div className="service-card-heading">
-                    <h3>{service.title}</h3>
+                    <h3>{service.name}</h3>
                     <p>From {formatPrice(service)}</p>
                   </div>
-                  <p>{service.description}</p>
+                  <p>{service.shortDescription}</p>
                   <div className="service-card-footer">
-                    <span>{formatDuration(service.duration)}</span>
+                    <span>{service.durationLabel}</span>
                     <Link className="text-link" to={`/gallery?service=${service.id}`}>
                       View Gallery
                     </Link>

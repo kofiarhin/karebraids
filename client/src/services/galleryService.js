@@ -1,19 +1,28 @@
-import { api } from '../lib/api.js'
+import {
+  getGalleryItems as getCanonicalGalleryItems,
+  getGalleryItemsByServiceId,
+  getGalleryServices as getCanonicalGalleryServices,
+  getServiceById,
+} from '../data/services.js'
 
-function buildGalleryParams({ limit, service } = {}) {
-  return {
-    ...(Number.isInteger(limit) && limit > 0 ? { limit } : {}),
-    ...(typeof service === 'string' && service.trim() ? { service } : {}),
-  }
+function normalizeLimit(limit) {
+  return Number.isInteger(limit) && limit > 0 ? limit : undefined
+}
+
+function normalizeService(service) {
+  return typeof service === 'string' && service.trim() ? service : null
 }
 
 export async function getGallery({ limit, service } = {}) {
-  const params = buildGalleryParams({ limit, service })
-  const response = await api.get('/gallery', {
-    params: Object.keys(params).length > 0 ? params : undefined,
-  })
+  const selectedServiceId = normalizeService(service)
+  const allItems = selectedServiceId ? getGalleryItemsByServiceId(selectedServiceId) : getCanonicalGalleryItems()
+  const itemLimit = normalizeLimit(limit)
 
-  return response.data
+  return {
+    galleryItems: itemLimit ? allItems.slice(0, itemLimit) : allItems,
+    selectedService: selectedServiceId ? getServiceById(selectedServiceId) ?? null : null,
+    reviews: [],
+  }
 }
 
 export async function getGalleryItems(options = {}) {
@@ -22,6 +31,5 @@ export async function getGalleryItems(options = {}) {
 }
 
 export async function getGalleryServices() {
-  const response = await api.get('/gallery/services')
-  return response.data.services
+  return getCanonicalGalleryServices()
 }

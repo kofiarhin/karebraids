@@ -1,8 +1,13 @@
-import { useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { GalleryModal } from '../components/GalleryModal.jsx'
-import { ReviewList } from '../components/reviews/ReviewList.jsx'
-import { useGallery } from '../hooks/queries/useGalleryItems.js'
+import {
+  SERVICE_IMAGE_FALLBACK,
+  getGalleryItems,
+  getGalleryItemsByServiceId,
+  getGalleryServices,
+  getServiceById,
+} from '../data/services.js'
 
 function formatPrice(service) {
   if (!service) return ''
@@ -13,21 +18,58 @@ function formatPrice(service) {
   }).format(service.startingPrice)
 }
 
-function formatDuration(duration) {
-  if (!duration) return ''
-  return `${duration.minHours}-${duration.maxHours} hrs`
+function SafeGalleryImage({ item }) {
+  const [hasError, setHasError] = useState(false)
+
+  if (hasError) {
+    return (
+      <span className="gallery-image-placeholder" role="img" aria-label={`${item.title} image unavailable`}>
+        Image coming soon
+      </span>
+    )
+  }
+
+  return (
+    <img
+      alt={item.alt}
+      loading="lazy"
+      onError={(event) => {
+        if (event.currentTarget.src !== SERVICE_IMAGE_FALLBACK) {
+          event.currentTarget.src = SERVICE_IMAGE_FALLBACK
+          return
+        }
+        setHasError(true)
+      }}
+      src={item.src}
+    />
+  )
 }
 
 export function Gallery() {
   const [selectedItem, setSelectedItem] = useState(null)
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const activeTriggerRef = useRef(null)
+  const galleryServices = useMemo(() => getGalleryServices(), [])
   const requestedService = searchParams.get('service')
-  const service = typeof requestedService === 'string' && requestedService.trim() ? requestedService : null
-  const { data, isError, isLoading, refetch } = useGallery({ service })
-  const galleryItems = data?.galleryItems ?? []
-  const selectedService = data?.selectedService ?? null
-  const reviews = data?.reviews ?? []
+  const initialServiceId = galleryServices.some((service) => service.id === requestedService) ? requestedService : 'all'
+  const [selectedServiceId, setSelectedServiceId] = useState(initialServiceId)
+  const selectedService = selectedServiceId === 'all' ? null : getServiceById(selectedServiceId)
+  const galleryItems = selectedServiceId === 'all' ? getGalleryItems() : getGalleryItemsByServiceId(selectedServiceId)
+
+  useEffect(() => {
+    const nextServiceId = galleryServices.some((service) => service.id === requestedService) ? requestedService : 'all'
+    setSelectedServiceId(nextServiceId)
+  }, [galleryServices, requestedService])
+
+  const updateSelectedService = (serviceId) => {
+    setSelectedServiceId(serviceId)
+    setSelectedItem(null)
+    if (serviceId === 'all') {
+      setSearchParams({})
+      return
+    }
+    setSearchParams({ service: serviceId })
+  }
 
   const openModal = (item, trigger) => {
     activeTriggerRef.current = trigger
@@ -46,35 +88,46 @@ export function Gallery() {
       <div className="gallery-title-wrap">
         <p className="eyebrow">Client Gallery</p>
         <h1>GALLERY</h1>
-        {selectedService ? <p className="gallery-filter-note">Showing {selectedService.title}</p> : null}
+        {selectedService ? <p className="gallery-filter-note">Showing {selectedService.name}</p> : null}
+      </div>
+
+      <div className="gallery-filter-panel">
+        <label htmlFor="gallery-service-filter">Filter gallery by service</label>
+        <select
+          id="gallery-service-filter"
+          onChange={(event) => updateSelectedService(event.target.value)}
+          value={selectedServiceId}
+        >
+          <option value="all">All Services</option>
+          {galleryServices.map((service) => (
+            <option key={service.id} value={service.id}>
+              {service.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       {selectedService ? (
         <section className="gallery-service-intro" aria-labelledby="gallery-service-title">
           <div>
             <p className="eyebrow">Selected Service</p>
-            <h2 id="gallery-service-title">{selectedService.title}</h2>
-            <p>{selectedService.description}</p>
+            <h2 id="gallery-service-title">{selectedService.name}</h2>
+            <p>{selectedService.shortDescription}</p>
           </div>
           <dl>
             <div><dt>Starting price</dt><dd>{formatPrice(selectedService)}</dd></div>
-            <div><dt>Duration</dt><dd>{formatDuration(selectedService.duration)}</dd></div>
+            <div><dt>Duration</dt><dd>{selectedService.durationLabel}</dd></div>
           </dl>
           <Link className="btn btn-primary" to={`/booking?style=${selectedService.id}`}>Book This Style</Link>
         </section>
       ) : null}
 
-      {isLoading ? <p className="gallery-query-state" role="status">Loading gallery images...</p> : null}
-      {isError ? (
-        <div className="gallery-query-state" role="alert">
-          <p>We could not load the gallery right now.</p>
-          <button className="btn btn-secondary" onClick={() => refetch()} type="button">Try Again</button>
-        </div>
+      {galleryItems.length === 0 ? (
+        <p className="gallery-query-state gallery-empty-state" role="status">
+          {selectedService ? 'No gallery images available for this service yet.' : 'New client looks are being prepared. Please check back soon.'}
+        </p>
       ) : null}
-      {!isLoading && !isError && galleryItems.length === 0 ? (
-        <p className="gallery-query-state" role="status">New client looks are being prepared. Please check back soon.</p>
-      ) : null}
-      {!isLoading && !isError && galleryItems.length > 0 ? (
+      {galleryItems.length > 0 ? (
         <div aria-label="Gallery image wall" className="gallery-grid" role="region">
           {galleryItems.map((item, index) => (
             <button
@@ -85,7 +138,7 @@ export function Gallery() {
               style={{ '--index': index }}
               type="button"
             >
-              <img alt={item.title} loading="lazy" src={item.image} />
+              <SafeGalleryImage item={item} />
               <span>
                 <strong>{item.title}</strong>
                 <small>{item.description}</small>
@@ -93,14 +146,6 @@ export function Gallery() {
             </button>
           ))}
         </div>
-      ) : null}
-
-      {selectedService && reviews.length > 0 ? (
-        <section className="gallery-service-reviews" aria-labelledby="gallery-service-reviews-title">
-          <p className="eyebrow">Client Notes</p>
-          <h2 id="gallery-service-reviews-title">Client Reviews</h2>
-          <ReviewList reviews={reviews} />
-        </section>
       ) : null}
 
       <GalleryModal item={selectedItem} onClose={closeModal} />

@@ -1,5 +1,7 @@
 import { Button } from '../components/Button.jsx'
-import { galleryItems } from '../constants/content.js'
+import { getGalleryItems } from '../data/services.js'
+
+const galleryItems = getGalleryItems()
 
 export function About() {
   return (

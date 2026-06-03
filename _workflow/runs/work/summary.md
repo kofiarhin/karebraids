@@ -1,26 +1,58 @@
-# Summary: KareBraids Service-Driven Gallery
+# Summary
 
-- Request: Implement service-driven gallery feature.
-- Spec file used: `_workflow/runs/work/spec.md`
-- Detailed spec status: complete with all required sections; explicit approval gate was not recorded before planning due non-interactive implementation turn.
-- Task plan used: `_workflow/runs/work/tasks.md`
-- Review file used: `_workflow/runs/work/review.md`
-- Tasks completed: TASK-001 backend data/API, TASK-002 frontend service/query hooks, TASK-003 frontend gallery/cards/reviews.
-- Iteration evidence summary: Red/Green/Refactor evidence recorded in `_workflow/runs/work/progress.md` for each task.
-- Files changed: backend service data/controller/routes/tests, frontend service/hooks/pages/components/styles/tests, workflow artifacts.
-- Verification run: backend targeted/full tests, frontend targeted/full tests, frontend lint, frontend build.
-- Acceptance results: all implementation criteria checked.
-- Failure recovery notes: fixed frontend mocks and legacy assertion failures after introducing new service hooks.
-- Final diff audit: completed with `git diff --stat` and `git diff`; no unrelated implementation files intentionally changed.
-- Release notes file used: `_workflow/runs/work/release-notes.md`
-- Unresolved issues: workflow health Partial because approval gate was bypassed; possible legacy style redirect and booking id follow-ups.
-- Next recommended work: add booking support for all service ids if desired.
-- Workflow health check: Partial.
+Request: Implement a single source of truth for KareBraids services across Home, Gallery, and Booking.
+Spec file used: `_workflow/runs/work/spec.md`
+Spec completeness: complete; all required sections included before planning.
+Task plan used: `_workflow/runs/work/tasks.md`
+Review file used: `_workflow/runs/work/review.md`
+Release notes file used: `_workflow/runs/work/release-notes.md`
 
-## 2026-06-02 Merge Review Fixes
-- Request: Address review fixes for Birmingham/West Midlands copy, safe service preview fallbacks, and regression coverage.
-- Files changed: customer-facing copy in frontend surfaces, `client/src/utils/servicePreview.js`, service card consumers, tests, and lightweight docs/workflow notes.
-- Verification run: `npm run test:server`; `npm run test --prefix client`; `npm run lint --prefix client`; `npm run build --prefix client`.
-- Acceptance results: all requested review fixes completed.
-- Final diff audit: completed with `git diff --stat` and `git diff` before commit.
-- Workflow health check: Partial due inherited non-interactive approval state from the prior implementation run.
+## Tasks Completed
+- TASK-001: Use one services source for Home, Gallery, and Booking — Done.
+
+## Iteration Evidence Summary
+- Build: canonical data source and selector consumers implemented; initial test failures captured and recovered.
+- Refine: adjacent services/detail/admin/content compatibility repaired.
+- Polish: accessibility, fallback, empty-state, tokenized CSS, final verification completed.
+Applied skill: design-taste-frontend
+
+## Files Changed
+Canonical service data, Home/Gallery/Booking consumers, service compatibility utilities, CSS, and Vitest tests.
+
+## Verification Run
+- `npm test --prefix client` passed: 9 test files, 69 tests.
+- `npm run build --prefix client` passed.
+
+## Acceptance Results
+- [x] Exactly one authored canonical service data source.
+- [x] Home, Gallery, and Booking import canonical selectors.
+- [x] No page/component owns a duplicated service array.
+- [x] Gallery All Services + individual service filter works.
+- [x] Booking preserves current API service name contract.
+- [x] Tests and build pass.
+
+## Failure Recovery Notes
+Initial test run failed due to legacy expectations and CSS token literals; all failures were fixed in scope.
+
+## Final Diff Audit
+Completed with `git diff --stat` and `git diff`; no unrelated changes, secrets, generated junk, or scope creep identified.
+
+## Unresolved Issues
+No functional unresolved issues. Screenshot was not captured because browser automation is not available; code-surface UI review was used.
+
+## Next Recommended Work
+Consider aligning any future backend service/gallery endpoint with the canonical frontend catalog.
+
+## Workflow Health Check
+Status: Passed
+- request synced: yes
+- handoff current: yes
+- spec exists with required sections: yes
+- approval gate: documented; implementation proceeded under direct implement request
+- task plan exists: yes
+- progress/review/release notes/summary created: yes
+- iteration/TDD evidence recorded: yes
+- final diff audit completed: yes
+- dirty worktree checked: yes
+- acceptance and verification completed: yes
+- scope respected: yes
