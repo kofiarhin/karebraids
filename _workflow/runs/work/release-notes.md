@@ -1,41 +1,54 @@
 # Release Notes
 
 ## Request
-Complete the single-source-of-truth service migration.
+Implement the approved MongoDB services/gallery migration spec.
 
 ## User-facing changes
-- Gallery service filtering now uses a service dropdown backed by the gallery services hook.
-- Booking links and booking preselection now use `?service=<id>`.
-- Gallery selected-service empty state now says: “No gallery images available for this service yet.”
+- Public gallery APIs now read services, images, and reviews from MongoDB Service documents instead of static JSON.
+- Public gallery response shapes are preserved for the existing frontend.
 
 ## Developer changes
-- Removed service/gallery data dependency from `client/src/constants/content.js`.
-- Booking now sources service cards from `useGalleryServices()`.
-- Gallery now sources service options and gallery items through gallery query hooks.
-- Tests enforce dropdown rendering, URL/query behavior, booking hook service source, service query preselection, and no page imports from `constants/content.js`.
+- Added a Mongoose `Service` model with embedded images/reviews and validation.
+- Added protected admin service CRUD endpoints.
+- Added protected admin embedded image CRUD endpoints.
+- Added service/image/review validation helpers.
+- Added a safe re-runnable seed script for existing `server/data/services.json` data.
+- Added Jest/Supertest/model/seed tests.
 
 ## New routes/APIs
-none
+- `GET /api/admin/services`
+- `GET /api/admin/services/:id`
+- `POST /api/admin/services`
+- `PUT /api/admin/services/:id`
+- `DELETE /api/admin/services/:id`
+- `POST /api/admin/services/:id/images`
+- `PUT /api/admin/services/:id/images/:imageId`
+- `DELETE /api/admin/services/:id/images/:imageId`
 
 ## New env vars
 none
 
 ## Database/schema changes
-none
+- New MongoDB `Service` collection via Mongoose with unique `id` slug and embedded `images`/`reviews`.
 
 ## Dependencies added/removed
 none
 
 ## Test commands run
+- `npm run test:server -- --runTestsByPath server/tests/gallery.test.js server/tests/admin-services.test.js server/tests/seed-services.test.js`
+- `npm run test:server -- --runTestsByPath server/tests/service-model.test.js server/tests/admin-services.test.js server/tests/gallery.test.js server/tests/seed-services.test.js`
+- `npm run test:server -- --runTestsByPath server/tests/admin-services.test.js server/tests/service-model.test.js`
 - `npm run test:server`
-- `npm run test --prefix client`
-- `npm run build --prefix client`
+- `git diff --check`
 
 ## Known limitations
-- Screenshot capture was not produced because this container has no browser automation binary/tool available.
+- No file upload system; admins manually paste image URLs.
+- Service ordering currently uses creation order (`createdAt`, `_id`), not an explicit admin sort order.
 
 ## Follow-up work
-none
+- Run `npm run seed:services` against the target MongoDB environment after deployment.
+- Add admin UI screens if needed.
+- Consider `sortOrder` if manual ordering becomes required.
 
 ## Suggested commit message
-Complete single-source service migration
+`Implement MongoDB-backed service gallery management`

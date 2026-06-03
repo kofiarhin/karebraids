@@ -1,10 +1,10 @@
-const services = require("../data/services.json");
+const Service = require("../models/Service");
+const { slugPattern } = require("../utils/serviceValidation");
 
 const positiveIntegerPattern = /^[1-9]\d*$/;
-const servicePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function toPreviewService(service) {
-  const { images, reviews, ...metadata } = service;
+  const { images = [], reviews, ...metadata } = service;
 
   return {
     ...metadata,
@@ -25,26 +25,52 @@ function getLimitedItems(items, limit) {
   return hasValidLimit ? items.slice(0, Number(limit)) : items;
 }
 
-function findService(serviceId) {
-  if (typeof serviceId !== "string" || !servicePattern.test(serviceId)) return null;
-  return services.find((service) => service.id === serviceId) ?? null;
+function serviceQueryIsValid(serviceId) {
+  return typeof serviceId === "string" && slugPattern.test(serviceId);
 }
 
-function getGalleryServices(req, res) {
-  return res.json({ services: services.map(toPreviewService) });
+async function listServices() {
+  return Service.find({}).sort({ createdAt: 1, _id: 1 }).lean();
 }
 
-function getGallery(req, res) {
-  const selectedService = findService(req.query.service);
-  const sourceServices = selectedService ? [selectedService] : services;
-  const galleryItems = sourceServices.flatMap((service) => service.images.map((image) => toGalleryItem(service, image)));
-  const items = getLimitedItems(galleryItems, req.query.limit);
+async function getGalleryServices(req, res, next) {
+  try {
+    const services = await listServices();
 
-  return res.json({
-    galleryItems: items,
-    selectedService: selectedService ? toPreviewService(selectedService) : null,
-    reviews: selectedService ? selectedService.reviews : [],
-  });
+    return res.json({ services: services.map(toPreviewService) });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function getGallery(req, res, next) {
+  try {
+    let selectedService = null;
+    let sourceServices;
+
+    if (serviceQueryIsValid(req.query.service)) {
+      selectedService = await Service.findOne({ id: req.query.service }).lean();
+    }
+
+    if (selectedService) {
+      sourceServices = [selectedService];
+    } else {
+      sourceServices = await listServices();
+    }
+
+    const galleryItems = sourceServices.flatMap((service) =>
+      (service.images || []).map((image) => toGalleryItem(service, image)),
+    );
+    const items = getLimitedItems(galleryItems, req.query.limit);
+
+    return res.json({
+      galleryItems: items,
+      selectedService: selectedService ? toPreviewService(selectedService) : null,
+      reviews: selectedService ? selectedService.reviews || [] : [],
+    });
+  } catch (error) {
+    return next(error);
+  }
 }
 
 module.exports = { getGallery, getGalleryServices };

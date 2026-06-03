@@ -1,7 +1,7 @@
 # Review
 
 ## Request
-Complete the single-source-of-truth service migration for gallery and booking service selection.
+Implement the approved MongoDB services/gallery migration spec.
 
 ## Spec file used
 `_workflow/runs/work/spec.md`
@@ -10,40 +10,45 @@ Complete the single-source-of-truth service migration for gallery and booking se
 `_workflow/runs/work/tasks.md`
 
 ## Tasks reviewed
-- TASK-001: Migrate gallery and booking service selection to service query source — Done.
+- TASK-001: Add MongoDB Service source for public gallery responses and admin management.
 
 ## Bugs found
-- Initial targeted tests selected dropdown options before async query data rendered. Fixed by waiting for options.
-- Existing tests referenced removed `constants/content.js` gallery/service exports. Fixed to use canonical data helpers.
+- No blocking bugs found in final review.
+- During implementation, model/script files were initially absent and targeted tests failed as expected in the Red phase.
 
 ## Scope creep check
-No scope creep found. Changes were limited to the requested client migration and tests.
+- Scope respected.
+- No frontend changes were made.
+- No file upload system, Cloudinary, S3, or external storage was added.
+- No separate Gallery collection was created.
 
 ## Final diff audit
-- `git diff --stat` showed 9 changed files, all in requested client source/tests.
-- `git diff --check` passed.
-- Diff matches saved spec.
-- No unrelated files were touched.
-- Workflow artifacts were updated.
-- Tests were added/updated for changed behavior.
-- No generated junk or temporary files were added.
-- No sensitive values or secrets were added.
+- `git diff --stat` completed and matched the approved backend migration scope.
+- `git diff` completed; full diff had 1621 lines and was reviewed for scope.
+- Runtime JSON dependency scan passed outside seed/tests.
+- No secrets or credentials were added.
+- No new runtime dependency was added.
+- `package.json` only gained `seed:services`.
 
 ## Failure recovery notes
-- Corrected prefixed Vitest targeted path usage.
-- Updated async assertions for hook-loaded service data.
+- Targeted tests initially failed due missing `Service` model and seed script; implementation resolved the failures.
+- Runtime JSON reference scan was corrected to use repo-relative glob exclusions.
 
 ## Missing tests
-None for requested scope.
+- None for requested backend scope.
 
 ## Security concerns
-None.
+- Admin service and image endpoints are protected by `requireAdmin`.
+- No secrets were added.
+- Validation rejects invalid service slugs, image URLs, duplicate embedded IDs, and out-of-range ratings.
 
 ## Architecture concerns
-None. Booking/Gallery now use the gallery query hook layer for server-state service data.
+- Fallow reported advisory existing cleanup/health findings; no unresolved imports, unlisted dependencies, circular dependencies, or boundary violations were reported.
 
 ## Follow-up tasks
-- Optional: add a browser screenshot workflow dependency if visual screenshot capture is required in future runs.
+- Optionally add admin UI screens for service/image management in a separate request.
+- Optionally add an explicit `sortOrder` field if admins need manual service ordering.
+- Review Fallow cleanup/health candidates separately.
 
 ## Final review verdict
-Passed.
+Passed with Fallow verdict PARTIAL due advisory existing findings.

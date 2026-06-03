@@ -4,7 +4,7 @@
 Complete.
 
 ## Latest completed task
-TASK-001: Migrate gallery and booking service selection to service query source.
+TASK-001: Add MongoDB Service source for public gallery responses and admin management.
 
 ## Current task
 None.
@@ -16,14 +16,17 @@ Complete through Iteration 3 Polish.
 None.
 
 ## Dirty worktree status
-Expected modified files are the client migration files, tests, and workflow artifacts. No unrelated dirty files were observed.
+Expected modified files are backend service/gallery migration files, backend tests, package script, project context, Fallow audit, and workflow artifacts. No unrelated dirty files were observed.
 
 ## Verification status
 Passed:
 - `npm run test:server`
-- `npm run test --prefix client`
-- `npm run build --prefix client`
 - `git diff --check`
+- Runtime JSON reference scan outside seed/tests
+- Gallery collection scan
+
+Fallow audit:
+- PARTIAL due advisory existing cleanup/health findings.
 
 ## Acceptance status
 All acceptance criteria are complete.
@@ -32,7 +35,7 @@ All acceptance criteria are complete.
 Recorded in `_workflow/runs/work/progress.md`.
 
 ## Workflow health status
-Partial because spec approval was not separately paused/approved before implementation due the direct completion instruction.
+Passed for implementation; Fallow verdict PARTIAL is documented in `.workflow/fallow-audit.md`.
 
 ## Next step
 Commit changes and open PR record.

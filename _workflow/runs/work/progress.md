@@ -75,3 +75,83 @@ Initialized workflow artifacts for TASK-001.
 
 ## Blockers
 - None.
+
+## TASK-001: Add MongoDB Service source for public gallery responses and admin management
+- Status: Done
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed:
+  - `server/models/Service.js`
+  - `server/utils/serviceValidation.js`
+  - `server/controllers/galleryController.js`
+  - `server/controllers/adminServiceController.js`
+  - `server/routes/adminRoutes.js`
+  - `server/scripts/seedServices.js`
+  - `server/tests/gallery.test.js`
+  - `server/tests/admin-services.test.js`
+  - `server/tests/seed-services.test.js`
+  - `server/tests/service-model.test.js`
+  - `package.json`
+  - `docs/PROJECT_CONTEXT.md`
+  - `.workflow/fallow-audit.md`
+
+### Iteration 1 Build
+- Goal: Add failing public gallery/admin/seed tests and minimal implementation.
+- Changes made: Added mocked MongoDB-backed gallery tests, admin CRUD/image CRUD tests, seed idempotency tests, Service model, validation helpers, gallery controller migration, admin service controller/routes, seed script, and npm seed script.
+- Test plan: Targeted Jest tests for gallery, admin services, and seed services.
+- Red phase evidence: `npm run test:server -- --runTestsByPath server/tests/gallery.test.js server/tests/admin-services.test.js server/tests/seed-services.test.js` failed because `server/models/Service.js` and `server/scripts/seedServices.js` did not exist yet.
+- Green phase evidence: The same targeted test command passed after implementation with 3 suites / 20 tests.
+- Refactor phase evidence: Controller helpers were split into validation/serialization helpers and route bindings stayed thin.
+- Test commands run: `npm run test:server -- --runTestsByPath server/tests/gallery.test.js server/tests/admin-services.test.js server/tests/seed-services.test.js`
+- Verification command/result: Passed.
+- Review findings: Public gallery service preview omits images/reviews and keeps `previewImage`; admin routes use `requireAdmin`.
+- Acceptance status: Met for core model/controller/admin/seed behavior.
+- Remaining issues: Model-level validation coverage was added in Iteration 2.
+- Next action: Iteration 2 Refine.
+
+### Iteration 2 Refine
+- Goal: Harden model validation and embedded image mutation behavior.
+- Changes made: Added `server/tests/service-model.test.js`; hardened image update mutation to use Mongoose array `.set()` when available.
+- Test plan: Targeted model/admin/gallery/seed tests.
+- Red phase evidence: Model validation coverage was initially absent for Mongoose validators, creating a missing-test gap.
+- Green phase evidence: `npm run test:server -- --runTestsByPath server/tests/service-model.test.js server/tests/admin-services.test.js server/tests/gallery.test.js server/tests/seed-services.test.js` passed with 4 suites / 25 tests.
+- Refactor phase evidence: `npm run test:server -- --runTestsByPath server/tests/admin-services.test.js server/tests/service-model.test.js` passed after Mongoose array mutation hardening.
+- Test commands run: targeted model/admin/gallery/seed commands.
+- Verification command/result: Passed.
+- Review findings: Validation covers service slug, image URL, review rating range, and duplicate embedded image IDs.
+- Acceptance status: Met.
+- Remaining issues: None.
+- Next action: Iteration 3 Polish.
+
+### Iteration 3 Polish
+- Goal: Run full backend verification, JSON runtime dependency audit, diff audit, and Fallow audit.
+- Changes made: Updated durable project context and workflow artifacts; created Fallow audit.
+- Test plan: Full backend suite, diff check, runtime JSON dependency scan, model collection scan, Fallow audit.
+- Red phase evidence: Runtime JSON scan initially used an imprecise glob and showed the expected seed script reference; corrected scan excluded `server/scripts/**` and `server/tests/**` and found no runtime references.
+- Green phase evidence: `npm run test:server` passed with 9 suites / 54 tests.
+- Refactor phase evidence: `git diff --check` passed with no whitespace errors; no separate Gallery model/collection was found.
+- Test commands run: `npm run test:server`; `rg 'services\.json|data/services' server --glob '!server/scripts/**' --glob '!server/tests/**' || true`; `rg 'Gallery|gallerySchema|GallerySchema' server/models server/controllers server/routes || true`; `git diff --stat`; `git diff`; `git diff --check`; `npx fallow --format json --quiet --explain 2>/dev/null > /tmp/fallow.json || true`.
+- Verification command/result: Passed for tests/diff/runtime dependency checks; Fallow verdict PARTIAL due advisory existing issues.
+- Review findings: Scope matches approved spec; no frontend changes, file uploads, Cloudinary/S3, or separate Gallery collection were added.
+- Acceptance status: Met.
+- Remaining issues: Fallow reported existing cleanup/health candidates for follow-up.
+- Next action: Commit and PR.
+
+## Acceptance result
+- [x] Service model exists with requested structure, timestamps, required validations, unique id, image URL validation, and rating range validation.
+- [x] Runtime gallery code no longer imports or reads `server/data/services.json`.
+- [x] `GET /api/gallery/services` returns MongoDB-sourced `{ services: [...] }` preview data.
+- [x] `GET /api/gallery` returns generated gallery items, selected service metadata, and selected reviews while preserving fallback behavior.
+- [x] No separate Gallery collection was created.
+- [x] Protected admin service CRUD endpoints exist with confirmed response contracts.
+- [x] Protected admin image CRUD endpoints exist with confirmed response contracts.
+- [x] Admin validation errors use `{ message: errors[0], errors: [...] }`; duplicate slugs return conflict.
+- [x] Seed script reads `server/data/services.json`, skips existing services, and is safe to re-run.
+- [x] Backend tests cover gallery listing/filtering, service CRUD, image CRUD, model validation, and seed logic.
+- [x] No new required environment variables were introduced.
+
+## Failure recovery notes
+- Added missing model/script files after red test failures.
+- Corrected runtime JSON reference scan globs to exclude only scripts/tests.
+
+## Blockers
+- None.
