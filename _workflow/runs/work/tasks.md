@@ -1,36 +1,39 @@
-# Gallery Spacing Refinement Task Plan
+# Task Plan: Fix Vite React Production Routing
 
 - Spec file used: `_workflow/runs/work/spec.md`
 - Planning date: 2026-06-04
-- Progress and summary files read: no prior run progress/summary existed for this request at planning time.
-- Spec sections used: affected surfaces, execution strategy, verification strategy, acceptance criteria, edge cases, risks and mitigations, assumptions, task extraction notes.
-- Approval note: latest user prompt directly requested implementation with concrete requirements; treated as approval to perform the targeted CSS-only task in this non-interactive coding run.
+- Progress and summary files read: none existed at start; durable docs read.
+- Spec sections used: Current State Analysis, Desired End State, Scope, Affected Surfaces, Dependency Map, UX Expectations, Verification Strategy, Acceptance Criteria, Risks, Task Extraction Notes.
 
-## TASK-001: Tighten Gallery page vertical spacing
+## TASK-001: Make View Styles use React Router navigation
 
 - Status: Done
-- Objective: Move the Gallery heading, filters, and grid upward by reducing top page spacing and title/content spacing while preserving bottom page spacing.
-- Files likely affected: `client/src/index.css`, `client/test/theme-tokens.test.jsx`
+- Objective: Replace the hero's plain `/gallery` anchor with existing shared Button client-side routing while preserving label and secondary button styling.
+- Files likely affected: `client/src/components/home/Hero.jsx`, `client/test/site-pages.test.jsx`
 - Checklist:
-  - [x] Add CSS regression tests for Gallery spacing.
-  - [x] Reduce `.gallery-page` top padding using clamp values.
-  - [x] Preserve `.gallery-page` bottom padding.
-  - [x] Reduce `.gallery-title-wrap` bottom margin using clamp values.
-  - [x] Add mobile-specific top clamp adjustment.
-  - [x] Do not modify React components or Gallery behavior.
-- Iteration plan:
-  - Iteration 1 Build: add failing CSS tests, update spacing CSS, run targeted test.
-  - Iteration 2 Refine: run full client test suite and inspect responsive CSS scope.
-  - Iteration 3 Polish: run lint/build, Fallow, diff audit, workflow docs.
-- Test plan: Vitest CSS assertions, full client Vitest, lint, build.
-- Red phase evidence: targeted Vitest failed after adding spacing expectations and before CSS implementation.
-- Green phase evidence: targeted Vitest passed after CSS implementation.
-- Refactor phase evidence: full client Vitest passed after implementation; no further behavior refactor required.
-- Test commands run: see progress and final response.
-- Acceptance criteria: all spec criteria checked.
-- Acceptance result: Done.
-- Verification commands: `npm run test --prefix client -- --run test/theme-tokens.test.jsx`, `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, `npx fallow health --format json --quiet --explain 2>/dev/null || true`, `git diff --stat`, `git diff`.
-- Stop condition: any required Gallery functionality regression or unresolvable overlap risk.
-- Out-of-scope items: React component changes, API/data/filter/modal/image-layout changes.
+  - [x] Add test coverage that clicking View Styles renders Gallery.
+  - [x] Use shared Button with `to="/gallery"` and `variant="secondary"`.
+  - [x] Preserve visible text `View Styles`.
+  - [x] Verify targeted tests.
+- Iteration plan: Build, Refine, Polish with focused Red -> Green -> Refactor evidence.
+- Test plan: `npm run test --prefix client -- test/site-pages.test.jsx test/deployment.test.js`, full client tests, build.
+- Acceptance result: [x] complete.
+- Verification commands: see progress.
+- Stop condition: if Button did not support `to`, use React Router `Link` directly.
+- Out-of-scope items: broader UI styling changes.
 
-Applied skill: design-taste-frontend
+## TASK-002: Add Vercel SPA rewrite fallback
+
+- Status: Done
+- Objective: Add Vercel config for the Vite client app so deep links serve `/`.
+- Files likely affected: `client/vercel.json`, `client/test/deployment.test.js`
+- Checklist:
+  - [x] Add test proving config shape.
+  - [x] Add `client/vercel.json` with expected rewrite.
+  - [x] Verify targeted tests and build.
+- Iteration plan: Build, Refine, Polish with focused Red -> Green -> Refactor evidence.
+- Test plan: deployment config test plus build.
+- Acceptance result: [x] complete; live production validation awaits deployment.
+- Verification commands: see progress.
+- Stop condition: if Vercel root is not client, document follow-up.
+- Out-of-scope items: changing Vercel dashboard settings.

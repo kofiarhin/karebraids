@@ -6,20 +6,20 @@
 
 ## Summary
 
-Fallow health completed successfully with JSON output. Overall score was 75.1 (grade B), with 95 files analyzed and 77 files scored. It reported existing complexity and hotspot findings, including `client/src/pages/Booking.jsx`, `server/utils/serviceValidation.js`, `client/src/pages/Admin.jsx`, `client/src/pages/Gallery.jsx`, and related gallery test/service files.
+Fallow health completed successfully with JSON output. It reported existing complexity/hotspot findings, including `client/src/pages/Booking.jsx`, `server/utils/serviceValidation.js`, `client/src/pages/Admin.jsx`, `server/utils/bookingValidation.js`, and `client/src/data/services.js`.
 
 ## Changed-Code Risk
 
-The production changed code is limited to `client/src/index.css` Gallery spacing values. Fallow findings do not require a change to the CSS spacing implementation. The `client/src/pages/Gallery.jsx` hotspot is pre-existing and out of scope because no React component behavior was changed.
+The production changed code is limited to the hero CTA in `client/src/components/home/Hero.jsx` and Vercel static routing config in `client/vercel.json`. Fallow did not identify an in-scope changed-code action for these files.
 
 ## Cleanup Opportunities
 
-No cleanup was applied because reported opportunities were unrelated to the targeted CSS-only request.
+No cleanup was applied because reported opportunities were unrelated to the targeted routing/deployment request.
 
 ## Duplicates / Circular Dependencies / Boundaries
 
-No in-scope duplicate, circular dependency, or architecture-boundary action was identified for the spacing CSS change.
+No in-scope duplicate, circular dependency, or architecture-boundary action was identified for the CTA/config change.
 
 ## Follow-Up
 
-Create a separate maintenance task for existing complexity/hotspot and lint hook issues if desired.
+Create a separate maintenance task for existing complexity/hotspot and hook lint issues if desired.

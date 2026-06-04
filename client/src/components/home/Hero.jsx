@@ -16,9 +16,7 @@ export function Hero() {
         </p>
         <div className="hero-actions">
           <Button to="/booking">Book Appointment</Button>
-          <a className="btn btn-secondary" href="/gallery">
-            <span>View Styles</span>
-          </a>
+          <Button to="/gallery" variant="secondary">View Styles</Button>
         </div>
         <div className="social-proof" aria-label="Client rating">
           <div className="client-avatar-stack">

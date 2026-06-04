@@ -245,15 +245,19 @@ describe('KareBraids pages', () => {
     })
   })
 
-  it('keeps booking and style CTAs route-safe', () => {
+  it('keeps booking and style CTAs route-safe', async () => {
+    const user = userEvent.setup()
     renderRoute('/')
 
     screen.getAllByRole('link', { name: /book appointment/i }).forEach((link) => {
       expect(link).toHaveAttribute('href', '/booking')
     })
     expect(within(screen.getByRole('navigation', { name: /main navigation/i })).getByRole('link', { name: /^services$/i })).toHaveAttribute('href', '/services')
-    expect(screen.getByRole('link', { name: /view styles/i })).toHaveAttribute('href', '/gallery')
+    const viewStylesLink = screen.getByRole('link', { name: /view styles/i })
+    expect(viewStylesLink).toHaveAttribute('href', '/gallery')
     expect(screen.getByRole('link', { name: /view full gallery/i })).toHaveAttribute('href', '/gallery')
+    await user.click(viewStylesLink)
+    expect(await screen.findByRole('heading', { name: /^gallery$/i })).toBeInTheDocument()
   })
 
   it('defines smallest-phone fallbacks for the luxury homepage', () => {
