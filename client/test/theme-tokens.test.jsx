@@ -58,3 +58,17 @@ describe('semantic color theme', () => {
     expect(styles).toMatch(/\.admin-page > \.empty-state\[role="status"\]\s*\{[\s\S]*?background:\s*var\(--color-state-success-surface\)/)
   })
 })
+
+describe('gallery spacing rhythm', () => {
+  it('tightens the gallery top spacing while preserving the existing bottom rhythm', () => {
+    expect(styles).toMatch(/\.gallery-page\s*\{[\s\S]*?padding:\s*clamp\(2rem, 4\.5vw, 3rem\) 0 clamp\(4rem, 8vw, 6rem\)/)
+  })
+
+  it('keeps the gallery title closer to the filters and grid with clamp-based spacing', () => {
+    expect(styles).toMatch(/\.gallery-title-wrap\s*\{[\s\S]*?margin-bottom:\s*clamp\(1\.25rem, 3vw, 2rem\)/)
+  })
+
+  it('adds a compact mobile top offset without hardcoded pixels', () => {
+    expect(styles).toMatch(/@media \(max-width: 560px\)\s*\{[\s\S]*?\.gallery-page\s*\{[\s\S]*?padding-top:\s*clamp\(1\.5rem, 7vw, 2\.25rem\)/)
+  })
+})

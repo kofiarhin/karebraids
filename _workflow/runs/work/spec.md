@@ -1,156 +1,158 @@
-# Services Page Redesign Spec
+# Gallery Spacing Refinement Spec
 
 ## 1. Metadata
 - Spec filename: `_workflow/runs/work/spec.md`
 - Date: 2026-06-04
-- Request ID / slug: services-page-redesign
-- Request source: Latest user prompt
+- Request ID / slug: gallery-spacing-refinement
+- Request source: latest direct user prompt
 - Execution mode: complete-workflow
-- Request classification: Frontend UI redesign
-- Scope level: Small
-- Risk level: Low
+- Request classification: frontend UI spacing refinement
+- Scope level: targeted CSS-only change
+- Risk level: low
 
 ## 2. Original Request
-- Raw user request: Redesign `/services` so it no longer resembles the Home hero; replace the large image hero with a compact editorial header, add service category chips, and keep the existing grid/cards.
-- Normalized request: Replace the top Services hero with compact copy/actions/category panel and make the grid appear directly after the header.
+- Raw user request: implement a targeted spacing refinement for the Gallery page.
+- Normalized request: tighten Gallery page vertical rhythm by reducing `.gallery-page` top padding and `.gallery-title-wrap` bottom margin while preserving bottom padding and functionality.
 - Source prompt / `<artifact-root>/request.md` reference: `_workflow/runs/work/request.md`
 
 ## 3. Questions And Answers
-- Questions asked: None; request included concrete copy, files, layout, and acceptance criteria.
-- Answers received: Not applicable.
-- Questions skipped: Non-blocking visual fine-tuning questions.
-- Remaining open questions: None blocking.
+- Questions asked: none; repo inspection and the user-provided requirements were sufficient.
+- Answers received: not applicable.
+- Questions skipped: no blocking questions remained.
+- Remaining open questions: none.
 
 ## 4. Problem Definition
-- Problem being solved: Services page currently uses a large image hero that visually repeats the Home page hero pattern.
-- Why it matters: Users should reach service browsing faster and the page should feel purpose-built for service discovery.
-- Current pain point: A large portrait hero and separate intro delay the service cards.
-- Expected value: Faster browsing, clearer page identity, premium editorial style.
+- Problem being solved: excessive whitespace between sticky header and Gallery title delays visible gallery content.
+- Why it matters: users should see gallery content sooner without a redesign.
+- Current pain point: symmetric page padding and large title margin create too much top rhythm.
+- Expected value: denser, premium Gallery page composition with no behavioral changes.
 
 ## 5. Current State Analysis
-- Existing behavior: `Services.jsx` derives `heroService`, renders `.services-hero` with `.services-hero-image`, then renders `.services-intro`, then the service category grid.
-- Existing architecture/components: React page component using shared service data and `Link` from React Router.
-- Existing files/modules likely involved: `client/src/pages/Services.jsx`, `client/src/index.css`, `client/test/site-pages.test.jsx`, `client/test/service-detail.test.jsx`.
-- Existing data flow: `getGalleryServices()` feeds service cards and formerly fed hero image.
-- Existing API/UI/CLI/workflow behavior: Static client data renders public `/services` route.
-- Existing tests or verification coverage: Public page tests cover services page rendering and service-detail fallback redirect.
+- Existing behavior: `.gallery-page` uses `padding: clamp(4rem, 8vw, 6rem) 0`; `.gallery-title-wrap` uses `margin-bottom: clamp(2.5rem, 6vw, 4rem)`.
+- Existing architecture/components: React/Vite frontend with Gallery route and shared CSS in `client/src/index.css`.
+- Existing files/modules likely involved: `client/src/index.css`, `client/test/theme-tokens.test.jsx`.
+- Existing data flow: unchanged Gallery data fetching and filtering in React.
+- Existing API/UI/CLI/workflow behavior: no API or CLI change.
+- Existing tests or verification coverage: Vitest CSS token tests can assert CSS rules.
 
 ## 6. Desired End State
-- Expected final behavior: `/services` starts with compact editorial header, category panel, and actions; no large hero image; grid follows immediately.
-- User-facing outcome: Users can quickly jump to services or booking while seeing service categories at a glance.
-- Developer-facing outcome: Header CSS and JSX use dedicated `services-page-header` naming.
-- System/workflow outcome: Existing service cards and routing continue to work.
-- Backward compatibility expectations: `/services/not-a-style` still lands on services listing.
+- Expected final behavior: Gallery title, filter controls, and grid sit higher below the sticky header.
+- User-facing outcome: tighter vertical rhythm with no overlap.
+- Developer-facing outcome: CSS-only change with regression tests.
+- System/workflow outcome: no API/data behavior change.
+- Backward compatibility expectations: all existing Gallery functionality remains unchanged.
 
 ## 7. Scope
-- In scope: Services header JSX, Services CSS, tests for changed expectations, workflow docs.
-- Out of scope: Changing service data, card content, gallery images, booking flow, backend APIs.
-- Non-goals: Full site redesign or new dependencies.
-- Explicit boundaries: Only Services page top layout and tests directly tied to it.
+- In scope: adjust `.gallery-page` top padding, preserve bottom padding, reduce `.gallery-title-wrap` bottom margin, add mobile top adjustment if needed, add CSS assertion tests.
+- Out of scope: React component changes, data fetching, filtering, modal behavior, image layout, redesign, typography changes.
+- Non-goals: new features, new dependencies, global spacing refactor.
+- Explicit boundaries: keep existing clamp-based spacing system.
 
 ## 8. Users And Use Cases
-- Primary users: KareBraids customers browsing services.
-- Secondary users: Site admins/developers maintaining public pages.
-- Main use cases: Scan service page, jump to grid, book an appointment.
-- Edge use cases: Mobile browsing with compact two-column category chips.
+- Primary users: site visitors browsing braid work.
+- Secondary users: maintainers verifying UI regressions.
+- Main use cases: open Gallery page and browse/filter images.
+- Edge use cases: mobile viewport with sticky header.
 
 ## 9. Functional Requirements
-- Required behaviors: Remove `heroService`, `.services-hero`, `.services-hero-image`, `.services-intro`; add specified copy/actions/panel; preserve cards.
-- Inputs: Static service data from `getGalleryServices()`.
-- Outputs: Rendered `/services` route.
-- State changes: None.
-- Error states: Existing empty-service handling remains unchanged.
-- Permissions/auth expectations: Public route; no auth.
+- Required behaviors: CSS spacing must move title/filter/grid upward and avoid sticky-header overlap.
+- Inputs: viewport width and existing Gallery markup.
+- Outputs: adjusted CSS spacing.
+- State changes: none.
+- Error states: not applicable.
+- Permissions/auth expectations: none.
 
 ## 10. Non-Functional Requirements
-- Performance expectations: Less top-page imagery should reduce above-grid visual weight.
-- Reliability expectations: Existing route and card links continue working.
-- Security/privacy expectations: No new data or secrets.
-- Accessibility expectations: Header labelled by `services-title`; decorative panel hidden from assistive tech per requested markup.
-- Maintainability expectations: CSS uses existing tokens and class names with clear page-specific naming.
-- DX expectations: Tests capture changed top-section behavior.
+- Performance expectations: no runtime cost.
+- Reliability expectations: existing tests pass.
+- Security/privacy expectations: no secrets or auth changes.
+- Accessibility expectations: no semantic/focus changes.
+- Maintainability expectations: values remain clamp-based.
+- DX expectations: tests document expected spacing contract.
 
 ## 11. Affected Surfaces
-- Files likely affected: `client/src/pages/Services.jsx`, `client/src/index.css`, `client/test/site-pages.test.jsx`, `client/test/service-detail.test.jsx`.
-- Directories likely affected: `client/src/pages`, `client/src`, `client/test`.
-- UI surfaces: `/services`.
-- API routes: Not applicable.
-- Components: `Services` page.
-- Services: Static service data consumer only.
-- Database/schema: Not applicable.
-- Config/env vars: Not applicable.
-- Tests: Vitest public page tests.
-- Docs: Workflow artifacts.
+- Files likely affected: `client/src/index.css`, `client/test/theme-tokens.test.jsx`.
+- Directories likely affected: `client/src`, `client/test`, `_workflow/runs/work`, `.workflow`.
+- UI surfaces: Gallery page only.
+- API routes: none.
+- Components: none expected.
+- Services: none.
+- Database/schema: none.
+- Config/env vars: none.
+- Tests: Vitest CSS assertions.
+- Docs: workflow artifacts.
 
 ## 12. Dependency And Integration Map
-- Internal dependencies: React Router `Link`, `getGalleryServices`, `getServicePreviewImage` for cards.
-- External packages/services: Existing React/Vite/Vitest stack only.
-- Integration points: `/services` route in `App.jsx`; booking and gallery routes.
-- Ordering constraints: Update failing tests first, then JSX/CSS, then verification.
-- Migration/setup requirements: None.
+- Internal dependencies: Gallery CSS selectors consumed by existing Gallery markup.
+- External packages/services: none added.
+- Integration points: Vite CSS bundling.
+- Ordering constraints: test first, CSS change second, verification third.
+- Migration/setup requirements: none.
 
 ## 13. Data And State Impact
-- Data models: None.
-- Database changes: None.
-- State management changes: None.
-- Cache/session/local storage impact: None.
-- Backward compatibility impact: Service detail fallback page heading expectation updated to new H1.
+- Data models: none.
+- Database changes: none.
+- State management changes: none.
+- Cache/session/local storage impact: none.
+- Backward compatibility impact: no contract change.
 
 ## 14. UX / API / Workflow Expectations
-- UX expectations: Dark luxury editorial header, compact action row, side panel on desktop, two-column chips on mobile.
-- API contract expectations: Not applicable.
-- CLI/workflow behavior: Not applicable.
-- Error handling expectations: Existing no-services null rendering remains.
-- Empty/loading/success/failure states: Existing success and empty behavior retained.
+- UX expectations: premium tighter spacing; responsive desktop/tablet/mobile.
+- API contract expectations: unchanged.
+- CLI/workflow behavior: unchanged.
+- Error handling expectations: unchanged.
+- Empty/loading/success/failure states: unchanged.
 
 ## 15. Execution Strategy
-- Recommended implementation approach: Update tests for new header, replace top JSX, replace old hero/intro CSS with new header/panel rules, verify.
-- Suggested sequencing: Tests -> JSX -> CSS -> checks -> review.
-- Safe rollout/migration approach: No migration needed.
-- Files to inspect before editing: Services page, CSS services block, page tests.
-- Decisions to avoid until more evidence exists: Do not introduce new images or dependencies.
+- Recommended implementation approach: replace symmetric `.gallery-page` padding with top/right-bottom-left shorthand preserving bottom clamp; reduce title margin clamp; add mobile top clamp override.
+- Suggested sequencing: add failing CSS tests, update CSS, rerun targeted/full checks.
+- Safe rollout/migration approach: CSS-only, no migration.
+- Files to inspect before editing: `client/src/index.css`, Gallery tests, package scripts.
+- Decisions to avoid until more evidence exists: no component or layout rewrite.
 
 ## 16. Verification Strategy
-- Required automated checks: Targeted Vitest, full Vitest, Vite build, ESLint check or documented existing lint blockers.
-- Required manual checks: Code-surface review for responsive layout; screenshot unavailable because no browser automation package is installed.
-- Test types needed: Rendering assertions for removed hero, new copy/actions/panel, direct grid order.
-- Build/lint/typecheck expectations: Build passes; lint has known unrelated pre-existing errors in Booking/Gallery.
-- Acceptance evidence required: Tests pass and diff confirms removed image hero/intro.
-- Proof of completion: Updated files plus passing tests/build.
+- Required automated checks: targeted Vitest CSS test, full client Vitest, client lint, client build.
+- Required manual checks: code-surface review of CSS selectors and diff.
+- Test types needed: CSS text assertions for spacing contract.
+- Build/lint/typecheck expectations: build passes; lint status recorded.
+- Acceptance evidence required: before/after values documented.
+- Proof of completion: committed diff and passing tests/build.
 
 ## 17. Acceptance Criteria
-- [x] `/services` no longer visually resembles the Home hero.
-- [x] No large portrait/image hero appears at the top of Services.
-- [x] Services grid appears directly after the compact header.
-- [x] Desktop and mobile layouts remain premium, clean, and responsive.
-- [x] Existing service cards, pricing, images, and booking CTA still work.
+- [x] The “Client Gallery / GALLERY” heading appears noticeably closer to the header.
+- [x] The filter dropdown and gallery grid move upward accordingly.
+- [x] No visual overlap occurs with the sticky header based on retained mobile top offset and no negative spacing.
+- [x] The page maintains a premium, balanced appearance.
+- [x] No regressions on mobile, tablet, or desktop based on clamp-based desktop/tablet spacing and mobile override.
 
 ## 18. Edge Cases And Failure Modes
-- Edge cases: No services available; mobile narrow widths; redirect from unknown service detail slug.
-- Failure modes: Stale tests expecting old H1; CSS selectors leaving old hero styles active.
-- Regression risks: Header CTA conflicts with global booking CTA queries; mitigated with scoped tests.
-- Recovery expectations: Adjust only changed tests and Services-specific CSS/JSX.
+- Edge cases: narrow mobile width with sticky header.
+- Failure modes: too little top padding or hardcoded pixels.
+- Regression risks: accidentally changing bottom spacing or Gallery behavior.
+- Recovery expectations: restore bottom clamp and limit changes to CSS selectors.
 
 ## 19. Risks And Mitigations
-- Technical risks: Old CSS selectors could remain unused; mitigated by replacing services hero selectors.
-- Product/UX risks: Category panel hidden from assistive tech by requested `aria-hidden`; acceptable because it is decorative summary copy.
-- Security risks: None.
-- Scope risks: Avoid unrelated lint fixes.
-- Mitigation plan: Keep changes scoped to requested files/tests.
+- Technical risks: CSS test could be too brittle; mitigated by selector-specific intent assertions.
+- Product/UX risks: spacing could become too tight; mitigated by nonzero clamp top padding.
+- Security risks: none.
+- Scope risks: component changes; mitigated by CSS-only edit.
+- Mitigation plan: diff review and full client tests/build.
 
 ## 20. Assumptions
-- Explicit assumptions: Test updates are acceptable to reflect intentional H1/content change. No new screenshot dependency should be installed just to capture a visual.
-- Confidence level: High.
-- What to revisit if assumptions are wrong: Add browser automation screenshot if requested.
+- Explicit assumptions: The sticky header remains in normal expected layout flow; CSS-only spacing is sufficient.
+- Confidence level: high.
+- What to revisit if assumptions are wrong: inspect rendered header height and adjust top clamp only.
 
 ## 21. Open Questions
-- Blocking questions: None.
-- Non-blocking questions: Whether category panel should be accessible rather than `aria-hidden` in a future pass.
-- Execution impact: None.
+- Blocking questions: none.
+- Non-blocking questions: exact visual preference could be tuned later after screenshot/browser review.
+- Execution impact: none.
 
 ## 22. Task Extraction Notes
-- Suggested vertical task boundaries: One task: replace Services top layout and prove grid/cards still work.
-- Suggested first task: Services editorial header redesign.
-- Suggested task ordering: Test, implement, verify.
-- Areas that should not become separate tasks: Backend, service data, booking flow.
-- How the 3-pass Build -> Refine -> Polish loop should apply: Build changed layout, refine route/test fallout, polish CSS/mobile and verification evidence.
+- Suggested vertical task boundaries: one task for Gallery spacing CSS plus tests.
+- Suggested first task: tighten Gallery spacing contract and implementation.
+- Suggested task ordering: test, CSS, verify.
+- Areas that should not become separate tasks: React Gallery behavior, API, modal, image layout.
+- How the 3-pass Build -> Refine -> Polish loop should apply: Build adds failing tests and initial CSS; Refine runs full client tests; Polish runs lint/build/diff review and records known lint limitation.
+
+Applied skill: design-taste-frontend
