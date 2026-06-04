@@ -1,41 +1,13 @@
 # Handoff
 
-## Current phase
-Complete.
-
-## Latest completed task
-TASK-001: Add MongoDB Service source for public gallery responses and admin management.
-
-## Current task
-None.
-
-## Current iteration
-Complete through Iteration 3 Polish.
-
-## Blockers
-None.
-
-## Dirty worktree status
-Expected modified files are backend service/gallery migration files, backend tests, package script, project context, Fallow audit, and workflow artifacts. No unrelated dirty files were observed.
-
-## Verification status
-Passed:
-- `npm run test:server`
-- `git diff --check`
-- Runtime JSON reference scan outside seed/tests
-- Gallery collection scan
-
-Fallow audit:
-- PARTIAL due advisory existing cleanup/health findings.
-
-## Acceptance status
-All acceptance criteria are complete.
-
-## Iteration evidence status
-Recorded in `_workflow/runs/work/progress.md`.
-
-## Workflow health status
-Passed for implementation; Fallow verdict PARTIAL is documented in `.workflow/fallow-audit.md`.
-
-## Next step
-Commit changes and open PR record.
+- Current phase: Complete
+- Latest completed task: TASK-001 Services editorial header redesign
+- Current task: None
+- Current iteration: Complete
+- Blockers: None for requested scope
+- Dirty worktree status: Expected changes in Services page, CSS, tests, and workflow artifacts.
+- Verification status: Targeted and full Vitest passed; build passed; lint partial due to unrelated existing errors; Fallow verdict PARTIAL.
+- Acceptance status: Complete; all criteria checked.
+- Iteration evidence status: Complete in `_workflow/runs/work/progress.md`.
+- Workflow health status: Partial because spec approval gate was not possible in this single-turn execution and full lint has unrelated pre-existing failures.
+- Next step: Commit and create PR.

@@ -44,7 +44,6 @@ vi.mock('../src/hooks/queries/useGalleryItems.js', async () => {
     featured: index < 4,
     previewImage: { id: `${service.id}-preview`, title: service.title, description: service.description, image: service.image, aspect: 'medium' },
   }))
-  const galleryResponse = { galleryItems, selectedService: null, reviews: [] }
   return {
     useGalleryItems: ({ limit } = {}) => ({ data: limit ? galleryItems.slice(0, limit) : galleryItems, isLoading: false, isError: false }),
     useGalleryServices: () => ({ data: galleryServices, isLoading: false, isError: false, refetch: vi.fn() }),
@@ -307,13 +306,24 @@ describe('KareBraids pages', () => {
     expect(styles).toContain('.dark-brand-shell .home-hero .hero-copy::before {\n    inset: -0.35rem;')
   })
 
-  it('renders a dedicated categorized services page with booking CTAs', () => {
+  it('renders a compact editorial services page header before the service grid', () => {
     const { container } = renderRoute('/services')
 
     expect(container.querySelector('.services-page')).toHaveClass('dark-services-page')
-    expect(screen.getByRole('heading', { level: 1, name: /signature braid services/i })).toBeInTheDocument()
-    expect(screen.getByText(/salon appointment or a mobile service/i)).toBeInTheDocument()
+    expect(container.querySelector('.services-hero')).not.toBeInTheDocument()
+    expect(container.querySelector('.services-hero-image')).not.toBeInTheDocument()
+    expect(container.querySelector('.services-intro')).not.toBeInTheDocument()
+    expect(container.querySelector('.services-page-header')).toBeInTheDocument()
+    expect(screen.getByText(/our services/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /braiding services tailored to your style/i })).toBeInTheDocument()
+    expect(screen.getByText(/from knotless braids and stitch braids/i)).toBeInTheDocument()
+    const pageHeader = container.querySelector('.services-page-header')
+    expect(within(pageHeader).getByRole('link', { name: /view services/i })).toHaveAttribute('href', '#service-category-braids')
+    expect(within(pageHeader).getByRole('link', { name: /book appointment/i })).toHaveAttribute('href', '/booking')
+    expect(container.querySelector('.services-header-panel')).toHaveTextContent(/knotless braids/i)
+    expect(container.querySelector('.services-header-panel')).toHaveTextContent(/custom styles/i)
     expect(screen.getByRole('heading', { level: 2, name: /braiding services/i })).toBeInTheDocument()
+    expect([...container.querySelectorAll('.services-page > section')].at(1)).toHaveClass('service-category')
     expect(container.querySelectorAll('.service-card')).toHaveLength(services.length)
     container.querySelectorAll('.service-card').forEach((card) => {
       expect(within(card).getByRole('img')).toHaveAttribute('loading', 'lazy')

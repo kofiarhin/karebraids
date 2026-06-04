@@ -12,36 +12,34 @@ function formatPrice(service) {
 
 export function Services() {
   const services = getGalleryServices()
-  const heroService = services[0]
-
   return (
     <div className="services-page dark-services-page">
-      <section className="services-hero" aria-labelledby="services-title">
-        <div className="services-hero-copy">
-          <p className="eyebrow">KareBraids Services</p>
-          <h1 id="services-title">Signature braid services, shaped around you.</h1>
+      <section className="services-page-header" aria-labelledby="services-title">
+        <div className="services-page-header-copy">
+          <p className="eyebrow">Our Services</p>
+          <h1 id="services-title">Braiding services tailored to your style.</h1>
           <p>
-            Explore protective styles finished with precision, comfort, and a polished touch for
-            every season of your hair journey.
+            From knotless braids and stitch braids to custom protective styles, every appointment
+            is designed around your hair, lifestyle, and look.
           </p>
-          <Link className="btn btn-primary" to="/booking">
-            Book Appointment
-          </Link>
-        </div>
-        {heroService ? (
-          <div className="services-hero-image">
-            <img alt="Close view of carefully crafted long braids" src={getServicePreviewImage(heroService)} />
+          <div className="services-header-actions">
+            <a className="btn btn-secondary" href="#service-category-braids">
+              View Services
+            </a>
+            <Link className="btn btn-primary" to="/booking">
+              Book Appointment
+            </Link>
           </div>
-        ) : null}
-      </section>
+        </div>
 
-      <section className="services-intro" aria-labelledby="services-intro-title">
-        <p className="eyebrow">Salon & Mobile</p>
-        <h2 id="services-intro-title">Premium care, wherever your appointment feels best.</h2>
-        <p>
-          Choose a calm salon appointment or a mobile service across Birmingham and the West Midlands. Every style begins
-          with a thoughtful consultation and a protective-care-first approach.
-        </p>
+        <div className="services-header-panel" aria-hidden="true">
+          <span>Knotless Braids</span>
+          <span>Box Braids</span>
+          <span>Stitch Braids</span>
+          <span>Cornrows</span>
+          <span>Kids Braids</span>
+          <span>Custom Styles</span>
+        </div>
       </section>
 
       {services.length > 0 ? (

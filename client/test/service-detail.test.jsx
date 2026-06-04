@@ -36,7 +36,7 @@ describe('service detail architecture', () => {
   it('redirects an unknown service detail slug to the services listing', () => {
     renderRoute('/services/not-a-style')
 
-    expect(screen.getByRole('heading', { level: 1, name: /signature braid services/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /braiding services tailored to your style/i })).toBeInTheDocument()
   })
 
   it('preselects a valid booking service query and preserves the booking wizard', async () => {
