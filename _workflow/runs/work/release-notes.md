@@ -1,14 +1,15 @@
 # Release Notes
 
-- Request: fix Vite React production routing for hero gallery CTA and Vercel SPA fallback.
+- Request: Redesign `/about` into a premium trust-building founder page centered around Karen.
 
 ## User-Facing Changes
-- The homepage “View Styles” CTA now routes to Gallery client-side.
-- Vercel deep links such as `/gallery` should serve the React app after deployment.
+- Replaced the simple About page with an editorial founder page for Karen.
+- Added trust cards, Birmingham positioning, KareBraids Standard steps, appointment timeline, proof metrics, and a strong final booking CTA.
+- Added responsive premium dark Afro-luxury styling.
 
 ## Developer Changes
-- Added a deployment config test for `client/vercel.json`.
-- Extended homepage route-safety test to click View Styles and assert Gallery renders.
+- Refactored repeated About content into clean arrays.
+- Added targeted About component tests.
 
 ## New Routes/APIs
 - none
@@ -23,19 +24,19 @@
 - none
 
 ## Test Commands Run
-- `npm run test --prefix client -- test/site-pages.test.jsx test/deployment.test.js`
-- `npm run build --prefix client`
+- `npm run test --prefix client -- About.test.jsx`
 - `npm run test --prefix client`
-- `npm run lint --prefix client` (pre-existing failures)
+- `npm run build --prefix client`
+- `npm run lint --prefix client` (fails due unrelated existing hook lint errors)
 - `npx fallow health --format json --quiet --explain 2>/dev/null || true`
 
 ## Known Limitations
-- Live `https://karebraids.vercel.app/gallery` refresh validation requires deploying this change.
-- Client lint currently fails on unrelated pre-existing hook lint issues.
+- Uses existing gallery imagery rather than a real Karen portrait asset.
+- Existing unrelated lint issues remain in `Booking.jsx` and `Gallery.jsx`.
 
 ## Follow-Up Work
-- Deploy to Vercel and confirm `/gallery` refresh.
-- Separately fix existing hook lint findings.
+- Add real founder portrait when available.
+- Resolve unrelated hook lint findings.
 
 ## Suggested Commit Message
-fix client gallery routing on vercel
+- `Redesign About page as premium founder story`
