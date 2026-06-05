@@ -2,7 +2,7 @@ import { Button } from '../Button.jsx'
 
 export function ExperienceBanner({ image }) {
   return (
-    <section className="relative isolate overflow-hidden bg-[#14110f] px-5 py-20 text-[#F5F1EE] sm:py-24" aria-labelledby="experience-title">
+    <section className="relative isolate overflow-hidden bg-[#F5F1EE] px-5 py-20 text-[#F5F1EE] sm:py-24" aria-labelledby="experience-title">
       <img className="absolute inset-0 -z-20 h-full w-full object-cover" src={image.src} alt={image.alt} />
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(10,8,7,0.9),rgba(10,8,7,0.72),rgba(10,8,7,0.9))]" />
       <div className="mx-auto max-w-4xl text-center">

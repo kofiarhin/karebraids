@@ -2,7 +2,7 @@ export function MeetKaren({ image }) {
   return (
     <section className="bg-[#F5F1EE] px-5 py-16 text-[#1F1F1F] sm:py-20 lg:py-24" aria-labelledby="meet-karen-title">
       <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
-        <div className="relative overflow-hidden rounded-[2rem] border border-[#E6DED8] bg-white shadow-[0_24px_80px_rgba(31,31,31,0.12)]">
+        <div className="relative overflow-hidden rounded-[2rem] border border-[#E6DED8] bg-white/70 shadow-sm">
           <img className="aspect-[4/5] w-full object-cover" src={image.src} alt={image.alt} />
           <div className="absolute inset-x-5 bottom-5 rounded-3xl border border-white/25 bg-[#14110f]/80 p-4 text-[#F5F1EE] shadow-2xl backdrop-blur-sm">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4A373]">Founder-led care</p>

@@ -13,60 +13,58 @@
   - `client/src/components/about/Testimonials.jsx`
   - `client/src/components/about/TrustStats.jsx`
   - `client/src/components/about/AboutCTA.jsx`
-  - `client/src/data/aboutPageData.js`
   - `client/src/pages/About.test.jsx`
-  - `client/test/site-pages.test.jsx`
 - Applied skill: design-taste-frontend
 
 ### Iteration 1 Build
-- Goal: Replace the About page with the requested Afro Hair Trends-inspired, KareBraids-branded structure.
-- Changes made: Added static page data, reusable About components, and new page composition.
-- Test plan: targeted About component tests.
-- Red phase evidence: tests updated for new hero, sections, and CTAs; pre-change failure not separately captured before implementation due non-interactive execution.
-- Green phase evidence: `npm run test --prefix client -- About.test.jsx` passed.
-- Refactor phase evidence: repeated page content extracted into `aboutPageData.js`.
+- Goal: Add a test for the requested cream background consistency.
+- Changes made: Added About test asserting root `bg-[#F5F1EE] text-[#1F1F1F]` and cream non-banner sections without dark full-width background classes.
+- Test plan: targeted About test.
+- Red phase evidence: `npm run test --prefix client -- About.test.jsx` failed before styling changes because the root lacked `text-[#1F1F1F]` and sections still used inconsistent backgrounds.
+- Green phase evidence: targeted test passed after styling updates.
+- Refactor phase evidence: none.
 - Test commands run: `npm run test --prefix client -- About.test.jsx`.
-- Verification command/result: passed.
-- Review findings: all required sections present.
+- Verification command/result: failed then passed.
+- Review findings: test covers the new acceptance criterion.
 - Acceptance status: met.
-- Remaining issues: route smoke tests needed update.
-- Next action: refine smoke tests and accessibility assertions.
+- Remaining issues: none in scope.
+- Next action: refine component classes.
 
 ### Iteration 2 Refine
-- Goal: Preserve navigation/route stability and image accessibility.
-- Changes made: Updated `site-pages.test.jsx` to verify required About content, route-safe links, and non-empty alt attributes.
+- Goal: Apply consistent cream backgrounds and subtle card treatment without changing layout/content.
+- Changes made: Updated About root, non-banner section backgrounds, banner fallback backgrounds, card backgrounds, shadows, borders, and Specialties text contrast.
 - Test plan: full client test suite.
-- Red phase evidence: stale class-based About expectations were replaced with user-visible behavior checks.
+- Red phase evidence: covered by Iteration 1 failing test.
 - Green phase evidence: `npm run test --prefix client` passed.
-- Refactor phase evidence: no behavior-changing refactor needed.
+- Refactor phase evidence: `SpecialtyCard` now uses a `hasImage` branch so fallback cards remain light/readable.
 - Test commands run: `npm run test --prefix client`.
 - Verification command/result: passed.
-- Review findings: About route, buttons, gallery links, and image alts verified.
+- Review findings: no large dark non-banner About section remains.
 - Acceptance status: met.
 - Remaining issues: none in scope.
 - Next action: final hardening.
 
 ### Iteration 3 Polish
-- Goal: Run final verification and quality checks.
-- Changes made: Ran build, lint, root tests, diff check, Fallow, and diff audit.
-- Test plan: build/lint/test/Fallow/diff.
-- Red phase evidence: `npm run lint --prefix client` reports pre-existing unrelated React hook errors in `Booking.jsx` and `Gallery.jsx`.
+- Goal: Run build/lint/server/diff/Fallow checks.
+- Changes made: Final verification and artifacts.
+- Test plan: build, lint attempt, server tests, diff check, Fallow.
+- Red phase evidence: `npm run lint --prefix client` still fails due unrelated existing hook errors in `Booking.jsx` and `Gallery.jsx`.
 - Green phase evidence: `npm run build --prefix client`, `npm run test --prefix client`, `npm run test`, and `git diff --check` passed.
-- Refactor phase evidence: final code review found no further in-scope refactor needed.
+- Refactor phase evidence: no further refactor needed.
 - Test commands run: `npm run build --prefix client`, `npm run lint --prefix client`, `npm run test`, `git diff --check`, `npx fallow health --format json --quiet --explain 2>/dev/null || true`.
 - Verification command/result: build/tests/diff passed; lint failed due unrelated existing files; Fallow completed with existing findings.
-- Review findings: diff is scoped to About UI, tests, and workflow artifacts.
+- Review findings: diff is scoped to About styling/test and workflow artifacts.
 - Acceptance status: met.
 - Remaining issues: unrelated lint/Fallow maintenance findings.
 - Next action: commit and PR.
 
 ### Acceptance Result
-- [x] `/about` renders the requested hero, Meet Karen, trust cards, experience banner, specialties, testimonials, stats, and final CTA.
-- [x] Hero uses a controlled 45–55vh dark image banner and readable centered copy.
-- [x] Booking links point to `/booking`; gallery links point to `/gallery`.
-- [x] Cards/testimonials/stats/specialties use static arrays.
-- [x] Images have non-empty alt text.
-- [x] Existing navigation and routing remain intact.
+- [x] `/about` root uses `#F5F1EE` and dark readable text.
+- [x] Non-banner About sections use `#F5F1EE`.
+- [x] No large dark full-width non-banner About sections remain.
+- [x] Cards use subtle light backgrounds, borders, and shadows.
+- [x] Image overlays remain readable.
+- [x] Navbar/footer untouched.
 - [x] Build passes.
 
 ### Failure Recovery Notes

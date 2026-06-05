@@ -4,7 +4,7 @@ export function AboutHero({ image }) {
   return (
     <section
       aria-labelledby="about-hero-title"
-      className="relative isolate flex min-h-[45vh] items-center overflow-hidden bg-[#14110f] px-5 py-20 text-center text-[#F5F1EE] sm:min-h-[50vh] lg:min-h-[55vh]"
+      className="relative isolate flex min-h-[45vh] items-center overflow-hidden bg-[#F5F1EE] px-5 py-20 text-center text-[#F5F1EE] sm:min-h-[50vh] lg:min-h-[55vh]"
     >
       <img
         alt={image.alt}

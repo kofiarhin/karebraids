@@ -10,7 +10,7 @@ import { aboutImages, specialties, testimonials, trustStats, whyChooseCards } fr
 
 export function About() {
   return (
-    <div className="bg-[#F5F1EE]">
+    <div className="bg-[#F5F1EE] text-[#1F1F1F]">
       <AboutHero image={aboutImages.hero} />
       <MeetKaren image={aboutImages.founder} />
       <WhyChooseUs cards={whyChooseCards} />

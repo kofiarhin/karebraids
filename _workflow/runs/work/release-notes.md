@@ -1,14 +1,13 @@
-# Release Notes — About Page Afro-Luxury Redesign
+# Release Notes — About Background Unification
 
-- Request: Redesign `/about` into a premium Afro-luxury, service-led About page.
+- Request: update `/about` background styling to use one main cream background.
 - User-facing changes:
-  - New dark image hero with KareBraids founder positioning and booking/gallery CTAs.
-  - New Meet Karen founder story section.
-  - New trust cards, experience banner, specialties grid, testimonials, trust stats, and final booking CTA.
+  - About now uses `#F5F1EE` across the page and non-banner sections.
+  - Large dark section backgrounds were removed from About section containers.
+  - Cards now use subtler light backgrounds, borders, and shadows.
 - Developer changes:
-  - Added reusable About section components under `client/src/components/about/`.
-  - Added static About page data in `client/src/data/aboutPageData.js`.
-  - Updated About and site smoke tests.
+  - Added an About test for cream root/non-banner section backgrounds.
+  - Adjusted Tailwind classes in About components only.
 - New routes/APIs: none.
 - New env vars: none.
 - Database/schema changes: none.
@@ -21,5 +20,5 @@
   - `npm run test`
   - `git diff --check`
 - Known limitations: lint still fails due unrelated existing hook errors in `Booking.jsx` and `Gallery.jsx`; screenshot not captured due unavailable browser automation.
-- Follow-up work: add real founder portrait; fix existing lint issues.
-- Suggested commit message: `Redesign About page with premium Afro-luxury sections`
+- Follow-up work: fix existing lint issues.
+- Suggested commit message: `Unify About page background styling`

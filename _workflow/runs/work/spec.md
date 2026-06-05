@@ -1,92 +1,92 @@
-# Detailed Spec — KareBraids About Page Redesign
+# Detailed Spec — About Page Cream Background Unification
 
 ## 1. Metadata
 - Spec filename: `_workflow/runs/work/spec.md`
 - Date: 2026-06-05
-- Request ID / slug: `about-page-afro-luxury-redesign`
+- Request ID / slug: `about-page-background-unification`
 - Request source: latest direct user prompt
 - Execution mode: complete-workflow
-- Request classification: frontend UI redesign
-- Scope level: single page with component/data/test updates
-- Risk level: moderate, because public page routing and tests must remain stable
+- Request classification: frontend UI styling refinement
+- Scope level: single page/component styling and tests
+- Risk level: low
 
 ## 2. Original Request
-- Raw user request: Redesign the KareBraids About page using Afro Hair Trends screenshots as inspiration, with a prescribed section structure and brand colors.
-- Normalized request: Replace `/about` with a premium, conversion-focused Afro-luxury React page using reusable Tailwind-styled sections, static data arrays, accessible images, and route-safe CTAs.
+- Raw user request: update the KareBraids About page so the full page uses `#F5F1EE`, removing dark full-width section backgrounds except image overlays.
+- Normalized request: keep the current About layout/content but make the page and non-banner sections consistently cream, with subtle light cards and readable text.
 - Source prompt / `<artifact-root>/request.md` reference: `_workflow/runs/work/request.md`
 
 ## 3. Questions And Answers
-- Questions asked: none; the prompt was highly specific and repository inspection answered implementation details.
+- Questions asked: none; request is specific.
 - Answers received: not applicable.
-- Questions skipped: visual asset exactness and screenshot availability.
-- Remaining open questions: whether a real Karen founder portrait exists; none was found, so service/founder-style imagery is reused.
+- Questions skipped: none blocking.
+- Remaining open questions: none.
 
 ## 4. Problem Definition
-- Problem being solved: the existing About page does not match the requested Afro Hair Trends-inspired, conversion-focused section structure.
-- Why it matters: About is a trust-building page for premium braiding clients deciding whether to book.
-- Current pain point: content is less aligned to the requested service-led hierarchy and includes an oversized editorial treatment.
-- Expected value: clearer founder story, more trust signals, better CTAs, and a more premium mobile-first presentation.
+- Problem being solved: About sections visually alternate between cream/light and dark blocks, creating an inconsistent page background.
+- Why it matters: the page should feel calmer, more premium, and visually unified.
+- Current pain point: Specialties and banner section containers used dark background classes.
+- Expected value: consistent cream page flow while preserving image-overlay readability.
 
 ## 5. Current State Analysis
-- Existing behavior: `/about` renders a Karen-centered editorial page from a single `About.jsx` file.
-- Existing architecture/components: React Router route exists in `client/src/App.jsx`; shared `Button`, `Header`, `Footer`, and layout already exist.
-- Existing files/modules likely involved: `client/src/pages/About.jsx`, About tests, site page smoke tests, reusable new About components, static data file.
-- Existing data flow: static frontend service/gallery data is available from `client/src/data/services.js`.
-- Existing API/UI/CLI/workflow behavior: About is a static client-side route.
-- Existing tests or verification coverage: `client/src/pages/About.test.jsx` and `client/test/site-pages.test.jsx` cover route rendering and CTAs.
+- Existing behavior: About root is cream, but several sections/components use dark or off-cream backgrounds.
+- Existing architecture/components: About is componentized under `client/src/components/about/` and composed in `client/src/pages/About.jsx`.
+- Existing files/modules likely involved: About page, About section components, About tests, workflow artifacts.
+- Existing data flow: static data only.
+- Existing API/UI/CLI/workflow behavior: static `/about` route.
+- Existing tests or verification coverage: About component tests and site smoke tests.
 
 ## 6. Desired End State
-- Expected final behavior: `/about` renders the required eight-section premium page.
-- User-facing outcome: visitors immediately see KareBraids, Karen, Birmingham service positioning, specialties, testimonials, trust stats, and booking CTAs.
-- Developer-facing outcome: content arrays are isolated in `aboutPageData.js`; sections are reusable components.
-- System/workflow outcome: routing remains unchanged and build/tests pass.
-- Backward compatibility expectations: no route/API/backend changes.
+- Expected final behavior: scrolling `/about` shows one consistent cream page background except image overlay content.
+- User-facing outcome: no large dark section block interrupts the About page.
+- Developer-facing outcome: background rules are asserted by tests.
+- System/workflow outcome: routing unaffected and build passes.
+- Backward compatibility expectations: no content/layout/API changes.
 
 ## 7. Scope
-- In scope: About page markup, section components, static data arrays, About/site tests, workflow artifacts.
-- Out of scope: API/business logic, database changes, booking flow changes, new dependencies, opening-hours content on About.
-- Non-goals: exact Afro Hair Trends copy, carousel implementation, admin editing, image upload.
-- Explicit boundaries: use existing app routing and shared buttons; keep logic static and UI-only.
+- In scope: Tailwind class adjustments for About root/sections/cards and a test for non-banner section backgrounds.
+- Out of scope: content changes, layout changes, navbar/footer changes, backend/API changes, dependencies.
+- Non-goals: redesigning About again.
+- Explicit boundaries: dark treatment may remain inside image overlays and image cards for text legibility.
 
 ## 8. Users And Use Cases
-- Primary users: prospective Birmingham braiding clients.
-- Secondary users: returning clients checking trust/quality signals.
-- Main use cases: learn about Karen, understand service values, view specialties, book appointment.
-- Edge use cases: mobile users, users relying on accessible image labels and semantic headings.
+- Primary users: prospective KareBraids clients browsing About.
+- Secondary users: mobile visitors scanning trust and service content.
+- Main use cases: scroll About without abrupt large dark blocks.
+- Edge use cases: image card with missing image should remain readable on light card.
 
 ## 9. Functional Requirements
-- Required behaviors: render hero, Meet Karen, four cards, experience banner, six specialties, three testimonials, four stats, final CTA.
-- Inputs: static data arrays and existing image URLs.
-- Outputs: static accessible page content.
+- Required behaviors: root wrapper uses `bg-[#F5F1EE] text-[#1F1F1F]`; non-banner sections use `bg-[#F5F1EE]`; cards use subtle light treatment.
+- Inputs: existing components and static data.
+- Outputs: same content with consistent styling.
 - State changes: none.
-- Error states: missing specialty images fall back to dark cards.
+- Error states: no-image specialty card remains readable.
 - Permissions/auth expectations: none.
 
 ## 10. Non-Functional Requirements
-- Performance expectations: static components, no new runtime data fetches.
-- Reliability expectations: no route regressions.
-- Security/privacy expectations: no secrets or external business logic.
-- Accessibility expectations: semantic sections/headings, non-empty alt text, named links/buttons.
-- Maintainability expectations: reusable components and isolated static data.
-- DX expectations: tests remain readable and build passes.
+- Performance expectations: no new runtime cost.
+- Reliability expectations: build/tests pass.
+- Security/privacy expectations: no secrets.
+- Accessibility expectations: contrast remains readable.
+- Maintainability expectations: class updates remain local to About components.
+- DX expectations: tests document background rule.
 
 ## 11. Affected Surfaces
-- Files likely affected: `client/src/pages/About.jsx`, new `client/src/components/about/*`, `client/src/data/aboutPageData.js`, About/site tests.
-- Directories likely affected: `client/src/components/about`, `client/src/data`, `client/src/pages`, `client/test`, workflow artifacts.
-- UI surfaces: `/about`.
+- Files likely affected: `client/src/pages/About.jsx`, `client/src/components/about/*.jsx`, `client/src/pages/About.test.jsx`.
+- Directories likely affected: `client/src/components/about`, `client/src/pages`, workflow artifacts.
+- UI surfaces: `/about` only.
 - API routes: none.
-- Components: About section components.
+- Components: AboutHero, MeetKaren, WhyChooseUs, ExperienceBanner, SpecialtiesGrid, Testimonials, TrustStats, AboutCTA.
 - Services: none.
 - Database/schema: none.
 - Config/env vars: none.
-- Tests: frontend About and public-page smoke tests.
-- Docs: workflow artifacts only.
+- Tests: About component test.
+- Docs: workflow artifacts.
 
 ## 12. Dependency And Integration Map
-- Internal dependencies: existing `Button`; existing service image data.
-- External packages/services: none added.
-- Integration points: React Router `Link` via shared `Button` for `/booking` and `/gallery`.
-- Ordering constraints: data before components; components before page; tests after page.
+- Internal dependencies: existing About components and shared Button.
+- External packages/services: none.
+- Integration points: React route remains unchanged.
+- Ordering constraints: add failing test, update styles, verify.
 - Migration/setup requirements: none.
 
 ## 13. Data And State Impact
@@ -94,66 +94,65 @@
 - Database changes: none.
 - State management changes: none.
 - Cache/session/local storage impact: none.
-- Backward compatibility impact: no API or route changes.
+- Backward compatibility impact: none.
 
 ## 14. UX / API / Workflow Expectations
-- UX expectations: warm premium dark/cream/gold page with generous spacing and controlled typography.
+- UX expectations: unified cream background, subtle light cards, readable dark text, image overlays allowed.
 - API contract expectations: none.
-- CLI/workflow behavior: tests/build run from existing npm scripts.
-- Error handling expectations: missing images render styled dark cards.
-- Empty/loading/success/failure states: not applicable to static page.
+- CLI/workflow behavior: existing scripts.
+- Error handling expectations: no-image cards remain readable.
+- Empty/loading/success/failure states: not applicable.
 
 ## 15. Execution Strategy
-- Recommended implementation approach: split sections into dedicated components and feed them from static arrays.
-- Suggested sequencing: data -> components -> page composition -> tests -> verification.
-- Safe rollout/migration approach: preserve `/about` route and shared layout.
-- Files to inspect before editing: current About, Button, Layout/Header/Footer, service image data, About/site tests.
-- Decisions to avoid until more evidence exists: adding new image assets or dependencies.
+- Recommended implementation approach: update root and section/card Tailwind classes; avoid changing layout/content.
+- Suggested sequencing: failing test -> style updates -> targeted/full verification.
+- Safe rollout/migration approach: CSS class-only changes.
+- Files to inspect before editing: About components and tests.
+- Decisions to avoid until more evidence exists: global CSS changes.
 
 ## 16. Verification Strategy
-- Required automated checks: targeted About test, full client test suite, client build, server tests, lint attempt, diff check.
-- Required manual checks: code-surface responsive/accessibility review; screenshot if browser automation available.
-- Test types needed: React render/smoke tests.
-- Build/lint/typecheck expectations: build passes; lint may expose unrelated existing failures.
-- Acceptance evidence required: page content, links, alt text, route stability, build pass.
-- Proof of completion: passing tests/build plus final diff audit.
+- Required automated checks: About test, full client tests, client build, server tests, lint attempt, diff check, Fallow.
+- Required manual checks: code-surface class review; screenshot unavailable if no browser tooling.
+- Test types needed: render/class test.
+- Build/lint/typecheck expectations: build passes; known unrelated lint failures documented.
+- Acceptance evidence required: test asserting cream root/non-banner sections and no dark full-width classes.
+- Proof of completion: passing tests/build and diff audit.
 
 ## 17. Acceptance Criteria
-- [x] `/about` renders the required section structure on desktop/mobile-capable markup.
-- [x] Hero text is readable, centered, and not clipped by full-screen sizing.
-- [x] Booking CTAs link to `/booking`; gallery CTAs link to `/gallery`.
-- [x] Static cards, specialties, testimonials, and stats are data-driven.
-- [x] Images have non-empty alt text and buttons/links have names.
-- [x] Existing navigation/routing is preserved.
+- [x] `/about` root uses `#F5F1EE` as main background.
+- [x] Non-banner About sections use `#F5F1EE` and do not use dark full-width background classes.
+- [x] Image banner overlays remain readable.
+- [x] Cards use subtle light backgrounds and borders.
+- [x] Text remains readable with brand accents.
+- [x] Navbar/footer untouched.
 - [x] `npm run build --prefix client` passes.
-- [x] Existing tests are run and relevant tests updated.
 
 ## 18. Edge Cases And Failure Modes
-- Edge cases: missing service image, small screens, long quote copy.
-- Failure modes: broken import path, inaccessible image, duplicate/ambiguous CTA names in tests.
-- Regression risks: site smoke tests expecting old About selectors.
-- Recovery expectations: update tests to reflect new public behavior, not stale implementation classes.
+- Edge cases: missing specialty image, image banner load failure.
+- Failure modes: dark full-width section class accidentally remains.
+- Regression risks: tests become too implementation-aware; mitigated by focusing on section background acceptance.
+- Recovery expectations: adjust only styling classes.
 
 ## 19. Risks And Mitigations
-- Technical risks: Tailwind v4 arbitrary classes may be purged incorrectly; mitigated by static class strings.
-- Product/UX risks: copied layout could feel generic; mitigated by KareBraids-specific copy/colors.
-- Security risks: none introduced.
-- Scope risks: accidental backend/API changes; mitigated by frontend-only edits.
-- Mitigation plan: targeted diff review and full test/build verification.
+- Technical risks: Tailwind arbitrary class test matching; mitigated by static class strings.
+- Product/UX risks: image banner text depends on overlay if image fails; section fallback background is cream per request.
+- Security risks: none.
+- Scope risks: accidental layout/content change; mitigated by diff review.
+- Mitigation plan: targeted tests and diff audit.
 
 ## 20. Assumptions
-- Explicit assumptions: available service/gallery images are acceptable until a real founder portrait exists.
+- Explicit assumptions: dark overlay content inside image banners/cards is acceptable for readability.
 - Confidence level: high.
-- What to revisit if assumptions are wrong: replace the founder/hero image mappings with approved assets.
+- What to revisit if assumptions are wrong: convert image banners to light text-over-cream layouts.
 
 ## 21. Open Questions
 - Blocking questions: none.
-- Non-blocking questions: preferred real Karen portrait source.
-- Execution impact: no blocker; fallback imagery used.
+- Non-blocking questions: none.
+- Execution impact: none.
 
 ## 22. Task Extraction Notes
-- Suggested vertical task boundaries: one vertical page replacement task covering data, components, tests, and verification.
-- Suggested first task: implement required About page sections and route-safe CTAs.
-- Suggested task ordering: implementation, tests, build/lint/Fallow, review artifacts.
-- Areas that should not become separate tasks: backend/API/database.
-- How the 3-pass Build -> Refine -> Polish loop should apply: Build components/data/tests; Refine route/test compatibility and accessibility; Polish build/lint/Fallow/diff/artifacts.
+- Suggested vertical task boundaries: one styling refinement task.
+- Suggested first task: unify About backgrounds and update test.
+- Suggested task ordering: test, class changes, verification, artifacts.
+- Areas that should not become separate tasks: backend/API/navbar/footer.
+- How the 3-pass Build -> Refine -> Polish loop should apply: Red test, green style update, polish verification.

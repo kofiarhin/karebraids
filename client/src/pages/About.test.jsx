@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { About } from './About.jsx'
 
 function renderAbout() {
-  render(
+  return render(
     <MemoryRouter>
       <About />
     </MemoryRouter>,
@@ -39,5 +39,19 @@ describe('About', () => {
 
     expect(screen.getAllByRole('link', { name: /book appointment/i })[0]).toHaveAttribute('href', '/booking')
     expect(screen.getAllByRole('link', { name: /view gallery/i })[0]).toHaveAttribute('href', '/gallery')
+  })
+
+  it('uses the cream page background consistently across non-banner sections', () => {
+    const { container } = renderAbout()
+    const page = container.firstElementChild
+    const nonBannerSections = [...container.querySelectorAll('section')].filter(
+      (section) => !section.querySelector('img.absolute.inset-0'),
+    )
+
+    expect(page).toHaveClass('bg-[#F5F1EE]', 'text-[#1F1F1F]')
+    nonBannerSections.forEach((section) => {
+      expect(section.className).toContain('bg-[#F5F1EE]')
+      expect(section.className).not.toMatch(/bg-\[#14110f\]|bg-black|bg-neutral-950|bg-stone-950/)
+    })
   })
 })

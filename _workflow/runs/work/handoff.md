@@ -2,7 +2,7 @@
 
 - Run id: `work`
 - Current phase: Complete
-- Request: Redesign `/about` into a premium Afro-luxury, service-led About page inspired by Afro Hair Trends screenshots.
+- Request: Unify `/about` background styling around `#F5F1EE` while preserving layout/content.
 - Applied skill: design-taste-frontend
 - Last completed task: `TASK-001`
 - Current task: none
@@ -17,14 +17,12 @@
   - `client/src/components/about/Testimonials.jsx`
   - `client/src/components/about/TrustStats.jsx`
   - `client/src/components/about/AboutCTA.jsx`
-  - `client/src/data/aboutPageData.js`
   - `client/src/pages/About.test.jsx`
-  - `client/test/site-pages.test.jsx`
   - `_workflow/runs/work/*`
   - `.workflow/fallow-audit.md`
-- Dirty worktree before work: existing active run artifacts present; source files changed only for this workflow.
+- Dirty worktree before work: clean after previous commit.
 - Verification status:
-  - `npm run test --prefix client -- About.test.jsx`: passed
+  - `npm run test --prefix client -- About.test.jsx`: failed first as Red evidence, then passed
   - `npm run test --prefix client`: passed
   - `npm run build --prefix client`: passed
   - `npm run lint --prefix client`: failed due existing unrelated hook lint errors in `Booking.jsx` and `Gallery.jsx`

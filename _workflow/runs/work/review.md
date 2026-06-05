@@ -1,20 +1,18 @@
-# Review — About Page Afro-Luxury Redesign
+# Review — About Background Unification
 
-- Request: redesign KareBraids About page into a premium conversion-focused page.
+- Request: make the About page use one consistent `#F5F1EE` background while preserving layout/content.
 - Spec file used: `_workflow/runs/work/spec.md`
 - Task plan used: `_workflow/runs/work/tasks.md`
 - Tasks reviewed: `TASK-001`
-- Bugs found: none in changed About implementation.
-- Scope creep check: no backend/API/database/dependency changes; Opening Hours not added to About.
+- Bugs found: none in changed About styling.
+- Scope creep check: no content, layout, navbar, footer, API, backend, dependency, or route changes.
 - Final diff audit:
   - `git diff --stat` and `git diff` reviewed.
-  - Diff matches saved spec.
-  - No unrelated source files intentionally touched.
-  - Tests updated for changed About behavior.
-  - No generated junk or secrets intentionally added; `.fallow/` cache was removed.
+  - Diff is scoped to About styling, About test, and workflow artifacts.
+  - No secrets or generated junk intentionally added; `.fallow/` cache removed.
 - Failure recovery notes: lint failure is unrelated existing hook errors in Booking and Gallery.
-- Missing tests: screenshot not captured because browser automation is unavailable in the current toolset; code-surface and automated render checks were used instead.
+- Missing tests: no browser screenshot due unavailable browser automation; render tests and code-surface class review used.
 - Security concerns: none.
-- Architecture concerns: none; data remains static and API logic is not in UI components.
-- Follow-up tasks: add an approved real Karen founder portrait asset; resolve existing lint errors.
-- Final review verdict: Passed with known unrelated lint limitations.
+- Architecture concerns: none.
+- Follow-up tasks: fix existing lint errors; optionally add browser screenshot tooling.
+- Final review verdict: Passed with known unrelated lint limitation.

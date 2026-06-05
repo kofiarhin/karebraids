@@ -5,20 +5,20 @@
 - Verdict: PARTIAL
 
 ## Summary
-Fallow completed successfully with machine-readable JSON output. Findings are existing repository health/complexity issues rather than blockers introduced by the About page redesign.
+Fallow completed successfully with machine-readable JSON output. Findings are existing repository health/complexity issues rather than blockers introduced by the About page background refinement.
 
 ## Notable Findings
-- `client/src/pages/Booking.jsx`: high complexity and React hook lint-adjacent concerns.
-- `client/src/pages/Gallery.jsx`: hook state synchronization concerns surfaced by lint, not part of this change.
+- `client/src/pages/Booking.jsx`: high complexity and existing hook lint concerns.
+- `client/src/pages/Gallery.jsx`: existing hook state synchronization concern surfaced by lint.
 - `server/utils/serviceValidation.js` and `server/utils/bookingValidation.js`: high CRAP/complexity findings needing future tests/refactors.
 
 ## Changed-Code Risk
-- Changed About page files are static UI/data/test files.
-- No backend, API, database, dependency, or environment changes were introduced.
+- Changed source files are limited to About UI styling and About tests.
+- No backend, API, database, dependency, route, navbar, footer, or environment changes were introduced.
 
 ## Recommended Follow-Up
 - Refactor `Booking.jsx` and `Gallery.jsx` hook state patterns.
 - Add targeted validation utility tests and reduce server validation complexity.
 
 ## Verdict Rationale
-PARTIAL because Fallow reports existing repository quality findings, but none are introduced by or blocking the About page UI redesign.
+PARTIAL because Fallow reports existing repository quality findings, but none are introduced by or blocking this About page styling refinement.

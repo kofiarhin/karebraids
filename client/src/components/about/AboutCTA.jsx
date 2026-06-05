@@ -2,7 +2,7 @@ import { Button } from '../Button.jsx'
 
 export function AboutCTA({ image }) {
   return (
-    <section className="relative isolate overflow-hidden bg-[#14110f] px-5 py-20 text-center text-[#F5F1EE] sm:py-24" aria-labelledby="about-cta-title">
+    <section className="relative isolate overflow-hidden bg-[#F5F1EE] px-5 py-20 text-center text-[#F5F1EE] sm:py-24" aria-labelledby="about-cta-title">
       <img className="absolute inset-0 -z-20 h-full w-full object-cover opacity-45" src={image.src} alt={image.alt} />
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(212,163,115,0.28),transparent_32%),linear-gradient(180deg,rgba(20,17,15,0.82),rgba(20,17,15,0.95))]" />
       <div className="mx-auto max-w-3xl">
