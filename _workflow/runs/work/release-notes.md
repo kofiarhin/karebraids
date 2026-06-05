@@ -1,42 +1,25 @@
-# Release Notes
+# Release Notes — About Page Afro-Luxury Redesign
 
-- Request: Redesign `/about` into a premium trust-building founder page centered around Karen.
-
-## User-Facing Changes
-- Replaced the simple About page with an editorial founder page for Karen.
-- Added trust cards, Birmingham positioning, KareBraids Standard steps, appointment timeline, proof metrics, and a strong final booking CTA.
-- Added responsive premium dark Afro-luxury styling.
-
-## Developer Changes
-- Refactored repeated About content into clean arrays.
-- Added targeted About component tests.
-
-## New Routes/APIs
-- none
-
-## New Env Vars
-- none
-
-## Database/Schema Changes
-- none
-
-## Dependencies Added/Removed
-- none
-
-## Test Commands Run
-- `npm run test --prefix client -- About.test.jsx`
-- `npm run test --prefix client`
-- `npm run build --prefix client`
-- `npm run lint --prefix client` (fails due unrelated existing hook lint errors)
-- `npx fallow health --format json --quiet --explain 2>/dev/null || true`
-
-## Known Limitations
-- Uses existing gallery imagery rather than a real Karen portrait asset.
-- Existing unrelated lint issues remain in `Booking.jsx` and `Gallery.jsx`.
-
-## Follow-Up Work
-- Add real founder portrait when available.
-- Resolve unrelated hook lint findings.
-
-## Suggested Commit Message
-- `Redesign About page as premium founder story`
+- Request: Redesign `/about` into a premium Afro-luxury, service-led About page.
+- User-facing changes:
+  - New dark image hero with KareBraids founder positioning and booking/gallery CTAs.
+  - New Meet Karen founder story section.
+  - New trust cards, experience banner, specialties grid, testimonials, trust stats, and final booking CTA.
+- Developer changes:
+  - Added reusable About section components under `client/src/components/about/`.
+  - Added static About page data in `client/src/data/aboutPageData.js`.
+  - Updated About and site smoke tests.
+- New routes/APIs: none.
+- New env vars: none.
+- Database/schema changes: none.
+- Dependencies added/removed: none.
+- Test commands run:
+  - `npm run test --prefix client -- About.test.jsx`
+  - `npm run test --prefix client`
+  - `npm run build --prefix client`
+  - `npm run lint --prefix client`
+  - `npm run test`
+  - `git diff --check`
+- Known limitations: lint still fails due unrelated existing hook errors in `Booking.jsx` and `Gallery.jsx`; screenshot not captured due unavailable browser automation.
+- Follow-up work: add real founder portrait; fix existing lint issues.
+- Suggested commit message: `Redesign About page with premium Afro-luxury sections`

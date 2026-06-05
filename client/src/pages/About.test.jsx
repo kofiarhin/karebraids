@@ -12,28 +12,32 @@ function renderAbout() {
 }
 
 describe('About', () => {
-  it('centers Karen and the Birmingham founder story', () => {
+  it('renders the premium About hero with clear founder-led positioning', () => {
     renderAbout()
 
-    expect(screen.getByRole('heading', { level: 1, name: /meet karen, the hands and heart behind karebraids/i })).toBeInTheDocument()
-    expect(screen.getByText(/birmingham-based braiding service/i)).toBeInTheDocument()
-    expect(screen.getByText(/Founder-led braiding care/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /about karebraids/i })).toBeInTheDocument()
+    expect(screen.getByText(/founded by karen/i)).toBeInTheDocument()
+    expect(screen.getByText(/premium braiding services in birmingham/i)).toBeInTheDocument()
+    expect(screen.getByText(/creating beautiful protective styles with care/i)).toBeInTheDocument()
   })
 
-  it('renders trust-building sections before the final booking CTA', () => {
+  it('renders the required service-led About page sections', () => {
     renderAbout()
 
-    expect(screen.getByRole('heading', { name: /care you can feel/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /premium braiding with a calm, personal service experience/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /a thoughtful process/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /know what happens next/i })).toBeInTheDocument()
-    expect(screen.getByText(/Protective-style focused/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /meet karen/i })).toBeInTheDocument()
+    expect(screen.getByText(/founder of karebraids/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /why clients choose karebraids/i })).toBeInTheDocument()
+    expect(screen.getByText(/more than a hairstyle/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /braiding specialties/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /what clients say/i })).toBeInTheDocument()
+    expect(screen.getByText(/200\+/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /ready for your next style/i })).toBeInTheDocument()
   })
 
-  it('keeps booking and gallery actions wired as links', () => {
+  it('keeps booking and gallery actions wired as internal links', () => {
     renderAbout()
 
-    expect(screen.getAllByRole('link', { name: /book an appointment/i })[0]).toHaveAttribute('href', '/booking')
-    expect(screen.getByRole('link', { name: /view styles/i })).toHaveAttribute('href', '/gallery')
+    expect(screen.getAllByRole('link', { name: /book appointment/i })[0]).toHaveAttribute('href', '/booking')
+    expect(screen.getAllByRole('link', { name: /view gallery/i })[0]).toHaveAttribute('href', '/gallery')
   })
 })
