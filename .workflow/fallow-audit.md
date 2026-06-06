@@ -1,49 +1,29 @@
 # Fallow Audit
 
+## Metadata
 - Date: 2026-06-06
-- Request: KareBraids global theme system
-- Command: `npx fallow health --format json --quiet --explain 2>/dev/null || true`
-- JSON envelope: `kind: health`, schema version 7, Fallow 2.89.0
-- Verdict: PARTIAL
+- Scope: theme-aware header/navigation changed-code audit
+- Command: `FALLOW_AGENT_SOURCE=codex npx fallow audit --base HEAD --format json --quiet --explain 2>/dev/null || true`
+- Fallow version: 2.89.0
+- Schema version: 7
 
-## Summary
+## Result
+- Verdict: PASSED
+- Fallow verdict: `pass`
+- Changed files analyzed: 7 at audit time
+- Dead-code issues introduced: 0
+- Complexity findings introduced: 0
+- Duplication clone groups introduced: 0
+- Circular dependencies / boundary violations / dependency issues: 0 in changed-code audit
 
-Fallow completed with valid machine-readable JSON. Repository health scored **75.8 (B)** across 113 analyzed files, with average maintainability **90.6**. The report contains existing repository-wide dead-code, unit-size, coupling, and validation/page complexity debt; it did not produce a complexity finding or hotspot for the changed theme source files.
+## Initial Failure And Recovery
+- The first audit omitted `--base` and returned exit code 2 because no base branch could be auto-detected.
+- Recovery: reran with `--base HEAD`; the command completed successfully.
+- An intermediate audit reported two introduced duplicate test fragments in `client/test/theme-tokens.test.jsx`.
+- Recovery: extracted a small shared assertion helper and reran the audit; final verdict passed with zero introduced duplication.
 
-## Changed-Code Risk
+## Interpretation
+The changed JavaScript/test surfaces introduce no dead code, complexity, dependency, architecture, or duplication regressions. CSS semantics are covered by focused Vitest assertions; Fallow is not a CSS linter or visual verifier.
 
-- No Fallow `findings` or `hotspots` were reported for `ThemeProvider.jsx`, `ThemeMenu.jsx`, `Header.jsx`, `theme.js`, or `ThemeContext.js`.
-- `ThemeMenu` is listed as a large function at 196 lines because accessible nested-menu markup and event handling live in one reusable component; cyclomatic/cognitive thresholds were not exceeded.
-- No circular dependency or unused dependency penalty was reported.
-- The implementation adds no dependency, API, database, auth, or environment surface.
-
-## Notable Repository Findings
-
-- `client/src/pages/Booking.jsx`: existing high cyclomatic/cognitive complexity; also the source of a pre-existing full-lint hook error.
-- `server/utils/serviceValidation.js` and `server/utils/bookingValidation.js`: existing critical CRAP/coverage findings.
-- `client/src/pages/Admin.jsx` and existing server auth/validation functions: high/moderate estimated coverage-risk findings.
-- Repository vital signs include 14 estimated dead files, 8 dead exports, and 5% duplicated lines; these are outside the approved theme scope.
-
-## Cleanup And Architecture Review
-
-- Theme constants/storage/media resolution are separated from React lifecycle code.
-- Context access is separated from the provider to preserve Fast Refresh lint compliance.
-- Existing semantic CSS architecture is extended rather than duplicated into component classes.
-- No changed-code circular/re-export cycle, unused dependency, unlisted dependency, security candidate, or architecture-boundary issue was identified by this health run.
-
-## Recommended Follow-Up
-
-- Address Booking/Gallery hook lint and complexity in a separate request.
-- Add targeted coverage for server validation utilities.
-- Consider splitting ThemeMenu presentation subtrees only if future options/menus expand; current complexity does not require it.
-
-## Verdict Rationale
-
-`PARTIAL` reflects existing repository-wide quality findings and the pre-existing full-lint failure. The global theme changes themselves introduce no reported Fallow finding or hotspot and are supported by passing targeted lint, tests, and build.
-
-## 2026-06-06 — Theme Trigger Refinement Refresh
-
-- Command: `npx fallow health --format json --quiet --explain 2>/dev/null || true`
-- Result: health 75.8 (B), valid `health` JSON envelope.
-- Changed-surface result: no finding or hotspot for ThemeMenu or the CSS trigger refinement.
-- Verdict remains: PARTIAL due existing repository-wide findings; this corrective UI diff adds no reported quality risk.
+## Final Verdict
+PASSED

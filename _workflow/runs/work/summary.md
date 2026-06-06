@@ -60,3 +60,21 @@
 - Verification: Focused tests 11/11, full client tests 99/99, changed-file lint passed, build passed, diff check passed, Fallow 75.8/B with no changed-surface finding/hotspot.
 - Known limitation: Full lint retains unrelated pre-existing Booking/Gallery errors; screenshot tooling unavailable.
 - Acceptance: All trigger hierarchy and behavior-preservation criteria met.
+
+## 2026-06-06 — Theme-aware Header Navigation
+- Request: make desktop/mobile header navigation respond to light, dark, and system-resolved themes.
+- Spec: `_workflow/runs/work/spec.md`; complete with all required sections and no blocking gaps.
+- Approval: direct user instruction with fully defined requirements and no-discovery mandate, recorded before planning.
+- Task plan: `_workflow/runs/work/tasks.md`.
+- Review: `_workflow/runs/work/review.md`.
+- Release notes: `_workflow/runs/work/release-notes.md`.
+- Tasks: TASK-001 reached Needs Human Review after all three Build/Refine/Polish iterations.
+- Iteration evidence: each pass recorded TDD Red, Green, Refactor, review, and verification evidence in progress/verification.
+- Files changed: semantic header CSS, two theme CSS test files, and workflow/Fallow artifacts.
+- Verification: focused 11 tests pass; build/diff/Fallow pass. Full test has six timeout failures, with contact/site pages passing independently and booking reproducing at clean HEAD. Lint has unchanged baseline hook errors.
+- Acceptance: all functional/style criteria met; repository-wide existing-tests criterion partial due baseline failures.
+- Failure recovery: corrected Fallow base detection, removed introduced test duplication, isolated full-suite failures, and reproduced booking timeouts at baseline.
+- Final diff audit: scoped, no unrelated code or sensitive values.
+- Unresolved: baseline booking timeouts, baseline lint errors, screenshot CDN block.
+- Recommended next work: fix baseline verification debt separately.
+- Workflow health: Partial.

@@ -1,20 +1,21 @@
 # Active Work Request
 
 ## Request ID
-`theme-menu-trigger-refinement`
+`theme-aware-header-navigation`
 
 ## Source
-Latest direct user prompt on 2026-06-06. Requirements are fully defined and the user explicitly instructed the agent not to enter discovery mode or ask questions.
+Latest direct user prompt on 2026-06-06. Requirements are fully defined; discovery and clarifying questions were explicitly prohibited.
 
 ## Execution Mode
-`complete-workflow` corrective continuation of the approved global theme spec.
+`complete-workflow`
 
 ## Normalized Request
-Refine the existing KareBraids ThemeMenu overflow trigger so it reads as a quiet secondary utility and no longer competes with the Book Appointment CTA. Keep all theme logic, persistence, system syncing, nested menu behavior, keyboard support, outside-click/Escape handling, focus management, and desktop/mobile functionality unchanged.
-
-Use a compact approximately 36px ghost trigger with a transparent background, subtle semantic border, secondary text color, restrained semantic hover treatment, visible focus ring, and approximately 10–12px separation from the CTA. Ensure the same trigger remains intentional inside the mobile drawer. Add or update tests that protect the visual hierarchy and run existing verification.
+Fix the KareBraids header/navigation styling so desktop and mobile navigation surfaces consume semantic theme tokens and visibly switch with the resolved `data-theme`. Preserve the existing dark appearance, provide a coherent light header, keep branding/navigation/active state/booking CTA/theme trigger readable and appropriately prioritized, preserve theme persistence and live system syncing, and add/update Vitest coverage.
 
 ## Explicit Boundaries
-- CSS/UI hierarchy refinement only; no theme logic changes.
-- No visible Theme label.
-- No new dependencies, page redesigns, backend/API/database/auth/env changes, or Tailwind dark variants.
+- Frontend CSS and focused theme-style tests only unless inspection proves markup or runtime changes are required.
+- No backend, API, database, auth, dependency, routing, or theme-state behavior changes.
+- No discovery questions or alternative proposals.
+
+## Approval Record
+The user supplied complete requirements, explicit acceptance criteria, implementation guidance, and a direct instruction to inspect and implement. This is recorded as explicit approval to execute the saved specification matching those requirements without a separate discovery exchange.

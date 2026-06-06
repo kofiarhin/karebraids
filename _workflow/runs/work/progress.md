@@ -299,3 +299,64 @@
 - [x] Mobile trigger remains intentional and low contrast.
 - [x] Menu behavior and theme logic are unchanged.
 - [x] Existing tests pass.
+
+## 2026-06-06 — TASK-001: Make desktop and mobile navigation follow the resolved theme
+- Status: Needs Human Review
+- Lifecycle transition: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Needs Human Review
+- Files changed: `client/src/index.css`, `client/src/theme/ThemeBootstrap.test.js`, `client/test/theme-tokens.test.jsx`, workflow artifacts, `.workflow/fallow-audit.md`.
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build
+- Goal: establish an explicit light/dark semantic header contract and migrate core navigation surfaces.
+- Changes: added header background/surface/text/link/border/shadow/overlay/accent/CTA roles and consumed them in header, brand, desktop nav, ThemeMenu, and mobile shell selectors.
+- Test plan: static CSS contract in `ThemeBootstrap.test.js`.
+- Red: targeted test failed on missing `--color-header-background` in explicit dark theme.
+- Green: targeted test passed after roles and selector migration.
+- Refactor: existing overflow trigger assertions now reference header semantic roles.
+- Commands: `npm run test --prefix client -- src/theme/ThemeBootstrap.test.js`.
+- Review: duplicate late header overrides were also migrated so the new contract wins in the effective cascade.
+- Acceptance: core desktop and mobile surfaces theme-aware.
+- Remaining: harden mobile CTA and focus treatment.
+- Next: Refine.
+
+### Iteration 2 Refine
+- Goal: remove remaining legacy dark-oriented navigation values and preserve CTA hierarchy.
+- Changes: migrated mobile primary CTA, brand/toggle shadows, drawer priority override, hover states, and control surfaces.
+- Test plan: inspect the first mobile CTA rule rather than allowing a regex to cross into a later override.
+- Red: targeted test failed because the base mobile CTA still used legacy gradient and `--brand-950` foreground.
+- Green: mobile CTA now uses explicit themed CTA background/foreground roles and targeted tests passed.
+- Refactor: normalized duplicate priority override and semantic comment.
+- Commands: `npm run test --prefix client -- src/theme/ThemeBootstrap.test.js`.
+- Review: booking CTA remains visually solid/dominant while ThemeMenu stays transparent/secondary.
+- Acceptance: mobile navigation and CTA role coverage complete.
+- Remaining: focus semantic role and final quality checks.
+- Next: Polish.
+
+### Iteration 3 Polish
+- Goal: complete accessible focus theming and verify no changed-code quality regression.
+- Changes: added theme-specific focus-ring role, migrated navigation focus outlines, taught the central token test about explicit dark roots, and extracted repeated test assertions.
+- Test plan: require focus role in both themes and selector consumption.
+- Red: targeted test failed on missing `--color-header-focus-ring`.
+- Green: targeted tests passed after token/style migration.
+- Refactor: Fallow initially found introduced test duplication; helper extraction reduced final Fallow findings to zero.
+- Commands: targeted Vitest, full client Vitest, independent recovery tests, baseline detached-worktree test, lint, build, diff check, Fallow audit.
+- Verification: in-scope tests/build/diff/Fallow pass; full test/lint remain partial due confirmed baseline failures.
+- Review: requested selectors contain no literal colors; runtime theme files remain unchanged.
+- Acceptance status: all implementation criteria met; repository-wide “existing tests pass” cannot be marked complete because baseline booking tests time out.
+- Remaining issues: two pre-existing booking test timeouts; pre-existing lint errors; screenshot blocked by browser CDN 403.
+- Next action: commit and PR with Partial workflow health / Needs Human Review noted.
+
+### Acceptance Result
+- [x] Light theme has a light semantic desktop header with readable brand, links, accent, CTA, trigger, border, and shadow.
+- [x] Dark theme preserves the existing dark-luxury header through explicit roles.
+- [x] Mobile toggle, backdrop, drawer, header, links, CTA, and ThemeMenu are theme-aware.
+- [x] Theme persistence and system-sync runtime logic is unchanged and provider/menu tests remain covered.
+- [~] Existing tests/lint: in-scope tests and build pass; full suite/lint retain confirmed pre-existing failures.
+
+### Failure Recovery
+- Full test failures were isolated by rerunning affected files. Contact and site-page suites passed independently.
+- Booking failures reproduced identically in a clean detached HEAD worktree, confirming they predate this change.
+- Fallow exit-code-2 base detection was corrected with `--base HEAD`; introduced duplicate test assertions were refactored and the audit reran to pass.
+
+### Blockers
+- Repository baseline booking timeout and lint failures prevent a fully Passed workflow verdict.

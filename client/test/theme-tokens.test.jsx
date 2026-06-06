@@ -4,11 +4,20 @@ import { describe, expect, it } from 'vitest'
 const styles = readFileSync('src/index.css', 'utf8')
 const rootMatch = styles.match(/:root\s*\{([\s\S]*?)\n\}/)
 const rootTokens = rootMatch?.[1] || ''
+const darkRootMatch = styles.match(/:root\[data-theme="dark"\]\s*\{([\s\S]*?)\n\}/)
 const lightRootMatch = styles.match(/:root\[data-theme="light"\]\s*\{([\s\S]*?)\n\}/)
 const selectorRules = styles
   .replace(rootMatch?.[0] || '', '')
+  .replace(darkRootMatch?.[0] || '', '')
   .replace(lightRootMatch?.[0] || '', '')
 const colorLiteralPattern = /#[\da-f]{3,8}\b|(?:rgb|hsl)a?\([^)]*\)/gi
+
+
+function expectStylesToMatch(patterns) {
+  for (const pattern of patterns) {
+    expect(styles).toMatch(pattern)
+  }
+}
 
 const requiredTokens = [
   '--color-page-background',
@@ -45,20 +54,24 @@ describe('semantic color theme', () => {
   })
 
   it('uses semantic tokens for the priority disconnected surfaces', () => {
-    expect(styles).toMatch(/\.mobile-nav-drawer\s*\{[\s\S]*?background:\s*var\(--color-panel-background\)/)
-    expect(styles).toMatch(/\.booking-panel\s*\{[\s\S]*?background:\s*var\(--color-panel-background\)/)
-    expect(styles).toMatch(/\.admin-table-panel[^}]*\{[\s\S]*?background:\s*var\(--color-panel-background\)/)
-    expect(styles).toMatch(/\.status-confirmed\s*\{[\s\S]*?var\(--color-state-success/)
-    expect(styles).toMatch(/\.status-cancelled\s*\{[\s\S]*?var\(--color-state-error/)
+    expectStylesToMatch([
+      /\.mobile-nav-drawer\s*\{[\s\S]*?background:\s*var\(--color-header-surface\)/,
+      /\.booking-panel\s*\{[\s\S]*?background:\s*var\(--color-panel-background\)/,
+      /\.admin-table-panel[^}]*\{[\s\S]*?background:\s*var\(--color-panel-background\)/,
+      /\.status-confirmed\s*\{[\s\S]*?var\(--color-state-success/,
+      /\.status-cancelled\s*\{[\s\S]*?var\(--color-state-error/,
+    ])
   })
 
   it('uses restrained semantic roles for Booking and Admin operational states', () => {
-    expect(styles).toMatch(/\.booking-page\s*\{[\s\S]*?background:\s*var\(--gradient-shell-subtle\)/)
-    expect(styles).toMatch(/\.theme-brand-shell \.booking-calendar[^}]*\{[\s\S]*?background:\s*var\(--color-panel-background-soft\)/)
-    expect(styles).toMatch(/\.admin-table th\s*\{[\s\S]*?background:\s*var\(--color-surface-elevated\)/)
-    expect(styles).toMatch(/\.admin-status-field select\s*\{[\s\S]*?background:\s*var\(--color-state-info-surface\)/)
-    expect(styles).toMatch(/\.theme-brand-shell \.form-alert\s*\{[\s\S]*?background:\s*var\(--color-state-error-surface\)/)
-    expect(styles).toMatch(/\.admin-page > \.empty-state\[role="status"\]\s*\{[\s\S]*?background:\s*var\(--color-state-success-surface\)/)
+    expectStylesToMatch([
+      /\.booking-page\s*\{[\s\S]*?background:\s*var\(--gradient-shell-subtle\)/,
+      /\.theme-brand-shell \.booking-calendar[^}]*\{[\s\S]*?background:\s*var\(--color-panel-background-soft\)/,
+      /\.admin-table th\s*\{[\s\S]*?background:\s*var\(--color-surface-elevated\)/,
+      /\.admin-status-field select\s*\{[\s\S]*?background:\s*var\(--color-state-info-surface\)/,
+      /\.theme-brand-shell \.form-alert\s*\{[\s\S]*?background:\s*var\(--color-state-error-surface\)/,
+      /\.admin-page > \.empty-state\[role="status"\]\s*\{[\s\S]*?background:\s*var\(--color-state-success-surface\)/,
+    ])
   })
 })
 
