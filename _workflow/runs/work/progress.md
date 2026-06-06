@@ -247,3 +247,55 @@
 - [x] Full lint limitation is pre-existing and documented.
 - [x] Final diff, secret, junk, and scope audits completed.
 - [x] Screenshot limitation documented with code-surface review fallback.
+
+## 2026-06-06 — TASK-005 — Planned -> Ready
+
+- Request: Make the ThemeMenu overflow trigger visually quieter so it does not compete with Book Appointment.
+- Intake questions: skipped by explicit user instruction; requirements fully defined.
+- Spec basis: Existing approved theme spec acceptance criterion plus corrective amendment section 24.
+- Dirty worktree before work: clean.
+- Planned files: `client/src/theme/ThemeBootstrap.test.js`, `client/src/index.css`, workflow evidence.
+- Applied skill: design-taste-frontend
+- Next step: Iteration 1 Build Red phase.
+
+## 2026-06-06 — TASK-005 — Done
+
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed: `client/src/index.css`, `client/src/components/ThemeMenu.jsx`, `client/src/components/ThemeMenu.test.jsx`, `client/src/theme/ThemeBootstrap.test.js`, workflow artifacts.
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Replace the large filled trigger with a compact transparent semantic utility control.
+- Test plan: Static CSS hierarchy assertion in `ThemeBootstrap.test.js`.
+- Red evidence: `npm run test --prefix client -- src/theme/ThemeBootstrap.test.js` failed because the trigger was 2.65rem, panel-filled, and lacked the required desktop spacing.
+- Green evidence: The same suite passed 3/3 after changing the trigger to 2.25rem, transparent, semantic border/text, subtle hover/expanded surface, and 0.7rem desktop spacing.
+- Refactor evidence: Removed header action gap and made spacing explicit on `.desktop-theme-menu`, preventing the desktop spacing rule from affecting the mobile drawer.
+- Review findings: Book Appointment retains its 2.9rem minimum height, gradient fill, strong shadow, and primary styling while the utility is 2.25rem and transparent.
+- Acceptance status: met.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Quiet the overflow glyph itself without adding a visible label.
+- Test plan: Component assertion for a compact 20px icon and icon-only visible content.
+- Red evidence: `npm run test --prefix client -- src/components/ThemeMenu.test.jsx` failed because the icon remained 22px.
+- Green evidence: Focused ThemeMenu/bootstrap suites passed 11/11 after reducing DotsThreeVertical to 20px regular weight.
+- Refactor evidence: Presentation-only icon change; accessible `aria-label="Theme options"` remains unchanged.
+- Review findings: The control remains clearly clickable with a 36px hit area and visible focus ring.
+- Acceptance status: met.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Prove no behavioral or theme regression and complete quality evidence.
+- Test plan: Full client suite, changed-file lint, full lint attempt, production build, diff/secret/junk review, Fallow.
+- Red evidence: No new product defect surfaced; missing-test exception applies to verification/documentation-only work. Full lint repeated the existing unrelated Booking/Gallery failures.
+- Green evidence: Full client suite passed 99/99; changed-file ESLint passed; Vite build passed; `git diff --check` passed; Fallow returned 75.8/B with no ThemeMenu/CSS findings or hotspots.
+- Refactor evidence: Final diff contains no theme logic changes and no unrelated source changes.
+- Review findings: Light and dark modes both derive trigger surfaces/text/borders from semantic tokens; mobile shares the quiet transparent treatment intentionally.
+- Acceptance status: met.
+
+### TASK-005 Acceptance Result
+- [x] Overflow trigger is visually subtle and approximately 36px.
+- [x] Default trigger has no solid white/panel circle.
+- [x] Book Appointment remains the dominant header action.
+- [x] Hover, expanded, and focus states remain visible and semantic.
+- [x] Mobile trigger remains intentional and low contrast.
+- [x] Menu behavior and theme logic are unchanged.
+- [x] Existing tests pass.

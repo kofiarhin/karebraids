@@ -83,3 +83,18 @@
 ## Final Review Verdict
 
 Passed for the approved global theme scope, with a documented pre-existing full-lint limitation and screenshot environment limitation.
+
+## 2026-06-06 — Theme Trigger Hierarchy Corrective Review
+
+- Request: Make the overflow trigger a subtle secondary utility without changing ThemeMenu behavior.
+- Spec basis: Approved global theme spec plus corrective amendment section 24.
+- Task reviewed: `TASK-005`.
+- Applied skill: design-taste-frontend
+- Bugs found: The trigger used a 42.4px panel-filled circle and bold 22px icon, which became especially bright in light mode and competed with the CTA.
+- Fix review: Trigger is now 36px, transparent, semantically bordered, secondary-colored, and separated from the CTA by 0.7rem. Hover/expanded treatment uses a restrained semantic gold alpha rather than a card surface. Icon is 20px regular weight.
+- Behavior review: No theme state, persistence, system listener, menu structure, focus, keyboard, close, or mobile callback code changed.
+- Mobile review: The shared transparent 36px utility trigger remains right-aligned beneath the drawer header and no longer creates a high-contrast white circle.
+- Accessibility review: Accessible name, ARIA state, 36px click target, keyboard interaction, and existing visible focus ring remain intact.
+- Scope creep: none; only trigger CSS/icon presentation, tests, and workflow evidence changed.
+- Screenshot: unavailable because no Chromium/Chrome executable or Playwright installation exists; code-surface and automated behavior review used as repository-approved fallback.
+- Verdict: Passed.

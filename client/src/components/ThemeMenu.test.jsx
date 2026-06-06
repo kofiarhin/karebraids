@@ -41,6 +41,17 @@ describe('ThemeMenu', () => {
     installMatchMedia(false)
   })
 
+  it('uses a compact overflow glyph without a visible label', () => {
+    renderThemeMenu()
+
+    const trigger = screen.getByRole('button', { name: 'Theme options' })
+    const icon = trigger.querySelector('svg')
+
+    expect(icon).toHaveAttribute('width', '20')
+    expect(icon).toHaveAttribute('height', '20')
+    expect(trigger).not.toHaveTextContent(/theme/i)
+  })
+
   it('opens a nested menu and identifies the active system selection', async () => {
     const user = userEvent.setup()
     renderThemeMenu()

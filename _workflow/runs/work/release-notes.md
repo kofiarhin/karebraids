@@ -71,3 +71,13 @@ None.
 ## Suggested Commit Message
 
 `feat: add global theme system`
+
+## 2026-06-06 — Theme Trigger Visual Refinement
+
+- Reduced the ThemeMenu trigger from 42.4px to 36px.
+- Removed the default filled panel background so the control no longer appears as a white circular button in light mode.
+- Applied semantic subtle border/secondary text colors and a restrained semantic hover/expanded surface.
+- Added 0.7rem separation after Book Appointment while keeping the CTA's larger gradient primary treatment dominant.
+- Reduced the overflow icon to 20px regular weight.
+- Kept the same transparent utility treatment inside the mobile drawer.
+- No theme logic, persistence, system sync, menu behavior, API, dependency, or data changes.

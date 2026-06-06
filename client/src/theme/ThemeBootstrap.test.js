@@ -44,4 +44,21 @@ describe('semantic theme styling', () => {
     expect(layoutSource).not.toContain('dark-brand-shell')
     expect(indexCss).toContain('.theme-brand-shell')
   })
+
+  it('keeps the overflow trigger visually secondary to the booking CTA', () => {
+    const triggerRule = indexCss.match(/\.theme-menu-trigger\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
+    const hoverRule = indexCss.match(
+      /\.theme-menu-trigger:hover,\s*\n\.theme-menu-trigger\[aria-expanded="true"\]\s*\{([\s\S]*?)\n\}/,
+    )?.[1] ?? ''
+
+    expect(triggerRule).toContain('width: 2.25rem;')
+    expect(triggerRule).toContain('height: 2.25rem;')
+    expect(triggerRule).toContain('border: 1px solid var(--color-border-subtle);')
+    expect(triggerRule).toContain('background: transparent;')
+    expect(triggerRule).toContain('color: var(--color-text-secondary);')
+    expect(triggerRule).not.toContain('var(--color-panel-background-soft)')
+    expect(hoverRule).toContain('background: var(--theme-gold-a012);')
+    expect(hoverRule).toContain('color: var(--color-text-primary);')
+    expect(indexCss).toMatch(/\.desktop-theme-menu\s*\{[^}]*margin-left:\s*0\.7rem;/)
+  })
 })

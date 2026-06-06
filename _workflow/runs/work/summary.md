@@ -49,3 +49,14 @@
 - Unresolved issues: Pre-existing full-lint errors in Booking/Gallery; browser screenshot unavailable.
 - Next recommended work: Optional separate lint cleanup and browser visual-regression coverage.
 - Workflow health: Partial due pre-existing full-lint errors and unavailable screenshot tooling; feature verification passed.
+
+## 2026-06-06 — Theme Trigger Hierarchy Refinement
+
+- Request: Make the theme overflow trigger visually quieter than Book Appointment without changing behavior.
+- Spec basis: Existing approved global theme spec plus corrective amendment section 24.
+- Task completed: `TASK-005` through Build, Refine, and Polish.
+- Applied skill: design-taste-frontend
+- Changes: 36px transparent semantic trigger, 0.7rem desktop CTA separation, subtle hover/expanded state, 20px regular overflow icon, regression tests.
+- Verification: Focused tests 11/11, full client tests 99/99, changed-file lint passed, build passed, diff check passed, Fallow 75.8/B with no changed-surface finding/hotspot.
+- Known limitation: Full lint retains unrelated pre-existing Booking/Gallery errors; screenshot tooling unavailable.
+- Acceptance: All trigger hierarchy and behavior-preservation criteria met.

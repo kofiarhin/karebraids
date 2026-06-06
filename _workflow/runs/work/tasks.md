@@ -114,3 +114,30 @@
 - Verification commands: `npm run test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, `git diff --check`, `git diff --stat`, `git diff`, required Fallow command.
 - Stop condition: Any required behavior remains unverified or a destructive/unrelated fix would be needed.
 - Out-of-scope items: Pre-existing unrelated lint/quality debt unless it blocks proof of this feature.
+
+## TASK-005: Quiet the ThemeMenu trigger without changing behavior
+
+- Status: Done
+- Objective: Make the overflow trigger a compact transparent semantic utility control so Book Appointment remains the dominant header action on desktop and the trigger remains intentional in the mobile drawer.
+- Files likely affected: `client/src/index.css`, `client/src/theme/ThemeBootstrap.test.js`, run-scoped workflow artifacts, `.workflow/fallow-audit.md`.
+- Checklist:
+  - [x] Add a failing regression test for 36px sizing, transparent background, semantic border/text, subtle hover, and CTA spacing.
+  - [x] Reduce the trigger footprint from 2.65rem to 2.25rem.
+  - [x] Remove the solid panel/card background from default and expanded states.
+  - [x] Use semantic border, secondary text, restrained hover surface, primary hover text, and existing focus ring.
+  - [x] Add approximately 0.7rem desktop separation after the CTA without disturbing mobile alignment.
+  - [x] Preserve all ThemeMenu behavior and verify both themes through semantic-token usage.
+- Iteration 1 Build: Red -> Green -> Refactor the base trigger footprint/background/border hierarchy.
+- Iteration 2 Refine: Red -> Green -> Refactor desktop spacing and hover/expanded treatment.
+- Iteration 3 Polish: Re-run interaction/full regressions, code-surface UI review, build/lint/diff/Fallow, and workflow documentation.
+- Test plan: `npm run test --prefix client -- src/theme/ThemeBootstrap.test.js`, `npm run test --prefix client -- src/components/ThemeMenu.test.jsx`, full client Vitest, changed-file ESLint, build.
+- Red phase evidence: Recorded in `_workflow/runs/work/progress.md`.
+- Green phase evidence: Recorded in `_workflow/runs/work/progress.md`.
+- Refactor phase evidence: Recorded in `_workflow/runs/work/progress.md`.
+- Test commands run: Recorded in `_workflow/runs/work/progress.md`.
+- Acceptance criteria: Trigger is visually subtle in light/dark themes; no solid white circle; CTA remains dominant; menu behavior is unchanged; tests pass.
+- Acceptance result: All criteria met.
+- Verification commands: focused/full Vitest, changed-file lint, build, diff check, Fallow.
+- Stop condition: Any behavioral regression or need for out-of-scope theme logic changes.
+- Out-of-scope items: Theme logic, menu structure, pages, backend, dependencies.
+- Applied skill: design-taste-frontend

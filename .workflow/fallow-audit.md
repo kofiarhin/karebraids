@@ -40,3 +40,10 @@ Fallow completed with valid machine-readable JSON. Repository health scored **75
 ## Verdict Rationale
 
 `PARTIAL` reflects existing repository-wide quality findings and the pre-existing full-lint failure. The global theme changes themselves introduce no reported Fallow finding or hotspot and are supported by passing targeted lint, tests, and build.
+
+## 2026-06-06 — Theme Trigger Refinement Refresh
+
+- Command: `npx fallow health --format json --quiet --explain 2>/dev/null || true`
+- Result: health 75.8 (B), valid `health` JSON envelope.
+- Changed-surface result: no finding or hotspot for ThemeMenu or the CSS trigger refinement.
+- Verdict remains: PARTIAL due existing repository-wide findings; this corrective UI diff adds no reported quality risk.

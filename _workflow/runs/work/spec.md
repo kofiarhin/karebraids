@@ -235,3 +235,12 @@
 - Detection result and reason: The request adds JSX UI, nested interactive menu behavior, global CSS token styling, and frontend visual refinement.
 - Applied skill: design-taste-frontend
 - Required propagation points: Record `Applied skill: design-taste-frontend` in tasks, iteration evidence, review, verification, release notes, summary, and final health check; perform a pre-implementation UI audit and post-implementation UI review.
+
+## 24. Approved Corrective Amendment — Theme Trigger Hierarchy
+- Date: 2026-06-06
+- Source: latest direct user prompt; discovery and questions explicitly skipped.
+- Relationship to approved spec: corrective continuation of Acceptance Criteria requiring the ThemeMenu to remain visually secondary and Book Appointment to remain dominant.
+- Required change: reduce the desktop overflow trigger to an approximately 36px transparent ghost utility button with semantic subtle border/text/hover/focus treatment and 10–12px CTA separation; retain an intentional low-contrast treatment in the mobile drawer.
+- Behavior constraints: no changes to theme state, persistence, system syncing, menu structure, active check, keyboard navigation, outside click, Escape, focus return, or desktop/mobile selection behavior.
+- Verification: add a failing static styling regression test first, then run focused ThemeMenu/bootstrap tests, full client tests, changed-file lint, build, diff audit, and Fallow.
+- Applied skill: design-taste-frontend

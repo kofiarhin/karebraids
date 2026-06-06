@@ -64,40 +64,34 @@ See `_workflow/runs/work/request.md`.
 - Current worktree: `/workspace/karebraids`
 - Run ID: `work`
 - Artifact root: `_workflow/runs/work/`
-- Explicit approval: User replied `approve spec` on 2026-06-06 before task planning.
-- Last completed safe checkpoint: All tasks, verification, review, Fallow audit, release notes, and summary completed.
-- Last completed task: `TASK-004`
+- Request: Quiet the existing ThemeMenu trigger while preserving all behavior.
+- Intake: Skipped by explicit user instruction; requirements fully defined.
+- Spec basis: Existing approved global theme spec plus corrective amendment section 24.
+- Last completed task: `TASK-005`
 - Current task: none
 - Current iteration: none
-- Next task: none
-- Blockers: none for the approved feature.
+- Blockers: none for requested scope.
 - Dirty worktree before workflow: clean.
-- Verification status: Frontend 97/97 passed; server 54/54 passed; changed-file lint passed; Vite build passed; full lint has pre-existing Booking/Gallery errors; Fallow 75.8/B with no changed-theme finding/hotspot.
-- Acceptance status: All approved theme criteria met.
+- Acceptance status: complete.
+- Verification status: focused tests 11/11, full client tests 99/99, changed-file lint passed, build passed, diff check passed; full lint has pre-existing Booking/Gallery failures; Fallow 75.8/B with no changed-surface finding/hotspot.
 - Applied skill: design-taste-frontend
-- Fallow verdict: PARTIAL due existing repository-wide findings.
-- Workflow health: Partial due pre-existing full-lint failures, unavailable browser screenshot tooling, and missing legacy `.workflow/spec.md`, `.workflow/task-plan.md`, `.workflow/handoff.md`, and `.workflow/release-notes.md` compatibility aliases; all required run-scoped artifacts are complete.
-- Files changed: approved theme modules/tests, Header/Layout/providers/index bootstrap/global semantic CSS, neutral-selector test assertions, run-scoped workflow artifacts, and `.workflow/fallow-audit.md`.
-- Tests already run: documented in `_workflow/runs/work/verification.md`.
-- Exact next action: Commit the completed implementation and create/update the pull request.
-- Safe to continue automatically: Yes.
+- Screenshot: unavailable due no Chromium/Chrome/Playwright; code-surface review completed.
+- Files changed: ThemeMenu trigger presentation, trigger tests, and workflow evidence only.
+- Exact next action: commit and create pull request.
+- Safe to continue automatically: yes.
 - Suggested next prompt after interruption: `continue workflow`
 
-## Final Health Check
+## Final Health Check — Theme Trigger Refinement
 
-- Run-scoped request synced: yes.
-- Root `WORK_REQUEST.md` left manual/compatibility-only: yes.
-- Handoff reflects latest state: yes.
-- Detailed spec includes all 23 required sections: yes.
-- Explicit approval occurred before task planning: yes.
-- Approved spec-derived task plan exists: yes.
-- Progress includes three iterations and TDD evidence for every executable task: yes.
-- Review, release notes, summary, and verification exist: yes.
-- `.workflow/fallow-audit.md` exists with PARTIAL verdict: yes.
-- Tests/lint/build statuses recorded: yes.
-- Final diff and dirty-worktree checks completed: yes.
+- Request synced: yes.
+- Existing approved spec extended with corrective amendment: yes.
+- Task plan includes TASK-005: yes.
+- Three iterations and TDD evidence recorded: yes.
 - Acceptance results complete: yes.
-- Scope respected: yes.
-- Decisions required: no new durable architecture decision beyond the approved spec.
-- Legacy `.workflow/spec.md`, `.workflow/task-plan.md`, `.workflow/handoff.md`, `.workflow/release-notes.md` compatibility aliases: missing; active run-scoped equivalents are complete and repository instructions prohibit updating another artifact scope.
-- Final health status: Partial.
+- Focused/full tests and build passed: yes.
+- Changed-file lint passed: yes.
+- Full lint limitation documented: yes, pre-existing.
+- Review, verification, Fallow, release notes, summary, and handoff updated: yes.
+- Final diff audit and dirty-worktree check completed: yes.
+- Scope respected: yes; no theme logic changes.
+- Workflow health: Partial only because full lint has pre-existing unrelated failures and screenshot tooling is unavailable.

@@ -30,3 +30,15 @@
 ## Verification Verdict
 
 Passed for changed behavior. Overall workflow health remains Partial because the repository-wide lint command has pre-existing unrelated failures and browser screenshot tooling is unavailable.
+
+## 2026-06-06 — Theme Trigger Refinement
+
+- PASS — `npm run test --prefix client -- src/theme/ThemeBootstrap.test.js`: 3 tests passed after expected Red failure.
+- PASS — `npm run test --prefix client -- src/components/ThemeMenu.test.jsx src/theme/ThemeBootstrap.test.js`: 11 tests passed.
+- PASS — `npm run test --prefix client`: 14 files, 99 tests passed.
+- PASS — `cd client && npx eslint src/components/ThemeMenu.jsx src/components/ThemeMenu.test.jsx src/theme/ThemeBootstrap.test.js`.
+- WARNING — `npm run lint --prefix client`: unchanged pre-existing errors in `Booking.jsx` and `Gallery.jsx`.
+- PASS — `npm run build --prefix client`.
+- PASS — `git diff --check`.
+- PARTIAL — `npx fallow health --format json --quiet --explain 2>/dev/null || true`: 75.8/B; no ThemeMenu/CSS finding or hotspot.
+- WARNING — Screenshot unavailable because Chromium/Chrome/Playwright is not installed; code-surface review confirms the 36px transparent utility treatment in both themes and mobile drawer.

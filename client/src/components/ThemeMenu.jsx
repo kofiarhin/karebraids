@@ -139,7 +139,7 @@ export function ThemeMenu({ className = '', onThemeSelected }) {
         ref={triggerRef}
         type="button"
       >
-        <DotsThreeVertical aria-hidden="true" size={22} weight="bold" />
+        <DotsThreeVertical aria-hidden="true" size={20} weight="regular" />
       </button>
 
       {isMenuOpen ? (
