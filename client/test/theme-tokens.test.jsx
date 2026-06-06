@@ -4,7 +4,10 @@ import { describe, expect, it } from 'vitest'
 const styles = readFileSync('src/index.css', 'utf8')
 const rootMatch = styles.match(/:root\s*\{([\s\S]*?)\n\}/)
 const rootTokens = rootMatch?.[1] || ''
-const selectorRules = rootMatch ? styles.replace(rootMatch[0], '') : styles
+const lightRootMatch = styles.match(/:root\[data-theme="light"\]\s*\{([\s\S]*?)\n\}/)
+const selectorRules = styles
+  .replace(rootMatch?.[0] || '', '')
+  .replace(lightRootMatch?.[0] || '', '')
 const colorLiteralPattern = /#[\da-f]{3,8}\b|(?:rgb|hsl)a?\([^)]*\)/gi
 
 const requiredTokens = [
@@ -51,10 +54,10 @@ describe('semantic color theme', () => {
 
   it('uses restrained semantic roles for Booking and Admin operational states', () => {
     expect(styles).toMatch(/\.booking-page\s*\{[\s\S]*?background:\s*var\(--gradient-shell-subtle\)/)
-    expect(styles).toMatch(/\.dark-brand-shell \.booking-calendar[^}]*\{[\s\S]*?background:\s*var\(--color-panel-background-soft\)/)
+    expect(styles).toMatch(/\.theme-brand-shell \.booking-calendar[^}]*\{[\s\S]*?background:\s*var\(--color-panel-background-soft\)/)
     expect(styles).toMatch(/\.admin-table th\s*\{[\s\S]*?background:\s*var\(--color-surface-elevated\)/)
     expect(styles).toMatch(/\.admin-status-field select\s*\{[\s\S]*?background:\s*var\(--color-state-info-surface\)/)
-    expect(styles).toMatch(/\.dark-brand-shell \.form-alert\s*\{[\s\S]*?background:\s*var\(--color-state-error-surface\)/)
+    expect(styles).toMatch(/\.theme-brand-shell \.form-alert\s*\{[\s\S]*?background:\s*var\(--color-state-error-surface\)/)
     expect(styles).toMatch(/\.admin-page > \.empty-state\[role="status"\]\s*\{[\s\S]*?background:\s*var\(--color-state-success-surface\)/)
   })
 })

@@ -4,7 +4,7 @@ import { Header } from './Header.jsx'
 
 export function Layout() {
   return (
-    <div className="site-shell dark-brand-shell">
+    <div className="site-shell theme-brand-shell">
       <Header />
       <main>
         <Outlet />

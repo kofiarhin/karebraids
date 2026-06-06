@@ -3,6 +3,7 @@ import { List, X } from '@phosphor-icons/react'
 import { NavLink } from 'react-router-dom'
 import { navItems } from '../constants/homepage.js'
 import { Button } from './Button.jsx'
+import { ThemeMenu } from './ThemeMenu.jsx'
 
 function NavItem({ item, className, onClick }) {
   if (item.type === 'anchor') {
@@ -67,9 +68,12 @@ export function Header() {
           <NavItem className="nav-link" item={item} key={item.label} />
         ))}
       </nav>
-      <Button className="header-cta" to="/booking">
-        Book Appointment
-      </Button>
+      <div className="header-actions">
+        <Button className="header-cta" to="/booking">
+          Book Appointment
+        </Button>
+        <ThemeMenu className="desktop-theme-menu" />
+      </div>
       <button
         aria-controls="mobile-navigation"
         aria-expanded={isMobileNavOpen}
@@ -103,6 +107,7 @@ export function Header() {
                 <X aria-hidden="true" size={22} weight="bold" />
               </button>
             </div>
+            <ThemeMenu className="mobile-theme-menu" onThemeSelected={closeMobileNav} />
             <nav aria-label="Mobile navigation" className="mobile-nav">
               {navItems.map((item) => (
                 <NavItem

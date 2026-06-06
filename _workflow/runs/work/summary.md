@@ -29,3 +29,23 @@
 - Release notes file used: `_workflow/runs/work/release-notes.md`
 - Unresolved issues: existing lint/Fallow findings.
 - Next recommended work: fix existing hook lint failures.
+
+## 2026-06-06 — Global Theme System
+
+- Request: Implement a production-ready persistent system/light/dark frontend theme with live OS tracking, no FOUC, semantic light styling, accessible desktop/mobile menu controls, and tests.
+- Spec file used: `_workflow/runs/work/spec.md`
+- Detailed spec status: Complete with all 23 required sections; explicit approval `approve spec` was received before planning.
+- Task plan used: `_workflow/runs/work/tasks.md`
+- Review file used: `_workflow/runs/work/review.md`
+- Release notes file used: `_workflow/runs/work/release-notes.md`
+- Tasks completed: `TASK-001`, `TASK-002`, `TASK-003`, `TASK-004`.
+- Applied skill: design-taste-frontend
+- Iteration evidence summary: Every task completed Build, Refine, and Polish evidence. Code tasks recorded failing Red checks, passing Green checks, and refactor verification; final documentation-only work records its missing-test exception.
+- Files changed: Theme helpers/context/provider/tests; ThemeMenu/tests; root providers; Header/Layout; index bootstrap; semantic CSS; neutral selector regression tests; workflow artifacts; Fallow audit.
+- Verification run: 97 frontend tests passed; 54 server tests passed; changed-file lint passed; Vite build passed; diff check passed; full lint retains pre-existing Booking/Gallery failures; Fallow health 75.8/B with no changed-theme finding/hotspot.
+- Acceptance results: All global theme functional, persistence, live system, no-FOUC, semantic styling, placement, accessibility, mobile close, and regression criteria met.
+- Failure recovery notes: Added legacy MediaQueryList support; split context for Fast Refresh; migrated all shell selectors; made ThemeMenu resilient in provider-less component harnesses; updated token tests for the second centralized root block.
+- Final diff audit: Approved client theme/UI/tests and workflow artifacts only; no secrets, junk, dependencies, backend, API, DB, auth, or env changes.
+- Unresolved issues: Pre-existing full-lint errors in Booking/Gallery; browser screenshot unavailable.
+- Next recommended work: Optional separate lint cleanup and browser visual-regression coverage.
+- Workflow health: Partial due pre-existing full-lint errors and unavailable screenshot tooling; feature verification passed.

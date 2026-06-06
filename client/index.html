@@ -4,6 +4,27 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (() => {
+        const storageKey = 'karebraids-theme'
+        const supportedThemes = ['system', 'light', 'dark']
+        let preference = 'system'
+
+        try {
+          const storedTheme = localStorage.getItem(storageKey)
+          if (supportedThemes.includes(storedTheme)) preference = storedTheme
+        } catch {
+          preference = 'system'
+        }
+
+        const systemTheme = window.matchMedia?.('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        const resolvedTheme = preference === 'system' ? systemTheme : preference
+        document.documentElement.dataset.theme = resolvedTheme
+        document.documentElement.style.colorScheme = resolvedTheme
+      })()
+    </script>
     <title>Karebraids</title>
   </head>
   <body>

@@ -1,10 +1,32 @@
-# Verification — About Background Unification
+# Verification — KareBraids Global Theme System
 
-- `npm run test --prefix client -- About.test.jsx`: failed first for the new background consistency assertion, then passed after style updates.
-- `npm run test --prefix client`: passed, 11 files / 79 tests.
-- `npm run build --prefix client`: passed.
-- `npm run lint --prefix client`: failed due existing unrelated hook lint errors in `client/src/pages/Booking.jsx` and `client/src/pages/Gallery.jsx`.
-- `npm run test`: passed, 9 server test suites / 54 tests.
-- `git diff --check`: passed.
-- `npx fallow health --format json --quiet --explain 2>/dev/null || true`: completed with existing repository health findings.
-- Screenshot: not captured; no browser automation tool is installed/available in this environment.
+- Date: 2026-06-06
+- Applied skill: design-taste-frontend
+
+## Automated Checks
+
+- PASS — `npm run test --prefix client -- src/theme/ThemeProvider.test.jsx`: 9 tests passed.
+- PASS — `npm run test --prefix client -- src/theme/ThemeBootstrap.test.js`: 2 tests passed.
+- PASS — `npm run test --prefix client -- src/components/ThemeMenu.test.jsx`: 7 tests passed.
+- PASS — `npm run test --prefix client`: 14 files, 97 tests passed.
+- PASS — changed-file `npx eslint ...`: no findings.
+- WARNING — `npm run lint --prefix client`: existing unrelated errors in `client/src/pages/Booking.jsx` and `client/src/pages/Gallery.jsx`; changed files pass.
+- PASS — `npm run build --prefix client`: Vite production build completed.
+- PASS — `npm run test`: 9 server suites, 54 tests passed.
+- PASS — `git diff --check`.
+- PASS — secret/junk/Tailwind-dark scan found no introduced secret, temporary file, or `dark:` conversion.
+- PARTIAL — `npx fallow health --format json --quiet --explain 2>/dev/null || true`: valid JSON, health 75.8/B; changed theme files have no finding/hotspot, repository-wide existing debt remains.
+
+## Manual / Code-Surface Checks
+
+- Confirmed inline bootstrap is in `<head>` before the React module.
+- Confirmed desktop ThemeMenu is the second item in `.header-actions`, after Book Appointment.
+- Confirmed mobile ThemeMenu is directly below `.mobile-nav-header`.
+- Confirmed menu selection closes submenu/parent; mobile callback closes drawer and existing Header effect returns focus.
+- Confirmed dark values remain in base `:root` and light values are scoped under `:root[data-theme="light"]`.
+- Confirmed every former `.dark-brand-shell` selector was migrated to `.theme-brand-shell`.
+- Screenshot not captured: environment has no Chromium/Chrome executable or Playwright installation. Repository guidance permits code-surface review fallback.
+
+## Verification Verdict
+
+Passed for changed behavior. Overall workflow health remains Partial because the repository-wide lint command has pre-existing unrelated failures and browser screenshot tooling is unavailable.

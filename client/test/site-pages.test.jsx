@@ -76,7 +76,7 @@ describe('KareBraids pages', () => {
   it('renders the redesigned homepage with dark luxury header navigation', () => {
     const { container } = renderRoute('/')
 
-    expect(container.querySelector('.site-shell')).toHaveClass('dark-brand-shell')
+    expect(container.querySelector('.site-shell')).toHaveClass('theme-brand-shell')
     expect(screen.getByRole('banner')).toHaveClass('site-header')
     expect(screen.getByRole('link', { name: /karebraids home/i })).toBeInTheDocument()
     expect(screen.getByRole('navigation', { name: /main navigation/i })).toHaveTextContent(/services/i)
@@ -303,7 +303,7 @@ describe('KareBraids pages', () => {
   it('keeps small-phone homepage decorative panels inside the viewport', () => {
     const styles = homeStyles()
 
-    expect(styles).toContain('.dark-brand-shell .home-hero .hero-copy::before {\n    inset: -0.35rem;')
+    expect(styles).toContain('.theme-brand-shell .home-hero .hero-copy::before {\n    inset: -0.35rem;')
   })
 
   it('renders a compact editorial services page header before the service grid', () => {
@@ -428,9 +428,9 @@ describe('KareBraids pages', () => {
   it('defines a refined booking flow treatment', () => {
     const styles = homeStyles()
 
-    expect(styles).toContain('.dark-brand-shell .booking-panel::before')
-    expect(styles).toContain('.dark-brand-shell .booking-service::after')
-    expect(styles).toContain('.dark-brand-shell .field-group:focus-within')
+    expect(styles).toContain('.theme-brand-shell .booking-panel::before')
+    expect(styles).toContain('.theme-brand-shell .booking-service::after')
+    expect(styles).toContain('.theme-brand-shell .field-group:focus-within')
     expect(styles).toContain('background: var(--theme-cream-highlight-a008);')
     expect(styles).toContain('box-shadow: inset 0 1px 0 var(--theme-cream-highlight-a008);')
   })

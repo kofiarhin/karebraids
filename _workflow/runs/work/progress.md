@@ -69,3 +69,181 @@
 
 ### Failure Recovery Notes
 - Lint remains blocked by existing unrelated hook rule failures in `client/src/pages/Booking.jsx` and `client/src/pages/Gallery.jsx`.
+
+## 2026-06-06 — Global Theme System Approval And Planning
+
+- User approval recorded: `approve spec`.
+- Approved spec: `_workflow/runs/work/spec.md`.
+- Task plan generated only after approval: `_workflow/runs/work/tasks.md`.
+- Execution mode: complete-workflow.
+- Dirty worktree check before planning: clean.
+- Previous progress/summary read and retained; this run supersedes the prior completed About-page workflow in the same branch-scoped artifact files.
+- Applied skill: design-taste-frontend
+- Next step: Execute `TASK-001` Iteration 1 Build with a failing ThemeProvider test.
+
+## 2026-06-06 — TASK-001 — Done
+
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Objective: Add the global theme engine and application-root provider.
+- Files changed: `client/src/theme/theme.js`, `ThemeContext.js`, `ThemeProvider.jsx`, `ThemeProvider.test.jsx`, `client/src/redux/providers.jsx`.
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Prove default system resolution, explicit selections, persistence, and root dataset synchronization.
+- Test plan: Focused ThemeProvider Vitest suite.
+- Red evidence: `npm run test --prefix client -- src/theme/ThemeProvider.test.jsx` failed because `ThemeProvider.jsx` did not exist.
+- Green evidence: The same command passed 8 tests after adding helpers/provider and root integration.
+- Refactor evidence: Centralized enum validation, storage guards, media query access, and resolution in `theme.js`; reran focused tests successfully.
+- Review findings: Provider owns browser lifecycle; no Redux store or server state was introduced.
+- Acceptance status: met.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Support legacy media-query listener APIs and cleanup.
+- Test plan: Add a legacy `addListener`/`removeListener` test.
+- Red evidence: Focused suite failed with `listener is not a function` because only `addEventListener` was supported.
+- Green evidence: Focused suite passed 9 tests after adding the compatibility branch.
+- Refactor evidence: Removed unnecessary synchronous state synchronization from the subscription effect and retained lazy initialization.
+- Review findings: Listener cleanup is StrictMode-safe for modern and legacy APIs.
+- Acceptance status: met.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Satisfy Fast Refresh/lint boundaries and keep context access maintainable.
+- Test plan: Targeted ESLint plus focused provider tests.
+- Red evidence: Targeted ESLint failed `react-refresh/only-export-components` when the provider file also exported the consumer hook.
+- Green evidence: Moved context/hook to `ThemeContext.js`; focused tests passed and targeted ESLint passed.
+- Refactor evidence: `ThemeProvider.jsx` now exports only the provider component and memoizes its public value.
+- Review findings: Public contract exposes `theme`, `resolvedTheme`, and `setTheme`; application root wraps Query/Router providers.
+- Acceptance status: met.
+
+### TASK-001 Acceptance Result
+- [x] Missing/invalid storage defaults to system.
+- [x] Valid selections persist under `karebraids-theme`.
+- [x] System preference resolves and changes live.
+- [x] Explicit selections ignore OS changes.
+- [x] Root `data-theme` and `color-scheme` remain synchronized.
+- [x] Provider is integrated at the application root.
+
+## 2026-06-06 — TASK-002 — Done
+
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Objective: Prevent FOUC and add semantic luxury light styling.
+- Files changed: `client/index.html`, `client/src/index.css`, `client/src/components/Layout.jsx`, `client/src/theme/ThemeBootstrap.test.js`, related semantic-token tests.
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Prove initial theme is set before the React module.
+- Test plan: Static bootstrap ordering and behavior assertions.
+- Red evidence: `npm run test --prefix client -- src/theme/ThemeBootstrap.test.js` failed because `karebraids-theme` bootstrap code was absent.
+- Green evidence: The test passed after adding an inline head script that validates storage, resolves system, and sets the root dataset before the module script.
+- Refactor evidence: Script uses fixed enum values, guarded storage access, and no user-generated interpolation.
+- Review findings: Bootstrap executes in `<head>`, before body/app loading.
+- Acceptance status: met.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Add the required light semantic palette and neutral shell naming.
+- Test plan: Static checks for all required tokens and selector migration.
+- Red evidence: The same bootstrap/theme suite failed because no light root block or neutral shell existed.
+- Green evidence: Suite passed after adding `:root[data-theme="light"]`, warm ivory/cream/bronze semantic values, and `theme-brand-shell`.
+- Refactor evidence: Migrated all scoped `.dark-brand-shell` selectors and assertions to `.theme-brand-shell` so existing dark styling remains connected in every route.
+- Review findings: No page conversion or Tailwind `dark:` classes were introduced.
+- Acceptance status: met.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Preserve centralized color-literal enforcement and full route styling.
+- Test plan: Existing semantic-token and site-page regression suites.
+- Red evidence: Full client tests initially failed the token centralization rule because it only excluded the original `:root` block, and route tests still expected the old shell name.
+- Green evidence: Updated the tests to treat both root token blocks as centralized declarations and assert the neutral selector; targeted 42 tests passed.
+- Refactor evidence: Light overrides include state/surface/shadow support tokens needed by legacy semantic consumers while retaining existing dark defaults.
+- Review findings: Light contrast uses dark espresso text on warm ivory/card surfaces; overlays retain dark image readability.
+- Acceptance status: met.
+
+### TASK-002 Acceptance Result
+- [x] No-FOUC script runs before React.
+- [x] Current `:root` dark palette remains the fallback/dark contract.
+- [x] Dedicated light semantic block covers required roles and supporting global surfaces.
+- [x] Shell naming is theme-neutral across layout, CSS, and tests.
+- [x] No page rewrites or Tailwind dark variants.
+
+## 2026-06-06 — TASK-003 — Done
+
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Objective: Add accessible desktop/mobile ThemeMenu and complete close behavior.
+- Files changed: `client/src/components/ThemeMenu.jsx`, `ThemeMenu.test.jsx`, `Header.jsx`, `client/src/index.css`.
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Add nested menu structure, active state, selection, persistence, and parent/submenu close behavior.
+- Test plan: Focused ThemeMenu interaction suite.
+- Red evidence: `npm run test --prefix client -- src/components/ThemeMenu.test.jsx` failed because `ThemeMenu.jsx` did not exist.
+- Green evidence: Five initial menu tests passed after implementing the requested Phosphor icons, nested menu, active check, and immediate selection behavior.
+- Refactor evidence: Theme options are data-driven; one reusable component serves desktop and mobile.
+- Review findings: Trigger remains icon-only and secondary to the CTA.
+- Acceptance status: met.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Harden keyboard, Escape, outside-click, focus, and ARIA behavior.
+- Test plan: Enter/ArrowRight/ArrowDown, two-level Escape, outside click, and focus return assertions.
+- Red evidence: These behaviors were part of the initial failing suite before the component existed.
+- Green evidence: Focused suite passed with trigger/menu/submenu `aria-controls`, `aria-expanded`, `aria-haspopup`, menu roles, checked state, and managed focus.
+- Refactor evidence: Centralized relative menu-item focus movement and scoped pointer listeners with cleanup.
+- Review findings: Escape first collapses the submenu, then closes the parent and returns focus to the trigger.
+- Acceptance status: met.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Integrate exact desktop/mobile placement and drawer completion.
+- Test plan: Header structure and mobile selection regression tests.
+- Red evidence: Two new integration tests failed because Header had no `.header-actions` ThemeMenu or mobile drawer ThemeMenu.
+- Green evidence: Seven ThemeMenu/Header tests passed after integration; mobile selection closes the drawer and returns focus to the mobile navigation trigger.
+- Refactor evidence: Added responsive header action grouping and menu styling based on existing semantic variables.
+- Review findings: Desktop menu follows Book Appointment; mobile menu is directly below the drawer header; CTA remains larger and visually dominant.
+- Acceptance status: met.
+
+### TASK-003 Acceptance Result
+- [x] Requested nested labels and Phosphor icons are present.
+- [x] Active selection is conveyed by checked state and Check icon.
+- [x] Click, Tab, arrows, Escape, outside click, ARIA, and focus return are supported.
+- [x] Selection closes both menu levels.
+- [x] Mobile selection also closes the navigation drawer.
+- [x] Desktop and mobile placements match the request.
+
+## 2026-06-06 — TASK-004 — Done
+
+- Lifecycle transition reached: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Objective: Complete regression hardening, verification, review, and workflow evidence.
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Run the complete frontend regression suite and fix only theme-related failures.
+- Test plan: Full client Vitest suite.
+- Red evidence: Initial full run failed 54 tests because legacy App test harnesses render Header without `AppProviders`, and the existing token test recognized only one theme root.
+- Green evidence: Added a safe standalone ThemeMenu fallback for isolated Header rendering and migrated token/shell assertions; `npm run test --prefix client` passed 97 tests in 14 files.
+- Refactor evidence: Runtime application still uses ThemeProvider; the standalone path only makes the reusable Header/ThemeMenu robust when rendered outside the app root.
+- Review findings: Existing booking, gallery, contact, admin, services, home, About, modal, and mobile-navigation tests all pass.
+- Acceptance status: met.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Run lint and visual/accessibility code-surface review.
+- Test plan: Full lint plus changed-file lint.
+- Red evidence: `npm run lint --prefix client` failed only on pre-existing `set-state-in-effect` errors and hook warnings in `Booking.jsx` and `Gallery.jsx`.
+- Green evidence: Targeted ESLint for every changed JS/JSX/test file passed with no findings.
+- Refactor evidence: Final code review confirmed event listener cleanup, static inline script safety, semantic styling, responsive placement, and no third-party additions.
+- Review findings: Browser screenshot could not be captured because no Chromium/Chrome executable or Playwright installation is available; code-surface review is the documented fallback allowed by repository guidance.
+- Acceptance status: met with pre-existing full-lint limitation documented.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Complete build/server/diff/quality checks and artifacts.
+- Test plan: Vite build, server tests, diff checks, secret/junk scan, Fallow, and health review.
+- Red evidence: No new code defect surfaced in this iteration; missing-test exception applies to documentation/quality-only work.
+- Green evidence: `npm run build --prefix client`, `npm run test`, and `git diff --check` passed; final Fallow result is recorded separately.
+- Refactor evidence: Final diff audit found only approved theme/UI/tests/workflow files and no secrets, generated junk, package, API, database, or environment changes.
+- Review findings: Scope matches the approved spec.
+- Acceptance status: met.
+
+### TASK-004 Acceptance Result
+- [x] Frontend tests pass: 97/97.
+- [x] Server tests pass: 54/54.
+- [x] Changed-file lint passes.
+- [x] Production build passes.
+- [x] Full lint limitation is pre-existing and documented.
+- [x] Final diff, secret, junk, and scope audits completed.
+- [x] Screenshot limitation documented with code-surface review fallback.

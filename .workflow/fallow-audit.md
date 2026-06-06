@@ -1,24 +1,42 @@
 # Fallow Audit
 
-- Date: 2026-06-05
+- Date: 2026-06-06
+- Request: KareBraids global theme system
 - Command: `npx fallow health --format json --quiet --explain 2>/dev/null || true`
+- JSON envelope: `kind: health`, schema version 7, Fallow 2.89.0
 - Verdict: PARTIAL
 
 ## Summary
-Fallow completed successfully with machine-readable JSON output. Findings are existing repository health/complexity issues rather than blockers introduced by the About page background refinement.
 
-## Notable Findings
-- `client/src/pages/Booking.jsx`: high complexity and existing hook lint concerns.
-- `client/src/pages/Gallery.jsx`: existing hook state synchronization concern surfaced by lint.
-- `server/utils/serviceValidation.js` and `server/utils/bookingValidation.js`: high CRAP/complexity findings needing future tests/refactors.
+Fallow completed with valid machine-readable JSON. Repository health scored **75.8 (B)** across 113 analyzed files, with average maintainability **90.6**. The report contains existing repository-wide dead-code, unit-size, coupling, and validation/page complexity debt; it did not produce a complexity finding or hotspot for the changed theme source files.
 
 ## Changed-Code Risk
-- Changed source files are limited to About UI styling and About tests.
-- No backend, API, database, dependency, route, navbar, footer, or environment changes were introduced.
+
+- No Fallow `findings` or `hotspots` were reported for `ThemeProvider.jsx`, `ThemeMenu.jsx`, `Header.jsx`, `theme.js`, or `ThemeContext.js`.
+- `ThemeMenu` is listed as a large function at 196 lines because accessible nested-menu markup and event handling live in one reusable component; cyclomatic/cognitive thresholds were not exceeded.
+- No circular dependency or unused dependency penalty was reported.
+- The implementation adds no dependency, API, database, auth, or environment surface.
+
+## Notable Repository Findings
+
+- `client/src/pages/Booking.jsx`: existing high cyclomatic/cognitive complexity; also the source of a pre-existing full-lint hook error.
+- `server/utils/serviceValidation.js` and `server/utils/bookingValidation.js`: existing critical CRAP/coverage findings.
+- `client/src/pages/Admin.jsx` and existing server auth/validation functions: high/moderate estimated coverage-risk findings.
+- Repository vital signs include 14 estimated dead files, 8 dead exports, and 5% duplicated lines; these are outside the approved theme scope.
+
+## Cleanup And Architecture Review
+
+- Theme constants/storage/media resolution are separated from React lifecycle code.
+- Context access is separated from the provider to preserve Fast Refresh lint compliance.
+- Existing semantic CSS architecture is extended rather than duplicated into component classes.
+- No changed-code circular/re-export cycle, unused dependency, unlisted dependency, security candidate, or architecture-boundary issue was identified by this health run.
 
 ## Recommended Follow-Up
-- Refactor `Booking.jsx` and `Gallery.jsx` hook state patterns.
-- Add targeted validation utility tests and reduce server validation complexity.
+
+- Address Booking/Gallery hook lint and complexity in a separate request.
+- Add targeted coverage for server validation utilities.
+- Consider splitting ThemeMenu presentation subtrees only if future options/menus expand; current complexity does not require it.
 
 ## Verdict Rationale
-PARTIAL because Fallow reports existing repository quality findings, but none are introduced by or blocking this About page styling refinement.
+
+`PARTIAL` reflects existing repository-wide quality findings and the pre-existing full-lint failure. The global theme changes themselves introduce no reported Fallow finding or hotspot and are supported by passing targeted lint, tests, and build.

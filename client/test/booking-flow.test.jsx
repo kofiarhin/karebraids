@@ -95,7 +95,7 @@ describe('booking flow', () => {
   it('defines the calm dark booking surface and clarified mobile content order', () => {
     const styles = bookingStyles()
 
-    expect(styles).toContain('.dark-brand-shell .booking-panel::before {\n  display: none;')
+    expect(styles).toContain('.theme-brand-shell .booking-panel::before {\n  display: none;')
     expect(styles).toContain('--booking-surface-glass: rgba(255, 255, 255, 0.02);')
     expect(styles).toContain('background: var(--booking-surface-glass);')
     expect(styles).toContain('--booking-border-glass: rgba(255, 255, 255, 0.08);')
