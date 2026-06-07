@@ -131,31 +131,86 @@ Customize placeholders before using this in a production project. MERN is the de
 62. Stop if scope is unclear, risky, destructive, unverified, blocked, or requires unavailable access.
 63. Final review, release notes, and summary must represent the full completed request or documented stop state, not only the first task.
 
+## Project Brain Rules
+
+Project Brain is mandatory backend workflow memory; it is not a separate UI. Users stay in CLI chat while agents maintain structured memory and provide compact live activity.
+
+### Required Memory Files
+
+Project-level JSON and projection:
+
+- `_workflow/project-brain/project.json`
+- `_workflow/project-brain/PROJECT_BRAIN.md`
+- `_workflow/project-brain/history.json`
+- `_workflow/project-brain/conflicts.json`
+- `_workflow/project-brain/categories.json`
+
+Run-scoped memory under the active artifact root:
+
+- `<artifact-root>/brain.json`
+- `<artifact-root>/activity.md`
+- `<artifact-root>/checkpoints.md`
+
+After artifact-root detection, initialize missing files from installed seeds without replacing existing memory. Before planning or implementation, read `_workflow/project-brain/project.json`, `_workflow/project-brain/categories.json`, `_workflow/project-brain/conflicts.json`, `<artifact-root>/brain.json`, `<artifact-root>/handoff.md`, and `<artifact-root>/progress.md`.
+
+### Authority And Context
+
+JSON is the source of truth. `PROJECT_BRAIN.md` is a generated human-readable projection. Project Brain is authoritative for current workflow state and durable memory; completed task execution evidence in `progress.md` remains authoritative for completed task history and must be reconciled into Project Brain without erasure.
+
+Always inject relevant active goals, constraints, architecture decisions, technical decisions, and current workflow state. Conditionally inject related requirements, artifacts, domain knowledge, and similar previous decisions. Never inject the entire chat history, stale run data, superseded decisions except for conflict context, or low-confidence assumptions unless marked as assumptions.
+
+### Update And Conflict Rules
+
+- Automatically extract memory after intake, after spec creation, after task planning, after task completion, after review, after release notes, and after summary.
+- Never destructively overwrite memory. Preserve old values using stable IDs, statuses, `supersedes`, item history, `changeLog`, and `_workflow/project-brain/history.json`.
+- Every item supports `id`, `text`, `status`, `confidence`, source metadata, timestamps, `supersedes`, and `history`.
+- AI-created categories may exist only in the governed `custom.<category>` custom namespace registered in `categories.json`; do not add arbitrary top-level categories.
+- Detect contradictions before promotion. Keep both items and create/update `conflicts.json`. Explicit high-confidence user corrections become active; replaced items become superseded. Unclear conflicts remain open and may require human review.
+- Record conflict detection/resolution in project and run change logs, history, activity, and a conflict-resolved checkpoint.
+- Refresh `PROJECT_BRAIN.md` after project-memory changes.
+- In parallel workflows, only the orchestrator writes shared project memory; workers record run-local/proposed changes for reconciliation.
+
+### Activity And Checkpoints
+
+After meaningful grouped changes, append to `<artifact-root>/activity.md` and show this compact block in chat:
+
+```txt
+Activity
+- Stage: <from> → <to>
+- Memory: <added/updated/conflict/resolved>
+- Artifact: <created/updated path>
+- Checkpoint: <saved/not saved>
+- Next: <next action>
+```
+
+Append a non-destructive checkpoint to `<artifact-root>/checkpoints.md` at intake complete, spec saved, task plan saved, each task done, workflow complete, and conflict resolved. Include timestamp, stage, memory summary, artifacts changed, open questions, and next action.
+
 ## Required Workflow
 
 For a work request:
 
-1. Use the latest direct user prompt as the active request when it looks like project work; otherwise read `<artifact-root>/request.md`, falling back to root `WORK_REQUEST.md` only as manual legacy input.
-2. Invoke the grill-me skill at `.agents/skills/grill-me/SKILL.md` to produce a Shared Understanding Handoff, unless the prompt explicitly says `skip questions` or `continue workflow`.
-3. Sync the normalized active request into `<artifact-root>/request.md`; do not auto-update root `WORK_REQUEST.md`.
-4. Read `RUN_WORKFLOW.md`.
-5. If questions are skipped, bypass grill-me and write assumptions into the spec. If the prompt is `continue workflow`, skip grill-me and resume from `<artifact-root>/handoff.md`.
-6. Check repository status for dirty worktree protection:
+1. Resolve branch, worktree, run id, and artifact root; initialize/read Project Brain before request resolution or planning.
+2. Use the latest direct user prompt as the active request when it looks like project work; otherwise read `<artifact-root>/request.md`, falling back to root `WORK_REQUEST.md` only as manual legacy input.
+3. Invoke the grill-me skill at `.agents/skills/grill-me/SKILL.md` to produce a Shared Understanding Handoff, unless the prompt explicitly says `skip questions` or `continue workflow`.
+4. Sync the normalized active request into `<artifact-root>/request.md`; do not auto-update root `WORK_REQUEST.md`.
+5. Read `RUN_WORKFLOW.md`.
+6. If questions are skipped, bypass grill-me and write assumptions into the spec. If the prompt is `continue workflow`, skip grill-me and resume from `<artifact-root>/handoff.md`.
+7. Check repository status for dirty worktree protection:
 
    ```bash
    git status --short
    ```
 
    Document existing dirty files, files planned for this workflow, and overlap risk. If dirty files overlap with planned files, stop and ask before editing. If dirty files are unrelated, continue but document them. Never overwrite user changes and never clean/reset files unless explicitly instructed.
-7. Read `<artifact-root>/handoff.md` if it exists, `<artifact-root>/progress.md`, the latest relevant `<artifact-root>/summary.md` entry, and durable supporting docs.
-8. Generate a detailed spec in `<artifact-root>/spec.md` using the required detailed spec template.
-9. Display the spec summary and path, then stop for explicit approval using the approval gate in `RUN_WORKFLOW.md`.
-10. Generate a vertical task plan in `<artifact-root>/tasks.md` from the approved saved detailed spec only after approval.
-11. If execution mode is `plan-only`, stop after saving the approved spec-derived task plan.
-12. If execution mode is `single-task`, execute only the next ready task through the full 3-pass hardening loop, update artifacts, then stop.
-13. If execution mode is omitted, use `complete-workflow`.
-14. In `complete-workflow`, execute every task in order until all tasks are complete or a stop condition is reached; each executable task must complete Build -> Refine -> Polish before the next task starts.
-15. For each task:
+8. Read `<artifact-root>/handoff.md` if it exists, `<artifact-root>/progress.md`, the latest relevant `<artifact-root>/summary.md` entry, and durable supporting docs.
+9. Generate a detailed spec in `<artifact-root>/spec.md` using the required detailed spec template.
+10. Display the spec summary and path, then stop for explicit approval using the approval gate in `RUN_WORKFLOW.md`.
+11. Generate a vertical task plan in `<artifact-root>/tasks.md` from the approved saved detailed spec only after approval.
+12. If execution mode is `plan-only`, stop after saving the approved spec-derived task plan.
+13. If execution mode is `single-task`, execute only the next ready task through the full 3-pass hardening loop, update artifacts, then stop.
+14. If execution mode is omitted, use `complete-workflow`.
+15. In `complete-workflow`, execute every task in order until all tasks are complete or a stop condition is reached; each executable task must complete Build -> Refine -> Polish before the next task starts.
+16. For each task:
     - read latest `<artifact-root>/progress.md`
     - read relevant `<artifact-root>/summary.md`
     - inspect the codebase for the current task
@@ -166,7 +221,7 @@ For a work request:
     - append progress to `<artifact-root>/progress.md`
     - update `<artifact-root>/handoff.md`
     - continue to the next task automatically only when the current task is `Done` and safe
-16. Before final review/summary, run the final diff audit:
+17. Before final review/summary, run the final diff audit:
 
     ```bash
     git diff --stat
@@ -174,35 +229,44 @@ For a work request:
     ```
 
     Document whether the diff matches the saved spec, unrelated files were touched, workflow artifacts were updated correctly, tests were added or updated for changed behavior, scope creep occurred, generated junk or temporary files appeared, and sensitive values or secrets were accidentally added. If either command cannot run, document why.
+<<<<<<< HEAD
 17. After all allowed tasks are complete or the workflow stops, create a review file in `<artifact-root>/review.md`.
 18. After the review, run the Fallow Quality layer and create `.workflow/fallow-audit.md`.
 18A. After the Fallow Quality layer, create release notes in `<artifact-root>/release-notes.md`.
 19. After release notes, create or append a summary in `<artifact-root>/summary.md`.
 20. Run the workflow health check and mark the result as `Passed`, `Partial`, or `Failed`.
 21. Check repository status again:
+=======
+18. After all allowed tasks are complete or the workflow stops, create a review file in `<artifact-root>/review.md`.
+19. After the review, create release notes in `<artifact-root>/release-notes.md`.
+20. After release notes, create or append a summary in `<artifact-root>/summary.md`.
+21. Run the workflow health check and mark the result as `Passed`, `Partial`, or `Failed`.
+22. Check repository status again:
+>>>>>>> agent-zero/integrate-project-brain-memory-system
 
     ```bash
     git status --short
     ```
 
-22. Summarize results, include the final artifact checklist, and suggest a commit message.
+23. Summarize results, include the final artifact checklist, and suggest a commit message.
 
 ## Continue Workflow Command
 
 If the user says `continue workflow`:
 
-1. Read `<artifact-root>/handoff.md` first and use it as the primary resume source.
-2. Read `<artifact-root>/progress.md` to verify completed task history.
-3. If `<artifact-root>/handoff.md` conflicts with `<artifact-root>/progress.md`, trust `<artifact-root>/progress.md` for completed task history and update handoff.
-4. Read the latest relevant file in `<artifact-root>/summary.md`, if any.
-5. If a spec exists but no task plan exists for the active request, resume at the spec approval gate, show the spec summary and path again, and wait for approval. Do not auto-generate tasks.
-6. If a task plan exists, read the task plan referenced by `<artifact-root>/handoff.md`, or the latest file in `<artifact-root>/tasks.md` if handoff has no task plan.
-7. Read the spec referenced by that task plan.
-8. Find the next task whose status is not `Done` and the current iteration recorded in `<artifact-root>/handoff.md`.
-9. Continue from that task and iteration without asking the original intake questions again unless the request, scope, or acceptance criteria are unclear.
-10. Continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached; each executable task must complete the full 3-pass hardening loop before the next task starts.
-11. Do not regenerate the entire spec unless the request changed.
-12. If every task is `Done`, continue with any missing `<artifact-root>/review.md`, `<artifact-root>/summary.md`, handoff update, workflow health check, or final response steps.
+1. Resolve the artifact root, initialize/read Project Brain first, and reconcile current workflow state against completed evidence in `<artifact-root>/progress.md`.
+2. Read `<artifact-root>/handoff.md` first and use it as the primary resume source.
+3. Read `<artifact-root>/progress.md` to verify completed task history.
+4. If `<artifact-root>/handoff.md` conflicts with `<artifact-root>/progress.md`, trust `<artifact-root>/progress.md` for completed task history and update handoff.
+5. Read the latest relevant file in `<artifact-root>/summary.md`, if any.
+6. If a spec exists but no task plan exists for the active request, resume at the spec approval gate, show the spec summary and path again, and wait for approval. Do not auto-generate tasks.
+7. If a task plan exists, read the task plan referenced by `<artifact-root>/handoff.md`, or the latest file in `<artifact-root>/tasks.md` if handoff has no task plan.
+8. Read the spec referenced by that task plan.
+9. Find the next task whose status is not `Done` and the current iteration recorded in `<artifact-root>/handoff.md`.
+10. Continue from that task and iteration without asking the original intake questions again unless the request, scope, or acceptance criteria are unclear.
+11. Continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached; each executable task must complete the full 3-pass hardening loop before the next task starts.
+12. Do not regenerate the entire spec unless the request changed.
+13. If every task is `Done`, continue with any missing `<artifact-root>/review.md`, `<artifact-root>/summary.md`, handoff update, workflow health check, or final response steps.
 
 ## Questioning Rules
 
@@ -572,7 +636,13 @@ The summary must include:
 
 ## Workflow Health Check
 
+Project Brain health is mandatory. Missing or invalid required brain JSON, destructive memory loss, ungoverned custom categories, or unreconciled workflow-state conflicts make health `Failed`; missing projection, activity, checkpoint, or extraction evidence makes health `Partial` or `Failed` according to severity.
+
 Before the final response, check:
+
+- Did project and run Project Brain JSON exist and parse?
+- Did `_workflow/project-brain/PROJECT_BRAIN.md` match active JSON memory?
+- Were memory extraction, activity, checkpoints, conflicts, and category governance completed non-destructively?
 
 - Did `<artifact-root>/request.md` sync?
 - Did `<artifact-root>/handoff.md` exist and reflect the latest workflow state?

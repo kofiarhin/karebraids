@@ -4,71 +4,69 @@ This file captures durable repository facts discovered during workflow runs. Kee
 
 ## Project Summary
 
-- Project name: KareBraids
-- Purpose: Braiding service website with public booking/contact/gallery APIs and protected admin management APIs.
-- Current maturity: MVP / production-oriented prototype.
+- Project name: `<PROJECT_NAME>`
+- Purpose: `<ONE_SENTENCE_PURPOSE>`
+- Current maturity: `<prototype / MVP / production / unknown>`
 
 ## Stack
 
-- Frontend: React with Vite
-- Backend: Express
-- Database: MongoDB with Mongoose
-- Runtime: Node.js
-- Languages: JavaScript / JSX
-- Styling: Tailwind CSS
-- Deployment: Not documented
+- Frontend: `<Framework or none>`
+- Backend: `<Framework or none>`
+- Database: `<Database or none>`
+- Runtime: `<Node/Python/Ruby/etc.>`
+- Languages: `<Languages>`
+- Styling: `<Tailwind/CSS/SCSS/etc.>`
+- Deployment: `<Platform(s)>`
 
 ## Package Manager
 
-- Detected package manager: npm
-- Lockfiles: `package-lock.json`
-- Install command: `npm install`
+- Detected package manager: `<npm / pnpm / yarn / pip / poetry / etc.>`
+- Lockfiles: `<package-lock.json / pnpm-lock.yaml / yarn.lock / etc.>`
+- Install command: `<command>`
 
 ## Common Commands
 
 ```bash
 # Test
-npm run test:server
-npm run test --prefix client
+<command>
 
 # Lint
-# No dedicated lint script is currently configured.
+<command>
 
 # Build
-npm run build --prefix client
+<command>
 
 # Typecheck
-# No dedicated typecheck script is currently configured.
+<command>
 ```
 
 ## Testing Tools
 
-- Unit tests: Jest for backend utilities/models; Vitest for frontend tests.
-- Integration tests: Supertest for backend API routes.
-- End-to-end tests: Not documented.
-- Manual verification notes: Run `git diff --check` before final handoff.
+- Unit tests: `<Tool>`
+- Integration tests: `<Tool>`
+- End-to-end tests: `<Tool>`
+- Manual verification notes: `<Notes>`
 
 ## Repo Conventions
 
-- Folder conventions: Backend code lives under `server/` with `controllers/`, `models/`, `routes/`, `utils/`, `scripts/`, and `tests/`.
-- Naming conventions: Backend models use PascalCase filenames; controllers and utilities use camelCase filenames.
-- API conventions: Validation errors use `{ message: errors[0], errors: [...] }`; protected admin APIs use `requireAdmin` with bearer JWT auth.
-- State management conventions: Frontend server data should stay in query/service layers, not duplicated into global client state.
-- Error handling conventions: Controllers pass unexpected errors to the Express error middleware, which returns a safe 500 response.
+- Folder conventions: `<Notes>`
+- Naming conventions: `<Notes>`
+- API conventions: `<Notes>`
+- State management conventions: `<Notes>`
+- Error handling conventions: `<Notes>`
 
 ## Architecture Rules
 
-- MongoDB Service documents are the runtime source of truth for public gallery service previews, gallery items, service images, and service reviews.
-- Gallery items are generated from embedded `Service.images`; do not create a separate Gallery collection.
-- The static `server/data/services.json` file is only for seed/migration use, not runtime gallery data.
-- Admin service and image management routes must remain protected by `requireAdmin`.
+- Project Brain JSON under `_workflow/project-brain/` is the source of truth for durable memory and current workflow state; run-scoped `progress.md` remains authoritative for completed task evidence.
+- Project Brain is CLI-native backend workflow memory. Do not add a separate memory UI unless a future request explicitly requires one.
+- `<Rule discovered from repo or agreed by team>`
+- `<Rule discovered from repo or agreed by team>`
 
 ## Known Constraints
 
-- No file upload system is currently implemented for service images; admins manually provide image URLs.
-- No Cloudinary, S3, or other external image storage integration is currently in scope.
-- Existing public gallery API contracts must remain backward compatible for the frontend.
+- `<Constraint>`
+- `<Constraint>`
 
 ## Open Questions
 
-- Whether future admin service ordering needs an explicit `sortOrder` field.
+- `<Question>`

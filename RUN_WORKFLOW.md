@@ -39,6 +39,8 @@ Do not implement without:
 ```txt
 direct user prompt or <artifact-root>/request.md
 -> detect current branch, worktree path, run id, and artifact root
+-> initialize and load project + run Project Brain
+-> inject relevant active memory
 -> grill-me intake unless skipped/resuming
 -> shared understanding handoff
 -> sync <artifact-root>/request.md
@@ -144,6 +146,126 @@ Final summary aggregation and orchestration happens only after branches are merg
 
 Legacy directories such as `_spec/`, `_task/`, `_progress/`, `_handoff/`, `_review/`, `_release/`, and `_summary/` may exist as historical compatibility artifacts. New active workflow state must use the run-scoped artifact root by default.
 
+## 0A. Initialize And Load Project Brain
+
+Project Brain is the mandatory structured memory layer for this workflow. It is backend workflow memory, not a separate UI. The user remains in CLI chat while the agent maintains memory automatically and shows compact activity updates.
+
+After resolving `<artifact-root>` and before resolving, planning, or implementing the request:
+
+1. Ensure these project-level files exist, initializing missing files from installed templates without replacing existing content:
+   - `_workflow/project-brain/project.json`
+   - `_workflow/project-brain/PROJECT_BRAIN.md`
+   - `_workflow/project-brain/history.json`
+   - `_workflow/project-brain/conflicts.json`
+   - `_workflow/project-brain/categories.json`
+2. Ensure these run-scoped files exist under the active artifact root, using `_workflow/templates/run/` seeds when available:
+   - `<artifact-root>/brain.json`
+   - `<artifact-root>/activity.md`
+   - `<artifact-root>/checkpoints.md`
+3. Read, in this order:
+   - `_workflow/project-brain/project.json`
+   - `_workflow/project-brain/categories.json`
+   - `_workflow/project-brain/conflicts.json`
+   - `<artifact-root>/brain.json`
+   - `<artifact-root>/handoff.md`
+   - `<artifact-root>/progress.md`
+4. Validate JSON before changing it. If a file is malformed, preserve the original, record the problem, and stop rather than resetting memory.
+
+### Source Of Truth And Reconciliation
+
+JSON is the source of truth for Project Brain memory and current workflow state. `_workflow/project-brain/PROJECT_BRAIN.md` is a generated human-readable projection and must be refreshed after project-memory changes; it is not independently authoritative.
+
+When artifacts disagree:
+
+- Project Brain controls current project memory, open questions, decisions, artifacts, and current/next workflow stage.
+- `<artifact-root>/brain.json` controls run-local memory and proposed changes for the active run.
+- Completed task execution evidence in `<artifact-root>/progress.md` remains authoritative for completed task history. Reconcile Project Brain to that evidence and record the reconciliation; never erase completed evidence.
+- Handoff, spec, tasks, review, release notes, and summary remain required evidence/artifacts, but their current-state fields must be reconciled to Project Brain.
+
+### Relevant Context Injection
+
+Before planning and before implementation, inject only relevant active memory into working context.
+
+Always include:
+
+- goals
+- constraints
+- architecture decisions
+- technical decisions
+- current workflow state
+
+Conditionally include related requirements, related artifacts, relevant domain knowledge, and similar previous decisions.
+
+Never inject the entire chat history, stale run data, superseded decisions unless needed for conflict context, or low-confidence assumptions unless explicitly labeled as assumptions.
+
+### Non-Destructive Memory Updates
+
+Never destructively overwrite memory. Read the latest JSON immediately before writing and preserve old values through stable IDs, lifecycle status, `supersedes`, item `history`, project `changeLog`, and `_workflow/project-brain/history.json` events. Do not delete memory to make artifacts agree.
+
+Each memory item supports:
+
+- `id`, `text`, `status`, and `confidence`
+- `source.runId`, `source.artifact`, and `source.conversation`
+- `createdAt`, `updatedAt`, `supersedes`, and `history`
+- status values `active`, `superseded`, `archived`, or `conflict`
+
+AI-created categories are allowed only under the governed `custom.<category>` namespace. Register the category definition in `_workflow/project-brain/categories.json`; never invent a new top-level Project Brain key.
+
+### Contradiction And Conflict Handling
+
+Compare incoming memory with active project and run memory before promotion. If it contradicts existing memory:
+
+1. Keep both old and new items.
+2. Mark unresolved items `conflict` and create or update a record in `_workflow/project-brain/conflicts.json`.
+3. If the user's wording is explicit and the new item has high confidence, promote the new item to `active`, mark the old item `superseded`, link both with `supersedes`/history, and retain the conflict resolution record.
+4. If authority or confidence is unclear, do not guess; keep the conflict open and add an open question or stop for human review when it blocks safe work.
+5. Record every conflict and resolution in project/run `changeLog`, `_workflow/project-brain/history.json`, `<artifact-root>/activity.md`, and a conflict-resolved checkpoint when applicable.
+
+In parallel modes, the orchestrator owns shared project-brain writes. Workers update only their run brain and task evidence, then propose project-memory changes for orchestrator reconciliation while using existing claims/locks.
+
+### Automatic Extraction And Projection
+
+Extract durable facts, decisions, requirements, constraints, risks, artifacts, open questions, and workflow transitions after intake, after spec creation/save, after task planning, after task completion, after review, after release notes, and after summary. Also extract after a user correction or conflict resolution.
+
+For every extraction:
+
+1. Update run memory first with provenance and confidence.
+2. Promote durable project-level facts to project memory non-destructively.
+3. Append project history and change-log events.
+4. Refresh `PROJECT_BRAIN.md` from active JSON memory.
+5. Append one entry to `<artifact-root>/activity.md`.
+6. Save a checkpoint when the event matches a required milestone.
+
+### Activity Output
+
+After each meaningful grouped workflow or memory change, append the update to `<artifact-root>/activity.md` and show exactly one compact block in chat:
+
+```txt
+Activity
+- Stage: <from> → <to>
+- Memory: <added/updated/conflict/resolved>
+- Artifact: <created/updated path>
+- Checkpoint: <saved/not saved>
+- Next: <next action>
+```
+
+Do not print full memory dumps in chat. Group related changes into one block.
+
+### Checkpoints
+
+Append to `<artifact-root>/checkpoints.md` at: intake complete, spec saved, task plan saved, each task done, workflow complete, and conflict resolved. Never rewrite previous checkpoints.
+
+Each checkpoint includes:
+
+- timestamp
+- stage
+- memory summary
+- artifacts changed
+- open questions
+- next action
+
+A checkpoint does not replace progress, handoff, verification, review, or summary evidence.
+
 ## 1. Resolve Active Request
 
 Read:
@@ -216,22 +338,23 @@ Handoff must always be safe to resume. Include a required `Token / Resume State`
 If the active user prompt is exactly or primarily `continue workflow`, resume instead of restarting intake:
 
 1. Resolve current branch, worktree path, run id, and artifact root first.
-2. Read `<artifact-root>/handoff.md` first and use it as the primary resume source.
-3. Read `<artifact-root>/progress.md` second to verify completed task and iteration history.
-4. Run `git status --short` and reconcile changed files against the handoff `Token / Resume State` section before continuing.
-5. If no handoff exists, create it, then fall back to `<artifact-root>/progress.md`, the latest relevant run-scoped `summary.md`, `<artifact-root>/tasks.md`, and the referenced spec to reconstruct the live state.
-6. If `<artifact-root>/handoff.md` conflicts with `<artifact-root>/progress.md`, trust `<artifact-root>/progress.md` for completed task history and update handoff accordingly.
-7. Reconcile `git status --short` output with files recorded in handoff and progress; document mismatches before resuming edits.
-8. Read the latest relevant run-scoped `summary.md`, if any.
-9. If a spec exists but no task plan exists for the active request, resume at the spec approval gate: read the saved spec, show the approval prompt from section 5A, and stop for explicit user approval. Do not generate tasks automatically.
-10. If a task plan exists, read the task plan referenced by `<artifact-root>/handoff.md`, or `<artifact-root>/tasks.md` if handoff has no task plan.
-11. Read the spec referenced by that task plan.
-12. Find the next unfinished task and unfinished iteration from `<artifact-root>/tasks.md` plus handoff/progress evidence.
-13. Continue only from the next unfinished task/iteration; do not repeat completed iterations.
-14. Do not ask the original intake questions again unless a current ambiguity blocks safe continuation.
-15. Do not regenerate the entire spec unless the request changed or required artifacts are missing/corrupt.
-16. Continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached, preserving the Build -> Refine -> Polish loop for each executable task.
-17. If all tasks are `Done`, complete any missing run-scoped review, release notes, summary, handoff update, workflow health check, or final response step.
+2. Initialize and read Project Brain using section 0A, then reconcile current workflow state with completed evidence in `<artifact-root>/progress.md`.
+3. Read `<artifact-root>/handoff.md` first and use it as the primary resume source.
+4. Read `<artifact-root>/progress.md` second to verify completed task and iteration history.
+5. Run `git status --short` and reconcile changed files against the handoff `Token / Resume State` section before continuing.
+6. If no handoff exists, create it, then fall back to `<artifact-root>/progress.md`, the latest relevant run-scoped `summary.md`, `<artifact-root>/tasks.md`, and the referenced spec to reconstruct the live state.
+7. If `<artifact-root>/handoff.md` conflicts with `<artifact-root>/progress.md`, trust `<artifact-root>/progress.md` for completed task history and update handoff accordingly.
+8. Reconcile `git status --short` output with files recorded in handoff and progress; document mismatches before resuming edits.
+9. Read the latest relevant run-scoped `summary.md`, if any.
+10. If a spec exists but no task plan exists for the active request, resume at the spec approval gate: read the saved spec, show the approval prompt from section 5A, and stop for explicit user approval. Do not generate tasks automatically.
+11. If a task plan exists, read the task plan referenced by `<artifact-root>/handoff.md`, or `<artifact-root>/tasks.md` if handoff has no task plan.
+12. Read the spec referenced by that task plan.
+13. Find the next unfinished task and unfinished iteration from `<artifact-root>/tasks.md` plus handoff/progress evidence.
+14. Continue only from the next unfinished task/iteration; do not repeat completed iterations.
+15. Do not ask the original intake questions again unless a current ambiguity blocks safe continuation.
+16. Do not regenerate the entire spec unless the request changed or required artifacts are missing/corrupt.
+17. Continue executing remaining tasks sequentially until all tasks are complete or a stop condition is reached, preserving the Build -> Refine -> Polish loop for each executable task.
+18. If all tasks are `Done`, complete any missing run-scoped review, release notes, summary, handoff update, workflow health check, or final response step.
 
 ## 2. Intake And Questioning
 
@@ -1147,6 +1270,8 @@ Check for:
 Fix only defects within the active task. Create follow-up tasks for anything larger.
 
 ## 17. Workflow Health Check
+
+Project Brain health is required: verify project and run JSON exist and parse, JSON is the source of truth, `PROJECT_BRAIN.md` matches active project memory, activity/checkpoints were appended at required milestones, conflicts and custom categories follow governance, and no prior memory/history was destructively removed. A missing required brain file or destructive memory loss makes health `Failed`; incomplete projection/activity/checkpoint evidence makes health `Partial` or `Failed` according to severity.
 
 Before the final response, check:
 

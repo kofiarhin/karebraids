@@ -5,6 +5,9 @@ Each branch or worktree writes generated workflow artifacts to its own run direc
 ```txt
 _workflow/runs/<branch-or-worktree-id>/
   request.md
+  brain.json
+  activity.md
+  checkpoints.md
   spec.md
   tasks.md
   progress.md
@@ -33,3 +36,7 @@ Active request state lives in `<artifact-root>/request.md`. Root `WORK_REQUEST.m
 Parallel coordination files live under `<artifact-root>/parallel/` during a run. In codex-workflow-kit, the committed source templates live under `templates/_workflow/runs/parallel/`; after installation, `_workflow/runs/parallel/` contains static starting points for `claims.md`, `locks.md`, and `agent-status.md`.
 
 Never merge generated workflow reports line by line manually. If `_workflow` conflicts during a merge, preserve each run directory, regenerate any aggregate/index state after branches merge, treat run folders as branch/worktree-local memory, and perform final orchestration after branch merge.
+
+## Project Brain
+
+Project Brain uses `_workflow/project-brain/project.json` for durable project memory and creates `brain.json`, `activity.md`, and `checkpoints.md` inside every active run directory. JSON is the source of truth; activity and checkpoints are append-only. Generic seeds are installed under `_workflow/templates/run/`. Preserve existing memory and reconcile completed execution evidence from `progress.md` instead of overwriting it.
