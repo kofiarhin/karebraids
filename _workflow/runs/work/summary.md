@@ -78,3 +78,18 @@
 - Unresolved: baseline booking timeouts, baseline lint errors, screenshot CDN block.
 - Recommended next work: fix baseline verification debt separately.
 - Workflow health: Partial.
+
+## 2026-06-07 — Backend-Driven Service and Gallery Data
+
+- Goal completed: MongoDB Service documents and Express APIs are now canonical for public service/gallery server state.
+- Backend: expanded Service schema, shared serializers, filtered `/api/services`, ID-or-slug detail, per-service gallery, and preserved gallery endpoints.
+- Seed: 11 URL-only schema-valid services with primary/gallery images; stable-ID bulk upserts; `.env` loading for CLI.
+- Frontend: shared API services and TanStack Query hooks drive Gallery, Services, homepage cards/gallery preview, Booking, ServiceDetail, and Admin service choices.
+- Booking: image-first cards show image, name, from price, and duration; async query-string preselection no longer relies on state-setting effects.
+- Compatibility: knotless booking/gallery links pass; legacy boho slug supported; production has no `client/src/data/services.js` imports.
+- Applied skill: design-taste-frontend
+- Verification: server 63/63; client 103/103; build pass; lint pass; seed validation pass; diff check pass.
+- Environment caveat: live `npm run seed:services` could not connect because `MONGODB_URI` is not configured in the container; the script reached the expected env gate and its upsert behavior is tested.
+- Fallow: 74.8/B, PARTIAL audit due Jest entry-point false positives and maintainability targets; no circular, boundary, unresolved import, or dependency issues.
+- Screenshot: unavailable because the container has no browser/browser automation runtime; final UI code-surface review passed.
+- Workflow health: Passed with documented environment caveat.

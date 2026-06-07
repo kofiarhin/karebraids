@@ -1,3 +1,5 @@
+require("dotenv").config({ quiet: true });
+
 const path = require("path");
 const { connectDatabase, disconnectDatabase } = require("../config/db");
 const { getEnv } = require("../config/env");
@@ -8,42 +10,34 @@ function loadServicesFromJson() {
 }
 
 async function seedServices({ services = loadServicesFromJson(), ServiceModel = Service } = {}) {
-  let inserted = 0;
-  let skipped = 0;
+  if (services.length === 0) return { inserted: 0, matched: 0, updated: 0, total: 0 };
 
-  for (const service of services) {
-    const existingService = await ServiceModel.findOne({ id: service.id });
+  const operations = services.map((service) => ({
+    updateOne: {
+      filter: { id: service.id },
+      update: { $set: service },
+      upsert: true,
+      runValidators: true,
+    },
+  }));
+  const result = await ServiceModel.bulkWrite(operations);
 
-    if (existingService) {
-      skipped += 1;
-      continue;
-    }
-
-    try {
-      await ServiceModel.create(service);
-      inserted += 1;
-    } catch (error) {
-      if (error.code === 11000) {
-        skipped += 1;
-        continue;
-      }
-
-      throw error;
-    }
-  }
-
-  return { inserted, skipped, total: services.length };
+  return {
+    inserted: result.upsertedCount || 0,
+    matched: result.matchedCount || 0,
+    updated: result.modifiedCount || 0,
+    total: services.length,
+  };
 }
 
 async function runSeedServices() {
   const { mongodbUri } = getEnv();
-
   await connectDatabase(mongodbUri);
 
   try {
     const result = await seedServices();
     console.log(
-      `Service seed complete. Inserted: ${result.inserted}. Skipped: ${result.skipped}. Total: ${result.total}.`,
+      `Service seed complete. Inserted: ${result.inserted}. Matched: ${result.matched}. Updated: ${result.updated}. Total: ${result.total}.`,
     );
     return result;
   } finally {
@@ -58,8 +52,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = {
-  loadServicesFromJson,
-  runSeedServices,
-  seedServices,
-};
+module.exports = { loadServicesFromJson, runSeedServices, seedServices };

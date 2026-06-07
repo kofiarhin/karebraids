@@ -1,5 +1,31 @@
 {
   "version": "1.0.0",
-  "updatedAt": "",
-  "events": []
+  "updatedAt": "2026-06-07T01:41:13Z",
+  "events": [
+    {
+      "id": "history-20260607-spec",
+      "timestamp": "2026-06-07T01:18:00Z",
+      "runId": "work",
+      "type": "spec-saved",
+      "summary": "Initialized Project Brain for backend-driven service/gallery work and saved the detailed spec at the approval gate.",
+      "artifacts": [
+        "_workflow/runs/work/request.md",
+        "_workflow/runs/work/spec.md",
+        "_workflow/runs/work/handoff.md"
+      ]
+    },
+    {
+      "id": "history-complete-service-data-20260607",
+      "timestamp": "2026-06-07T01:41:13Z",
+      "runId": "work",
+      "type": "workflow-complete",
+      "summary": "Completed backend-driven service/gallery migration with all tests/build/lint passing and a documented seed environment caveat.",
+      "artifacts": [
+        "_workflow/runs/work/review.md",
+        "_workflow/runs/work/release-notes.md",
+        "_workflow/runs/work/summary.md",
+        ".workflow/fallow-audit.md"
+      ]
+    }
+  ]
 }

@@ -1,19 +1,23 @@
 import { api } from '../lib/api.js'
+<<<<<<< HEAD
 import {
   getGalleryItems as getCanonicalGalleryItems,
   getGalleryItemsByServiceId,
   getGalleryServices as getCanonicalGalleryServices,
   getServiceById,
 } from '../data/services.js'
+=======
+>>>>>>> 17932ad (feat: drive services and gallery from backend)
 
 function normalizeLimit(limit) {
   return Number.isInteger(limit) && limit > 0 ? limit : undefined
 }
 
 function normalizeService(service) {
-  return typeof service === 'string' && service.trim() ? service : null
+  return typeof service === 'string' && service.trim() ? service.trim() : undefined
 }
 
+<<<<<<< HEAD
 function buildGalleryParams({ limit, service } = {}) {
   const params = {}
   const itemLimit = normalizeLimit(limit)
@@ -35,6 +39,16 @@ function getLocalGallery({ limit, service } = {}) {
     selectedService: selectedServiceId ? getServiceById(selectedServiceId) ?? null : null,
     reviews: [],
   }
+=======
+export async function getGallery({ limit, service } = {}) {
+  const response = await api.get('/gallery', {
+    params: {
+      limit: normalizeLimit(limit),
+      service: normalizeService(service),
+    },
+  })
+  return response.data
+>>>>>>> 17932ad (feat: drive services and gallery from backend)
 }
 
 function responseHasGalleryItems(data) {
@@ -67,6 +81,7 @@ export async function getGalleryItems(options = {}) {
 }
 
 export async function getGalleryServices() {
+<<<<<<< HEAD
   try {
     const response = await api.get('/gallery/services')
 
@@ -78,4 +93,8 @@ export async function getGalleryServices() {
   } catch {
     return getCanonicalGalleryServices()
   }
+=======
+  const response = await api.get('/gallery/services')
+  return response.data.services || []
+>>>>>>> 17932ad (feat: drive services and gallery from backend)
 }
