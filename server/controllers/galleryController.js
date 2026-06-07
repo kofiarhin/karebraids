@@ -1,24 +1,8 @@
 const Service = require("../models/Service");
+const { serializeGalleryItems, serializeService } = require("../utils/serviceSerializer");
 const { slugPattern } = require("../utils/serviceValidation");
 
 const positiveIntegerPattern = /^[1-9]\d*$/;
-
-function toPreviewService(service) {
-  const { images = [], reviews, ...metadata } = service;
-
-  return {
-    ...metadata,
-    previewImage: images[0] ?? null,
-  };
-}
-
-function toGalleryItem(service, image) {
-  return {
-    ...image,
-    serviceId: service.id,
-    serviceTitle: service.title,
-  };
-}
 
 function getLimitedItems(items, limit) {
   const hasValidLimit = typeof limit === "string" && positiveIntegerPattern.test(limit);
@@ -36,8 +20,7 @@ async function listServices() {
 async function getGalleryServices(req, res, next) {
   try {
     const services = await listServices();
-
-    return res.json({ services: services.map(toPreviewService) });
+    return res.json({ services: services.map(serializeService) });
   } catch (error) {
     return next(error);
   }
@@ -49,23 +32,19 @@ async function getGallery(req, res, next) {
     let sourceServices;
 
     if (serviceQueryIsValid(req.query.service)) {
-      selectedService = await Service.findOne({ id: req.query.service }).lean();
+      selectedService = await Service.findOne({
+        $or: [{ id: req.query.service }, { slug: req.query.service }],
+      }).lean();
     }
 
-    if (selectedService) {
-      sourceServices = [selectedService];
-    } else {
-      sourceServices = await listServices();
-    }
+    if (selectedService) sourceServices = [selectedService];
+    else sourceServices = await listServices();
 
-    const galleryItems = sourceServices.flatMap((service) =>
-      (service.images || []).map((image) => toGalleryItem(service, image)),
-    );
-    const items = getLimitedItems(galleryItems, req.query.limit);
+    const galleryItems = sourceServices.flatMap(serializeGalleryItems);
 
     return res.json({
-      galleryItems: items,
-      selectedService: selectedService ? toPreviewService(selectedService) : null,
+      galleryItems: getLimitedItems(galleryItems, req.query.limit),
+      selectedService: selectedService ? serializeService(selectedService) : null,
       reviews: selectedService ? selectedService.reviews || [] : [],
     });
   } catch (error) {

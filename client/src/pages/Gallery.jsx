@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { GalleryModal } from '../components/GalleryModal.jsx'
-import { SERVICE_IMAGE_FALLBACK } from '../data/services.js'
+import { SERVICE_PREVIEW_FALLBACK_IMAGE } from '../utils/servicePreview.js'
 import { useGalleryItems, useGalleryServices } from '../hooks/queries/useGalleryItems.js'
 
 function formatPrice(service) {
@@ -29,13 +29,13 @@ function SafeGalleryImage({ item }) {
       alt={item.alt}
       loading="lazy"
       onError={(event) => {
-        if (event.currentTarget.src !== SERVICE_IMAGE_FALLBACK) {
-          event.currentTarget.src = SERVICE_IMAGE_FALLBACK
+        if (event.currentTarget.src !== SERVICE_PREVIEW_FALLBACK_IMAGE) {
+          event.currentTarget.src = SERVICE_PREVIEW_FALLBACK_IMAGE
           return
         }
         setHasError(true)
       }}
-      src={item.src}
+      src={item.src || item.image}
     />
   )
 }
@@ -47,18 +47,13 @@ export function Gallery() {
   const galleryServicesQuery = useGalleryServices()
   const galleryServices = galleryServicesQuery.data || []
   const requestedService = searchParams.get('service')
-  const [selectedServiceId, setSelectedServiceId] = useState('all')
-  const selectedService = selectedServiceId === 'all' ? null : galleryServices.find((service) => service.id === selectedServiceId) || null
+  const requestedMatch = galleryServices.find((service) => service.id === requestedService || service.slug === requestedService)
+  const selectedServiceId = requestedMatch ? requestedMatch.slug || requestedMatch.id : 'all'
+  const selectedService = requestedMatch || null
   const galleryItemsQuery = useGalleryItems(selectedServiceId === 'all' ? {} : { service: selectedServiceId })
   const galleryItems = galleryItemsQuery.data || []
 
-  useEffect(() => {
-    const nextServiceId = galleryServices.some((service) => service.id === requestedService) ? requestedService : 'all'
-    setSelectedServiceId(nextServiceId)
-  }, [galleryServices, requestedService])
-
   const updateSelectedService = (serviceId) => {
-    setSelectedServiceId(serviceId)
     setSelectedItem(null)
     if (serviceId === 'all') {
       setSearchParams({})
@@ -87,6 +82,9 @@ export function Gallery() {
         {selectedService ? <p className="gallery-filter-note">Showing {selectedService.name}</p> : null}
       </div>
 
+      {galleryServicesQuery.isLoading ? <p className="gallery-query-state" role="status">Loading services…</p> : null}
+      {galleryServicesQuery.isError ? <p className="gallery-query-state" role="alert">Services could not be loaded. Please try again.</p> : null}
+
       <div className="gallery-filter-panel">
         <label htmlFor="gallery-service-filter">Filter gallery by service</label>
         <select
@@ -96,7 +94,7 @@ export function Gallery() {
         >
           <option value="all">All Services</option>
           {galleryServices.map((service) => (
-            <option key={service.id} value={service.id}>
+            <option key={service.id} value={service.slug || service.id}>
               {service.name}
             </option>
           ))}
@@ -114,7 +112,7 @@ export function Gallery() {
             <div><dt>Starting price</dt><dd>{formatPrice(selectedService)}</dd></div>
             <div><dt>Duration</dt><dd>{selectedService.durationLabel}</dd></div>
           </dl>
-          <Link className="btn btn-primary" to={`/booking?service=${selectedService.id}`}>Book This Style</Link>
+          <Link className="btn btn-primary" to={`/booking?service=${selectedService.slug || selectedService.id}`}>Book This Style</Link>
         </section>
       ) : null}
 

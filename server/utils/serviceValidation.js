@@ -19,38 +19,28 @@ function isHttpUrl(value) {
 }
 
 function normalizeImagePayload(payload = {}) {
-  return {
+  const image = {
     id: normalizeString(payload.id),
     title: normalizeString(payload.title),
     description: normalizeString(payload.description),
-    image: normalizeString(payload.image),
+    image: normalizeString(payload.image || payload.src),
     aspect: normalizeString(payload.aspect),
   };
+  if (payload.src !== undefined) image.src = normalizeString(payload.src);
+  if (payload.alt !== undefined) image.alt = normalizeString(payload.alt);
+  return image;
 }
 
 function validateImagePayload(payload = {}) {
   const image = normalizeImagePayload(payload);
   const errors = [];
 
-  if (!slugPattern.test(image.id)) {
-    errors.push("Image id must be a lowercase slug.");
-  }
-
-  if (!image.title) {
-    errors.push("Image title is required.");
-  }
-
-  if (!image.description) {
-    errors.push("Image description is required.");
-  }
-
-  if (!isHttpUrl(image.image)) {
-    errors.push("Image URL must be a valid http or https URL.");
-  }
-
-  if (!image.aspect) {
-    errors.push("Image aspect is required.");
-  }
+  if (!slugPattern.test(image.id)) errors.push("Image id must be a lowercase slug.");
+  if (!image.title) errors.push("Image title is required.");
+  if (!image.description) errors.push("Image description is required.");
+  if (!isHttpUrl(image.image)) errors.push("Image URL must be a valid http or https URL.");
+  if (image.src && !isHttpUrl(image.src)) errors.push("Image src must be a valid http or https URL.");
+  if (!image.aspect) errors.push("Image aspect is required.");
 
   return { image, errors };
 }
@@ -67,23 +57,12 @@ function normalizeReviewPayload(payload = {}) {
 function validateReviewPayload(payload = {}) {
   const review = normalizeReviewPayload(payload);
   const errors = [];
-
-  if (!review.id) {
-    errors.push("Review id is required.");
-  }
-
-  if (!review.name) {
-    errors.push("Review name is required.");
-  }
-
+  if (!review.id) errors.push("Review id is required.");
+  if (!review.name) errors.push("Review name is required.");
   if (!Number.isFinite(review.rating) || review.rating < 1 || review.rating > 5) {
     errors.push("Review rating must be between 1 and 5.");
   }
-
-  if (!review.comment) {
-    errors.push("Review comment is required.");
-  }
-
+  if (!review.comment) errors.push("Review comment is required.");
   return { review, errors };
 }
 
@@ -95,50 +74,48 @@ function hasDuplicateIds(items) {
 function validateServicePayload(payload = {}) {
   const images = Array.isArray(payload.images) ? payload.images.map(normalizeImagePayload) : [];
   const reviews = Array.isArray(payload.reviews) ? payload.reviews.map(normalizeReviewPayload) : [];
+  const startingPrice = normalizeNumber(payload.startingPrice ?? payload.priceFrom ?? payload.fromPrice);
+  const id = normalizeString(payload.id || payload.slug);
   const service = {
-    id: normalizeString(payload.id),
-    title: normalizeString(payload.title),
-    description: normalizeString(payload.description),
-    startingPrice: normalizeNumber(payload.startingPrice),
+    id,
+    slug: normalizeString(payload.slug || id),
+    name: normalizeString(payload.name || payload.title),
+    title: normalizeString(payload.title || payload.name),
+    category: normalizeString(payload.category || "Braids"),
+    shortDescription: normalizeString(payload.shortDescription || payload.description),
+    description: normalizeString(payload.description || payload.shortDescription),
+    startingPrice,
+    priceFrom: Number.isFinite(normalizeNumber(payload.priceFrom)) ? normalizeNumber(payload.priceFrom) : startingPrice,
     currency: normalizeString(payload.currency).toUpperCase(),
     duration: {
       minHours: normalizeNumber(payload.duration?.minHours),
       maxHours: normalizeNumber(payload.duration?.maxHours),
     },
+    durationLabel: normalizeString(payload.durationLabel),
     featured: Boolean(payload.featured),
+    bookingEnabled: payload.bookingEnabled !== false,
+    galleryEnabled: payload.galleryEnabled !== false,
+    status: normalizeString(payload.status || "available"),
+    primaryImage: payload.primaryImage ? normalizeImagePayload(payload.primaryImage) : null,
     images,
     reviews,
   };
   const errors = [];
 
-  if (!slugPattern.test(service.id)) {
-    errors.push("Service id must be a lowercase slug.");
-  }
-
-  if (!service.title) {
-    errors.push("Service title is required.");
-  }
-
-  if (!service.description) {
-    errors.push("Service description is required.");
-  }
-
+  if (!slugPattern.test(service.id)) errors.push("Service id must be a lowercase slug.");
+  if (!slugPattern.test(service.slug)) errors.push("Service slug must be a lowercase slug.");
+  if (!service.title) errors.push("Service title is required.");
+  if (!service.description) errors.push("Service description is required.");
   if (!Number.isFinite(service.startingPrice) || service.startingPrice < 0) {
     errors.push("Starting price must be zero or greater.");
   }
-
-  if (!service.currency) {
-    errors.push("Currency is required.");
-  }
-
+  if (!service.currency) errors.push("Currency is required.");
   if (!Number.isFinite(service.duration.minHours) || service.duration.minHours < 0) {
     errors.push("Minimum duration must be zero or greater.");
   }
-
   if (!Number.isFinite(service.duration.maxHours) || service.duration.maxHours < 0) {
     errors.push("Maximum duration must be zero or greater.");
   }
-
   if (
     Number.isFinite(service.duration.minHours) &&
     Number.isFinite(service.duration.maxHours) &&
@@ -147,21 +124,11 @@ function validateServicePayload(payload = {}) {
     errors.push("Maximum duration must be greater than or equal to minimum duration.");
   }
 
-  images.forEach((imagePayload) => {
-    errors.push(...validateImagePayload(imagePayload).errors);
-  });
-
-  reviews.forEach((reviewPayload) => {
-    errors.push(...validateReviewPayload(reviewPayload).errors);
-  });
-
-  if (hasDuplicateIds(images)) {
-    errors.push("Image ids must be unique within a service.");
-  }
-
-  if (hasDuplicateIds(reviews)) {
-    errors.push("Review ids must be unique within a service.");
-  }
+  if (service.primaryImage) errors.push(...validateImagePayload(service.primaryImage).errors);
+  images.forEach((imagePayload) => errors.push(...validateImagePayload(imagePayload).errors));
+  reviews.forEach((reviewPayload) => errors.push(...validateReviewPayload(reviewPayload).errors));
+  if (hasDuplicateIds(images)) errors.push("Image ids must be unique within a service.");
+  if (hasDuplicateIds(reviews)) errors.push("Review ids must be unique within a service.");
 
   return { service, errors };
 }
@@ -170,6 +137,5 @@ module.exports = {
   isHttpUrl,
   slugPattern,
   validateImagePayload,
-  validateReviewPayload,
   validateServicePayload,
 };

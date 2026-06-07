@@ -50,6 +50,18 @@ vi.mock('../src/hooks/queries/useGalleryItems.js', async () => {
   }
 })
 
+
+vi.mock('../src/hooks/queries/useServices.js', async () => {
+  const { getBookableServices } = await import('../src/data/services.js')
+  const services = getBookableServices()
+  return {
+    useFeaturedServices: () => ({ data: services.filter((service) => service.featured), isLoading: false, isError: false }),
+    useGalleryEnabledServices: () => ({ data: services.filter((service) => service.galleryEnabled), isLoading: false, isError: false }),
+    useBookableServices: () => ({ data: services, isLoading: false, isError: false }),
+    useService: () => ({ data: null, isLoading: false, isError: false }),
+  }
+})
+
 const originalMatchMedia = window.matchMedia
 const testDirectory = path.dirname(fileURLToPath(import.meta.url))
 const homeStyles = () => fs.readFileSync(path.join(testDirectory, '../src/index.css'), 'utf8')

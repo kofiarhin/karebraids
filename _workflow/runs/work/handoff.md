@@ -1,29 +1,28 @@
-# Workflow Handoff — Theme-aware Header Navigation
+# Workflow Handoff — Backend-Driven Service and Gallery Data
 
 ## Shared Understanding Handoff
-- Request: make desktop and mobile header/navigation visibly follow resolved light/dark/system theme.
-- Scope: focused CSS semantic-token migration and Vitest regression coverage.
-- Runtime theme persistence/system syncing unchanged.
+- Goal: MongoDB Service documents and Express APIs are canonical for public service/gallery UI data.
+- Scope completed: backend schema/routes/serializers, seed upserts/data, TanStack Query API layer/hooks, Services/Gallery/home/Booking/ServiceDetail/Admin consumers, compatibility tests, and verification.
 - Applied skill: design-taste-frontend
 
 ## Live Resume State
-- Current phase: Complete with baseline verification caveats
+- Current phase: Complete
 - Current branch: `work`
 - Current worktree: `/workspace/karebraids`
 - Run ID: `work`
 - Artifact root: `_workflow/runs/work/`
-- Spec: `_workflow/runs/work/spec.md`
-- Task plan: `_workflow/runs/work/tasks.md`
-- Last task: TASK-001 — Needs Human Review
+- Spec: `_workflow/runs/work/spec.md` — approved and accepted
+- Task plan: `_workflow/runs/work/tasks.md` — TASK-001 through TASK-005 Done
+- Last completed task: TASK-005 — Verify and harden the complete migration
 - Current iteration: Iteration 3 Polish complete
-- Blockers: pre-existing booking test timeouts and hook lint errors prevent Passed health
-- Dirty worktree before work: clean
-- Verification: focused tests/build/diff/Fallow pass; full test/lint partial with baseline evidence
-- Acceptance: functional theme criteria met; existing-tests criterion partial
+- Blockers: None
+- Dirty worktree before work: Clean
+- Verification: 63 backend tests; 103 frontend tests; client build/lint; seed model validation; no-live-import search; diff check all pass
+- Environment caveat: `npm run seed:services` requires `MONGODB_URI`, absent in this container
+- Acceptance: All criteria checked [x]
 - Review: `_workflow/runs/work/review.md`
-- Verification record: `_workflow/runs/work/verification.md`
 - Release notes: `_workflow/runs/work/release-notes.md`
 - Summary: `_workflow/runs/work/summary.md`
-- Fallow: `.workflow/fallow-audit.md` — PASSED
-- Workflow health: Partial
-- Next step: commit current scoped changes and create PR; separately repair baseline verification debt.
+- Fallow: `.workflow/fallow-audit.md` — PARTIAL, health 74.8/B
+- Workflow health: Passed with documented environment caveat
+- Next step: Commit the completed migration and create the pull request.

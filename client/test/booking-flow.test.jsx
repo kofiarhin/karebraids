@@ -7,7 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
 import * as bookingService from '../src/services/bookingService.js'
 import { getBookableServices } from '../src/data/services.js'
-import { useGalleryServices } from '../src/hooks/queries/useGalleryItems.js'
+import { useBookableServices } from '../src/hooks/queries/useServices.js'
 
 const bookingStyles = () => readFileSync('src/index.css', 'utf8')
 
@@ -16,8 +16,8 @@ vi.mock('../src/services/bookingService.js', () => ({
   getAvailability: vi.fn(),
 }))
 
-vi.mock('../src/hooks/queries/useGalleryItems.js', () => ({
-  useGalleryServices: vi.fn(),
+vi.mock('../src/hooks/queries/useServices.js', () => ({
+  useBookableServices: vi.fn(),
 }))
 
 function renderBooking(route = '/booking') {
@@ -60,15 +60,19 @@ async function chooseAvailableAppointmentDate(user) {
 }
 
 describe('booking flow', () => {
-  it('renders booking service options from useGalleryServices', () => {
+  it('renders image-first booking service options from useBookableServices', () => {
     const services = getBookableServices().slice(0, 2)
-    useGalleryServices.mockReturnValue({ data: services, isLoading: false, isError: false })
+    useBookableServices.mockReturnValue({ data: services, isLoading: false, isError: false })
 
     renderBooking()
 
-    expect(useGalleryServices).toHaveBeenCalled()
+    expect(useBookableServices).toHaveBeenCalled()
     services.forEach((service) => {
-      expect(screen.getByRole('button', { name: new RegExp(service.name, 'i') })).toBeInTheDocument()
+      const option = screen.getByRole('button', { name: new RegExp(service.name, 'i') })
+      expect(option).toBeInTheDocument()
+      expect(option.querySelector('img')).toHaveAttribute('src', expect.stringMatching(/^https?:\/\//))
+      expect(option).toHaveTextContent(/from £/i)
+      expect(option).toHaveTextContent(service.durationLabel)
     })
   })
 
@@ -77,7 +81,7 @@ describe('booking flow', () => {
       slots: ['09:00', '10:00'],
       message: 'Appointments are available.',
     })
-    useGalleryServices.mockReturnValue({ data: getBookableServices(), isLoading: false, isError: false })
+    useBookableServices.mockReturnValue({ data: getBookableServices(), isLoading: false, isError: false })
     bookingService.createBooking.mockResolvedValue({
       booking: {
         service: 'Knotless Braids',
@@ -114,7 +118,7 @@ describe('booking flow', () => {
   })
 
   it('preselects a booking service from the service query parameter', () => {
-    useGalleryServices.mockReturnValue({ data: getBookableServices(), isLoading: false, isError: false })
+    useBookableServices.mockReturnValue({ data: getBookableServices(), isLoading: false, isError: false })
 
     renderBooking('/booking?service=stitch-braids')
 

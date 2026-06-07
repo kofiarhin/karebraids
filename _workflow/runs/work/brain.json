@@ -1,6 +1,7 @@
 {
   "version": "1.0.0",
   "updatedAt": "2026-06-07T01:41:13Z",
+  "runId": "work",
   "workflow": {
     "currentStage": "complete",
     "completedStages": [
@@ -40,7 +41,7 @@
   "requirements": [
     {
       "id": "req-service-api",
-      "text": "Public service APIs provide filtered lists, id-or-slug detail, per-service gallery, and backward-compatible gallery responses.",
+      "text": "Add filtered service list, id-or-slug detail, and per-service gallery endpoints while preserving existing gallery endpoints.",
       "status": "active",
       "confidence": 1.0,
       "source": {
@@ -55,7 +56,7 @@
     },
     {
       "id": "req-client-server-state",
-      "text": "Public React service/gallery surfaces use TanStack Query and the shared API client instead of hardcoded live data.",
+      "text": "Refactor the named Services, Gallery, Booking, and homepage surfaces to TanStack Query through the shared API client.",
       "status": "active",
       "confidence": 1.0,
       "source": {
@@ -70,7 +71,37 @@
     },
     {
       "id": "req-seed-upsert",
-      "text": "Service seed data is complete and rerunnable through upserts.",
+      "text": "Make complete service seed data rerunnable through upserts and store image URLs/metadata only.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-deep-links",
+      "text": "Preserve booking preselection and gallery filtering for service query-string deep links.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-tests",
+      "text": "Add TDD-first Jest/Vitest coverage and run server tests, client tests, and client build.",
       "status": "active",
       "confidence": 1.0,
       "source": {
@@ -87,7 +118,7 @@
   "constraints": [
     {
       "id": "constraint-no-binaries",
-      "text": "MongoDB stores image URLs and metadata only, never image binaries.",
+      "text": "Do not store image binaries in MongoDB; store validated HTTP(S) image URLs and metadata only.",
       "status": "active",
       "confidence": 1.0,
       "source": {
@@ -101,8 +132,8 @@
       "history": []
     },
     {
-      "id": "constraint-deep-links",
-      "text": "Existing booking and gallery service query-string links must remain compatible.",
+      "id": "constraint-style",
+      "text": "Preserve the existing visual style and booking wizard behavior.",
       "status": "active",
       "confidence": 1.0,
       "source": {
@@ -114,12 +145,27 @@
       "updatedAt": "2026-06-07T01:18:00Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "constraint-approval",
+      "text": "Do not generate tasks or implement before explicit approval of the saved spec.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "architectureDecisions": [
     {
       "id": "arch-canonical-service",
-      "text": "MongoDB Service collection is the canonical service/gallery source; Express is the public contract and TanStack Query owns frontend server state.",
+      "text": "MongoDB Service collection is canonical; Express serializers expose compatibility aliases; React consumes server state via TanStack Query.",
       "status": "active",
       "confidence": 0.98,
       "source": {
@@ -135,10 +181,10 @@
   ],
   "technicalDecisions": [
     {
-      "id": "tech-image-url-validation",
-      "text": "Service image fields accept validated HTTP(S) URLs and expose image/src compatibility aliases.",
+      "id": "tech-shared-serializer",
+      "text": "Use shared backend normalization for service and gallery responses to prevent alias drift.",
       "status": "active",
-      "confidence": 0.98,
+      "confidence": 0.95,
       "source": {
         "runId": "work",
         "artifact": "_workflow/runs/work/spec.md",
@@ -168,7 +214,7 @@
   "domainKnowledge": [
     {
       "id": "domain-current-split",
-      "text": "The backend gallery already reads Service documents, but several public React surfaces currently read client/src/data/services.js.",
+      "text": "Current backend already serves gallery from Service records, while named frontend surfaces still use hardcoded client service data.",
       "status": "active",
       "confidence": 1.0,
       "source": {
@@ -201,7 +247,7 @@
   "risks": [
     {
       "id": "risk-async-compat",
-      "text": "Catalog migration can regress deep-link selection, async states, or legacy response aliases.",
+      "text": "Async query resolution and id/slug aliases may regress URL-driven gallery filtering or booking preselection.",
       "status": "active",
       "confidence": 0.95,
       "source": {
@@ -217,8 +263,23 @@
   ],
   "artifacts": [
     {
-      "id": "artifact-active-spec",
-      "text": "Active spec: _workflow/runs/work/spec.md.",
+      "id": "artifact-request",
+      "text": "Active normalized request saved at _workflow/runs/work/request.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/request.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-spec",
+      "text": "Detailed implementation spec saved at _workflow/runs/work/spec.md and awaiting approval.",
       "status": "active",
       "confidence": 1.0,
       "source": {
@@ -228,6 +289,21 @@
       },
       "createdAt": "2026-06-07T01:18:00Z",
       "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-task-plan-20260607",
+      "text": "Approved spec-derived task plan saved at _workflow/runs/work/tasks.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/tasks.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:24:09Z",
+      "updatedAt": "2026-06-07T01:24:09Z",
       "supersedes": [],
       "history": []
     },
@@ -280,7 +356,7 @@
   "workflowHistory": [
     {
       "id": "workflow-spec-saved-20260607",
-      "text": "Backend-driven service/gallery request completed intake and is paused for explicit spec approval.",
+      "text": "Intake completed and detailed spec saved; workflow paused at explicit approval gate.",
       "status": "active",
       "confidence": 1.0,
       "source": {
@@ -312,14 +388,25 @@
   "custom": {},
   "changeLog": [
     {
-      "id": "project-change-20260607-spec",
+      "id": "run-change-20260607-spec",
       "timestamp": "2026-06-07T01:18:00Z",
       "type": "spec-saved",
-      "summary": "Recorded canonical service/gallery goal, constraints, and approval-gated spec.",
+      "summary": "Initialized run memory for backend-driven service/gallery work and paused at approval gate.",
       "source": {
         "runId": "work",
         "artifact": "_workflow/runs/work/spec.md",
         "conversation": "workflow"
+      }
+    },
+    {
+      "id": "run-change-plan-20260607",
+      "timestamp": "2026-06-07T01:24:09Z",
+      "type": "task-plan-saved",
+      "summary": "Recorded explicit spec approval and created five sequential vertical tasks.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/tasks.md",
+        "conversation": "user"
       }
     },
     {
