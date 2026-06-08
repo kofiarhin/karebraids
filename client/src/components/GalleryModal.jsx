@@ -2,22 +2,35 @@ import { X } from '@phosphor-icons/react'
 import { useEffect, useRef } from 'react'
 
 const modalStyle = {
-  display: 'grid',
-  placeItems: 'center',
-  width: 'min(calc(100vw - 2rem), 58rem)',
+  display: 'block',
+  width: 'fit-content',
+  maxWidth: 'calc(100vw - 2rem)',
   maxHeight: 'calc(100dvh - 2rem)',
-  padding: 'clamp(0.75rem, 2vw, 1.5rem)',
-  overflow: 'auto',
+  padding: 0,
+  overflow: 'visible',
+  border: 0,
+  borderRadius: 0,
+  background: 'transparent',
+  boxShadow: 'none',
 }
 
 const imageStyle = {
   display: 'block',
   width: 'auto',
-  maxWidth: '100%',
+  maxWidth: 'min(92vw, 980px)',
   height: 'auto',
-  maxHeight: '80vh',
+  maxHeight: '84dvh',
   minHeight: 0,
   objectFit: 'contain',
+  borderRadius: '0.9rem',
+  background: 'var(--brand-800)',
+  boxShadow: '0 34px 90px var(--theme-shadow-black-a05)',
+}
+
+const closeButtonStyle = {
+  top: '-0.85rem',
+  right: '-0.85rem',
+  zIndex: 2,
 }
 
 const hiddenCopyStyle = {
@@ -71,6 +84,7 @@ export function GalleryModal({ item, onClose }) {
           className="modal-close"
           onClick={onClose}
           ref={closeButtonRef}
+          style={closeButtonStyle}
           type="button"
         >
           <X aria-hidden="true" size={20} weight="bold" />
