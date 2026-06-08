@@ -7,6 +7,60 @@ import { useGalleryItems } from '../../hooks/queries/useGalleryItems.js'
 const HERO_IMAGE_LIMIT = 5
 const HERO_CYCLE_MS = 4000
 
+const carouselStyles = {
+  position: 'relative',
+  width: '100%',
+  height: '100%',
+  minHeight: 'inherit',
+  overflow: 'hidden',
+}
+
+const slideStyles = {
+  position: 'absolute',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  opacity: 0,
+  transform: 'scale(1.02)',
+  transition: 'opacity 900ms cubic-bezier(0.16, 1, 0.3, 1), transform 4500ms cubic-bezier(0.16, 1, 0.3, 1)',
+}
+
+const activeSlideStyles = {
+  opacity: 1,
+  transform: 'scale(1.06)',
+  zIndex: 1,
+}
+
+const dotsStyles = {
+  position: 'absolute',
+  left: '50%',
+  bottom: '1rem',
+  zIndex: 3,
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '0.45rem',
+  border: '1px solid rgba(255, 250, 246, 0.5)',
+  borderRadius: '999px',
+  background: 'rgba(28, 33, 28, 0.32)',
+  padding: '0.4rem 0.5rem',
+  backdropFilter: 'blur(14px)',
+  transform: 'translateX(-50%)',
+}
+
+function getDotStyles(isActive) {
+  return {
+    width: isActive ? '1.35rem' : '0.55rem',
+    height: '0.55rem',
+    border: `1px solid ${isActive ? 'rgba(255, 250, 246, 0.86)' : 'rgba(255, 250, 246, 0.72)'}`,
+    borderRadius: '999px',
+    background: isActive ? '#b78652' : 'rgba(255, 250, 246, 0.52)',
+    cursor: 'pointer',
+    padding: 0,
+    transition: 'background 200ms ease, border-color 200ms ease, transform 200ms ease, width 200ms ease',
+  }
+}
+
 function getHeroImageId(image, index) {
   return image.id || image.src || `hero-image-${index}`
 }
@@ -50,8 +104,8 @@ export function Hero() {
   }, [heroImages.length, isPaused])
 
   return (
-    <section className="luxury-hero hero-section home-hero" aria-labelledby="homepage-hero-title">
-      <div className="luxury-hero-copy hero-copy" data-reveal>
+    <section className="luxury-hero" aria-labelledby="homepage-hero-title">
+      <div className="luxury-hero-copy" data-reveal>
         <p className="eyebrow">Luxury African Hair Braiding</p>
         <h1 id="homepage-hero-title">
           Luxury braiding, crafted with <span>care.</span>
@@ -88,33 +142,36 @@ export function Hero() {
       </div>
 
       <div
-        className="luxury-hero-media hero-media editorial-media"
+        className="luxury-hero-media"
         data-reveal
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         style={{ '--index': 1 }}
       >
-        <div className="hero-carousel" aria-label="Featured braid styles carousel">
+        <div aria-label="Featured braid styles carousel" style={carouselStyles}>
           {heroImages.map((image, index) => (
             <img
               alt={image.alt}
               aria-hidden={index !== activeIndex}
-              className={`hero-slide ${index === activeIndex ? 'is-active' : ''}`}
               key={image.id}
               loading={index === 0 ? 'eager' : 'lazy'}
               src={image.src}
+              style={{
+                ...slideStyles,
+                ...(index === activeIndex ? activeSlideStyles : null),
+              }}
             />
           ))}
 
           {heroImages.length > 1 ? (
-            <div className="hero-carousel-dots" role="tablist" aria-label="Choose hero image">
+            <div role="tablist" aria-label="Choose hero image" style={dotsStyles}>
               {heroImages.map((image, index) => (
                 <button
                   aria-label={`Show hero image ${index + 1}`}
                   aria-selected={index === activeIndex}
-                  className={`hero-carousel-dot ${index === activeIndex ? 'is-active' : ''}`}
                   key={`${image.id}-dot`}
                   onClick={() => setActiveIndex(index)}
+                  style={getDotStyles(index === activeIndex)}
                   type="button"
                 />
               ))}
