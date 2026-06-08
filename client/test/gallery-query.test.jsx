@@ -74,7 +74,7 @@ describe('service-driven gallery surfaces', () => {
     await waitFor(() => expect(galleryService.getGalleryItems).toHaveBeenCalledWith({ limit: undefined, service: service.id }))
     expect(screen.getByRole('heading', { name: service.name })).toBeInTheDocument()
     expect(within(await screen.findByRole('region', { name: /gallery image wall/i })).getAllByRole('button')).toHaveLength(serviceItems.length)
-    serviceItems.forEach((item) => expect(screen.getByRole('button', { name: item.title })).toBeInTheDocument())
+    serviceItems.forEach((item, index) => expect(screen.getByRole('button', { name: new RegExp(`^${item.title}, representative image ${index + 1}$`, 'i') })).toBeInTheDocument())
   })
 
   it('clears the URL when all services is selected', async () => {
@@ -95,15 +95,15 @@ describe('service-driven gallery surfaces', () => {
     })
   })
 
-  it('shows a polished empty state if a selected gallery-enabled service has no images', async () => {
+  it('keeps the full representative gallery when a service is selected as UI context', async () => {
     const user = userEvent.setup()
-    const emptyService = getGalleryServices().find((service) => getGalleryItemsByServiceId(service.id).length === 0)
+    const service = getGalleryServices()[0]
     renderRoute('/gallery')
 
-    await screen.findByRole('option', { name: emptyService.name })
-    await user.selectOptions(await screen.findByLabelText(/filter gallery by service/i), emptyService.id)
+    await screen.findByRole('option', { name: service.name })
+    await user.selectOptions(await screen.findByLabelText(/filter gallery by service/i), service.id)
 
-    expect(await screen.findByText('No gallery images available for this service yet.')).toBeInTheDocument()
-    expect(screen.queryByRole('region', { name: /gallery image wall/i })).not.toBeInTheDocument()
+    expect(await screen.findByText(`Viewing inspiration while considering ${service.name}`)).toBeInTheDocument()
+    expect(within(screen.getByRole('region', { name: /gallery image wall/i })).getAllByRole('button')).toHaveLength(getGalleryItems().length)
   })
 })

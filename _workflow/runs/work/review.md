@@ -1,42 +1,60 @@
-# Review — Backend-Driven Service and Gallery Data
+# Review — Representative Local Image Library Refactor
 
-## Scope Review
-- Approved scope implemented: Service schema, public service routes, normalized gallery compatibility, seed upserts/data, TanStack Query API layer, named frontend surfaces, service detail/admin compatibility cleanup, image-first booking cards, and tests.
-- No unrelated dependencies, authentication changes, booking API redesign, uploads, or binary image persistence were introduced.
-- `client/src/data/services.js` remains only as a non-production legacy/test fixture; production source files no longer import it.
+## Request
+Centralize curated local public images as representative inspiration assets, keep service business/category data independent, remove frontend remote Pexels usage and exact-service image claims, preserve booking and gallery UX, and retain backend compatibility.
 
-## Backend Review
-- `Service` now supports public IDs/slugs, display metadata, pricing aliases, structured duration, flags/status, primary/gallery images, and reviews.
-- Both `image` and optional `src` enforce HTTP(S) validation; nested gallery image IDs remain unique per service.
-- Shared serializers keep service/gallery contracts consistent and expose all requested aliases.
-- `/api/services` supports composable filters; detail/gallery lookups accept ID or slug; existing gallery endpoints remain mounted and tested.
-- Seed operations use stable-ID bulk upserts and all 11 records validate through Mongoose.
-
-## Frontend Review
+## Spec And Plan
+- Spec: `_workflow/runs/work/spec.md`
+- Task plan: `_workflow/runs/work/tasks.md`
+- Tasks reviewed: TASK-001, TASK-002, TASK-003
 - Applied skill: design-taste-frontend
-- API calls live in service modules and use `client/src/lib/api.js`; server state uses TanStack Query.
-- Gallery, Services, home browse/featured/gallery sections, Booking, ServiceDetail, and Admin booking service selection no longer use hardcoded live service data.
-- Gallery and Booking accept either service ID or slug query values after async data resolution.
-- Booking cards preserve existing visual language while making the image primary and keeping name, from-price, and duration concise.
-- Loading, error, and empty states are present on migrated async surfaces.
 
-## Test Review
-- Backend endpoint/model/seed tests cover all requested public routes and compatibility behavior.
-- Frontend API and page tests cover shared API paths, homepage/gallery rendering, service detail, booking image cards, and deep-link preselection.
-- Required full server/client/build commands pass; ESLint and diff checks pass.
-- Live seed execution requires `MONGODB_URI`, which is intentionally absent from this environment; unit validation/upsert tests provide implementation proof.
+## Bugs Found And Resolved
+- Curated image records used remote Pexels URLs and source attribution fields instead of local public paths.
+- Local services owned service-classified gallery arrays and preview authority.
+- `servicePreview.js` preferred API/service image fields, including service galleries.
+- Gallery/home/service copy and alt text implied exact client/service examples.
+- `galleryService.js` contained committed merge-conflict markers and still delegated curated gallery items to API data.
+- Homepage constants duplicated remote visual URLs and used representative images as named testimonial portraits.
+- Existing ThemeMenu tests described a removed nested submenu rather than the current direct radio menu.
+- Hero used a synchronous state update effect rejected by the current React Hooks lint rule.
 
-## UI Review
-- Existing CSS classes, layout structure, palette, and interaction flow were retained.
-- New booking images use fixed dimensions and `object-fit: cover` to avoid layout shifts and collapse from 6rem to 5rem on narrow phones.
-- Buttons retain semantic keyboard behavior and include descriptive accessible names.
-- Screenshot tooling was unavailable (no supported browser or browser automation package); code-surface review was used per repository fallback guidance.
+## Scope Creep Check
+- Application changes remain within image authority, representative UI semantics, local gallery delivery, and directly required verification recovery.
+- The ThemeMenu production component was not changed; only stale tests were aligned with its existing behavior so the required full client suite could verify the image refactor.
+- The Hero behavior-preserving index derivation was a targeted lint recovery discovered during required verification.
+- No booking logic, service categorization, API routes, database models, authentication, dependencies, env files, or package manifests changed.
 
 ## Final Diff Audit
 - `git diff --stat` and `git diff` reviewed.
-- Diff matches the approved spec and contains no secrets, image binaries, generated build output, package-lock churn, or temporary artifacts.
-- Tests were added/updated for changed behavior.
-- No scope creep requiring an ADR was found; the canonical MongoDB/Express/TanStack Query decision is already recorded in Project Brain/spec.
+- Curated production image paths occur only in `client/src/data/imageLibrary.js`.
+- No frontend `https://images.pexels.com/...` literal remains.
+- No frontend read of `service.galleryImages` or service `primaryImage` alt authority remains.
+- Required copy and representative captions/alt text are present.
+- Local service business fields remain intact; compatibility display fields derive from `getDisplayImage(service.id)`.
+- Backend controller/model/data remain unchanged and existing API responses/tests remain compatible.
+- No secrets, generated build output, temporary files, binary additions, or unrelated package changes are included.
 
-## Verdict
-PASSED, with a documented environment-only limitation for live seed execution and a PARTIAL Fallow changed-code verdict explained in `.workflow/fallow-audit.md`.
+## Verification And Failure Recovery
+- Initial focused helper tests failed as expected against remote/service-owned image behavior; implementation made them pass.
+- Initial focused Gallery/ServiceDetail semantic tests failed as expected against old copy and image authority; implementation made them pass.
+- Full client verification initially exposed old URL/title/empty-state expectations; tests were updated to the approved representative architecture and then passed.
+- Full client verification exposed stale ThemeMenu nested-menu tests against the existing direct menu; tests were corrected and passed.
+- ESLint exposed the pre-existing Hero state-setting effect and the new Node global use in a test; both were corrected and focused/full checks passed.
+
+## Missing Tests
+None for the requested behavior. Added focused coverage for image metadata/path existence, deterministic display selection, service compatibility fields, non-classifying gallery context, service preview authority, Gallery copy/context/captions, and ServiceDetail representative imagery.
+
+## Security Concerns
+None identified. Removing remote image hosts reduces third-party requests. No credentials or personal data were introduced.
+
+## Architecture Concerns
+- Current frontend intentionally ignores seeded backend image metadata for curated display. Backend image fields remain available for a future explicit real-client-photo source.
+- `getGallery` remains available for API compatibility while `getGalleryItems` supplies the local representative library to current UI query hooks.
+
+## Follow-Up Tasks
+- When verified real client photos are available, introduce an explicit trusted media type/source rather than overloading representative images.
+- Optional: format dense legacy one-line JSX in a separate no-behavior refactor.
+
+## Final Review Verdict
+PASSED — the diff matches the approved spec, preserves required UX/business behavior, and has complete automated verification.

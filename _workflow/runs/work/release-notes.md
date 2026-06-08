@@ -1,30 +1,23 @@
-# Release Notes — Backend-Driven Service and Gallery Data
-
-## Added
-- Public service list/detail/per-service-gallery Express endpoints with filters and ID-or-slug lookup.
-- Canonical service/image serializers with legacy pricing and image aliases.
-- TanStack Query service hooks for featured, bookable, gallery-enabled, and detail queries.
-- Backend-driven service detail and image-first booking service cards.
-- Jest/Vitest coverage for API contracts, seed upserts, frontend API calls, deep links, and booking cards.
+# Release Notes — Representative Local Image Library
 
 ## Changed
-- Expanded MongoDB Service schema and seed catalog to 11 schema-valid services, including safe Kids Braids, Box Braids, and Twists records.
-- Service seeding now bulk-upserts existing records instead of skipping them.
-- Existing gallery endpoints now use the shared canonical serializer and accept service IDs or slugs.
-- Gallery, Services, homepage service/gallery sections, Booking, ServiceDetail, and Admin service selection now use backend data.
-- Removed production dependencies on `client/src/data/services.js` and retired obsolete static style profiles.
+- Added one curated representative image library backed by all existing files in `client/public/images/`.
+- Service display images now derive deterministically from service ids without classifying images as exact services.
+- Gallery, service, homepage, and booking imagery now uses local public paths only.
+- Gallery filters remain service consideration context while showing the shared inspiration library.
+- Updated UI labels, disclaimers, captions, and alt text to make representative usage explicit.
+- Removed representative imagery from named testimonial portraits and retained initials instead.
 
-## Compatibility
-- `/booking?service=knotless-braids` and `/gallery?service=knotless-braids` remain supported.
-- Legacy `boho-braids` slug resolves through the canonical backend record.
-- Existing gallery endpoints and frontend field aliases remain available.
+## Preserved
+- Service categories, descriptions, prices, durations, featured/booking/gallery/status flags.
+- Booking links and workflow.
+- Gallery masonry and modal UX.
+- Existing backend service/gallery image fields and API response compatibility for future real client photos.
 
 ## Verification
 - 63 backend tests passed.
-- 103 frontend tests passed.
+- 112 frontend tests passed.
 - Client production build and ESLint passed.
-- 11 seed records validate with HTTP(S)-only image metadata.
-- Applied skill: design-taste-frontend
+- 15 local image paths validated.
 
-## Deployment Note
-Run `npm run seed:services` with a configured `MONGODB_URI` before or during deployment to synchronize the canonical Service collection.
+Applied skill: design-taste-frontend

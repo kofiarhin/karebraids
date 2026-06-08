@@ -91,7 +91,7 @@ export function GalleryModal({ item, onClose }) {
         </button>
         <img alt={item.alt || item.title} src={item.src || item.image} style={imageStyle} />
         <div className="modal-copy" style={hiddenCopyStyle}>
-          <p className="eyebrow">KareBraids Gallery</p>
+          <p className="eyebrow">Style Inspiration Gallery</p>
           <h2 id="gallery-modal-title">{item.title}</h2>
           <p id="gallery-modal-description">{item.description}</p>
         </div>

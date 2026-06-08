@@ -70,7 +70,7 @@ describe('booking flow', () => {
     services.forEach((service) => {
       const option = screen.getByRole('button', { name: new RegExp(service.name, 'i') })
       expect(option).toBeInTheDocument()
-      expect(option.querySelector('img')).toHaveAttribute('src', expect.stringMatching(/^https?:\/\//))
+      expect(option.querySelector('img')).toHaveAttribute('src', expect.stringMatching(/^\/images\//))
       expect(option).toHaveTextContent(/from £/i)
       expect(option).toHaveTextContent(service.durationLabel)
     })

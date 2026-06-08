@@ -25,10 +25,10 @@ describe('gallery modal', () => {
     const user = userEvent.setup()
     renderGallery()
 
-    await user.click(screen.getByRole('button', { name: /copper knotless braids/i }))
+    await user.click(screen.getByRole('button', { name: /^braiding inspiration, representative image 1$/i }))
 
-    const dialog = screen.getByRole('dialog', { name: /copper knotless braids/i })
-    const description = within(dialog).getByText(/long knotless braids with warm copper tone/i)
+    const dialog = screen.getByRole('dialog', { name: /braiding inspiration/i })
+    const description = within(dialog).getByText(/representative styling image used for inspiration/i)
 
     expect(dialog).toHaveClass('dark-gallery-modal')
     expect(dialog).toHaveAttribute('aria-describedby', 'gallery-modal-description')
@@ -43,10 +43,10 @@ describe('gallery modal', () => {
   it('closes with Escape and returns focus to the gallery item', async () => {
     const user = userEvent.setup()
     renderGallery()
-    const galleryItem = screen.getByRole('button', { name: /precision cornrows/i })
+    const galleryItem = screen.getByRole('button', { name: /^protective styling, representative image 3$/i })
 
     await user.click(galleryItem)
-    expect(screen.getByRole('dialog', { name: /precision cornrows/i })).toBeInTheDocument()
+    expect(screen.getByRole('dialog', { name: /protective styling/i })).toBeInTheDocument()
 
     await user.keyboard('{Escape}')
 
@@ -57,10 +57,10 @@ describe('gallery modal', () => {
   it('closes from a backdrop click and returns focus to the gallery item', async () => {
     const user = userEvent.setup()
     renderGallery()
-    const galleryItem = screen.getByRole('button', { name: /handcrafted detail/i })
+    const galleryItem = screen.getByRole('button', { name: /^styling detail, representative image 2$/i })
 
     await user.click(galleryItem)
-    expect(screen.getByRole('dialog', { name: /handcrafted detail/i })).toBeInTheDocument()
+    expect(screen.getByRole('dialog', { name: /styling detail/i })).toBeInTheDocument()
 
     await user.click(document.querySelector('.modal-backdrop'))
 
@@ -72,8 +72,8 @@ describe('gallery modal', () => {
     const user = userEvent.setup()
     renderGallery()
 
-    await user.click(screen.getByRole('button', { name: 'Outdoor Braid Profile' }))
+    await user.click(screen.getByRole('button', { name: /^clean finish, representative image 4$/i }))
 
-    expect(screen.getByRole('dialog', { name: /outdoor braid profile/i })).toBeInTheDocument()
+    expect(screen.getByRole('dialog', { name: /clean finish/i })).toBeInTheDocument()
   })
 })

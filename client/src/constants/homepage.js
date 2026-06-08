@@ -1,15 +1,8 @@
-const editorialImages = ['https://images.pexels.com/photos/11515382/pexels-photo-11515382.jpeg?auto=compress&cs=tinysrgb&w=1200', 'https://images.pexels.com/photos/9385074/pexels-photo-9385074.jpeg?auto=compress&cs=tinysrgb&w=1200', 'https://images.pexels.com/photos/6976266/pexels-photo-6976266.jpeg?auto=compress&cs=tinysrgb&w=1200', 'https://images.pexels.com/photos/14883868/pexels-photo-14883868.jpeg?auto=compress&cs=tinysrgb&w=1200', 'https://images.pexels.com/photos/36441633/pexels-photo-36441633.jpeg?auto=compress&cs=tinysrgb&w=1200', 'https://images.pexels.com/photos/15576674/pexels-photo-15576674.jpeg?auto=compress&cs=tinysrgb&w=1200', 'https://images.pexels.com/photos/17218456/pexels-photo-17218456.jpeg?auto=compress&cs=tinysrgb&w=1200', 'https://images.pexels.com/photos/11815194/pexels-photo-11815194.jpeg?auto=compress&cs=tinysrgb&w=1200', 'https://images.pexels.com/photos/8511174/pexels-photo-8511174.jpeg?auto=compress&cs=tinysrgb&w=1200']
+import { imageLibrary } from '../data/imageLibrary.js'
 
 export const homepageImages = {
-  hero: {
-    src: editorialImages[0],
-    alt: 'Black woman with long sculpted braids in warm editorial light',
-  },
-  avatars: [
-    { src: editorialImages[5] },
-    { src: editorialImages[7] },
-    { src: editorialImages[8] },
-  ],
+  hero: imageLibrary[0],
+  avatars: imageLibrary.slice(1, 4),
 }
 
 export const navItems = [
@@ -38,13 +31,13 @@ export const valueItems = [
 ]
 
 export const homepageTestimonials = [
-  { name: 'Ama K.', review: 'My knotless braids were so neat and lightweight. The whole experience felt calm, professional, and premium.', rating: 5, avatar: editorialImages[7], initials: 'AK' },
-  { name: 'Nia O.', review: 'KareBraids took her time with my hair and the finish was beautiful. I got compliments for weeks.', rating: 5, avatar: editorialImages[5], initials: 'NO' },
-  { name: 'Zuri A.', review: 'The braids were clean, comfortable, and lasted really well. I felt looked after from start to finish.', rating: 5, avatar: editorialImages[8], initials: 'ZA' },
-  { name: 'Sade B.', review: 'Professional, gentle, and very detailed. My goddess braids came out exactly how I wanted.', rating: 5, avatar: editorialImages[6], initials: 'SB' },
+  { name: 'Ama K.', review: 'My knotless braids were so neat and lightweight. The whole experience felt calm, professional, and premium.', rating: 5, avatar: null, initials: 'AK' },
+  { name: 'Nia O.', review: 'KareBraids took her time with my hair and the finish was beautiful. I got compliments for weeks.', rating: 5, avatar: null, initials: 'NO' },
+  { name: 'Zuri A.', review: 'The braids were clean, comfortable, and lasted really well. I felt looked after from start to finish.', rating: 5, avatar: null, initials: 'ZA' },
+  { name: 'Sade B.', review: 'Professional, gentle, and very detailed. My goddess braids came out exactly how I wanted.', rating: 5, avatar: null, initials: 'SB' },
   { name: 'Aaliyah M.', review: 'Booking was easy and the service was excellent. My hair looked flawless without feeling tight.', rating: 5, avatar: null, initials: 'AM' },
-  { name: 'Imani R.', review: 'Every step felt organized and my appointment started exactly when expected.', rating: 5, avatar: editorialImages[3], initials: 'IR' },
-  { name: 'Tomi E.', review: 'The pricing was clear and the result looked polished for weeks.', rating: 5, avatar: editorialImages[1], initials: 'TE' },
+  { name: 'Imani R.', review: 'Every step felt organized and my appointment started exactly when expected.', rating: 5, avatar: null, initials: 'IR' },
+  { name: 'Tomi E.', review: 'The pricing was clear and the result looked polished for weeks.', rating: 5, avatar: null, initials: 'TE' },
   { name: 'Leah D.', review: 'A premium, comfortable experience and a style that felt completely like me.', rating: 5, avatar: null, initials: 'LD' },
 ]
 

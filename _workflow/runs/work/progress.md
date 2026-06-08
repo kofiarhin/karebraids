@@ -481,3 +481,131 @@
 - Screenshot: Not captured because no Chromium/Firefox/Playwright/Puppeteer runtime exists in the container; code-surface UI review completed.
 - Acceptance: All spec criteria checked [x].
 - Workflow status: Done with one environment-only seed execution caveat.
+
+## 2026-06-08 — Representative Local Image Library Intake And Spec
+
+- Status: Paused at required spec approval gate.
+- Lifecycle transition: Intake complete -> Spec saved -> Awaiting approval.
+- User request: Centralize existing local public images as representative inspiration assets and remove service-specific image authority from frontend behavior.
+- Repository findings: 15 local JPG assets exist in `client/public/images/`; frontend image library, services, preview helper, homepage constants, Gallery, Services, ServiceDetail, and home cards contain remote/service-specific image assumptions; backend compatibility fields can remain inspect-only by default.
+- Questions: None required; request and repository evidence fully define goal, scope, exclusions, affected behavior, and acceptance criteria.
+- Files changed: Run-scoped workflow request/spec/handoff/progress/activity/checkpoints and Project Brain memory only.
+- Code changes: None.
+- Tests: Not run at this approval-gated stage.
+- Verification: Confirmed clean worktree before workflow artifact edits and confirmed actual local image filenames.
+- Review: Spec includes all required sections, frontend taste routing, TDD strategy, exact copy requirements, compatibility boundaries, and verification commands.
+- Acceptance: Not evaluated; implementation has not started.
+- Blocker: Explicit user approval of `_workflow/runs/work/spec.md`.
+- Next step: On approval, replace the stale prior task plan with a new spec-derived vertical task plan, then execute all tasks through Build -> Refine -> Polish.
+- Applied skill: design-taste-frontend
+
+
+## 2026-06-08 — Spec Approved And Task Plan Saved
+- Status: Planning complete; TASK-001 Ready.
+- Approval: User explicitly replied `approve spec`.
+- Task plan: Replaced the stale prior plan with `_workflow/runs/work/tasks.md`, derived from the active spec.
+- Tasks: TASK-001 local library/data contract; TASK-002 preview/UI semantics; TASK-003 verification and quality gates.
+- Applied skill: design-taste-frontend
+- Next step: Begin TASK-001 Iteration 1 Build with failing Vitest contract tests.
+
+## 2026-06-08 — TASK-001 — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Objective: Establish the local representative image and service compatibility contract.
+- Files changed: `client/src/data/imageLibrary.js`, `client/src/data/services.js`, focused tests.
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Enforce local path/metadata and service compatibility contracts.
+- Red: Focused Vitest run produced 6 expected failures for remote URLs, service galleries, classification metadata, and preview authority.
+- Green: Added 15 real local image records, deterministic selection, representative gallery items, business-only service catalog, and derived compatibility fields; 7/7 focused tests passed.
+- Refactor: Centralized alt/description conventions and deterministic indexing.
+- Verification: `npm run test --prefix client -- --run src/data/imageLibrary.test.js src/data/services.test.js src/utils/servicePreview.test.js` passed.
+- Review: No public images imported/moved; fallback remains a public path.
+- Acceptance: Met.
+- Remaining issues: UI still consumed old semantics.
+- Next action: TASK-002.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Cover empty seeds and specific/all service context without classification.
+- Red: Tests asserted missing classification keys and contextual-only service metadata.
+- Green: `getGalleryItemsByServiceId` returns all representative items and adds only `contextServiceId` for specific context.
+- Refactor: Kept `getGalleryItems()` as a direct central-library delegation.
+- Verification: Focused suite passed.
+- Review: Future real-photo backend fields remain separate.
+- Acceptance: Met.
+- Remaining issues: None in data contract.
+- Next action: Polish audit.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Prove paths exist and are centralized.
+- Red: Repository search found remote URLs and duplicated homepage constants before cleanup.
+- Green: All 15 paths resolve and production `/images/` declarations exist only in `imageLibrary.js`.
+- Refactor: Removed obsolete source URLs and exact-service titles.
+- Verification: Node path validation and `rg` audits passed.
+- Review: Required exports and fields confirmed.
+- Acceptance: [x] all TASK-001 criteria.
+- Remaining issues: None.
+- Next action: TASK-002.
+
+## 2026-06-08 — TASK-002 — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Objective: Make preview and UI rendering use representative image authority and truthful semantics.
+- Files changed: preview/gallery service adapters, Gallery/Services/ServiceDetail, home components/constants, Hero lint recovery, styles, and affected tests.
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Replace exact-service image authority and required copy.
+- Red: Gallery and ServiceDetail focused tests failed on `Client Gallery`, `Showing`, `Style gallery`, API image alt/gallery reads, and missing representative captions.
+- Green: Added required title/disclaimer/context phrase, generic alt text, `Representative image` captions, local service previews, and central ServiceDetail inspiration.
+- Refactor: `servicePreview.js` now delegates only to `getDisplayImage(service?.id)`.
+- Verification: 5 focused files / 9 tests passed.
+- Review: Layout/masonry/modal and booking links unchanged.
+- Acceptance: Met.
+- Remaining issues: Full regression expectations still described remote/service-classified behavior.
+- Next action: Refine regressions.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Preserve gallery query/filter/modal and homepage flows.
+- Red: Full client run exposed old URL/title/empty-state expectations and stale direct-menu ThemeMenu tests.
+- Green: Updated regression assertions to local representative paths, contextual filtering, generic modal titles, and current direct ThemeMenu behavior.
+- Refactor: Added unique gallery button accessible names while preserving generic image alt text.
+- Verification: Affected 47 tests passed, then ThemeMenu 8/8 passed.
+- Review: Service names remain surrounding business context, never image classification.
+- Acceptance: Met.
+- Remaining issues: Lint found Hero effect/test Node global.
+- Next action: Polish and lint recovery.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Remove all remote/exact claims and pass full quality checks.
+- Red: ESLint reported Hero synchronous state effect and test `process` global.
+- Green: Derived a bounded visible carousel index without an effect; imported `cwd` explicitly. Full lint passed.
+- Refactor: Representative testimonial images were removed in favor of initials; compact captions added without redesign.
+- Verification: Full frontend 112/112, build, and lint passed; semantic/path audits passed.
+- Review: Frontend taste code-surface review passed; browser unavailable for screenshot.
+- Acceptance: [x] all TASK-002 criteria.
+- Remaining issues: None.
+- Next action: TASK-003.
+
+## 2026-06-08 — TASK-003 — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Objective: Verify compatibility and complete workflow quality gates.
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build
+- Verification: `npm test` passed 63/63; `npm run test --prefix client` passed 112/112; `npm run build --prefix client` passed; `npm run lint --prefix client` passed.
+- Red/Green/Refactor exception: Verification/documentation task; behavioral failures were recovered within TASK-002 before this final pass.
+- Review: Required commands all pass.
+- Acceptance: Met.
+- Next action: Diff/backend audits.
+
+### Iteration 2 Refine
+- Verification: 15 local paths validated; production path centralization and prohibited semantic searches passed; backend controller/model inspected and unchanged; `git diff --check` passed.
+- Review: Diff is scoped, no secrets/junk/package/backend changes.
+- Acceptance: Met.
+- Next action: Fallow and final artifacts.
+
+### Iteration 3 Polish
+- Fallow: Health 75.2/B; PARTIAL due intentional compatibility/namespace export findings and duplication observations. No circular, boundary, unresolved import, dependency, or changed-code complexity blocker.
+- Screenshot: Not captured because no browser/browser automation runtime is installed; code-surface and component review used.
+- Acceptance: [x] all spec criteria.
+- Workflow status: Done.

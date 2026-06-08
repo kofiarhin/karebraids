@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-06-07T01:41:13Z",
+  "updatedAt": "2026-06-08T23:17:15Z",
   "workflow": {
     "currentStage": "complete",
     "completedStages": [
@@ -33,6 +33,21 @@
       },
       "createdAt": "2026-06-07T01:18:00Z",
       "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "goal-representative-local-images",
+      "text": "Use one frontend-owned library of existing local public images as representative styling inspiration while services remain independently categorized business data.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
       "supersedes": [],
       "history": []
     }
@@ -82,6 +97,51 @@
       "updatedAt": "2026-06-07T01:18:00Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "req-local-image-library",
+      "text": "All curated frontend image paths must be /images/<filename> values centralized in client/src/data/imageLibrary.js and must match files in client/public/images/.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-representative-semantics",
+      "text": "Curated images must use generic representative metadata and UI copy and must never be presented as proof of a specific hairstyle or service.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-preserve-service-ux",
+      "text": "Preserve service categories, prices, durations, booking links, gallery masonry/modal behavior, and service filtering as UI context.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "constraints": [
@@ -114,6 +174,36 @@
       "updatedAt": "2026-06-07T01:18:00Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "constraint-no-remote-images",
+      "text": "The frontend must not use remote https://images.pexels.com URLs, import public images, or move image files.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "constraint-backend-compatible",
+      "text": "Existing backend service image fields may remain for future real client photos; current API responses must not be broken.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "architectureDecisions": [
@@ -129,6 +219,36 @@
       },
       "createdAt": "2026-06-07T01:18:00Z",
       "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "decision-image-library-authority",
+      "text": "client/src/data/imageLibrary.js is the sole authority for current curated representative visuals; service records are authoritative only for business data.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "decision-local-representative-library-complete",
+      "text": "Current curated frontend visuals are served only from client/public/images through client/src/data/imageLibrary.js; backend service media fields remain reserved for future trusted real client photos.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-08T23:17:15Z",
+      "updatedAt": "2026-06-08T23:17:15Z",
       "supersedes": [],
       "history": []
     }
@@ -163,6 +283,36 @@
       "updatedAt": "2026-06-07T01:41:13Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "decision-display-image-by-service-id",
+      "text": "Frontend compatibility image and previewImage fields and service previews derive deterministically from getDisplayImage(service.id), with isRepresentativeImage true.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "decision-gallery-context-not-classification",
+      "text": "Current gallery items are the shared representative library; service selection adds UI consideration context only and never image classification.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-08T23:17:15Z",
+      "updatedAt": "2026-06-08T23:17:15Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "domainKnowledge": [
@@ -195,6 +345,21 @@
       "updatedAt": "2026-06-07T01:41:13Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "domain-local-image-count-15",
+      "text": "The curated representative library contains 15 existing local JPG assets, all validated under client/public/images/.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-08T23:17:15Z",
+      "updatedAt": "2026-06-08T23:17:15Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "openQuestions": [],
@@ -211,6 +376,21 @@
       },
       "createdAt": "2026-06-07T01:18:00Z",
       "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "risk-gallery-shape-regression",
+      "text": "Changing image authority can regress gallery modal/masonry item shape, service filter context, or booking/home card imagery if adapters are not preserved.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
       "supersedes": [],
       "history": []
     }
@@ -275,6 +455,66 @@
       "updatedAt": "2026-06-07T01:41:13Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "artifact-active-spec-representative-images",
+      "text": "Active spec: _workflow/runs/work/spec.md for the representative local image library refactor.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-review-representative-images",
+      "text": "Completed review: _workflow/runs/work/review.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-08T23:17:15Z",
+      "updatedAt": "2026-06-08T23:17:15Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-verification-representative-images",
+      "text": "Completed verification: _workflow/runs/work/verification.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-08T23:17:15Z",
+      "updatedAt": "2026-06-08T23:17:15Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-release-representative-images",
+      "text": "Release notes: _workflow/runs/work/release-notes.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-08T23:17:15Z",
+      "updatedAt": "2026-06-08T23:17:15Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "workflowHistory": [
@@ -307,6 +547,36 @@
       "updatedAt": "2026-06-07T01:41:13Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "workflow-spec-saved-representative-images-20260608",
+      "text": "Representative local image library intake completed and the workflow is paused at the explicit spec approval gate.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-08T22:59:44Z",
+      "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "workflow-complete-representative-images-20260608",
+      "text": "Representative local image library workflow completed all three tasks with 63 backend tests, 112 frontend tests, build, lint, path, semantic, review, and Fallow checks.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-08T23:17:15Z",
+      "updatedAt": "2026-06-08T23:17:15Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "custom": {},
@@ -327,6 +597,28 @@
       "timestamp": "2026-06-07T01:41:13Z",
       "type": "workflow-complete",
       "summary": "Completed canonical Service API, seed upserts, frontend query migration, booking image cards, and verification.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      }
+    },
+    {
+      "id": "change-spec-representative-images-20260608",
+      "timestamp": "2026-06-08T22:59:44Z",
+      "type": "spec-saved",
+      "summary": "Recorded the local representative image library goal, decoupled service-image architecture, UI semantics, and approval-gated spec.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      }
+    },
+    {
+      "id": "change-complete-representative-images-20260608",
+      "timestamp": "2026-06-08T23:17:15Z",
+      "type": "workflow-complete",
+      "summary": "Completed local representative image library, service decoupling, UI semantics, tests, review, and quality gates.",
       "source": {
         "runId": "work",
         "artifact": "_workflow/runs/work/summary.md",

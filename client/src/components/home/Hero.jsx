@@ -89,9 +89,7 @@ export function Hero() {
       : [{ id: 'hero-fallback', src: homepageImages.hero.src, alt: homepageImages.hero.alt }]
   }, [heroImagesQuery.data])
 
-  useEffect(() => {
-    setActiveIndex(0)
-  }, [heroImages.length])
+  const visibleIndex = activeIndex % heroImages.length
 
   useEffect(() => {
     if (isPaused || heroImages.length <= 1) return undefined
@@ -152,13 +150,13 @@ export function Hero() {
           {heroImages.map((image, index) => (
             <img
               alt={image.alt}
-              aria-hidden={index !== activeIndex}
+              aria-hidden={index !== visibleIndex}
               key={image.id}
               loading={index === 0 ? 'eager' : 'lazy'}
               src={image.src}
               style={{
                 ...slideStyles,
-                ...(index === activeIndex ? activeSlideStyles : null),
+                ...(index === visibleIndex ? activeSlideStyles : null),
               }}
             />
           ))}
@@ -168,10 +166,10 @@ export function Hero() {
               {heroImages.map((image, index) => (
                 <button
                   aria-label={`Show hero image ${index + 1}`}
-                  aria-selected={index === activeIndex}
+                  aria-selected={index === visibleIndex}
                   key={`${image.id}-dot`}
                   onClick={() => setActiveIndex(index)}
-                  style={getDotStyles(index === activeIndex)}
+                  style={getDotStyles(index === visibleIndex)}
                   type="button"
                 />
               ))}

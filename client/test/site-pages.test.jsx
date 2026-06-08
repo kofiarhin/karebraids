@@ -17,6 +17,7 @@ const services = getBookableServices().map((service) => ({
   image: service.image,
   duration: service.durationLabel.replace(/hours/g, 'hrs'),
   fromPrice: service.fromPrice,
+  isRepresentativeImage: service.isRepresentativeImage,
 }))
 
 vi.mock('../src/hooks/queries/useGalleryItems.js', async () => {
@@ -108,7 +109,7 @@ describe('KareBraids pages', () => {
     expect(container.querySelector('.browse-style-section')).toHaveTextContent(/browse by style/i)
     expect(screen.queryByText(/signature styles/i)).not.toBeInTheDocument()
     expect(screen.getByText(/why choose karebraids/i)).toBeInTheDocument()
-    expect(screen.getByText(/client gallery/i)).toBeInTheDocument()
+    expect(screen.getByText(/style inspiration gallery/i)).toBeInTheDocument()
     expect(screen.getByText(/client testimonials/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /ready for your next look/i })).toBeInTheDocument()
     expect(screen.getByRole('contentinfo')).toHaveTextContent(/mon - sat: 8am - 7pm/i)
@@ -120,18 +121,18 @@ describe('KareBraids pages', () => {
   it('renders editorial homepage images with accessible semantics', () => {
     const { container } = renderRoute('/')
 
-    expect(screen.getByRole('img', { name: /black woman with long sculpted braids/i })).toHaveAttribute(
+    expect(container.querySelector('.luxury-hero-media img[aria-hidden="false"]')).toHaveAttribute(
       'src',
       galleryItems[0].image,
     )
-        expect(screen.getByRole('img', { name: /ama k. testimonial portrait/i })).toBeInTheDocument()
+    expect(screen.queryByRole('img', { name: /testimonial portrait/i })).not.toBeInTheDocument()
     expect(container.querySelectorAll('.gallery-feature-card img')).toHaveLength(4)
     expect(container.querySelectorAll('.gallery-feature-card')).toHaveLength(4)
     container.querySelectorAll('.gallery-feature-card').forEach((card, index) => {
       expect(card).toHaveAttribute('href', '/gallery')
-      expect(within(card).getByRole('img', { name: galleryItems[index].title })).toHaveAttribute('loading', 'lazy')
+      expect(within(card).getByRole('img', { name: galleryItems[index].alt })).toHaveAttribute('loading', 'lazy')
       expect(within(card).getByText(galleryItems[index].title)).toBeInTheDocument()
-      expect(within(card).getByText(/view gallery/i)).toBeInTheDocument()
+      expect(within(card).getByText(/representative image/i)).toBeInTheDocument()
     })
     container.querySelectorAll('.client-avatar-stack img').forEach((image) => {
       expect(image).toHaveAttribute('alt', '')
@@ -354,9 +355,10 @@ describe('KareBraids pages', () => {
           category: expect.any(String),
           title: expect.any(String),
           description: expect.any(String),
-          image: expect.any(String),
+          image: expect.stringMatching(/^\/images\//),
           duration: expect.any(String),
           fromPrice: expect.stringMatching(/^From £/),
+          isRepresentativeImage: true,
         }),
       )
       expect(galleryItems.map((item) => item.image)).toContain(service.image)
@@ -406,7 +408,7 @@ describe('KareBraids pages', () => {
     expect(container.querySelector('.gallery-title-wrap')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'GALLERY' })).toBeInTheDocument()
     expect(screen.queryByText(/craftsmanship preview/i)).not.toBeInTheDocument()
-    expect(container.querySelectorAll('.gallery-card')).toHaveLength(9)
+    expect(container.querySelectorAll('.gallery-card')).toHaveLength(galleryItems.length)
     expect(screen.getByRole('region', { name: /gallery image wall/i })).toHaveClass(
       'gallery-grid',
     )

@@ -26,13 +26,12 @@ function renderThemeMenu(props = {}) {
   )
 }
 
-async function openThemeSubmenu(user) {
+async function openThemeMenu(user) {
   const trigger = screen.getByRole('button', { name: 'Theme options' })
   await user.click(trigger)
-  const themeItem = screen.getByRole('menuitem', { name: /theme/i })
-  await user.click(themeItem)
-  return { themeItem, trigger }
+  return { trigger }
 }
+
 
 describe('ThemeMenu', () => {
   beforeEach(() => {
@@ -52,15 +51,14 @@ describe('ThemeMenu', () => {
     expect(trigger).not.toHaveTextContent(/theme/i)
   })
 
-  it('opens a nested menu and identifies the active system selection', async () => {
+  it('opens the menu and identifies the active system selection', async () => {
     const user = userEvent.setup()
     renderThemeMenu()
 
-    const { themeItem, trigger } = await openThemeSubmenu(user)
+    const { trigger } = await openThemeMenu(user)
 
     expect(trigger).toHaveAttribute('aria-expanded', 'true')
-    expect(themeItem).toHaveAttribute('aria-expanded', 'true')
-    expect(screen.getByRole('menu', { name: 'Theme selection' })).toBeVisible()
+    expect(screen.getByRole('menu', { name: 'Theme menu' })).toBeVisible()
     expect(screen.getByRole('menuitemradio', { name: 'System' })).toHaveAttribute('aria-checked', 'true')
     expect(screen.getByRole('menuitemradio', { name: 'Light' })).toHaveAttribute('aria-checked', 'false')
   })
@@ -70,12 +68,11 @@ describe('ThemeMenu', () => {
     const onThemeSelected = vi.fn()
     renderThemeMenu({ onThemeSelected })
 
-    const { trigger } = await openThemeSubmenu(user)
+    const { trigger } = await openThemeMenu(user)
     await user.click(screen.getByRole('menuitemradio', { name: 'Dark' }))
 
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark')
     expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
-    expect(screen.queryByRole('menu', { name: 'Theme selection' })).not.toBeInTheDocument()
     expect(screen.queryByRole('menu', { name: 'Theme menu' })).not.toBeInTheDocument()
     expect(onThemeSelected).toHaveBeenCalledWith('dark')
     expect(trigger).toHaveFocus()
@@ -85,11 +82,7 @@ describe('ThemeMenu', () => {
     const user = userEvent.setup()
     renderThemeMenu()
 
-    const { trigger } = await openThemeSubmenu(user)
-    await user.keyboard('{Escape}')
-    expect(screen.queryByRole('menu', { name: 'Theme selection' })).not.toBeInTheDocument()
-    expect(screen.getByRole('menu', { name: 'Theme menu' })).toBeVisible()
-
+    const { trigger } = await openThemeMenu(user)
     await user.keyboard('{Escape}')
     expect(screen.queryByRole('menu', { name: 'Theme menu' })).not.toBeInTheDocument()
     expect(trigger).toHaveFocus()
@@ -99,23 +92,19 @@ describe('ThemeMenu', () => {
     const user = userEvent.setup()
     renderThemeMenu()
 
-    await openThemeSubmenu(user)
+    await openThemeMenu(user)
     await user.click(screen.getByRole('button', { name: 'Outside' }))
 
     expect(screen.queryByRole('menu', { name: 'Theme menu' })).not.toBeInTheDocument()
   })
 
-  it('supports keyboard opening and arrow navigation into the submenu', async () => {
+  it('supports keyboard opening and arrow navigation', async () => {
     const user = userEvent.setup()
     renderThemeMenu()
 
     const trigger = screen.getByRole('button', { name: 'Theme options' })
     trigger.focus()
     await user.keyboard('{Enter}')
-
-    const themeItem = screen.getByRole('menuitem', { name: /theme/i })
-    expect(themeItem).toHaveFocus()
-    await user.keyboard('{ArrowRight}')
 
     expect(screen.getByRole('menuitemradio', { name: 'System' })).toHaveFocus()
     await user.keyboard('{ArrowDown}')
@@ -160,7 +149,6 @@ describe('Header theme integration', () => {
 
     const themeTriggers = screen.getAllByRole('button', { name: 'Theme options' })
     await user.click(themeTriggers.at(-1))
-    await user.click(screen.getAllByRole('menuitem', { name: /theme/i }).at(-1))
     await user.click(screen.getByRole('menuitemradio', { name: 'Light' }))
 
     expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
