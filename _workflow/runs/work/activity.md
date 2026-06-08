@@ -52,3 +52,28 @@ Append compact, timestamped workflow and memory updates. Do not rewrite prior en
 - Artifact: updated release notes, summary, handoff, Project Brain projection
 - Checkpoint: saved
 - Next: commit and PR
+
+## 2026-06-08 — Intake and spec saved
+- Stage: Completed prior workflow -> Spec approval gate for representative local image library
+- Memory: Added active goal, representative-image constraints, affected architecture, and approval state
+- Artifact: Updated `_workflow/runs/work/request.md`, `_workflow/runs/work/spec.md`, `_workflow/runs/work/handoff.md`, and `_workflow/runs/work/progress.md`
+- Checkpoint: Saved
+- Next: Await explicit spec approval
+- Applied skill: design-taste-frontend
+
+
+## 2026-06-08 — Spec approved and plan saved
+- Stage: Spec approval gate -> Implementation planning complete
+- Memory: Updated approval and active task state
+- Artifact: Replaced `_workflow/runs/work/tasks.md`; updated handoff/progress
+- Checkpoint: Saved
+- Next: TASK-001 Iteration 1 Build / Red
+- Applied skill: design-taste-frontend
+
+## 2026-06-08 — Implementation and verification complete
+- Stage: TASK-001 Build -> TASK-003 Polish complete
+- Memory: Updated implementation, verification, review, Fallow, and completion state
+- Artifact: Code/tests plus review, verification, Fallow, release notes, summary, handoff
+- Checkpoint: Saved
+- Next: Commit and create PR
+- Applied skill: design-taste-frontend

@@ -93,3 +93,17 @@
 - Fallow: 74.8/B, PARTIAL audit due Jest entry-point false positives and maintainability targets; no circular, boundary, unresolved import, or dependency issues.
 - Screenshot: unavailable because the container has no browser/browser automation runtime; final UI code-surface review passed.
 - Workflow health: Passed with documented environment caveat.
+
+## 2026-06-08 — Representative Local Image Library Refactor
+- Goal completed: Current curated frontend visuals now come exclusively from a single local representative library using existing `client/public/images/` assets.
+- Data architecture: `imageLibrary.js` owns curated paths/metadata; services remain business/category records and derive compatibility display fields from `getDisplayImage(service.id)`.
+- Gallery: shared representative items power current UI; a selected service is context only and does not classify images.
+- UI semantics: added the required inspiration title/disclaimer/context phrase, generic alt text, representative captions, and “Style inspiration” copy.
+- Homepage: remote visual constants were replaced with library references; named testimonial portraits no longer use representative imagery.
+- Backend: inspected and unchanged; API/image fields remain compatible for future real client photos.
+- TDD: focused helper/page tests were observed failing before implementation and passing afterward; affected legacy regression expectations were updated to the approved architecture.
+- Verification: backend 63/63, frontend 112/112, build passed, lint passed, 15 local paths validated, semantic/path audits passed, diff check passed.
+- Applied skill: design-taste-frontend
+- Screenshot: unavailable because no browser/browser automation runtime is installed; code-surface review passed.
+- Fallow: 75.2/B, PARTIAL due intentional compatibility/duplicate export findings and duplication observations; no circular, boundary, dependency, unresolved import, or changed-code complexity blocker.
+- Workflow health: Passed with documented Fallow and screenshot limitations.

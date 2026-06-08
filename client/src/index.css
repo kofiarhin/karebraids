@@ -5508,3 +5508,25 @@ button:disabled,
     height: 5rem;
   }
 }
+
+/* Curated visuals are representative inspiration, not service-specific examples. */
+.service-card-image,
+.featured-service-card {
+  position: relative;
+}
+
+.representative-image-caption {
+  position: absolute;
+  z-index: 2;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--theme-white-a018);
+  border-radius: 999px;
+  background: var(--theme-espresso-deep-a078);
+  color: var(--warm-ivory);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}

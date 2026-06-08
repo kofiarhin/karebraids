@@ -77,9 +77,10 @@ export function Gallery() {
   return (
     <section className="gallery-page dark-gallery-page">
       <div className="gallery-title-wrap">
-        <p className="eyebrow">Client Gallery</p>
+        <p className="eyebrow">Style Inspiration Gallery</p>
         <h1>GALLERY</h1>
-        {selectedService ? <p className="gallery-filter-note">Showing {selectedService.name}</p> : null}
+        <p className="gallery-filter-note">Representative styling images used for inspiration. Final results depend on your chosen service, hair type, length, and consultation.</p>
+        {selectedService ? <p className="gallery-filter-note">Viewing inspiration while considering {selectedService.name}</p> : null}
       </div>
 
       {galleryServicesQuery.isLoading ? <p className="gallery-query-state" role="status">Loading services…</p> : null}
@@ -118,14 +119,14 @@ export function Gallery() {
 
       {galleryItems.length === 0 ? (
         <p className="gallery-query-state gallery-empty-state" role="status">
-          {selectedService ? 'No gallery images available for this service yet.' : 'New client looks are being prepared. Please check back soon.'}
+          {selectedService ? 'Representative inspiration images are being prepared.' : 'New styling inspiration is being prepared. Please check back soon.'}
         </p>
       ) : null}
       {galleryItems.length > 0 ? (
         <div aria-label="Gallery image wall" className="gallery-grid" role="region">
           {galleryItems.map((item, index) => (
             <button
-              aria-label={item.title}
+              aria-label={`${item.title}, representative image ${index + 1}`}
               className={`gallery-card ${item.aspect}`}
               key={item.id}
               onClick={(event) => openModal(item, event.currentTarget)}
@@ -135,7 +136,7 @@ export function Gallery() {
               <SafeGalleryImage item={item} />
               <span>
                 <strong>{item.title}</strong>
-                <small>{item.description}</small>
+                <small>Representative image</small>
               </span>
             </button>
           ))}

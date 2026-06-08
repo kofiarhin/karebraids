@@ -1,119 +1,77 @@
-# Task Plan — Backend-Driven Service and Gallery Data
+# Task Plan — Representative Local Image Library Refactor
 
 - Spec file used: `_workflow/runs/work/spec.md`
-- Planning date: 2026-06-07
-- Explicit approval: User replied `approve spec`
-- Progress read: `_workflow/runs/work/progress.md`
-- Summary read: `_workflow/runs/work/summary.md`
-- Spec sections used: Current State, Desired End State, Scope, Functional/Non-Functional Requirements, Affected Surfaces, Dependency Map, Data/State Impact, UX/API Expectations, Execution Strategy, Verification Strategy, Acceptance Criteria, Edge Cases, Risks, Assumptions, Open Questions, and Task Extraction Notes.
+- Planning date: 2026-06-08
+- Approval: Explicit user response `approve spec`
+- Progress and summary files read: `_workflow/runs/work/progress.md`, `_workflow/runs/work/summary.md`
+- Spec sections used: Current State, Desired End State, Scope, Functional Requirements, Affected Surfaces, Dependency Map, Data/State Impact, UX Expectations, Execution Strategy, Verification Strategy, Acceptance Criteria, Edge Cases, Risks, Assumptions, Task Extraction Notes.
+- Applied skill: design-taste-frontend
 
-## TASK-001: Serve normalized services and galleries from MongoDB
-
+## TASK-001: Establish the local representative image and service compatibility contract
 - Status: Done
-- Objective: Expand the Service model and expose tested service list/detail/gallery endpoints while preserving existing gallery endpoints.
-- Files likely affected: `server/models/Service.js`, `server/controllers/*service*`, `server/controllers/galleryController.js`, `server/routes/*service*`, `server/app.js`, `server/tests/*service*`, `server/tests/*gallery*`.
+- Objective: Make `imageLibrary.js` the sole source of curated image paths and make local service/gallery compatibility helpers derive representative visuals without service classification.
+- Files likely affected: `client/src/data/imageLibrary.js`, `client/src/data/services.js`, new focused Vitest files.
 - Checklist:
-  - [x] Add requested service/image fields and validation.
-  - [x] Centralize service/gallery response normalization.
-  - [x] Add filtered list, id-or-slug detail, and per-service gallery routes.
-  - [x] Preserve existing gallery routes and compatibility.
-- Iteration 1 Build: Write failing endpoint/model tests; implement minimum model/routes/controllers/serializer.
-- Iteration 2 Refine: Add filter composition, missing-record, alias, and legacy fallback coverage.
-- Iteration 3 Polish: Review route ordering, lean queries, validation messages, and response consistency.
-- Test plan: Focused Jest/Supertest and model tests, then full server suite.
+  - [ ] Add failing tests for required image fields, local real paths, usage, deterministic display selection, and gallery semantics.
+  - [ ] Add failing tests for service business fields, derived image aliases, and non-classifying gallery helpers.
+  - [ ] Replace remote image library records with existing public filenames.
+  - [ ] Remove service-owned gallery image arrays and derive compatibility fields.
+- Iteration 1 Build: Red with contract tests; Green with minimum local library/service adapter; Refactor shared metadata/selection.
+- Iteration 2 Refine: Red for empty/unknown seeds and specific/all service gallery context; Green edge behavior; Refactor stable helper shapes.
+- Iteration 3 Polish: Red/search for duplicate curated paths and remote URLs; Green cleanup; Refactor naming/documentation without behavior change.
+- Test plan: Focused Vitest plus path-existence script/search.
 - Red phase evidence: Recorded in `_workflow/runs/work/progress.md`.
 - Green phase evidence: Recorded in `_workflow/runs/work/progress.md`.
 - Refactor phase evidence: Recorded in `_workflow/runs/work/progress.md`.
-- Test commands run: Recorded in `_workflow/runs/work/progress.md`.
-- Acceptance criteria: Spec criteria 1-4 and backend portions of 11-13.
-- Acceptance result: All task criteria met; see `_workflow/runs/work/progress.md`.
-- Verification commands: Focused Jest tests; `npm test`; `git diff --check`.
-- Stop condition: Endpoints and model contract pass focused tests without regressing existing gallery behavior.
-- Out-of-scope items: Admin writes, uploads, pagination, auth.
+- Test commands run: Recorded in `_workflow/runs/work/progress.md` and `_workflow/runs/work/verification.md`.
+- Acceptance criteria: Local paths only; required exports/fields; service compatibility derived from `getDisplayImage`; no image classification.
+- Acceptance result: [x] All criteria met.
+- Verification commands: Focused Vitest, `rg`, Node path validation.
+- Stop condition: Helper contracts pass and no curated path exists outside the library.
+- Out-of-scope items: Backend schema/API changes; UI redesign.
 
-## TASK-002: Make service seed data complete and rerunnable
-
+## TASK-002: Make preview and UI rendering use representative image authority
 - Status: Done
-- Objective: Align every seeded service with the new schema and upsert records safely on reruns.
-- Files likely affected: `server/data/services.json`, `server/scripts/seedServices.js`, seed/model tests.
+- Objective: Ensure current service/gallery/home rendering ignores API/service-owned image metadata and uses generic representative semantics while preserving interactions.
+- Files likely affected: `client/src/utils/servicePreview.js`, Gallery/Services/ServiceDetail pages, homepage components/constants, related tests.
 - Checklist:
-  - [x] Add all required service metadata and primary images.
-  - [x] Preserve multiple gallery images and URL-only storage.
-  - [x] Ensure Kids Braids has safe primary image data.
-  - [x] Replace skip-if-existing behavior with stable-key upserts.
-- Iteration 1 Build: Add failing seed shape/upsert tests; implement schema-complete JSON and upserts.
-- Iteration 2 Refine: Validate every seed document through Mongoose and verify alias/default consistency.
-- Iteration 3 Polish: Improve deterministic logging/error handling and rerun safety.
-- Test plan: Seed-data validation tests and mocked bulk-write/upsert behavior; seed script dry validation where possible.
-- Red/Green/Refactor evidence: Recorded in `_workflow/runs/work/progress.md`.
-- Acceptance criteria: Spec criteria 5-6 and 13.
-- Acceptance result: All task criteria met; see `_workflow/runs/work/progress.md`.
-- Verification commands: Focused Jest; `npm run seed:services` only if configured DB access is safe/available; JSON/model validation.
-- Stop condition: All seed records validate and reruns update rather than skip.
-- Out-of-scope items: Live production migration, image uploads.
+  - [ ] Add failing tests proving service preview ignores primary/gallery remote image fields.
+  - [ ] Add failing UI tests for required gallery title/disclaimer/filter phrase/captions and generic alt text.
+  - [ ] Update render adapters/components/constants without changing layout, booking, modal, or filter behavior.
+  - [ ] Remove remaining frontend remote Pexels URLs and prohibited exact-service claims.
+- Iteration 1 Build: Red preview/UI semantic tests; Green minimum helper/copy changes; Refactor shared representative constants.
+- Iteration 2 Refine: Red service filter and modal/card compatibility edge cases; Green contextual behavior; Refactor repeated captions/alt text.
+- Iteration 3 Polish: Red repository semantic searches; Green final cleanup; Refactor code clarity while preserving visuals.
+- Test plan: Focused component/helper Vitest, existing Gallery/Services/ServiceDetail/home tests, semantic searches.
+- Red phase evidence: Recorded in `_workflow/runs/work/progress.md`.
+- Green phase evidence: Recorded in `_workflow/runs/work/progress.md`.
+- Refactor phase evidence: Recorded in `_workflow/runs/work/progress.md`.
+- Test commands run: Recorded in `_workflow/runs/work/progress.md` and `_workflow/runs/work/verification.md`.
+- Acceptance criteria: Required copy present; prohibited copy absent; generic alt/caption semantics; masonry/modal/filter/booking paths preserved.
+- Acceptance result: [x] All criteria met.
+- Verification commands: Focused/full client tests, lint, build, `rg` checks.
+- Stop condition: UI semantics are truthful and existing interactions pass tests.
+- Out-of-scope items: Visual redesign, new state management, API logic changes.
 
-## TASK-003: Load services and gallery UI through TanStack Query
-
+## TASK-003: Verify compatibility and complete workflow quality gates
 - Status: Done
-- Objective: Replace hardcoded runtime data in Services, Gallery, and homepage sections with shared backend API/query hooks.
-- Files likely affected: `client/src/services/galleryService.js`, `client/src/services/serviceService.js`, `client/src/hooks/queries/*`, `client/src/pages/Gallery.jsx`, `client/src/pages/Services.jsx`, `client/src/components/home/{BrowseByStyle,FeaturedServices,GalleryFeature}.jsx`, helpers/tests.
+- Objective: Prove the full refactor, inspect backend compatibility, and complete review/Fallow/release artifacts.
+- Files likely affected: Workflow artifacts and `.workflow/fallow-audit.md`; backend only if a verified failure requires it.
 - Checklist:
-  - [x] Route all API calls through `client/src/lib/api.js`.
-  - [x] Keep existing gallery hooks working and add service hooks.
-  - [x] Refactor named browsing/home surfaces with loading/error/empty states.
-  - [x] Preserve gallery query-string filtering and visual classes.
-- Iteration 1 Build: Add failing service/hook/page tests and minimum query-backed implementation.
-- Iteration 2 Refine: Cover async URL filtering, errors/empty states, aliases, and cache keys.
-- Iteration 3 Polish: Apply UI taste review, accessibility, image fallbacks, and no-live-import checks.
-- Applied skill: design-taste-frontend
-- Test plan: Focused Vitest service/component/page tests, lint touched files, client build.
-- Red/Green/Refactor evidence: Recorded in `_workflow/runs/work/progress.md`.
-- Acceptance criteria: Spec criteria 7-8, gallery/home/services portions of 10 and 13.
-- Acceptance result: All task criteria met; see `_workflow/runs/work/progress.md`.
-- Verification commands: Focused Vitest; `rg` no-live-import check; client tests/build.
-- Stop condition: Named browse surfaces render backend data and retain deep-link filtering.
-- Out-of-scope items: Redesign or new state library.
-
-## TASK-004: Load image-first booking services from the backend
-
-- Status: Done
-- Objective: Preserve the booking wizard while sourcing bookable services from the API and presenting image-first choices.
-- Files likely affected: `client/src/pages/Booking.jsx`, booking styles/tests, service hooks/helpers.
-- Checklist:
-  - [x] Fetch bookable services with TanStack Query.
-  - [x] Preserve service query-string preselection after async resolution.
-  - [x] Show image, name, from price, and duration with fallback.
-  - [x] Keep selection/submission wizard behavior stable.
-- Iteration 1 Build: Add failing booking tests and implement minimum async service selection.
-- Iteration 2 Refine: Protect user selection from later effects; cover loading/error/invalid query states.
-- Iteration 3 Polish: Apply UI taste/accessibility/image layout review and full booking regressions.
-- Applied skill: design-taste-frontend
-- Test plan: Focused Booking Vitest tests, full client tests/build.
-- Red/Green/Refactor evidence: Recorded in `_workflow/runs/work/progress.md`.
-- Acceptance criteria: Spec criteria 8-10 and 13.
-- Acceptance result: All task criteria met; see `_workflow/runs/work/progress.md`.
-- Verification commands: Focused Booking tests; client suite/build; code-surface/screenshot review.
-- Stop condition: Backend-driven image cards work and deep-link preselection remains verified.
-- Out-of-scope items: Booking API/form redesign.
-
-## TASK-005: Verify and harden the complete migration
-
-- Status: Done
-- Objective: Prove the full request, audit scope/quality, and complete workflow artifacts.
-- Files likely affected: Tests and workflow artifacts only unless an in-scope defect is found.
-- Checklist:
-  - [x] Run required server/client test/build commands.
-  - [x] Run lint/diff/no-live-import/seed validation checks.
-  - [x] Perform frontend taste final review and screenshot if app is runnable.
-  - [x] Run Fallow JSON audit and complete review/release/summary/handoff/health.
-- Iteration 1 Build: Run full verification and fix only in-scope failures TDD-first.
-- Iteration 2 Refine: Audit compatibility, contracts, imports, secrets, and generated junk.
-- Iteration 3 Polish: Final UI/code-surface review, Fallow, artifacts, and health.
-- Applied skill: design-taste-frontend
-- Test plan: All required commands plus targeted recovery commands.
-- Red/Green/Refactor evidence: Documentation-only unless a defect fix is required; record exceptions.
-- Acceptance criteria: All spec acceptance criteria.
-- Acceptance result: All task criteria met; see `_workflow/runs/work/progress.md`.
-- Verification commands: `npm test`; `npm run test --prefix client`; `npm run build --prefix client`; lint; `git diff --stat`; `git diff`; Fallow.
-- Stop condition: Complete verified request or documented Needs Human Review state.
-- Out-of-scope items: Unrelated baseline debt.
+  - [ ] Run required server/client/build commands.
+  - [ ] Run lint, path/remote/copy searches, and final diff audit.
+  - [ ] Inspect backend controller/data/model compatibility and document no-change decision or scoped fix.
+  - [ ] Complete review, Fallow audit, release notes, summary, handoff, Project Brain, and health check.
+- Iteration 1 Build: Execute required verification and recover scoped failures.
+- Iteration 2 Refine: Audit paths, semantics, backend compatibility, and diff scope.
+- Iteration 3 Polish: Fallow, final UI code-surface review/screenshot if runtime available, and artifact reconciliation.
+- Test plan: `npm test`, `npm run test --prefix client`, `npm run build --prefix client`, lint, searches.
+- Red phase evidence: Documentation-only exception unless verification reveals a behavioral failure.
+- Green phase evidence: Pending.
+- Refactor phase evidence: Pending.
+- Test commands run: Recorded in `_workflow/runs/work/progress.md` and `_workflow/runs/work/verification.md`.
+- Acceptance criteria: Every spec criterion checked; no unverified code; workflow health recorded.
+- Acceptance result: [x] All criteria met.
+- Verification commands: Required commands plus `git diff --stat`, `git diff`, `git diff --check`, Fallow JSON commands.
+- Stop condition: Complete or documented Needs Human Review according to verification outcomes.
+- Out-of-scope items: Unrelated baseline cleanup.

@@ -47,7 +47,7 @@ export function Services() {
           <div className="service-grid">
             {services.map((service) => (
               <article className="service-card" key={service.id}>
-                <div className="service-card-image"><img alt={service.primaryImage?.alt || `${service.name} protective braiding style`} loading="lazy" src={getServicePreviewImage(service)} /></div>
+                <div className="service-card-image"><img alt="Representative protective styling image" loading="lazy" src={getServicePreviewImage(service)} /><span className="representative-image-caption">Representative image</span></div>
                 <div className="service-card-copy">
                   <div className="service-card-heading"><h3>{service.name}</h3><p>From {formatPrice(service)}</p></div>
                   <p>{service.shortDescription}</p>

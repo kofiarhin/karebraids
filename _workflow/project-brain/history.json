@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-06-07T01:41:13Z",
+  "updatedAt": "2026-06-08T23:17:15Z",
   "events": [
     {
       "id": "history-20260607-spec",
@@ -26,6 +26,30 @@
         "_workflow/runs/work/summary.md",
         ".workflow/fallow-audit.md"
       ]
+    },
+    {
+      "id": "history-spec-representative-images-20260608",
+      "timestamp": "2026-06-08T22:59:44Z",
+      "type": "spec-saved",
+      "runId": "work",
+      "summary": "Saved approval-gated spec for central local representative image handling and service/image decoupling.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      }
+    },
+    {
+      "id": "history-complete-representative-images-20260608",
+      "timestamp": "2026-06-08T23:17:15Z",
+      "type": "workflow-complete",
+      "runId": "work",
+      "summary": "Completed representative local image library refactor and verification.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      }
     }
   ]
 }
