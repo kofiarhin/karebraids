@@ -37,13 +37,25 @@ function getLocalGallery({ limit, service } = {}) {
   }
 }
 
+function responseHasGalleryItems(data) {
+  return Array.isArray(data?.galleryItems) && data.galleryItems.length > 0
+}
+
+function responseHasServices(data) {
+  return Array.isArray(data?.services) && data.services.length > 0
+}
+
 export async function getGallery(options = {}) {
   try {
     const response = await api.get('/gallery', {
       params: buildGalleryParams(options),
     })
 
-    return response.data
+    if (responseHasGalleryItems(response.data)) {
+      return response.data
+    }
+
+    return getLocalGallery(options)
   } catch {
     return getLocalGallery(options)
   }
@@ -57,7 +69,12 @@ export async function getGalleryItems(options = {}) {
 export async function getGalleryServices() {
   try {
     const response = await api.get('/gallery/services')
-    return response.data.services || []
+
+    if (responseHasServices(response.data)) {
+      return response.data.services
+    }
+
+    return getCanonicalGalleryServices()
   } catch {
     return getCanonicalGalleryServices()
   }
