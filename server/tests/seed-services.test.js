@@ -1,63 +1,74 @@
+const Service = require("../models/Service");
 const { loadServicesFromJson, seedServices } = require("../scripts/seedServices");
 
 const serviceFixture = [
   {
     id: "knotless-braids",
+    slug: "knotless-braids",
+    name: "Knotless Braids",
     title: "Knotless Braids",
+    category: "Braids",
+    shortDescription: "Lightweight knotless braids.",
     description: "Lightweight knotless braids.",
     startingPrice: 80,
+    priceFrom: 80,
     currency: "GBP",
     duration: { minHours: 4, maxHours: 6 },
+    durationLabel: "4–6 hours",
     featured: true,
-    images: [],
-    reviews: [],
-  },
-  {
-    id: "boho-knotless-braids",
-    title: "Boho Knotless Braids",
-    description: "Boho knotless braids.",
-    startingPrice: 95,
-    currency: "GBP",
-    duration: { minHours: 5, maxHours: 7 },
-    featured: true,
+    bookingEnabled: true,
+    galleryEnabled: true,
+    status: "available",
+    primaryImage: {
+      id: "knotless-primary",
+      title: "Knotless Braids",
+      description: "Knotless braids preview.",
+      image: "https://example.com/knotless.jpg",
+      src: "https://example.com/knotless.jpg",
+      alt: "Knotless braids",
+      aspect: "feature",
+    },
     images: [],
     reviews: [],
   },
 ];
 
 describe("service seed script", () => {
-  it("loads the existing JSON service data", () => {
+  it("loads schema-complete JSON service data including Kids Braids", async () => {
     const services = loadServicesFromJson();
+    const kidsBraids = services.find((service) => service.id === "kids-braids");
 
-    expect(services).toHaveLength(8);
-    expect(services[0]).toEqual(expect.objectContaining({ id: "knotless-braids" }));
+    expect(services.length).toBeGreaterThanOrEqual(9);
+    expect(kidsBraids).toEqual(expect.objectContaining({
+      slug: "kids-braids",
+      name: "Kids Braids",
+      bookingEnabled: true,
+      galleryEnabled: true,
+      status: "available",
+      primaryImage: expect.objectContaining({ image: expect.stringMatching(/^https?:\/\//) }),
+    }));
+
+    await expect(Promise.all(services.map((service) => new Service(service).validate()))).resolves.toBeDefined();
+    expect(JSON.stringify(services)).not.toMatch(/data:image|base64,/i);
   });
 
-  it("inserts only missing services and skips duplicates", async () => {
+  it("upserts every service by stable id so reruns update existing records", async () => {
     const ServiceModel = {
-      findOne: jest.fn()
-        .mockResolvedValueOnce({ id: "knotless-braids" })
-        .mockResolvedValueOnce(null),
-      create: jest.fn().mockResolvedValue(serviceFixture[1]),
+      bulkWrite: jest.fn().mockResolvedValue({ upsertedCount: 1, matchedCount: 0, modifiedCount: 0 }),
     };
 
     const result = await seedServices({ services: serviceFixture, ServiceModel });
 
-    expect(result).toEqual({ inserted: 1, skipped: 1, total: 2 });
-    expect(ServiceModel.findOne).toHaveBeenCalledWith({ id: "knotless-braids" });
-    expect(ServiceModel.findOne).toHaveBeenCalledWith({ id: "boho-knotless-braids" });
-    expect(ServiceModel.create).toHaveBeenCalledTimes(1);
-    expect(ServiceModel.create).toHaveBeenCalledWith(serviceFixture[1]);
-  });
-
-  it("treats duplicate key races as skipped records", async () => {
-    const ServiceModel = {
-      findOne: jest.fn().mockResolvedValue(null),
-      create: jest.fn().mockRejectedValue({ code: 11000 }),
-    };
-
-    const result = await seedServices({ services: [serviceFixture[0]], ServiceModel });
-
-    expect(result).toEqual({ inserted: 0, skipped: 1, total: 1 });
+    expect(ServiceModel.bulkWrite).toHaveBeenCalledWith([
+      {
+        updateOne: {
+          filter: { id: "knotless-braids" },
+          update: { $set: serviceFixture[0] },
+          upsert: true,
+          runValidators: true,
+        },
+      },
+    ]);
+    expect(result).toEqual({ inserted: 1, matched: 0, updated: 0, total: 1 });
   });
 });

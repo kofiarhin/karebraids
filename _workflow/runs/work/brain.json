@@ -1,0 +1,424 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-06-07T01:41:13Z",
+  "runId": "work",
+  "workflow": {
+    "currentStage": "complete",
+    "completedStages": [
+      "intake",
+      "spec",
+      "spec-approval",
+      "planning",
+      "implementation",
+      "verification",
+      "review",
+      "fallow-quality",
+      "handoff",
+      "release-notes",
+      "summary",
+      "health-check"
+    ],
+    "nextStage": "commit-and-pr",
+    "status": "complete"
+  },
+  "goals": [
+    {
+      "id": "goal-service-canonical",
+      "text": "Make MongoDB Service documents and Express APIs the canonical source for all public service and gallery data.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "req-service-api",
+      "text": "Add filtered service list, id-or-slug detail, and per-service gallery endpoints while preserving existing gallery endpoints.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-client-server-state",
+      "text": "Refactor the named Services, Gallery, Booking, and homepage surfaces to TanStack Query through the shared API client.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-seed-upsert",
+      "text": "Make complete service seed data rerunnable through upserts and store image URLs/metadata only.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-deep-links",
+      "text": "Preserve booking preselection and gallery filtering for service query-string deep links.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-tests",
+      "text": "Add TDD-first Jest/Vitest coverage and run server tests, client tests, and client build.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "constraints": [
+    {
+      "id": "constraint-no-binaries",
+      "text": "Do not store image binaries in MongoDB; store validated HTTP(S) image URLs and metadata only.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "constraint-style",
+      "text": "Preserve the existing visual style and booking wizard behavior.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "constraint-approval",
+      "text": "Do not generate tasks or implement before explicit approval of the saved spec.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "architectureDecisions": [
+    {
+      "id": "arch-canonical-service",
+      "text": "MongoDB Service collection is canonical; Express serializers expose compatibility aliases; React consumes server state via TanStack Query.",
+      "status": "active",
+      "confidence": 0.98,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "technicalDecisions": [
+    {
+      "id": "tech-shared-serializer",
+      "text": "Use shared backend normalization for service and gallery responses to prevent alias drift.",
+      "status": "active",
+      "confidence": 0.95,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "tech-service-contract-complete",
+      "text": "Public services/gallery data is normalized by Express serializers and consumed through TanStack Query; seed reruns use stable-ID upserts.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:41:13Z",
+      "updatedAt": "2026-06-07T01:41:13Z",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "domainKnowledge": [
+    {
+      "id": "domain-current-split",
+      "text": "Current backend already serves gallery from Service records, while named frontend surfaces still use hardcoded client service data.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/request.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "domain-service-seed-11",
+      "text": "The canonical seed catalog contains 11 schema-valid services with HTTP(S)-only primary/gallery image metadata.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:41:13Z",
+      "updatedAt": "2026-06-07T01:41:13Z",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "openQuestions": [],
+  "risks": [
+    {
+      "id": "risk-async-compat",
+      "text": "Async query resolution and id/slug aliases may regress URL-driven gallery filtering or booking preselection.",
+      "status": "active",
+      "confidence": 0.95,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-request",
+      "text": "Active normalized request saved at _workflow/runs/work/request.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/request.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-spec",
+      "text": "Detailed implementation spec saved at _workflow/runs/work/spec.md and awaiting approval.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-task-plan-20260607",
+      "text": "Approved spec-derived task plan saved at _workflow/runs/work/tasks.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/tasks.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:24:09Z",
+      "updatedAt": "2026-06-07T01:24:09Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-review-service-data",
+      "text": "Completed review: _workflow/runs/work/review.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:41:13Z",
+      "updatedAt": "2026-06-07T01:41:13Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-release-service-data",
+      "text": "Release notes: _workflow/runs/work/release-notes.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:41:13Z",
+      "updatedAt": "2026-06-07T01:41:13Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-summary-service-data",
+      "text": "Completion summary: _workflow/runs/work/summary.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:41:13Z",
+      "updatedAt": "2026-06-07T01:41:13Z",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "workflowHistory": [
+    {
+      "id": "workflow-spec-saved-20260607",
+      "text": "Intake completed and detailed spec saved; workflow paused at explicit approval gate.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:18:00Z",
+      "updatedAt": "2026-06-07T01:18:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "workflow-complete-service-data-20260607",
+      "text": "Backend-driven service/gallery workflow completed all five tasks and final verification.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-07T01:41:13Z",
+      "updatedAt": "2026-06-07T01:41:13Z",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "custom": {},
+  "changeLog": [
+    {
+      "id": "run-change-20260607-spec",
+      "timestamp": "2026-06-07T01:18:00Z",
+      "type": "spec-saved",
+      "summary": "Initialized run memory for backend-driven service/gallery work and paused at approval gate.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "workflow"
+      }
+    },
+    {
+      "id": "run-change-plan-20260607",
+      "timestamp": "2026-06-07T01:24:09Z",
+      "type": "task-plan-saved",
+      "summary": "Recorded explicit spec approval and created five sequential vertical tasks.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/tasks.md",
+        "conversation": "user"
+      }
+    },
+    {
+      "id": "change-complete-service-data-20260607",
+      "timestamp": "2026-06-07T01:41:13Z",
+      "type": "workflow-complete",
+      "summary": "Completed canonical Service API, seed upserts, frontend query migration, booking image cards, and verification.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      }
+    }
+  ]
+}

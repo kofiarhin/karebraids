@@ -62,3 +62,36 @@ describe("Service model", () => {
     await expect(service.validate()).rejects.toThrow(/Image ids must be unique within a service/i);
   });
 });
+
+it("supports canonical service metadata and primary image aliases", async () => {
+  const service = new Service({
+    ...validService,
+    slug: "knotless-braids",
+    name: "Knotless Braids",
+    category: "Braids",
+    shortDescription: "Lightweight and natural-looking.",
+    priceFrom: 80,
+    durationLabel: "4–6 hours",
+    bookingEnabled: true,
+    galleryEnabled: true,
+    status: "available",
+    primaryImage: {
+      ...validService.images[0],
+      src: "https://example.com/knotless-braids.jpg",
+      alt: "Knotless braids hairstyle",
+    },
+  });
+
+  await expect(service.validate()).resolves.toBeUndefined();
+  expect(service.primaryImage.src).toBe("https://example.com/knotless-braids.jpg");
+});
+
+it("validates optional primary image and gallery src URLs", async () => {
+  const service = new Service({
+    ...validService,
+    primaryImage: { ...validService.images[0], src: "javascript:alert(1)" },
+    images: [{ ...validService.images[0], src: "not-a-url" }],
+  });
+
+  await expect(service.validate()).rejects.toThrow(/Image src must be a valid http or https URL/i);
+});

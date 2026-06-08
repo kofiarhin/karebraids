@@ -16,11 +16,10 @@ import {
 } from '../hooks/mutations/useAdminBookingMutations.js'
 import { useAdminBookings } from '../hooks/queries/useAdminBookings.js'
 import { getApiErrorMessage } from '../lib/api.js'
-import { getBookableServices } from '../data/services.js'
+import { useBookableServices } from '../hooks/queries/useServices.js'
 
 const ADMIN_TOKEN_KEY = 'karebraids-admin-token'
 const statuses = ['pending', 'confirmed', 'cancelled', 'completed']
-const services = getBookableServices()
 function normalizeBooking(booking) {
   return {
     service: booking?.service || 'Knotless Braids',
@@ -96,7 +95,7 @@ function AdminLogin({ onLogin }) {
   )
 }
 
-function BookingForm({ booking, isSaving, onCancelEdit, onSubmit }) {
+function BookingForm({ booking, isSaving, onCancelEdit, onSubmit, services }) {
   const [form, setForm] = useState(() => normalizeBooking(booking))
 
   const updateField = (field, value) => {
@@ -193,6 +192,8 @@ export function Admin() {
   const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
   const bookingsQuery = useAdminBookings(token)
+  const servicesQuery = useBookableServices()
+  const services = servicesQuery.data || []
   const createBooking = useCreateAdminBooking(token)
   const updateBooking = useUpdateAdminBooking(token)
   const updateStatus = useUpdateAdminBookingStatus(token)
@@ -400,6 +401,7 @@ export function Admin() {
           key={editingBooking?._id || 'new-booking'}
           onCancelEdit={() => setEditingBooking(null)}
           onSubmit={submitBooking}
+          services={services}
         />
       </div>
     </section>

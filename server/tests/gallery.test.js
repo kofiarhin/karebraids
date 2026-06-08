@@ -99,8 +99,9 @@ describe("service-driven gallery API", () => {
         }),
       }),
     );
-    expect(response.body.services[0].images).toBeUndefined();
-    expect(response.body.services[0].reviews).toBeUndefined();
+    expect(response.body.services[0].images).toHaveLength(2);
+    expect(response.body.services[0].galleryImages).toHaveLength(2);
+    expect(response.body.services[0].priceFrom).toBe(80);
   });
 
   it("returns all service images by default", async () => {
@@ -137,7 +138,9 @@ describe("service-driven gallery API", () => {
     const response = await request(app).get("/api/gallery?service=boho-knotless-braids");
 
     expect(response.status).toBe(200);
-    expect(Service.findOne).toHaveBeenCalledWith({ id: "boho-knotless-braids" });
+    expect(Service.findOne).toHaveBeenCalledWith({
+      $or: [{ id: "boho-knotless-braids" }, { slug: "boho-knotless-braids" }],
+    });
     expect(response.body.galleryItems).toHaveLength(1);
     expect(response.body.galleryItems.every((item) => item.serviceId === "boho-knotless-braids")).toBe(true);
     expect(response.body.selectedService).toEqual(
@@ -147,8 +150,8 @@ describe("service-driven gallery API", () => {
         previewImage: expect.objectContaining({ id: response.body.galleryItems[0].id }),
       }),
     );
-    expect(response.body.selectedService.images).toBeUndefined();
-    expect(response.body.selectedService.reviews).toBeUndefined();
+    expect(response.body.selectedService.images).toHaveLength(1);
+    expect(response.body.selectedService.galleryImages).toHaveLength(1);
     expect(response.body.reviews).toHaveLength(2);
   });
 

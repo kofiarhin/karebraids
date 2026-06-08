@@ -3,17 +3,19 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
-import { getFeaturedServices } from '../src/data/services.js'
 
-const { useGalleryItems, useGalleryServices } = vi.hoisted(() => {
+const { featuredServices, useGalleryItems, useGalleryServices, useFeaturedServices } = vi.hoisted(() => {
   const galleryItems = Array.from({ length: 5 }, (_, index) => ({ id: `gallery-${index}`, title: `Gallery ${index}`, description: 'Client braid look.', image: `https://example.com/${index}.jpg`, aspect: 'medium', serviceId: 'knotless-braids', serviceTitle: 'Knotless Braids' }))
-  const services = Array.from({ length: 8 }, (_, index) => ({ id: index === 0 ? 'knotless-braids' : `service-${index}`, title: index === 0 ? 'Knotless Braids' : `Service ${index}`, description: 'Service description.', startingPrice: 80 + index, currency: 'GBP', duration: { minHours: 2, maxHours: 5 }, featured: index < 4, previewImage: { id: `service-${index}-preview`, image: `https://example.com/service-${index}.jpg`, title: 'Preview', description: 'Preview', aspect: 'medium' } }))
+  const services = Array.from({ length: 8 }, (_, index) => ({ id: index === 0 ? 'knotless-braids' : `service-${index}`, slug: index === 0 ? 'knotless-braids' : `service-${index}`, name: index === 0 ? 'Knotless Braids' : `Service ${index}`, title: index === 0 ? 'Knotless Braids' : `Service ${index}`, shortDescription: 'Service description.', description: 'Service description.', startingPrice: 80 + index, currency: 'GBP', duration: { minHours: 2, maxHours: 5 }, durationLabel: '2–5 hours', featured: index < 4, previewImage: { id: `service-${index}-preview`, image: `https://example.com/service-${index}.jpg`, title: 'Preview', description: 'Preview', aspect: 'medium' } }))
   return {
+    featuredServices: services.filter((service) => service.featured),
     useGalleryItems: vi.fn(({ limit } = {}) => ({ data: limit ? galleryItems.slice(0, limit) : galleryItems, isLoading: false, isError: false })),
     useGalleryServices: vi.fn(() => ({ data: services, isLoading: false, isError: false })),
+    useFeaturedServices: vi.fn(() => ({ data: services.filter((service) => service.featured), isLoading: false, isError: false })),
   }
 })
 vi.mock('../src/hooks/queries/useGalleryItems.js', () => ({ useGalleryItems, useGalleryServices }))
+vi.mock('../src/hooks/queries/useServices.js', () => ({ useFeaturedServices }))
 
 function renderHome() { return render(<MemoryRouter><App /></MemoryRouter>) }
 
@@ -22,7 +24,7 @@ describe('homepage below-hero redesign', () => {
     renderHome()
     const featuredSection = document.querySelector('.featured-services-section')
 
-    getFeaturedServices().forEach((service) => {
+    featuredServices.forEach((service) => {
       expect(within(featuredSection).getByRole('heading', { name: service.name })).toBeInTheDocument()
     })
   })

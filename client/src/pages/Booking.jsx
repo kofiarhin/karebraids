@@ -8,10 +8,11 @@ import {
   MapPin,
   WarningCircle,
 } from '@phosphor-icons/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Button } from '../components/Button.jsx'
-import { useGalleryServices } from '../hooks/queries/useGalleryItems.js'
+import { useBookableServices } from '../hooks/queries/useServices.js'
+import { getServicePreviewImage } from '../utils/servicePreview.js'
 import { useCreateBooking } from '../hooks/mutations/useCreateBooking.js'
 import { useAvailability } from '../hooks/queries/useAvailability.js'
 import { getApiErrorMessage } from '../lib/api.js'
@@ -105,13 +106,29 @@ function formatReadableDate(dateValue) {
 export function Booking() {
   const [searchParams] = useSearchParams()
   const requestedServiceId = searchParams.get('service')
-  const galleryServices = useGalleryServices()
-  const bookableServices = galleryServices.data || []
+  const bookableServicesQuery = useBookableServices()
+  const bookableServices = bookableServicesQuery.data || []
   const preselectedService = bookableServices.find(
     (service) => service.id === requestedServiceId || service.slug === requestedServiceId,
   )
-  const [form, setForm] = useState(initialForm)
-  const [step, setStep] = useState('service')
+
+  if (requestedServiceId && bookableServicesQuery.isLoading) {
+    return <section className="booking-page dark-booking-page"><p className="gallery-query-state" role="status">Loading selected service…</p></section>
+  }
+
+  return (
+    <BookingWizard
+      bookableServices={bookableServices}
+      bookableServicesQuery={bookableServicesQuery}
+      initialService={preselectedService}
+      key={preselectedService?.id || 'booking-wizard'}
+    />
+  )
+}
+
+function BookingWizard({ bookableServices, bookableServicesQuery, initialService }) {
+  const [form, setForm] = useState(() => ({ ...initialForm, service: initialService?.name || '' }))
+  const [step, setStep] = useState(initialService ? 'date' : 'service')
   const [visibleMonth, setVisibleMonth] = useState(getInitialMonth)
   const [formError, setFormError] = useState('')
   const [confirmedBooking, setConfirmedBooking] = useState(null)
@@ -119,13 +136,6 @@ export function Booking() {
   const createBooking = useCreateBooking()
   const currentStepIndex = steps.indexOf(step)
   const today = todayString()
-
-  useEffect(() => {
-    if (!requestedServiceId || !preselectedService || form.service) return
-
-    setForm((current) => ({ ...current, service: preselectedService.name }))
-    setStep('date')
-  }, [form.service, preselectedService, requestedServiceId])
 
   const selectedService = useMemo(
     () => bookableServices.find((service) => service.name === form.service),
@@ -295,17 +305,24 @@ export function Booking() {
                 <h2>Select service</h2>
                 <p className="step-context">Start with the braid style you want reserved.</p>
               </div>
+              {bookableServicesQuery.isLoading ? <p className="gallery-query-state" role="status">Loading bookable services…</p> : null}
+              {bookableServicesQuery.isError ? <p className="form-alert" role="alert">Services could not be loaded. Please try again.</p> : null}
+              {!bookableServicesQuery.isLoading && !bookableServicesQuery.isError && bookableServices.length === 0 ? <p className="gallery-query-state" role="status">No services are available to book right now.</p> : null}
               <div className="booking-service-grid">
                 {bookableServices.map((service) => (
                   <button
+                    aria-label={`${service.name}, from ${new Intl.NumberFormat('en-GB', { style: 'currency', currency: service.currency || 'GBP', maximumFractionDigits: 0 }).format(service.startingPrice ?? service.priceFrom ?? 0)}, ${service.durationLabel}`}
                     className="booking-service"
                     key={service.id}
                     onClick={() => selectService(service)}
                     type="button"
                   >
-                    <strong>{service.name}</strong>
-                    <span>{service.shortDescription}</span>
-                    <small>{service.durationLabel}</small>
+                    <img alt="" aria-hidden="true" loading="lazy" src={getServicePreviewImage(service)} />
+                    <span className="booking-service-copy">
+                      <strong>{service.name}</strong>
+                      <small>From {new Intl.NumberFormat('en-GB', { style: 'currency', currency: service.currency || 'GBP', maximumFractionDigits: 0 }).format(service.startingPrice ?? service.priceFrom ?? 0)}</small>
+                      <span>{service.durationLabel}</span>
+                    </span>
                   </button>
                 ))}
               </div>

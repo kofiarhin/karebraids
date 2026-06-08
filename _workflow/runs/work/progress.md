@@ -360,3 +360,124 @@
 
 ### Blockers
 - Repository baseline booking timeout and lint failures prevent a fully Passed workflow verdict.
+
+## 2026-06-07 — TASK-001 — Done
+
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Objective: Serve normalized MongoDB-backed services and galleries through public APIs.
+- Files changed: Service model/validation/serializer, service controller/routes/app mount, gallery controller, API/model tests.
+- Acceptance: [x] requested schema fields/URL validation/unique nested image IDs; [x] filtered list; [x] id-or-slug detail; [x] per-service gallery; [x] existing gallery endpoints preserved.
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Establish the new public contract.
+- Red: `npm test -- --runTestsByPath server/tests/service-model.test.js server/tests/services.test.js` failed with missing primary image/src support and 404 service routes.
+- Green: Added schema fields, shared serializer, `/api/services` routes/controllers, and app mount; focused tests passed after implementation.
+- Refactor: Shared image/service/gallery normalization between service and gallery controllers.
+- Review: Route order protects `/:id/gallery`; reads use `lean()` and stable sorting.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Preserve gallery/admin compatibility.
+- Red: Existing gallery/admin tests exposed old preview omissions, id-only lookup, and normalized empty image aliases.
+- Green: Updated gallery tests/contracts, id-or-slug lookup, and payload normalization while preserving exact admin image payloads.
+- Refactor: Reused `serviceValidation` URL and slug helpers from the model boundary.
+- Verification: 32 focused backend tests passed.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Complete aliases, reviews, and quality cleanup.
+- Red: Contract review identified detail reviews and unused public utility exports.
+- Green: Included review data in normalized service detail responses and removed unused exports.
+- Refactor: Kept only controller-consumed serializer exports.
+- Verification: `npm test` passed 63/63.
+- Remaining issues: None in scope.
+
+## 2026-06-07 — TASK-002 — Done
+
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Objective: Make service seed data complete, URL-only, and rerunnable through upserts.
+- Files changed: `server/data/services.json`, seed script, seed tests.
+- Acceptance: [x] schema-complete records; [x] primary image on every service including Kids Braids; [x] multiple gallery images; [x] URL-only data; [x] stable-id upserts.
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Red: `server/tests/seed-services.test.js` failed because only eight records existed, Kids Braids was absent, and the script called `findOne/create` instead of upserting.
+- Green: Added complete canonical metadata/primary images and `bulkWrite` update-one upserts.
+- Refactor: Returned inserted/matched/updated totals from one deterministic operation batch.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Retain legacy catalog links and validate every record.
+- Changes: Added Kids Braids plus Box Braids and Twists, gave `boho-knotless-braids` the legacy `boho-braids` slug, and retained rich multi-image existing services.
+- Verification: All 11 seed documents validated through the Mongoose model; no data URI/base64 content found.
+- Review: Only HTTP(S) URLs and metadata are persisted.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Changes: Loaded `.env` quietly in the CLI script and improved seed completion logging.
+- Verification: Focused seed/model tests passed; `npm run seed:services` reached the expected environment gate and reported missing `MONGODB_URI` in this container.
+- Missing-test exception: No live MongoDB instance/configuration was available; mocked bulk upsert behavior and Mongoose validation passed.
+- Remaining issues: A configured `MONGODB_URI` is required to execute the live seed.
+
+## 2026-06-07 — TASK-003 — Done
+
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Applied skill: design-taste-frontend
+- Objective: Load Services, Gallery, homepage cards, and service details through TanStack Query/shared API services.
+- Files changed: frontend service modules/hooks, named browse surfaces, service detail/legacy redirect, preview helper, homepage editorial constants, tests.
+- Acceptance: [x] shared API client; [x] existing gallery hooks retained; [x] service hooks added; [x] named surfaces backend-driven; [x] loading/error/empty states; [x] gallery URL filters retained; [x] no live `data/services` imports.
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Red: Focused Vitest run failed because new service hooks required QueryClient/mocks and exposed prior static-source test assumptions.
+- Green: Added `serviceService`, `useFeaturedServices`, `useBookableServices`, `useGalleryEnabledServices`, and `useService`; rewired all named components.
+- Refactor: Centralized service image fallback logic in `servicePreview.js` and retained `galleryService` hook contracts.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Red: Homepage tests caught link/alt compatibility differences; full tests caught service-detail API fixture gaps and a duplicated `/api` path prefix.
+- Green: Restored gallery preview links/accessible names, corrected base-URL-relative service paths, and migrated ServiceDetail/StyleRedirect/Admin service selection away from the hardcoded module.
+- Refactor: Removed obsolete `constants/styles.js` and all production imports of `client/src/data/services.js`.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Stabilize URL-driven filtering and asynchronous states.
+- Changes: Derived gallery selection directly from URL/query data, supported id or slug values, and added explicit status messages.
+- Verification: Full client suite passed 103/103; ESLint passed; Vite build passed.
+- Review: Existing classes/layouts remain; no broad redesign was introduced.
+
+## 2026-06-07 — TASK-004 — Done
+
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Applied skill: design-taste-frontend
+- Objective: Preserve the booking wizard with backend-driven, image-first bookable service choices.
+- Files changed: Booking page/styles/tests and shared service image/query helpers.
+- Acceptance: [x] bookable filter query; [x] image/name/from-price/duration cards; [x] fallback image; [x] async deep-link preselection; [x] existing booking workflow/submission preserved.
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Red: Existing booking tests targeted `useGalleryServices` and cards without image/price content.
+- Green: Switched to `useBookableServices`, added image-first card markup and CSS, and updated tests to assert image/from-price/duration content.
+- Refactor: Reused the shared preview fallback helper.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Prevent async query effects from overriding user state.
+- Changes: Split the query-aware Booking wrapper from BookingWizard and initialize preselection only when the requested service has resolved.
+- Green: Query-string booking test and full booking flow passed.
+- Refactor: Removed synchronous state-setting effects and related hook lint errors.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Changes: Added responsive fixed-ratio image treatment, concise secondary duration, descriptive button labels, and loading/error/empty states.
+- Verification: Focused booking/gallery/detail tests passed 19/19; full client tests/build/lint passed.
+- UI review: Image-first hierarchy is clear, existing dark glass styling remains, and mobile cards collapse safely. Browser screenshot tooling was unavailable in the container, so code-surface review was used as the documented fallback.
+
+## 2026-06-07 — TASK-005 — Done
+
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Applied skill: design-taste-frontend
+- Objective: Verify and harden the complete migration.
+
+### Iteration 1 Build
+- Verification: `npm test` 63/63; `npm run test --prefix client` 103/103; `npm run build --prefix client` passed; `npm run lint --prefix client` passed.
+- Red/Green/Refactor exception: Verification/documentation task; no new behavioral defect required another code Red cycle after final focused recovery.
+
+### Iteration 2 Refine
+- Checks: No production `client/src/data/services.js` imports; 11 seed records validate; URL-only image audit passed; `git diff --check` passed.
+- Diff audit: Changes match the approved service/gallery spec; no credentials, binaries, package changes, temporary files, or unrelated backend/auth changes were added.
+
+### Iteration 3 Polish
+- Fallow: Health 74.8/B. Changed-code audit is PARTIAL because Fallow treats Jest test files as unused entry points and flags existing/renamed large functions plus repeated UI state structures; no unresolved imports, dependency issues, circular dependencies, or boundary violations were reported.
+- Screenshot: Not captured because no Chromium/Firefox/Playwright/Puppeteer runtime exists in the container; code-surface UI review completed.
+- Acceptance: All spec criteria checked [x].
+- Workflow status: Done with one environment-only seed execution caveat.

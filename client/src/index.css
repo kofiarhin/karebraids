@@ -5471,3 +5471,40 @@ button:disabled,
     min-height: auto;
   }
 }
+
+/* Backend-driven booking service previews */
+.booking-service {
+  grid-template-columns: 6rem minmax(0, 1fr);
+  align-items: center;
+  min-height: 7.5rem;
+  overflow: hidden;
+  padding: 0.75rem;
+}
+
+.booking-service > img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 0.65rem;
+  object-fit: cover;
+}
+
+.booking-service-copy {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.booking-service-copy > span {
+  font-size: 0.88rem;
+}
+
+@media (max-width: 480px) {
+  .booking-service {
+    grid-template-columns: 5rem minmax(0, 1fr);
+  }
+
+  .booking-service > img {
+    width: 5rem;
+    height: 5rem;
+  }
+}
