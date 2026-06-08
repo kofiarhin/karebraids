@@ -229,26 +229,18 @@ For a work request:
     ```
 
     Document whether the diff matches the saved spec, unrelated files were touched, workflow artifacts were updated correctly, tests were added or updated for changed behavior, scope creep occurred, generated junk or temporary files appeared, and sensitive values or secrets were accidentally added. If either command cannot run, document why.
-<<<<<<< HEAD
-17. After all allowed tasks are complete or the workflow stops, create a review file in `<artifact-root>/review.md`.
-18. After the review, run the Fallow Quality layer and create `.workflow/fallow-audit.md`.
-18A. After the Fallow Quality layer, create release notes in `<artifact-root>/release-notes.md`.
-19. After release notes, create or append a summary in `<artifact-root>/summary.md`.
-20. Run the workflow health check and mark the result as `Passed`, `Partial`, or `Failed`.
-21. Check repository status again:
-=======
 18. After all allowed tasks are complete or the workflow stops, create a review file in `<artifact-root>/review.md`.
-19. After the review, create release notes in `<artifact-root>/release-notes.md`.
-20. After release notes, create or append a summary in `<artifact-root>/summary.md`.
-21. Run the workflow health check and mark the result as `Passed`, `Partial`, or `Failed`.
-22. Check repository status again:
->>>>>>> agent-zero/integrate-project-brain-memory-system
+19. After the review, run the Fallow Quality layer and create `.workflow/fallow-audit.md`.
+20. After the Fallow Quality layer, create release notes in `<artifact-root>/release-notes.md`.
+21. After release notes, create or append a summary in `<artifact-root>/summary.md`.
+22. Run the workflow health check and mark the result as `Passed`, `Partial`, or `Failed`.
+23. Check repository status again:
 
     ```bash
     git status --short
     ```
 
-23. Summarize results, include the final artifact checklist, and suggest a commit message.
+24. Summarize results, include the final artifact checklist, and suggest a commit message.
 
 ## Continue Workflow Command
 
