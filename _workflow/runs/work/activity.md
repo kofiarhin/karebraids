@@ -77,3 +77,24 @@ Append compact, timestamped workflow and memory updates. Do not rewrite prior en
 - Checkpoint: Saved
 - Next: Commit and create PR
 - Applied skill: design-taste-frontend
+
+## 2026-06-09T22:45:00Z — Booking/services production repair intake and spec
+- Stage: Intake → Spec approval gate
+- Memory: Added active production repair goal, requirements, routing decision, access risk, and current workflow state.
+- Artifact: Updated `_workflow/runs/work/request.md`, `_workflow/runs/work/spec.md`, and `_workflow/runs/work/handoff.md`.
+- Checkpoint: Saved.
+- Next: Obtain explicit approval of the saved spec before planning or implementation.
+
+## 2026-06-09T23:00:00Z — Approved task plan saved
+- Stage: Spec approval → Planning complete
+- Memory: Recorded approval and three vertical implementation tasks.
+- Artifact: Created `_workflow/runs/work/tasks.md`; implementation starts at TASK-001.
+- Checkpoint: Saved.
+- Next: TASK-001 Iteration 1 Build, TDD Red.
+
+## 2026-06-09T23:30:00Z — Workflow complete
+- Stage: Implementation → Verification → Review → Fallow → Handoff/Release/Health complete
+- Memory: Recorded root causes, deployment architecture, Mongo-backed booking eligibility, verification results, and external deployment requirement.
+- Artifact: Updated progress, verification, review, Fallow audit, release notes, summary, handoff, tasks, and Project Brain.
+- Checkpoint: Saved.
+- Next: Commit, create PR, deploy from repository root, and run documented production checks.

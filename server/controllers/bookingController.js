@@ -1,9 +1,14 @@
 const Booking = require("../models/Booking");
+const Service = require("../models/Service");
 const { TIME_SLOTS } = require("../constants/services");
 const {
   validateAvailabilityQuery,
   validateBookingPayload,
 } = require("../utils/bookingValidation");
+
+async function isBookableService(service) {
+  return Service.exists({ name: service, bookingEnabled: true, status: "available" });
+}
 
 async function getAvailability(req, res, next) {
   try {
@@ -11,6 +16,10 @@ async function getAvailability(req, res, next) {
 
     if (errors.length) {
       return res.status(400).json({ message: errors[0], errors });
+    }
+
+    if (!(await isBookableService(service))) {
+      return res.status(400).json({ message: "Choose an available service." });
     }
 
     const bookedSlots = await Booking.find({ service, date }).select("time -_id").lean();
@@ -34,6 +43,10 @@ async function createBooking(req, res, next) {
 
     if (errors.length) {
       return res.status(400).json({ message: errors[0], errors });
+    }
+
+    if (!(await isBookableService(booking.service))) {
+      return res.status(400).json({ message: "Choose an available service." });
     }
 
     const existingBooking = await Booking.findOne({

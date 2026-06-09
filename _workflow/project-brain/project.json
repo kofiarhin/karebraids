@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-06-08T23:17:15Z",
+  "updatedAt": "2026-06-09T23:30:00Z",
   "workflow": {
     "currentStage": "complete",
     "completedStages": [
@@ -48,6 +48,21 @@
       },
       "createdAt": "2026-06-08T22:59:44Z",
       "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "goal-production-booking-services",
+      "text": "Make the KareBraids services and booking flow production-ready on a single root-level Vercel deployment with same-origin API routing.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-09T22:45:00Z",
+      "updatedAt": "2026-06-09T22:45:00Z",
       "supersedes": [],
       "history": []
     }
@@ -142,6 +157,66 @@
       "updatedAt": "2026-06-08T22:59:44Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "req-same-origin-api",
+      "text": "Default browser API requests to same-origin /api while retaining a safe optional VITE_API_URL override.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-09T22:45:00Z",
+      "updatedAt": "2026-06-09T22:45:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-vercel-fullstack-routing",
+      "text": "Route /api/* to Express and non-API routes to the Vite SPA from a repository-root Vercel project.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-09T22:45:00Z",
+      "updatedAt": "2026-06-09T22:45:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-booking-services-verification",
+      "text": "Verify health, services, filtered bookable services, availability, booking creation, and duplicate-slot protection.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-09T22:45:00Z",
+      "updatedAt": "2026-06-09T22:45:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-production-env-seed-docs",
+      "text": "Document Vercel environment variables, MongoDB access, service presence checks, and the idempotent seedServices workflow.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-09T22:45:00Z",
+      "updatedAt": "2026-06-09T22:45:00Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "constraints": [
@@ -204,6 +279,36 @@
       "updatedAt": "2026-06-08T22:59:44Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "constraint-minimal-production-fix",
+      "text": "Keep changes minimal and production-safe; do not redesign unrelated UI.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-09T22:45:00Z",
+      "updatedAt": "2026-06-09T22:45:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "constraint-no-secrets",
+      "text": "Never commit MongoDB, admin, or JWT credentials; use environment variables only.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-09T22:45:00Z",
+      "updatedAt": "2026-06-09T22:45:00Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "architectureDecisions": [
@@ -249,6 +354,21 @@
       },
       "createdAt": "2026-06-08T23:17:15Z",
       "updatedAt": "2026-06-08T23:17:15Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "decision-root-vercel-same-origin",
+      "text": "Use one Vercel project rooted at the repository root to serve the Vite SPA and Express API on the same origin.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-09T22:45:00Z",
+      "updatedAt": "2026-06-09T22:45:00Z",
       "supersedes": [],
       "history": []
     }
@@ -313,6 +433,66 @@
       "updatedAt": "2026-06-08T23:17:15Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "tech-client-api-default",
+      "text": "The shared Axios client defaults to same-origin /api and normalizes an optional complete VITE_API_URL prefix.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-09T23:30:00Z",
+      "updatedAt": "2026-06-09T23:30:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "tech-vercel-function",
+      "text": "api/index.js is the Vercel Express entrypoint and caches/retries MongoDB initialization; server/server.js remains local persistent runtime.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-09T23:30:00Z",
+      "updatedAt": "2026-06-09T23:30:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "tech-booking-service-db-validation",
+      "text": "Public availability and booking eligibility are validated against MongoDB Service records with bookingEnabled true and status available.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-09T23:30:00Z",
+      "updatedAt": "2026-06-09T23:30:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "tech-seed-db-only-env",
+      "text": "The service seed command reads only MONGODB_URI and performs idempotent stable-ID upserts.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-09T23:30:00Z",
+      "updatedAt": "2026-06-09T23:30:00Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "domainKnowledge": [
@@ -360,6 +540,36 @@
       "updatedAt": "2026-06-08T23:17:15Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "domain-production-service-seed",
+      "text": "Services, service details, and booking selection require non-empty Service documents in the target MongoDB database.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-09T23:30:00Z",
+      "updatedAt": "2026-06-09T23:30:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "domain-production-deploy-steps",
+      "text": "Production requires a repository-root Vercel project, four server environment secrets, Atlas network access, redeployment, endpoint checks, and seeding when empty.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-09T23:30:00Z",
+      "updatedAt": "2026-06-09T23:30:00Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "openQuestions": [],
@@ -391,6 +601,36 @@
       },
       "createdAt": "2026-06-08T22:59:44Z",
       "updatedAt": "2026-06-08T22:59:44Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "risk-production-access-unavailable",
+      "text": "Actual Vercel settings, environment values, and production MongoDB contents require operator access; outbound live probes from the current environment are blocked by an HTTP 403 CONNECT proxy.",
+      "status": "active",
+      "confidence": 0.95,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-09T22:45:00Z",
+      "updatedAt": "2026-06-09T22:45:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "risk-live-verification-pending",
+      "text": "Current live Vercel endpoint responses and production Service count remain unconfirmed until an operator deploys the patch and runs documented checks.",
+      "status": "open",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-09T23:30:00Z",
+      "updatedAt": "2026-06-09T23:30:00Z",
       "supersedes": [],
       "history": []
     }
@@ -619,6 +859,28 @@
       "timestamp": "2026-06-08T23:17:15Z",
       "type": "workflow-complete",
       "summary": "Completed local representative image library, service decoupling, UI semantics, tests, review, and quality gates.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "workflow"
+      }
+    },
+    {
+      "id": "change-booking-services-spec-20260609",
+      "timestamp": "2026-06-09T22:45:00Z",
+      "type": "spec-saved",
+      "summary": "Saved the production booking/services repair request and detailed spec; waiting for explicit approval before planning.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      }
+    },
+    {
+      "id": "change-complete-booking-services-20260609",
+      "timestamp": "2026-06-09T23:30:00Z",
+      "type": "workflow-complete",
+      "summary": "Completed same-origin client API, root Vercel/serverless routing, Mongo-backed booking eligibility, seed/local runtime fixes, tests, and deployment documentation.",
       "source": {
         "runId": "work",
         "artifact": "_workflow/runs/work/summary.md",

@@ -107,3 +107,15 @@
 - Screenshot: unavailable because no browser/browser automation runtime is installed; code-surface review passed.
 - Fallow: 75.2/B, PARTIAL due intentional compatibility/duplicate export findings and duplication observations; no circular, boundary, dependency, unresolved import, or changed-code complexity blocker.
 - Workflow health: Passed with documented Fallow and screenshot limitations.
+
+## 2026-06-09 — Production Booking and Services Repair
+- Root causes fixed: missing client `/api` fallback, client-only SPA rewrite, absent Vercel Express function, stale hard-coded bookable-service list, over-coupled seed env validation, undeclared nodemon, and missing deployment/seed guidance.
+- Client: same-origin `/api` default, normalized override, local proxy.
+- Deployment: root `vercel.json`, reproducible root/client install, `client/dist` output, ordered API rewrites, SPA fallback, serverless Express/Mongo handler.
+- Booking: Mongo-backed available/bookable service validation; duplicate pre-check and unique-index race both return 409.
+- Operations: database-only seed env accessor, idempotent seed docs, Vercel env/Atlas/project-root/post-deploy troubleshooting.
+- Verification: server 71/71, client 116/116, build, lint, diff check, focused endpoint/config tests, and production dependency audit all pass.
+- Local dev: nodemon and Vite launch; container lacks a MongoDB daemon, so the API cannot complete local DB startup here.
+- Production: live endpoint access remains unconfirmed because outbound CONNECT was blocked and deployment credentials are unavailable. Exact deployment and curl checks are documented.
+- Fallow: 74.4/B, PARTIAL due static entrypoint/coverage and duplication findings; no dependency, import, circular, or boundary blocker.
+- Workflow health: Passed for repository-controlled work; external production verification required after deploy.

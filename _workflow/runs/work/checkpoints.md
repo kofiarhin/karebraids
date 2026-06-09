@@ -89,3 +89,24 @@ Append a checkpoint at intake completion, spec save, task-plan save, each comple
 - Open questions: None.
 - Next action: Commit and create PR.
 - Applied skill: design-taste-frontend
+
+## 2026-06-09T22:45:00Z — Spec saved
+- Stage: Spec approval gate
+- Memory summary: Single root-level Vercel project; same-origin `/api`; minimal full-stack production repair; production account/database state remains externally verifiable.
+- Artifacts changed: `_workflow/runs/work/request.md`, `_workflow/runs/work/spec.md`, `_workflow/runs/work/handoff.md`, `_workflow/runs/work/brain.json`, project brain files.
+- Open questions: Actual Vercel settings/env and production Service document count.
+- Next action: Wait for explicit spec approval, then generate the vertical task plan.
+
+## 2026-06-09T23:00:00Z — Task plan saved
+- Stage: Planning complete
+- Memory summary: Spec approved; three sequential vertical tasks cover client API routing, root Vercel/serverless routing, and endpoint/database/deployment proof.
+- Artifacts changed: `_workflow/runs/work/tasks.md`, activity/checkpoint state.
+- Open questions: Production account/database state remains an operator verification item.
+- Next action: Execute TASK-001 Iteration 1 Build.
+
+## 2026-06-09T23:30:00Z — Workflow complete
+- Stage: Complete
+- Memory summary: Full repository-controlled booking/services repair completed and verified; production account/database state remains an operator action.
+- Artifacts changed: Runtime/config/tests/docs plus all final workflow artifacts.
+- Open questions: Actual post-deploy endpoint responses and production Service document count.
+- Next action: Commit and PR, then deploy and execute README verification commands.

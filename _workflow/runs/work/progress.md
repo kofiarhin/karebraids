@@ -609,3 +609,118 @@
 - Screenshot: Not captured because no browser/browser automation runtime is installed; code-surface and component review used.
 - Acceptance: [x] all spec criteria.
 - Workflow status: Done.
+
+# 2026-06-09 — Booking and Services Production Repair
+
+## TASK-001 — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Objective: Route browser API calls through a same-origin `/api` contract while preserving explicit overrides and local development.
+- Files changed: `client/src/lib/api.js`, `client/vite.config.js`, `client/test/api-config.test.js`, `client/test/deployment.test.js`.
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Default missing/blank `VITE_API_URL` to `/api` and preserve explicit API prefixes.
+- Red: Focused Vitest failed because `resolveApiBaseUrl` did not exist and Axios had no fallback.
+- Green: Added `resolveApiBaseUrl`, `/api` default, whitespace/trailing-slash normalization, and Axios integration; 7 focused client tests passed.
+- Refactor: Kept all request logic in the shared Axios adapter; no React component changes.
+- Verification: `npm run test --prefix client -- --run test/api-config.test.js test/deployment.test.js test/service-api.test.js` passed.
+- Review: Existing services/bookings/contact/gallery/admin adapters all import the shared API instance.
+- Acceptance: Met.
+- Remaining issues: Local Vite still needed a proxy.
+- Next action: Refine local runtime.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Make same-origin `/api/*` work under local Vite.
+- Red: Deployment test required a Vite `/api` proxy and failed before configuration existed.
+- Green: Added configurable `VITE_API_PROXY_TARGET` with `http://localhost:5000` default.
+- Refactor: Imported Node `env` explicitly to satisfy ESLint rather than using an undefined global.
+- Verification: Focused deployment/API tests and full client lint passed.
+- Review: Proxy is development-only; production continues through Vercel rewrites.
+- Acceptance: Met.
+- Remaining issues: Root full-stack Vercel routing not yet present.
+- Next action: TASK-002.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Prove client regressions, build, and adapter centralization.
+- Red: Full lint initially reported `process` undefined in `vite.config.js`.
+- Green: Explicit `node:process` import resolved the only lint failure.
+- Refactor: Added documented optional client env examples; no duplicated per-service base handling.
+- Verification: Full client 116/116, build, and lint passed.
+- Review: No JSX/CSS/UI changes; TanStack Query ownership unchanged.
+- Acceptance: [x] all TASK-001 criteria.
+- Remaining issues: None.
+- Next action: TASK-002.
+
+## TASK-002 — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Objective: Serve the Vite SPA and every Express namespace from one root Vercel project.
+- Files changed: `vercel.json`, `api/index.js`, removed `client/vercel.json`, deployment/serverless tests.
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Add root Vercel build/routing and an Express function.
+- Red: Vitest failed because root `vercel.json` and `api/index.js` did not exist and `client/vercel.json` still swallowed API paths; Jest failed to resolve the serverless entrypoint.
+- Green: Added root Vercel config, ordered API rewrites before SPA fallback, Vite output settings, and a handler that invokes Express without `listen()`.
+- Refactor: Used modern Vercel `rewrites`/`outputDirectory` rather than legacy `builds`; changed install command to reproducible root/client `npm ci`.
+- Verification: Deployment tests and serverless health test passed.
+- Review: Root Directory must be repository root; stale client-only deployment config removed.
+- Acceptance: Met.
+- Remaining issues: Warm invocation and failure retry needed coverage.
+- Next action: Refine function lifecycle.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Reuse successful Mongo initialization and recover after connection failure.
+- Red: Tests required warm-invocation reuse, retry after rejection, and JSON API 404 behavior.
+- Green: Added module-scoped connection promise, rejection reset, and direct Express forwarding; all four serverless tests passed.
+- Refactor: Preserved `server/server.js` solely for local persistent listening.
+- Verification: `server/tests/serverless.test.js` passed 4/4 and API namespace suites passed 35 focused tests.
+- Review: Unknown `/api/*` returns Express JSON 404, not SPA HTML.
+- Acceptance: Met.
+- Remaining issues: Actual deployed reachability requires redeployment/operator access.
+- Next action: Polish configuration and regressions.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Validate routing precedence and all API namespaces.
+- Red: Prior client config was explicitly asserted absent; API function/root config were asserted present.
+- Green: Root config parses and tests enforce `/api`, `/api/:path*`, then SPA order.
+- Refactor: Standardized backend semicolon style in the function.
+- Verification: Full server 71/71, full client 116/116, build, lint, and `git diff --check` passed.
+- Review: Express registration covers health, services, bookings, contact, gallery, and admin; existing endpoint suites prove route ownership.
+- Acceptance: [x] all TASK-002 criteria.
+- Remaining issues: Live production probes remain blocked until deployment and external access.
+- Next action: TASK-003.
+
+## TASK-003 — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Objective: Prove booking/service behavior and document production database/deployment operations.
+- Files changed: booking controller/validation/tests, env/seed script/tests, README/env docs, `package.json`/lock.
+
+### Iteration 1 Build — Red -> Green -> Refactor
+- Goal: Remove the hidden hard-coded service-name blocker.
+- Red: A booking test using seeded `Boho Knotless Braids` returned 400 because `server/constants/services.js` did not contain most seeded services.
+- Green: Public availability and booking now validate service names against MongoDB records with `bookingEnabled: true` and `status: available`; seeded services can book and archived/unknown services are rejected.
+- Refactor: Structural payload validation now checks service presence; canonical service eligibility stays in the controller/database layer.
+- Verification: Booking/admin suites passed 17/17, then focused API suites passed.
+- Review: Booking page continues submitting selected service names from the Mongo-backed service query; no UI changes.
+- Acceptance: Met.
+- Remaining issues: Seed command coupled to unrelated admin env validation.
+- Next action: Refine operations.
+
+### Iteration 2 Refine — Red -> Green -> Refactor
+- Goal: Make production service seeding require only database configuration and preserve duplicate protection.
+- Red: Env test failed because no database-only accessor existed; initial `npm run dev` smoke failed because `nodemon` was referenced but not installed.
+- Green: Added `getMongoDbUri`, updated the seed script, installed declared `nodemon`, and added unique-index race coverage returning 409.
+- Refactor: Full app startup still validates Mongo/admin/JWT env; database-only seed workflow no longer requires unrelated credentials.
+- Verification: Env/seed 7/7, endpoint-focused 43/43, and local dev launched both nodemon and Vite; server then stopped only because no MongoDB daemon is available in the container.
+- Review: Seed remains idempotent stable-ID bulk upsert; no production data was mutated.
+- Acceptance: Met with external DB caveat.
+- Remaining issues: Actual production Service count cannot be inspected without `MONGODB_URI`/Vercel access.
+- Next action: Documentation and final verification.
+
+### Iteration 3 Polish — Red -> Green -> Refactor
+- Goal: Complete operator-ready deployment, environment, seed, troubleshooting, and verification guidance.
+- Red/Green/Refactor exception: Documentation changes do not introduce executable behavior; all related runtime/config behavior had test-first coverage in earlier iterations.
+- Changes: Replaced placeholder README with root-project Vercel settings, required env table, Atlas access guidance, service presence/seed steps, endpoint curl commands, duplicate check, and troubleshooting.
+- Verification: Server 71/71; client 116/116; build and lint passed; production dependency audit reported zero vulnerabilities; secrets/junk/diff checks passed.
+- Review: Live URL probes were attempted with curl and web access but blocked by this environment before reaching Vercel; no unverified claim of current production success is made.
+- Acceptance: [x] repository implementation criteria; [~] live production reachability requires deploying this commit and running documented checks.
+- Remaining issues: Operator must configure/redeploy Vercel and seed the production database if the filtered service list is empty.
+- Next action: Final review, Fallow, handoff, release notes, summary, health check.

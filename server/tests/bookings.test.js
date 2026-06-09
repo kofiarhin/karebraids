@@ -1,11 +1,16 @@
 const request = require("supertest");
 const Booking = require("../models/Booking");
+const Service = require("../models/Service");
 const app = require("../app");
 
 jest.mock("../models/Booking", () => ({
   create: jest.fn(),
   findOne: jest.fn(),
   find: jest.fn(),
+}));
+
+jest.mock("../models/Service", () => ({
+  exists: jest.fn(),
 }));
 
 const validPayload = {
@@ -22,6 +27,7 @@ const validPayload = {
 describe("booking API", () => {
   beforeEach(() => {
     jest.resetAllMocks();
+    Service.exists.mockResolvedValue(true);
   });
 
   it("creates a valid booking", async () => {
@@ -46,6 +52,34 @@ describe("booking API", () => {
     );
   });
 
+  it("accepts any available booking-enabled service from MongoDB", async () => {
+    Booking.findOne.mockResolvedValue(null);
+    Booking.create.mockResolvedValue({ _id: "booking-2", ...validPayload, service: "Boho Knotless Braids" });
+
+    const response = await request(app)
+      .post("/api/bookings")
+      .send({ ...validPayload, service: "Boho Knotless Braids" });
+
+    expect(response.status).toBe(201);
+    expect(Service.exists).toHaveBeenCalledWith({
+      name: "Boho Knotless Braids",
+      bookingEnabled: true,
+      status: "available",
+    });
+  });
+
+  it("rejects services that are not available for booking", async () => {
+    Service.exists.mockResolvedValue(false);
+
+    const response = await request(app)
+      .post("/api/bookings")
+      .send({ ...validPayload, service: "Archived Service" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toMatch(/available service/i);
+    expect(Booking.create).not.toHaveBeenCalled();
+  });
+
   it("rejects Sunday bookings", async () => {
     const response = await request(app)
       .post("/api/bookings")
@@ -64,6 +98,16 @@ describe("booking API", () => {
     expect(response.status).toBe(409);
     expect(response.body.message).toMatch(/already booked/i);
     expect(Booking.create).not.toHaveBeenCalled();
+  });
+
+  it("returns 409 when the database unique index catches a duplicate race", async () => {
+    Booking.findOne.mockResolvedValue(null);
+    Booking.create.mockRejectedValue(Object.assign(new Error("duplicate key"), { code: 11000 }));
+
+    const response = await request(app).post("/api/bookings").send(validPayload);
+
+    expect(response.status).toBe(409);
+    expect(response.body.message).toMatch(/already booked/i);
   });
 
   it("rejects notes that are too long", async () => {

@@ -1,4 +1,4 @@
-const { SERVICES, TIME_SLOTS } = require("../constants/services");
+const { TIME_SLOTS } = require("../constants/services");
 const BOOKING_STATUSES = ["pending", "confirmed", "cancelled", "completed"];
 
 function parseDateOnly(date) {
@@ -38,8 +38,8 @@ function validateBookingPayload(payload) {
   const errors = [];
   const parsedDate = parseDateOnly(booking.date);
 
-  if (!SERVICES.includes(booking.service)) {
-    errors.push("Choose a valid service.");
+  if (!booking.service) {
+    errors.push("Choose a service.");
   }
 
   if (!parsedDate) {
@@ -107,8 +107,8 @@ function validateAvailabilityQuery(query) {
   const parsedDate = parseDateOnly(date);
   const errors = [];
 
-  if (!SERVICES.includes(service)) {
-    errors.push("Choose a valid service.");
+  if (!service) {
+    errors.push("Choose a service.");
   }
 
   if (!parsedDate) {

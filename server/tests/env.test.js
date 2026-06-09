@@ -1,4 +1,4 @@
-const { getEnv } = require("../config/env");
+const { getEnv, getMongoDbUri } = require("../config/env");
 
 describe("environment validation", () => {
   const originalEnv = process.env;
@@ -11,6 +11,15 @@ describe("environment validation", () => {
     process.env = { NODE_ENV: "production" };
 
     expect(() => getEnv()).toThrow("MONGODB_URI is required");
+  });
+
+  it("allows database-only commands to read MONGODB_URI without admin credentials", () => {
+    process.env = {
+      NODE_ENV: "production",
+      MONGODB_URI: "  mongodb://127.0.0.1:27017/karebraids  ",
+    };
+
+    expect(getMongoDbUri()).toBe("mongodb://127.0.0.1:27017/karebraids");
   });
 
   it("allows tests to provide an in-memory or mocked database path", () => {

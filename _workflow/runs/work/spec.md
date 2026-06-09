@@ -1,225 +1,217 @@
-# Representative Local Image Library Refactor
+# KareBraids Booking and Services Production Repair Spec
 
 ## 1. Metadata
 - Spec filename: `_workflow/runs/work/spec.md`
-- Date: 2026-06-08
-- Request ID / slug: `representative-local-image-library`
-- Request source: Direct user prompt; normalized in `_workflow/runs/work/request.md`
+- Date: 2026-06-09
+- Request ID / slug: `booking-services-production-repair`
+- Request source: Direct user prompts on 2026-06-09
 - Execution mode: `complete-workflow`
-- Request classification: Frontend data architecture, semantic UI copy, compatibility refactor, tests
-- Scope level: Medium, cross-cutting frontend
-- Risk level: Medium
+- Request classification: Full-stack production defect audit and repair
+- Scope level: Cross-cutting client, API, database workflow, deployment, tests, and docs
+- Risk level: Medium-high because routing and serverless database initialization affect all production API traffic
 
 ## 2. Original Request
-- Raw user request: Refactor image handling so existing curated local images form one central representative visual library while services remain independently categorized business data. Remove remote frontend Pexels URLs and service-specific image claims; preserve gallery, service, booking, and API compatibility behavior.
-- Normalized request: Centralize all curated frontend image paths and metadata in `client/src/data/imageLibrary.js`, deterministically derive representative service display images, decouple gallery items from service classification, update semantic copy/alt text/captions, and preserve current application UX and backend response compatibility.
+- Raw user request: Audit and fix the broken KareBraids booking/services flow, confirm production API reachability, audit Vercel assumptions, fix same-origin routing and API configuration, verify service/availability/booking endpoints, inspect MongoDB seeding, and document root causes/deployment requirements.
+- Normalized request: Repair the complete service discovery and booking request path for a root-level single-project Vercel deployment while retaining local development and existing UI behavior.
 - Source prompt / request reference: `_workflow/runs/work/request.md`
 
 ## 3. Questions And Answers
-- Questions asked: None. Repository inspection answered implementation-state questions and the user supplied explicit behavior, copy, boundaries, and verification commands.
-- Answers received: Not applicable.
-- Questions skipped: No unnecessary questions were asked because the request is implementation-ready.
-- Remaining open questions: None blocking.
+- Questions asked: Whether production should use one root-level Vercel project serving both the React app and Express API.
+- Answers received: User instructed the agent to proceed with the full audit and implementation after the recommended single-project architecture was proposed.
+- Questions skipped: No further questions; route behavior, acceptance checks, and boundaries are explicit or discoverable in the repository.
+- Remaining open questions: Actual Vercel project settings and production MongoDB contents cannot be directly inspected without deployment/account credentials. Public endpoint probes from this environment are also currently blocked by an outbound proxy returning HTTP 403.
 
 ## 4. Problem Definition
-- Problem being solved: Curated marketing images are duplicated across frontend modules, use remote Pexels URLs, and are treated as if they prove exact service/hairstyle classifications.
-- Why it matters: Business service data and representative visual assets need separate authority so copy remains truthful and future real client photos can be attached without another architectural rewrite.
-- Current pain point: `client/src/data/services.js` owns service-specific `galleryImages`; `servicePreview.js`, pages, and homepage constants read remote or service-owned images; some UI text and alt text imply exact service examples.
-- Expected value: One maintainable local asset library, truthful representative semantics, deterministic display images, preserved service taxonomy and UX, and a clean future path for genuine service/client media.
+- Problem being solved: The production booking page cannot load services and displays “Services could not be loaded. Please try again.”
+- Why it matters: Service data is the first dependency for the booking wizard, service catalogue, and service detail routes.
+- Current pain point: The frontend may emit incorrect relative requests when `VITE_API_URL` is absent, while the only Vercel config is client-scoped and rewrites all paths to the SPA rather than routing `/api/*` to Express.
+- Expected value: Production users can browse services, retrieve availability, and submit conflict-safe bookings on the same Vercel origin.
 
 ## 5. Current State Analysis
-- Existing behavior: Services and gallery can be loaded through API/query hooks, while legacy local service helpers and several UI surfaces still encode image assumptions and remote fallbacks.
-- Existing architecture/components: React/Vite client with TanStack Query for server state; Express/Mongoose backend with service/gallery compatibility fields.
-- Existing files/modules likely involved: `client/src/data/imageLibrary.js`, `client/src/data/services.js`, `client/src/utils/servicePreview.js`, Gallery/Services/ServiceDetail pages, homepage service/gallery components/constants, related styles/constants, and new or updated Vitest files.
-- Existing data flow: API service objects may include primary/gallery image data; components call `getServicePreviewImage` or render gallery query items; local service helpers currently flatten service-owned galleries.
-- Existing API/UI/CLI/workflow behavior: Gallery has filtering, masonry, and modal behavior; services expose category/price/duration/booking navigation; backend API responses include image compatibility data.
-- Existing tests or verification coverage: Client has broad page/query tests from the prior backend-driven data migration but lacks focused tests for the new representative image library contract; server Jest coverage exists for service/gallery endpoints and models.
+- Existing behavior:
+  - `client/src/lib/api.js` uses `import.meta.env.VITE_API_URL` directly with no default `/api` base.
+  - Client service modules call `/services`, `/bookings/availability`, and `/bookings`, assuming the Axios base already contains `/api`.
+  - `client/vercel.json` rewrites every path to `/`, including any `/api/*` request if the client directory is deployed as the Vercel root.
+  - No root `vercel.json` or Vercel serverless API entrypoint exists.
+  - Express defines `/api/health`, `/api/services`, `/api/bookings`, `/api/contact`, `/api/gallery`, and `/api/admin` in `server/app.js`.
+  - `server/server.js` connects to MongoDB and listens persistently, which is appropriate locally but not itself a Vercel serverless handler.
+  - Service APIs read MongoDB only; an empty/unseeded database returns an empty service list.
+  - `npm run seed:services` performs stable-ID upserts from `server/data/services.json` after loading `.env` and validating `MONGODB_URI` plus production admin credentials through `getEnv()`.
+- Existing architecture/components: React/Vite/TanStack Query client; Axios API adapter; Express/Mongoose backend; MongoDB-backed Service and Booking models.
+- Existing files/modules likely involved: `client/src/lib/api.js`, client API tests, `server/app.js`, `server/server.js`, a new root serverless entrypoint, Vercel config(s), env/seed tests, README, and package scripts only if deployment/build orchestration requires it.
+- Existing data flow: Booking page -> `useBookableServices` -> `getServices` -> Axios -> `/services`; availability and creation use the same adapter with booking routes.
+- Existing API/UI/CLI/workflow behavior: Local dev runs Vite and persistent Express separately; Vite currently has no `/api` proxy; production deployment appears client-only based on `client/vercel.json`.
+- Existing tests or verification coverage: Jest/Supertest covers service filters, booking availability, booking creation, and duplicate protection. Vitest has a deployment test that currently expects only the client SPA rewrite.
+- Production probe evidence: Requests to the live URL were attempted on 2026-06-09, but this execution environment’s outbound CONNECT proxy returned HTTP 403 before reaching Vercel. Reachability is therefore unconfirmed rather than assumed.
+- Dirty worktree: Clean before intake; no overlap risk.
 
 ## 6. Desired End State
-- Expected final behavior: All curated frontend visuals resolve from existing `/images/<filename>` paths declared only in `imageLibrary.js`; services remain categorized business records; selected gallery service filters provide context without image classification.
-- User-facing outcome: Gallery and service imagery is labeled as representative inspiration, with required disclaimer copy and generic alt text/titles; categories, pricing, duration, booking, masonry, and modal UX remain intact.
-- Developer-facing outcome: A single deterministic image API (`getDisplayImage`, `getGalleryImageItems`) feeds compatibility and display helpers; no frontend remote Pexels URL or `service.galleryImages` authority remains.
-- System/workflow outcome: Current API compatibility remains available; future real client photos can later be attached to services through a separate explicit media source.
-- Backward compatibility expectations: Preserve API response shapes, routes, booking links, query-string service context, and compatibility `image`/`previewImage` frontend fields.
+- Expected final behavior: One root-level Vercel deployment builds/serves the Vite client and invokes Express for `/api/*`; client requests use same-origin `/api` when no override is configured.
+- User-facing outcome: Services and service detail pages load; booking service selection loads; availability appears after service/date selection; valid bookings submit; duplicate slots return a conflict.
+- Developer-facing outcome: Local `npm run dev`, frontend tests/build/lint, backend tests, and documented seed/deployment procedures are coherent.
+- System/workflow outcome: Express initialization is safe for serverless reuse, MongoDB configuration is explicit, and service seed requirements are documented.
+- Backward compatibility expectations: A configured absolute `VITE_API_URL` continues to work, whether it points to an API origin or an `/api` prefix according to the finalized normalized-base contract. Existing API response shapes and UI are preserved.
 
 ## 7. Scope
 - In scope:
-  - Replace `imageLibrary` entries with real filenames from `client/public/images/` and required representative metadata.
-  - Refactor local services to contain only required business fields as canonical records, with derived compatibility image fields and `isRepresentativeImage: true`.
-  - Route local gallery helpers through `getGalleryImageItems()` and make service selection contextual only.
-  - Refactor `servicePreview.js` to use `getDisplayImage(service.id)` and ignore service galleries/API image classification for current curated rendering.
-  - Update affected UI copy, captions, titles, and alt text.
-  - Remove/replace every frontend `https://images.pexels.com/...` occurrence.
-  - Add focused Vitest coverage before implementation and preserve existing tests.
-  - Inspect backend files and avoid changes unless compatibility tests show a necessity.
+  - Audit all Vercel configuration and deployment assumptions.
+  - Confirm route registration for services, bookings, contact, gallery, and admin.
+  - Add root deployment routing/build configuration and serverless Express entrypoint as required.
+  - Add safe client API base normalization/fallback.
+  - Preserve local Vite + Express development, adding a development proxy if needed for same-origin-style calls.
+  - Verify service, availability, booking, and duplicate-slot contracts.
+  - Audit env validation, MongoDB connection behavior, service seed command/data, and docs.
+  - Add/update Vitest and Jest tests first where behavior changes.
 - Out of scope:
-  - Site redesign or layout replacement.
-  - Booking logic removal or service taxonomy changes.
-  - Redux introduction or API logic in React components.
-  - Moving/renaming local image files.
-  - Converting current backend fields into a real client-photo system.
-- Non-goals: Proving that any curated image depicts a named service; changing prices/durations; changing API contracts.
-- Explicit boundaries: Curated images are representative marketing assets only.
+  - UI redesign or copy overhaul.
+  - Admin feature redesign.
+  - Changing booking business rules, service schema, or public API response shapes unless a proven blocker requires a minimal compatible change.
+  - Provisioning Vercel/MongoDB accounts or adding secrets.
+- Non-goals: Multi-project frontend/backend deployment, replacing Axios/TanStack Query, introducing Redux, or changing databases.
+- Explicit boundaries: Never commit credentials; preserve current routes and minimal patch size.
 
 ## 8. Users And Use Cases
-- Primary users: Prospective KareBraids clients browsing services and visual inspiration.
-- Secondary users: Maintainers updating curated visuals or later integrating real client photos.
-- Main use cases: Browse service categories and details; inspect representative gallery imagery; filter gallery context by a considered service; continue to booking.
-- Edge use cases: Unknown service filter, empty API gallery payload, missing service id, deterministic fallback image, image metadata used by modal/card views.
+- Primary users: Prospective KareBraids clients browsing services and booking appointments.
+- Secondary users: Site administrator and deployer maintaining service inventory and bookings.
+- Main use cases: Browse services, open service details, select a bookable service, view open slots, submit booking.
+- Edge use cases: Empty service database, missing env vars, malformed availability query, duplicate slot race, direct SPA deep links, serverless cold starts.
 
 ## 9. Functional Requirements
 - Required behaviors:
-  - `imageLibrary.js` exports all four required symbols.
-  - Each image object has exactly the required semantic fields at minimum and `usage: "representative"`.
-  - All `src` values are local `/images/...` paths matching existing public files.
-  - `getDisplayImage(seed)` deterministically returns an image object and handles empty/unknown seeds.
-  - `getGalleryImageItems()` returns representative items without hairstyle/service classification.
-  - Service compatibility `image` and `previewImage` values come from `getDisplayImage(service.id)` and expose `isRepresentativeImage: true`.
-  - `getGalleryItems()` returns `getGalleryImageItems()`.
-  - `getGalleryItemsByServiceId("all")` returns all items; specific ids return representative items with, at most, optional non-classifying UI context.
-  - `getServicePreviewImage` uses `getDisplayImage(service.id)` and never reads `service.galleryImages`.
-  - Required UI copy replacements and disclaimer appear in relevant gallery/service surfaces.
-- Inputs: Service ids/slugs, API service objects, gallery filter query string.
-- Outputs: Local representative image paths/objects and truthful UI labels.
-- State changes: No new global state; existing query/filter/modal state remains.
-- Error states: Existing loading/error/empty states remain functional and do not revert to remote URLs or exact-service claims.
-- Permissions/auth expectations: Not applicable.
+  - `/api/health` responds through the production deployment.
+  - Public and protected Express route namespaces are not swallowed by the SPA rewrite.
+  - Service list/filter/detail requests reach Express and MongoDB.
+  - Availability validates service/date and excludes booked slots.
+  - Booking creation validates input and rejects duplicate service/date/time with HTTP 409, including database unique-index races.
+  - Client defaults to same-origin `/api` when `VITE_API_URL` is missing or blank.
+  - Local development resolves `/api/*` to Express.
+- Inputs: Existing query parameters and booking JSON payload.
+- Outputs: Existing API JSON contracts and HTTP status codes.
+- State changes: Booking POST creates one MongoDB Booking document; seed command upserts Service documents.
+- Error states: Missing env, failed database connection, empty service collection, invalid booking/availability input, duplicate booking, unknown API path.
+- Permissions/auth expectations: Existing admin authentication remains unchanged; public routes remain public.
 
 ## 10. Non-Functional Requirements
-- Performance expectations: Static public assets; no new network image hosts or runtime image imports.
-- Reliability expectations: Deterministic fallback for all service ids and safe handling of missing ids.
-- Security/privacy expectations: No secrets or client-identifying claims; no remote image tracking dependency.
-- Accessibility expectations: Generic accurate alt text such as “Representative protective styling image”; modal/card labels remain meaningful; decorative images remain decorative where already intentional.
-- Maintainability expectations: Curated paths exist only in `imageLibrary.js`; no duplicated image arrays in constants/components.
-- DX expectations: Small pure helper APIs with focused unit tests.
+- Performance expectations: Reuse cached Mongoose/serverless connection state where practical; avoid reconnect storms.
+- Reliability expectations: Correct routing precedence; deterministic base URL normalization; idempotent service seeding.
+- Security/privacy expectations: Secrets only in Vercel env or local `.env`; no credential logging; preserve admin route protection.
+- Accessibility expectations: Not applicable; no UI redesign planned.
+- Maintainability expectations: One documented API base contract and one root deployment configuration.
+- DX expectations: Root scripts remain authoritative; local development and production instructions are copy-paste ready.
 
 ## 11. Affected Surfaces
-- Files likely affected:
-  - `client/src/data/imageLibrary.js`
-  - `client/src/data/services.js`
-  - `client/src/utils/servicePreview.js`
-  - `client/src/pages/Gallery.jsx`
-  - `client/src/pages/Services.jsx`
-  - `client/src/pages/ServiceDetail.jsx`
-  - `client/src/components/home/FeaturedServices.jsx`
-  - `client/src/components/home/GalleryFeature.jsx`
-  - `client/src/components/home/BrowseByStyle.jsx` if required by the no-exact-service-alt rule
-  - `client/src/constants/styles.js`
-  - `client/src/constants/homepage.js`
-  - Focused/new client test files
-- Directories likely affected: `client/src/data`, `client/src/utils`, `client/src/pages`, `client/src/components/home`, `client/src/constants`
-- UI surfaces: Gallery heading/disclaimer/filter context/cards/modal; service cards/detail gallery; homepage gallery and service cards.
-- API routes: No intended changes.
-- Components: Existing components only; no redesign.
-- Services: Existing query/API layer stays outside components.
-- Database/schema: No intended changes.
-- Config/env vars: None.
-- Tests: Vitest tests for data helpers, preview helper, and copy/semantic regressions; existing Jest suites.
-- Docs: Run-scoped workflow artifacts and Fallow audit.
-- Workflow artifacts: request, spec, tasks after approval, progress, handoff, activity, checkpoints, review, verification, Fallow audit, release notes, summary, Project Brain.
+- Files likely affected: `client/src/lib/api.js`, `client/vite.config.js`, deployment/API tests, `server/app.js` and/or a new `api/index.js`, `vercel.json`, removal or narrowing of `client/vercel.json`, `.env.example`, `README.md`, potentially `server/config/env.js`, `server/config/db.js`, and seed tests/docs.
+- Directories likely affected: `client/`, `server/`, root `api/`, root deployment/docs/workflow artifacts.
+- UI surfaces: No markup/styling changes expected; only data loading behavior.
+- API routes: `/api/health`, `/api/services`, `/api/services/:id`, `/api/bookings/availability`, `/api/bookings`, plus reachability preservation for contact/gallery/admin.
+- Components: Booking, Services, and ServiceDetail are audit surfaces but should not need API logic changes.
+- Services: Axios adapter and existing service/booking service modules.
+- Database/schema: No planned schema migration; verify Service seed and Booking uniqueness.
+- Config/env vars: `MONGODB_URI`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `JWT_SECRET`, optional `VITE_API_URL`, and local `PORT`.
+- Tests: Vitest deployment/API-base behavior; Jest/Supertest route and serverless compatibility where practical.
+- Docs: Vercel project root/build/output/env/seed/deploy instructions and troubleshooting.
+- Workflow artifacts: Active run request/spec/tasks/progress/handoff/review/verification/release/summary and Fallow audit.
+- Frontend Taste Application: Not applicable. No frontend markup, CSS, Tailwind, redesign, or UI polish is in scope.
 
 ## 12. Dependency And Integration Map
-- Internal dependencies: Service pages/components depend on query hooks and `getServicePreviewImage`; local service helpers depend on the new image library; Gallery depends on gallery query shape and UI filter context.
-- External packages/services: React, React Router, TanStack Query, Vitest; no new packages.
-- Integration points: Existing API service/gallery responses, public asset serving from Vite, gallery modal/filter components.
-- Ordering constraints: Establish/test image library contract first; update service/preview adapters second; update UI semantics third; run full verification last.
-- Migration/setup requirements: None; local files already exist.
+- Internal dependencies: Axios adapter -> client service modules -> TanStack Query hooks -> pages; Vercel rewrite -> serverless Express app -> Mongoose -> MongoDB.
+- External packages/services: Vercel, MongoDB Atlas or compatible MongoDB, Axios, Express, Mongoose.
+- Integration points: Vercel build output, `/api` function routing, environment injection, MongoDB network access/IP policy.
+- Ordering constraints: Tests first; establish API base contract; establish serverless handler; configure route precedence; then docs and end-to-end verification.
+- Migration/setup requirements: Configure root Vercel project and required env vars; seed services once against production MongoDB if empty.
 
 ## 13. Data And State Impact
-- Data models: Frontend curated image object contract becomes independent from service records.
-- Database changes: None expected.
-- State management changes: None; filter remains URL/local UI context.
-- Cache/session/local storage impact: None.
-- Backward compatibility impact: Frontend stops trusting API/local service images for curated display but backend fields remain available for future real-photo work.
+- Data models: Existing Service and Booking models retained.
+- Database changes: No planned destructive changes. Production may require initial Service upserts.
+- State management changes: None; TanStack Query remains server-state owner.
+- Cache/session/local storage impact: None expected.
+- Backward compatibility impact: Existing records and endpoint contracts remain valid.
 
 ## 14. UX / API / Workflow Expectations
-- UX expectations: Preserve present layout/masonry/modal/card interactions; replace “Client Gallery” with “Style Inspiration Gallery”; add the exact representative disclaimer; use “Viewing inspiration while considering {service.name}”; replace “Style gallery” with “Style inspiration”; captions say “Representative image.”
-- API contract expectations: Do not break or remove existing service/gallery response fields.
-- CLI/workflow behavior: Verification through required npm commands plus targeted lint/diff/Fallow checks.
-- Error handling expectations: Existing query errors and empty states remain; representative fallback remains local.
-- Empty/loading/success/failure states: No redesign; semantic copy should remain truthful in every state.
+- UX expectations: Existing loading/error/success states remain; successful routing removes false service-load errors.
+- API contract expectations: Preserve JSON structures and status codes tested by current Supertest suites.
+- CLI/workflow behavior: `npm run dev` starts local client/server; `npm run seed:services` seeds the selected MongoDB URI.
+- Error handling expectations: API failures remain JSON; SPA fallback must never respond to `/api/*`; empty service data is documented distinctly from routing failure.
+- Empty/loading/success/failure states: Empty seeded state yields an empty list rather than routing HTML; connection errors reach Express error handling/logs; UI existing error state remains for genuine failures.
 
 ## 15. Execution Strategy
 - Recommended implementation approach:
-  1. Write failing data/helper tests that enforce local paths, required fields, deterministic selection, no service classification, and service compatibility derivation.
-  2. Replace image library metadata with local assets and refactor local service/gallery/preview adapters.
-  3. Write failing UI tests for required headings/disclaimer/filter/caption/alt semantics, then update components/constants without altering layout behavior.
-  4. Search the entire frontend for remote Pexels URLs, service gallery reads, and prohibited copy; remove remaining violations.
-  5. Run focused tests, full client/server tests, lint/build, diff audit, review, Fallow, and health check.
-- Suggested sequencing: Data contract → compatibility helpers → UI semantics → full regression verification.
-- Safe rollout/migration approach: Retain backend fields and compatibility frontend aliases while changing only their current source.
-- Files to inspect before editing: All listed affected surfaces, existing API/query hooks, relevant tests, public image filenames.
-- Decisions to avoid until more evidence exists: Backend schema/controller modifications; replacing gallery query architecture; broad visual styling changes.
+  1. Add failing Vitest tests for same-origin API default, override normalization, root Vercel API precedence, and SPA fallback.
+  2. Add/adjust Jest tests for route reachability/serverless entry behavior and retain booking duplicate tests.
+  3. Implement an Axios base resolver defaulting to `/api`, with whitespace/trailing-slash safety.
+  4. Add a Vite development proxy for `/api` to the local Express port if required by the selected fallback.
+  5. Export/use Express in a Vercel-compatible serverless entrypoint without calling `listen`; preserve `server/server.js` for local runtime.
+  6. Add root `vercel.json` with explicit API route precedence and SPA fallback, plus correct client build/output settings.
+  7. Remove or revise conflicting client-only Vercel configuration.
+  8. Audit env/connection/seed behavior and document production setup and empty-database recovery.
+  9. Run endpoint contract tests, client tests/build/lint, server tests, local smoke checks, diff audit, review, Fallow, and workflow health check.
+- Suggested sequencing: Deployment contract -> client base -> serverless handler -> route verification -> Mongo/seed docs -> full regression.
+- Safe rollout/migration approach: Deploy config/code first with env vars configured, invoke health/services, seed only if services are empty, then verify availability and a controlled booking payload.
+- Files to inspect before editing: All likely files plus schemas, validation, current deployment tests, package scripts, and Vite config.
+- Decisions to avoid until more evidence exists: Do not alter service/booking schema or UI; do not loosen auth/env validation merely to make health pass without understanding the serverless initialization path.
 
 ## 16. Verification Strategy
 - Required automated checks:
-  - Targeted Vitest for new data/helper behavior and UI semantics.
-  - `npm test`
-  - `npm run test --prefix client`
-  - `npm run build --prefix client`
-  - Changed-file or full client lint where available.
-  - `rg` checks proving no frontend remote Pexels URLs, prohibited copy, or `service.galleryImages` reads remain.
-- Required manual checks: Code-surface review of gallery masonry/modal/filter preservation, service business details/booking links, and generic image claims. Screenshot only if browser automation is available because the visible change is primarily copy/assets rather than redesign.
-- Test types needed: Pure unit tests for image/service helpers; component/page tests for user-visible copy and representative semantics; existing integration/regression suites.
-- Build/lint/typecheck expectations: Vite build passes; lint introduces no new errors.
-- Acceptance evidence required: Test commands/results, searches, diff audit, review notes, Fallow audit.
-- Proof of completion: All acceptance criteria checked and no remaining frontend remote Pexels image URL or exact-service curated-image claim.
+  - Focused Vitest tests for API base and Vercel config.
+  - Relevant Jest/Supertest service and booking suites.
+  - Full `npm test`.
+  - Full `npm run test --prefix client`.
+  - `npm run build --prefix client`.
+  - `npm run lint --prefix client`.
+  - `git diff --check`.
+- Required manual checks: Inspect generated Vercel route/build semantics; local server/client smoke test where environment permits; probe deployed endpoints if outbound access permits.
+- Test types needed: Unit/config tests, API integration tests, duplicate race protection regression, build validation.
+- Build/lint/typecheck expectations: Client build and lint pass; no TypeScript check applies.
+- Acceptance evidence required: Exact commands/results, HTTP statuses/bodies from Supertest/local curl, production probe result or explicit access limitation, seed dry/test evidence.
+- Proof of completion: All in-scope automated checks pass and deployment/env steps are documented; inability to inspect actual production DB or deploy is recorded as a remaining operational action, not hidden.
 
 ## 17. Acceptance Criteria
-- [ ] The app builds successfully with `npm run build --prefix client`.
-- [ ] `npm test` and `npm run test --prefix client` pass, or any verified pre-existing/environment limitation is isolated and documented according to workflow rules.
-- [ ] All curated image paths are declared in `client/src/data/imageLibrary.js`, use `/images/<real-filename>`, and resolve to files already in `client/public/images/`.
-- [ ] Every curated image object includes `id`, `src`, `alt`, `title`, `description`, `aspect`, and `usage: "representative"`.
-- [ ] No frontend `https://images.pexels.com/...` URL remains.
-- [ ] Services retain categories, prices, durations, featured/booking/gallery/status business fields and booking links while curated image authority is removed.
-- [ ] Compatibility `image` and `previewImage` derive from `getDisplayImage(service.id)` and expose `isRepresentativeImage: true`.
-- [ ] No frontend display helper reads `service.galleryImages` as curated image truth.
-- [ ] Gallery masonry/modal UX remains functional, and service filtering remains UI context without classifying images.
-- [ ] Required gallery/service copy, disclaimer, “Representative image” captions, and generic alt text are present; prohibited exact-service titles/claims are absent.
-- [ ] Backend API responses remain compatible; backend files are changed only if required by verified tests.
-- [ ] Architecture permits future real client photos to be attached separately without rewriting the representative library.
+- [ ] Root-level Vercel routing sends `/api/*` to Express and non-API deep links to the Vite SPA without conflict.
+- [ ] The client uses same-origin `/api` when `VITE_API_URL` is missing/blank and safely supports an explicit override.
+- [ ] Services page, booking service selection, and service detail API flows retain working contracts.
+- [ ] Availability loads for a valid selected service/date and excludes already-booked slots.
+- [ ] Booking submission succeeds for a free slot and returns 409 for duplicate slots, including unique-index conflict handling.
+- [ ] `/api/health`, `/api/services`, filtered `/api/services`, `/api/bookings/availability`, and POST `/api/bookings` are verified through automated/local HTTP checks.
+- [ ] `/api/contact`, `/api/gallery`, and `/api/admin` route namespaces remain reachable by Express and are not rewritten to the SPA.
+- [ ] `npm run dev` remains valid for local development, with same-origin-style API calls reaching the local server.
+- [ ] Client tests/build/lint and server tests pass.
+- [ ] Required Vercel env vars, root/project settings, MongoDB network requirements, service presence check, and idempotent seed workflow are documented.
+- [ ] Root cause analysis, changed files, deployment actions, and remaining risks are captured in final workflow artifacts and response.
 
 ## 18. Edge Cases And Failure Modes
-- Edge cases: Empty seed, unknown service, API object with stale remote image fields, specific/unknown/`all` gallery filter, fewer/more local images than services, modal item metadata compatibility.
-- Failure modes: Broken public filename, components still preferring API image fields, duplicated paths outside the library, service filter copy implying classification, tests asserting old exact-service alt text.
-- Regression risks: Booking cards or homepage cards lose images; gallery item shape breaks modal/masonry; ServiceDetail expects gallery arrays; server tests encode image URL validation.
-- Recovery expectations: Fix only scoped adapters/components, preserve response aliases, and rerun the exact failing command.
+- Edge cases: Blank/trailing-slash `VITE_API_URL`; deep links; `/api` 404; empty Services collection; serverless cold start/concurrent connection; existing booking race; Sunday/past/invalid date validation; protected admin routes.
+- Failure modes: SPA HTML returned for API calls; requests sent to `/services` instead of `/api/services`; function starts a listener; missing Mongo/admin/JWT env; Atlas network rejection; unseeded database; deployment rooted at `client/` despite root config.
+- Regression risks: Breaking local dev, double `/api/api`, swallowing API routes with SPA rewrite, changing admin auth initialization, or creating duplicate connections.
+- Recovery expectations: Clear JSON/API errors, documented Vercel logs/env checks, idempotent reseed command, rollback-safe config changes.
 
 ## 19. Risks And Mitigations
-- Technical risks: Existing API-driven gallery may bypass local library. Mitigation: make the current frontend display adapter/library authoritative and test behavior against API objects containing remote/service-specific fields.
-- Product/UX risks: Generic semantics could remove useful service context. Mitigation: preserve service names in surrounding business UI and use the exact “considering” filter phrase, never on image classification metadata.
-- Security risks: Low; local assets reduce third-party requests.
-- Scope risks: Backend/media redesign or visual redesign. Mitigation: inspect-only backend default and explicit no-redesign boundary.
-- Mitigation plan: TDD-first helper tests, targeted component tests, repository-wide searches, full regression commands, diff review.
+- Technical risks: Vercel routing syntax/build output mismatch. Mitigation: config tests plus official config semantics and local build inspection.
+- Product/UX risks: Empty database appears as no services. Mitigation: explicit production verification and seed procedure.
+- Security risks: Exposing credentials in config/docs or weakening admin env checks. Mitigation: variable names/examples only; no secrets; preserve auth.
+- Scope risks: Expanding into UI or data redesign. Mitigation: constrain changes to adapters, runtime/config, tests, and docs.
+- Access risk: No Vercel/Mongo credentials and outbound live probe blocked by proxy. Mitigation: verify locally/in tests and provide exact post-deploy checks; clearly label production reachability as requiring operator confirmation.
 
 ## 20. Assumptions
 - Explicit assumptions:
-  - All 15 current files directly under `client/public/images/` are approved curated representative visuals.
-  - Existing backend image fields may remain unchanged and may contain seeded remote values because current frontend rendering will not depend on them.
-  - `SERVICE_IMAGE_FALLBACK` remains a string path for compatibility, while `getDisplayImage` returns the full image object.
-  - Specific gallery service filters may return the full representative set with optional context metadata, but no service/category classification fields attached to the images.
-- Confidence level: High.
-- What to revisit if assumptions are wrong: Approved image subset, fallback type expected by callers, or backend tests requiring local-path schema changes.
+  - Vercel project should be rooted at the repository root.
+  - One domain should serve frontend and API.
+  - Existing MongoDB schemas and API payloads are correct.
+  - Production secrets will be supplied by the deployer.
+  - Current `server/data/services.json` is the intended seed source despite image-content evolution elsewhere.
+- Confidence level: High for repository root causes; medium for live platform/database state due unavailable account/network access.
+- What to revisit if assumptions are wrong: If frontend/backend must remain separate Vercel projects, retain override support and document CORS/origin configuration rather than using root rewrites.
 
 ## 21. Open Questions
-- Blocking questions: None.
-- Non-blocking questions: Exact local filename-to-title pairing can be selected during implementation as long as titles remain generic and truthful.
-- Execution impact: None before planning.
+- Blocking questions: None for implementation after spec approval.
+- Non-blocking questions: Whether the production MongoDB currently contains Service records; whether Vercel project root is presently `client`; whether all env vars are configured; whether Atlas permits Vercel egress.
+- Execution impact: These affect post-deployment operator steps and final reachability evidence, not the repository patch.
 
 ## 22. Task Extraction Notes
 - Suggested vertical task boundaries:
-  - Establish the local representative image library and local service/gallery compatibility contract.
-  - Make preview/render adapters ignore service-owned image authority.
-  - Correct Gallery/Home/Service UI semantics while preserving interactions.
-  - Perform repository-wide regression cleanup and final verification.
-- Suggested first task: Add failing tests for the image library and service compatibility helpers, then implement the local deterministic library.
-- Suggested task ordering: Data/helper contract first, render adapters second, UI copy/semantics third, verification/docs last.
-- Areas that should not become separate tasks: Backend changes without a failing compatibility test; broad styling redesign; unrelated lint cleanup.
-- How the 3-pass Build -> Refine -> Polish loop should apply: Each code task starts with failing focused tests, reaches the smallest passing implementation, then refactors and hardens searches/edge cases before final review.
-
-## 23. Frontend Taste Application
-- Applicable.
-- Detection result and reason: The request changes JSX-rendered headings, descriptions, captions, and alt text across frontend UI surfaces, although it explicitly forbids redesign.
-- Required propagation points: Spec, tasks, implementation evidence, review, verification, release notes, summary, and health check.
-- Applied skill: design-taste-frontend
-- Taste constraint for this request: Preserve existing visual hierarchy/layout/motion and make only semantically required copy/accessibility/data-source edits.
+  - TASK-001: Make the browser and local Vite runtime resolve API calls through a tested `/api` contract.
+  - TASK-002: Add a tested root Vercel/Express serverless deployment path preserving every API namespace and SPA deep links.
+  - TASK-003: Verify services/availability/booking behavior, Mongo/service seeding, and complete deployment documentation and quality gates.
+- Suggested first task: API base contract and development proxy because it defines request URLs consumed by all pages.
+- Suggested task ordering: Client contract -> deployment/serverless route -> database/endpoint/docs/full verification.
+- Areas that should not become separate tasks: UI redesign, schema refactor, or unrelated lint cleanup.
+- How the 3-pass Build -> Refine -> Polish loop should apply: Each code task starts with focused failing tests, implements the smallest behavior, then hardens edge cases/config semantics and runs regression checks in each iteration.

@@ -1,23 +1,27 @@
-# Release Notes — Representative Local Image Library
+# Release Notes — Production Booking and Services Repair
 
-## Changed
-- Added one curated representative image library backed by all existing files in `client/public/images/`.
-- Service display images now derive deterministically from service ids without classifying images as exact services.
-- Gallery, service, homepage, and booking imagery now uses local public paths only.
-- Gallery filters remain service consideration context while showing the shared inspiration library.
-- Updated UI labels, disclaimers, captions, and alt text to make representative usage explicit.
-- Removed representative imagery from named testimonial portraits and retained initials instead.
+## Fixed
+- Browser API requests now default to same-origin `/api` when `VITE_API_URL` is missing or blank.
+- Local Vite development proxies `/api/*` to Express.
+- Root Vercel deployment now builds the client and routes API requests to a serverless Express function before SPA fallback.
+- Removed the conflicting client-only Vercel rewrite.
+- Public availability and booking validation now use MongoDB service eligibility instead of a stale hard-coded service-name list.
+- Mongo unique-index races continue to return a user-safe 409 duplicate-slot response.
+- Service seeding now requires only `MONGODB_URI`.
+- `npm run dev` now has its required `nodemon` dependency.
 
-## Preserved
-- Service categories, descriptions, prices, durations, featured/booking/gallery/status flags.
-- Booking links and workflow.
-- Gallery masonry and modal UX.
-- Existing backend service/gallery image fields and API response compatibility for future real client photos.
+## Deployment actions
+1. Set Vercel Root Directory to repository root (`.`).
+2. Configure `MONGODB_URI`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and `JWT_SECRET` for Production/Preview as needed.
+3. Leave `VITE_API_URL` unset for same-origin production routing.
+4. Ensure MongoDB Atlas permits Vercel connections.
+5. Redeploy.
+6. Run README health/services/availability/booking checks.
+7. If services are empty, run `npm run seed:services` against the production URI.
 
-## Verification
-- 63 backend tests passed.
-- 112 frontend tests passed.
-- Client production build and ESLint passed.
-- 15 local image paths validated.
+## Compatibility
+- Existing API response shapes, React pages, TanStack Query hooks, admin auth, and booking duplicate key remain compatible.
+- No UI redesign or schema migration.
 
-Applied skill: design-taste-frontend
+## Known operational requirement
+Current production was not redeployed from this environment, and outbound endpoint probes were blocked. Production success must be confirmed after deployment with the documented commands.

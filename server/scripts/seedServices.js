@@ -2,7 +2,7 @@ require("dotenv").config({ quiet: true });
 
 const path = require("path");
 const { connectDatabase, disconnectDatabase } = require("../config/db");
-const { getEnv } = require("../config/env");
+const { getMongoDbUri } = require("../config/env");
 const Service = require("../models/Service");
 
 function loadServicesFromJson() {
@@ -31,8 +31,7 @@ async function seedServices({ services = loadServicesFromJson(), ServiceModel = 
 }
 
 async function runSeedServices() {
-  const { mongodbUri } = getEnv();
-  await connectDatabase(mongodbUri);
+  await connectDatabase(getMongoDbUri());
 
   try {
     const result = await seedServices();

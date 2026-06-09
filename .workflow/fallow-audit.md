@@ -1,42 +1,42 @@
 # Fallow Audit
 
 ## Metadata
-- Date: 2026-06-08
-- Scope: representative local image library frontend refactor
+- Date: 2026-06-09
+- Scope: booking/services production repair
 - Commands:
   - `FALLOW_AGENT_SOURCE=codex npx fallow audit --base HEAD --format json --quiet --explain 2>/dev/null || true`
   - `FALLOW_AGENT_SOURCE=codex npx fallow health --format json --quiet --explain 2>/dev/null || true`
-- Fallow version: 2.89.0
+- Fallow version: 2.91.0
 - Schema version: 7
 
 ## Result
 - Verdict: PARTIAL
 - Changed-code audit verdict: `fail`
-- Health score: 75.2 / 100 (B)
-- Files analyzed: 126
-- Average maintainability: 90.3
+- Health score: 74.4 / 100 (B)
+- Files analyzed: 129
+- Average maintainability: 89.9
 - Circular dependencies: 0
 - Boundary violations: 0
 - Unresolved imports/unlisted dependencies: 0
 
 ## Cleanup And Dependency Findings
-- Five dead-code findings were reported: three inherited compatibility helper exports in `client/src/data/services.js` and two duplicate export-name groupings (`getGalleryItems`, `SERVICE_IMAGE_FALLBACK`).
-- The helper exports are retained for legacy/local compatibility and tests; the duplicate names exist in separate data and API-service namespaces with different responsibilities.
-- No unused package, unresolved import, unlisted dependency, circular dependency, re-export cycle, or boundary violation was reported.
+- Fallow reported `api/index.js` and Jest test files as unused because Vercel/Jest entrypoints are outside its static import graph. They are required and directly exercised by deployment/serverless tests.
+- No unused dependency, unresolved import, unlisted dependency, circular dependency, re-export cycle, or boundary violation was reported.
 
 ## Complexity And Duplication
-- No changed-code complexity finding was introduced.
-- Four duplication groups were attributed as introduced, primarily expected repeated metadata/assertion structures in focused tests and representative UI labels. They do not indicate divergent image authority.
-- Existing repository complexity hotspots remain outside this request; the required tests, lint, and build all pass.
+- One introduced moderate static complexity/CRAP finding was reported for `getAvailability`; the function is covered by booking API tests, but Fallow's static estimated coverage does not recognize the Jest mock path.
+- Two introduced duplication groups are test/config assertion repetition. Existing controller/test duplication was also reported. No extraction is warranted within this minimal production fix.
+- Existing Booking UI and service-validation hotspots remain outside scope.
 
 ## Changed-Code Risk
-- New image/data behavior has focused TDD coverage and all 112 frontend plus 63 backend tests pass.
-- Vite build and ESLint pass.
-- Static audits prove 15 local image paths exist, production paths are centralized, and no frontend remote Pexels URL or service-gallery authority remains.
+- Server 71/71 and client 116/116 tests pass.
+- Client build and lint pass.
+- Production dependency audit reports zero vulnerabilities.
+- Root config, function entrypoint, API JSON behavior, Mongo-backed service eligibility, and duplicate protection have focused tests.
 
 ## Recommended Follow-Up
-- Optionally configure intentional compatibility exports/namespace duplicates in Fallow.
-- Optionally refactor existing repository complexity hotspots in separate scoped work.
+- Optionally configure Fallow entrypoints for `api/index.js` and Jest files.
+- Address existing complexity hotspots only in separately scoped refactors.
 
 ## Final Verdict
-PARTIAL — Fallow reports intentional compatibility/namespace export findings and test duplication, but no correctness, import, dependency, circular, boundary, or changed-code complexity blocker.
+PARTIAL — static entrypoint/coverage/duplication findings remain, but no correctness, dependency, circular, boundary, import, build, lint, or tested changed-code blocker was found.

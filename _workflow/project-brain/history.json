@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-06-08T23:17:15Z",
+  "updatedAt": "2026-06-09T23:30:00Z",
   "events": [
     {
       "id": "history-20260607-spec",
@@ -50,6 +50,32 @@
         "artifact": "_workflow/runs/work/summary.md",
         "conversation": "workflow"
       }
+    },
+    {
+      "id": "history-booking-services-spec-20260609",
+      "timestamp": "2026-06-09T22:45:00Z",
+      "type": "spec-saved",
+      "runId": "work",
+      "summary": "Production booking/services repair spec saved at approval gate.",
+      "artifacts": [
+        "_workflow/runs/work/request.md",
+        "_workflow/runs/work/spec.md",
+        "_workflow/runs/work/handoff.md"
+      ]
+    },
+    {
+      "id": "history-complete-booking-services-20260609",
+      "timestamp": "2026-06-09T23:30:00Z",
+      "type": "workflow-complete",
+      "runId": "work",
+      "summary": "Production booking/services repository repair completed; external deployment verification remains.",
+      "artifacts": [
+        "_workflow/runs/work/review.md",
+        "_workflow/runs/work/verification.md",
+        "_workflow/runs/work/release-notes.md",
+        "_workflow/runs/work/summary.md",
+        ".workflow/fallow-audit.md"
+      ]
     }
   ]
 }
