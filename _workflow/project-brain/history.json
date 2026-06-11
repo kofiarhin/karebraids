@@ -1,7 +1,46 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-06-10T23:40:00+01:00",
+  "updatedAt": "2026-06-11T07:20:15+01:00",
   "events": [
+    {
+      "id": "history-complete-gallery-filter-navigation-20260611",
+      "timestamp": "2026-06-11T07:20:15+01:00",
+      "runId": "dev",
+      "type": "workflow-complete",
+      "summary": "Completed Gallery backend filtering and modal navigation with full automated, browser, review, and Fallow verification.",
+      "artifacts": [
+        "_workflow/runs/dev/review.md",
+        "_workflow/runs/dev/verification.md",
+        "_workflow/runs/dev/release-notes.md",
+        "_workflow/runs/dev/summary.md",
+        ".workflow/fallow-audit.md"
+      ]
+    },
+    {
+      "id": "history-gallery-filter-navigation-plan-20260611",
+      "timestamp": "2026-06-11T06:38:02+01:00",
+      "runId": "dev",
+      "type": "task-plan-saved",
+      "summary": "Explicit spec approval recorded and Gallery filtering/navigation task plan saved.",
+      "artifacts": [
+        "_workflow/runs/dev/tasks.md",
+        "_workflow/runs/dev/handoff.md",
+        "_workflow/runs/dev/progress.md"
+      ]
+    },
+    {
+      "id": "history-gallery-filter-navigation-spec-20260611",
+      "timestamp": "2026-06-11T06:30:50+01:00",
+      "runId": "dev",
+      "type": "spec-saved",
+      "summary": "Gallery backend filtering and modal navigation spec saved; prior context-only filtering decision resolved as superseded.",
+      "artifacts": [
+        "_workflow/runs/dev/request.md",
+        "_workflow/runs/dev/spec.md",
+        "_workflow/runs/dev/handoff.md",
+        "_workflow/runs/dev/brain.json"
+      ]
+    },
     {
       "id": "history-complete-public-gsap-20260610",
       "timestamp": "2026-06-10T23:40:00+01:00",

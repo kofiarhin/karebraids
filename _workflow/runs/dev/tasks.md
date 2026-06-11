@@ -1,175 +1,238 @@
-# Task Plan: Reusable Public GSAP Animation System
+# Task Plan: Gallery Backend Filtering And Modal Navigation
 
 - Spec file used: `_workflow/runs/dev/spec.md`
-- Planning date: 2026-06-10
+- Planning date: 2026-06-11
+- Explicit approval received: `approve spec`
 - Execution mode: `complete-workflow`
 - Progress read: `_workflow/runs/dev/progress.md`
 - Summary read: `_workflow/runs/dev/summary.md`
 - Handoff read: `_workflow/runs/dev/handoff.md`
 - Applied skill: design-taste-frontend
-- Detailed spec sections used: Current State Analysis, Desired End State, Scope, Functional Requirements, Non-Functional Requirements, Affected Surfaces, Dependency And Integration Map, UX Expectations, Execution Strategy, Verification Strategy, Acceptance Criteria, Edge Cases, Risks, Assumptions, and Task Extraction Notes.
 
-## TASK-001: Add the reusable GSAP animation foundation
+## Spec Basis
+
+This plan derives from spec sections 5-7, 9, 11-19, and 22: existing Gallery/TanStack Query behavior, backend response contract, index-based modal state, accessibility, responsive control placement, test-first verification, edge cases, and the no-backend-redesign boundary.
+
+### TASK-001: Fetch Gallery items from the backend
 
 - Status: Done
-- Objective: Install GSAP dependencies and add centralized, reduced-motion-aware, scoped animation hooks and components.
+- Objective: Make `getGalleryItems({ limit, service })` use backend `/gallery` data with normalized query parameters and a safe empty-array response.
 - Files likely affected:
-  - `client/package.json`
-  - `client/package-lock.json`
-  - `client/src/animations/gsapSetup.js`
-  - `client/src/hooks/useReducedMotion.js`
-  - `client/src/hooks/useScrollReveal.js`
-  - `client/src/components/animations/*.jsx`
-  - `client/test/animation-system.test.jsx`
+  - `client/test/service-api.test.js`
+  - `client/src/services/galleryService.js`
 - Checklist:
-  - [x] Add `gsap` and `@gsap/react`.
-  - [x] Register ScrollTrigger and `useGSAP` once.
-  - [x] Add reusable motion defaults.
-  - [x] Add reactive reduced-motion hook.
-  - [x] Add PageTransition, Reveal, StaggerReveal, ImageReveal, and ParallaxLayer.
-  - [x] Keep content visible if motion is disabled or unavailable.
-- Iteration 1 Build: Test exports/rendering/reduced-motion fallback first, then add minimal primitives.
-- Iteration 2 Refine: Test scoped selectors and rerender/unmount cleanup behavior, then harden refs and dependencies.
-- Iteration 3 Polish: Test component variants and accessible DOM preservation, then simplify APIs and motion defaults.
-- Test plan: `npm run test --prefix client -- animation-system.test.jsx`
-- Red phase evidence: `animation-system.test.jsx` initially failed before the reusable setup/primitives existed.
-- Green phase evidence: centralized setup, hooks, and primitives passed the focused suite.
-- Refactor phase evidence: repeated reduced-motion test setup was extracted after Fallow identified duplication.
-- Test commands run: focused animation tests and client lint passed.
+  - [x] Add failing focused service tests first.
+  - [x] Call `api.get('/gallery')` with normalized `limit` and `service`.
+  - [x] Return `response.data.galleryItems || []`.
+  - [x] Remove local image-library use from `getGalleryItems()`.
+  - [x] Keep `getGalleryServices()` unchanged.
+- Iteration 1 Build:
+  - Goal: Prove valid limit/service parameters and backend item extraction.
+  - Changes made: Added a backend item retrieval test, then replaced local library mapping/slicing with `api.get('/gallery')`.
+  - Test plan: focused `service-api.test.js`.
+  - Red phase evidence: Focused test failed because local curated items were returned and `api.get` was not used.
+  - Green phase evidence: Focused suite passed, 4 tests.
+  - Refactor phase evidence: Removed the now-unused local image-library import; focused suite remained passing.
+  - Test commands run: `npm run test --prefix client -- test/service-api.test.js`.
+  - Verification command/result: passed.
+  - Review findings: Change follows existing `getGallery()` API-client pattern and leaves `getGalleryServices()` unchanged.
+  - Acceptance status: met.
+  - Remaining issues: none.
+  - Next action: add edge-case coverage.
+- Iteration 2 Refine:
+  - Goal: Prove invalid inputs normalize to undefined and missing items return `[]`.
+  - Changes made: Added invalid option normalization and missing `galleryItems` fallback coverage.
+  - Test plan: focused service edge-case tests.
+  - Red phase evidence: Missing-test exception: these edge cases were already satisfied by the minimal Build implementation; no further production change was required.
+  - Green phase evidence: Focused suite passed, 5 tests.
+  - Refactor phase evidence: No code refactor required; rerun remained passing.
+  - Test commands run: `npm run test --prefix client -- test/service-api.test.js`.
+  - Verification command/result: passed.
+  - Review findings: Invalid options become undefined and absent items become `[]`.
+  - Acceptance status: met.
+  - Remaining issues: none.
+  - Next action: lint and final task review.
+- Iteration 3 Polish:
+  - Goal: Confirm imports and API-client style match existing conventions.
+  - Changes made: Reviewed imports, naming, and API call shape; no additional code change.
+  - Test plan: focused service suite plus lint.
+  - Red phase evidence: Verification-only exception; no new behavior was introduced in Polish.
+  - Green phase evidence: Focused suite passed.
+  - Refactor phase evidence: ESLint passed after final review.
+  - Test commands run: focused test and focused lint commands.
+  - Verification command/result: passed.
+  - Review findings: No local Gallery item source remains in the service.
+  - Acceptance status: met.
+  - Remaining issues: none.
+  - Next action: TASK-002.
+- Test plan: service unit tests with mocked shared API.
+- Red phase evidence: observed expected local-data failure.
+- Green phase evidence: 5 focused tests passed.
+- Refactor phase evidence: focused tests and lint passed.
+- Test commands run: `npm run test --prefix client -- test/service-api.test.js`; `npm run lint --prefix client -- src/services/galleryService.js test/service-api.test.js`.
 - Acceptance criteria:
-  - [x] Central setup and all specified reusable primitives exist.
-  - [x] Reduced motion bypasses GSAP motion and leaves content visible.
-  - [x] Components preserve semantic elements/classes and scope animation to local refs.
-- Acceptance result: all criteria met through Build, Refine, and Polish.
-- Verification commands: focused test, client lint.
-- Stop condition: dependency installation fails or primitives cannot render safely in jsdom.
-- Out-of-scope items: page-specific animation tuning.
+  - [x] Valid `limit` and trimmed `service` are sent to `/gallery`.
+  - [x] Invalid inputs normalize to undefined.
+  - [x] Backend `galleryItems` is returned and missing data yields `[]`.
+  - [x] Local `getGalleryImageItems()` is not used.
+- Acceptance result: complete.
+- Verification commands:
+  - `npm run test --prefix client -- test/service-api.test.js`
+  - `npm run lint --prefix client`
+- Stop condition: API shape or shared-client behavior differs from the approved spec.
+- Out-of-scope items: backend/controller/schema changes.
 
-## TASK-002: Add public-only route transitions and common section reveals
+### TASK-002: Add cyclic modal navigation within filtered results
 
 - Status: Done
-- Objective: Animate incoming public route content and replace the global homepage IntersectionObserver reveal path while excluding `/admin`.
+- Objective: Track the selected Gallery image by index and support cyclic side-control and keyboard navigation while preserving close/focus/filter behavior.
 - Files likely affected:
-  - `client/src/App.jsx`
-  - `client/src/components/Layout.jsx`
-  - `client/src/components/animations/PublicRouteTransition.jsx`
-  - `client/src/hooks/useRevealOnScroll.js`
-  - `client/src/pages/Home.jsx`
-  - route tests
-- Checklist:
-  - [x] Put public routes under a transition boundary.
-  - [x] Keep `/admin` as a sibling route outside that boundary.
-  - [x] Key incoming transitions by pathname.
-  - [x] Replace global document reveal queries with scoped GSAP behavior.
-- Iteration 1 Build: Add failing route-structure tests, then implement the public route shell.
-- Iteration 2 Refine: Add failing reduced-motion/admin exclusion tests, then harden route keys and fallback behavior.
-- Iteration 3 Polish: Add regression assertions for scroll restoration and semantic layout, then remove legacy reveal coupling.
-- Test plan: focused animation and route/page tests.
-- Red phase evidence: route tests initially had no public transition marker or Admin exclusion assertion.
-- Green phase evidence: public nested routes render the keyed transition/reveal boundary; Admin remains outside.
-- Refactor phase evidence: the legacy global IntersectionObserver hook was removed.
-- Test commands run: animation, public-page, and Admin suites plus lint passed.
-- Acceptance criteria:
-  - [x] Public route transitions exist and do not delay navigation.
-  - [x] `/admin` receives no decorative animation wrapper.
-  - [x] No global `document.querySelectorAll('[data-reveal]')` animation path remains.
-- Acceptance result: all criteria met through Build, Refine, and Polish.
-- Verification commands: focused tests, lint.
-- Stop condition: route behavior or admin login rendering regresses.
-- Out-of-scope items: page-level visual choreography.
-
-## TASK-003: Apply consistent motion to every public page
-
-- Status: Done
-- Objective: Use reusable primitives across Home, About, Services, Service Detail, Booking, and Contact with restrained Booking behavior.
-- Files likely affected:
-  - public page files
-  - selected `components/home/*`
-  - selected `components/about/*`
-  - `client/src/index.css`
-  - public page tests
-- Checklist:
-  - [x] Add section/text/image/stagger motion to every public page except Gallery.
-  - [x] Animate async lists when they render.
-  - [x] Keep Booking controls immediately interactive.
-  - [x] Avoid duplicated page-local GSAP timelines.
-- Iteration 1 Build: Add public-page coverage assertions, then wrap major page sections and lists.
-- Iteration 2 Refine: Add async/loading/empty and Booking interaction regression tests, then harden dynamic rendering.
-- Iteration 3 Polish: Add reduced-motion/mobile CSS assertions and tune durations/distances.
-- Test plan: site pages, booking flow, contact, service detail, homepage, About.
-- Red phase evidence: public-page coverage initially lacked shared motion boundaries and dynamic item markers.
-- Green phase evidence: all public routes use `ScopedPageReveals`; async additions are observed locally.
-- Refactor phase evidence: per-page code was limited to declarative `data-motion-item` markers.
-- Test commands run: full client tests, Booking focused tests, lint, and browser route checks passed.
-- Acceptance criteria:
-  - [x] `/`, `/about`, `/services`, `/services/:slug`, `/booking`, and `/contact` use reusable animation primitives.
-  - [x] Booking remains immediately usable.
-  - [x] Existing UI, copy, API behavior, and tests remain intact.
-- Acceptance result: all criteria met through Build, Refine, and Polish.
-- Verification commands: focused suites, lint.
-- Stop condition: public interaction behavior changes.
-- Out-of-scope items: Gallery-specific choreography.
-
-## TASK-004: Make Gallery the strongest motion showcase
-
-- Status: Done
-- Objective: Add richer but restrained Gallery image, parallax, hover, and existing-modal motion while preserving accessibility.
-- Files likely affected:
+  - `client/test/gallery-modal.test.jsx`
+  - `client/test/gallery-query.test.jsx`
   - `client/src/pages/Gallery.jsx`
   - `client/src/components/GalleryModal.jsx`
-  - `client/src/index.css`
-  - Gallery tests
 - Checklist:
-  - [x] Stagger Gallery cards.
-  - [x] Add image mask/scale reveals and shallow parallax.
-  - [x] Preserve hover zoom without transform conflicts.
-  - [x] Animate existing modal surface/image.
-  - [x] Preserve Escape, backdrop, close button, body lock, and focus restoration.
-- Iteration 1 Build: Add failing Gallery primitive/modal animation tests, then implement entry motion.
-- Iteration 2 Refine: Add close/focus/reduced-motion regressions, then harden lifecycle and cleanup.
-- Iteration 3 Polish: Tune mobile/parallax/hover behavior and run design-taste review.
-- Test plan: Gallery page/query/modal suites and animation tests.
-- Red phase evidence: Gallery tests initially lacked stagger/image/parallax/modal motion markers.
-- Green phase evidence: Gallery cards and existing modal use scoped reusable GSAP motion.
-- Refactor phase evidence: wrapper CSS composes parallax and hover transforms; reduced motion clears both.
-- Test commands run: Gallery modal tests, full client tests, lint, and browser visual checks passed.
+  - [x] Add failing navigation and filter-reset tests first.
+  - [x] Replace selected-object state with nullable selected index.
+  - [x] Derive current item from `galleryItems`.
+  - [x] Add cyclic previous/next callbacks.
+  - [x] Pass navigation availability, callbacks, index, and count.
+  - [x] Add side controls and required aria labels.
+  - [x] Add ArrowLeft/ArrowRight support and preserve Escape.
+  - [x] Hide navigation for one image.
+  - [x] Preserve backdrop close and opening-card focus restoration.
+- Iteration 1 Build:
+  - Goal: Add controls and prove click wraparound.
+  - Changes made: Added failing control/wrap test; implemented index state, cyclic callbacks, and Phosphor side controls.
+  - Test plan: focused modal tests.
+  - Red phase evidence: Modal suite failed because no previous control existed.
+  - Green phase evidence: Click wraparound passed after page/modal implementation.
+  - Refactor phase evidence: Updated existing `aria-describedby` regression to include image position; 5 tests passed.
+  - Test commands run: focused modal suite.
+  - Verification command/result: passed.
+  - Review findings: Navigation uses modulo arithmetic against current `galleryItems`.
+  - Acceptance status: met.
+  - Remaining issues: keyboard/single/filter coverage.
+  - Next action: refine accessibility.
+- Iteration 2 Refine:
+  - Goal: Prove ArrowLeft/ArrowRight, Escape, count text, and single-image behavior.
+  - Changes made: Added arrow-key, image-position, and single-image tests.
+  - Test plan: focused keyboard/accessibility tests.
+  - Red phase evidence: Missing-test exception: keyboard and single-image behavior were implemented in the minimal Build change; refinement added explicit regression coverage without further production changes.
+  - Green phase evidence: Modal suite passed, 7 tests.
+  - Refactor phase evidence: Key listener dependencies and required labels reviewed; suite remained passing.
+  - Test commands run: focused modal suite.
+  - Verification command/result: passed.
+  - Review findings: Escape remains first close path; arrow keys prevent default only when navigation is available.
+  - Acceptance status: met.
+  - Remaining issues: filter integration.
+  - Next action: prove filter reset.
+- Iteration 3 Polish:
+  - Goal: Prove filter changes close the modal and focus restoration remains correct.
+  - Changes made: Replaced stale context-only fixture with filtered backend results and added filter-change modal-close test.
+  - Test plan: Gallery query integration and modal regression tests.
+  - Red phase evidence: Existing test encoded the superseded full-gallery behavior; it was intentionally replaced. Filter-reset behavior was already part of Build, so no separate production Red was available.
+  - Green phase evidence: Gallery query suite passed, 7 tests.
+  - Refactor phase evidence: Focused lint passed for page, modal, and tests.
+  - Test commands run: focused query suite and focused lint.
+  - Verification command/result: passed; jsdom emitted existing non-fatal `scrollTo` notices.
+  - Review findings: URL state and selected-service intro remain intact; filter handler clears modal state and stale trigger.
+  - Acceptance status: met.
+  - Remaining issues: visual control styling.
+  - Next action: TASK-003.
+- Test plan: React Testing Library mouse, keyboard, URL/filter, and focus tests.
+- Red phase evidence: missing controls observed in focused test.
+- Green phase evidence: modal and query suites each pass 7 tests.
+- Refactor phase evidence: focused lint passed.
+- Test commands run: focused modal/query suites and lint.
 - Acceptance criteria:
-  - [x] Gallery is visibly richer than other pages without flashy effects.
-  - [x] Existing modal accessibility and focus behavior remain correct.
-  - [x] Reduced motion and mobile disable or minimize expensive movement.
-- Acceptance result: all criteria met through Build, Refine, and Polish.
-- Verification commands: focused Gallery tests, lint, browser checks.
-- Stop condition: modal close or focus restoration cannot be proven.
-- Out-of-scope items: new Gallery navigation or modal features.
+  - [x] Side controls appear only with multiple images.
+  - [x] Next/previous wrap at array boundaries.
+  - [x] Arrow keys navigate and Escape closes.
+  - [x] Backdrop and close button still close.
+  - [x] Closing restores opening-card focus.
+  - [x] Filter changes close/reset the modal.
+  - [x] Dialog and required aria labels remain.
+- Acceptance result: complete.
+- Verification commands:
+  - `npm run test --prefix client -- test/gallery-modal.test.jsx`
+  - `npm run test --prefix client -- test/gallery-query.test.jsx`
+- Stop condition: Existing modal animation or focus semantics cannot be preserved safely.
+- Out-of-scope items: swipe gestures, focus-trap redesign, thumbnails, autoplay.
 
-## TASK-005: Verify the complete animation system and close the workflow
+### TASK-003: Polish controls and complete verification
 
 - Status: Done
-- Objective: Run requested install/test/build commands, browser checks, review, Fallow Quality, diff audit, and final workflow artifacts.
+- Objective: Place usable responsive modal navigation controls without redesigning the modal, then complete full regression and workflow closeout.
 - Files likely affected:
-  - `_workflow/runs/dev/*`
-  - `.workflow/fallow-audit.md`
-  - `.workflow/artifacts/polish-ui/*`
+  - `client/src/index.css`
+  - `client/test/site-pages.test.jsx` only if CSS regression coverage is needed
+  - Workflow review/verification/release/summary artifacts
 - Checklist:
-  - [x] Run requested installs.
-  - [x] Run server and client tests.
-  - [x] Run client lint and build.
-  - [x] Check all public routes, Admin exclusion, reduced motion, Gallery modal, Booking, mobile, and console.
-  - [x] Run final diff audit.
-  - [x] Create review, verification, Fallow audit, release notes, summary, and final handoff.
-- Iteration 1 Build: Run focused and full automated verification; recover in-scope failures.
-- Iteration 2 Refine: Run browser desktop/mobile/reduced-motion checks and fix in-scope defects.
-- Iteration 3 Polish: Run final review, Fallow, diff/security/scope audit, and health check.
-- Test plan: all commands in spec section 16.
-- Red phase evidence: verification/documentation task; missing-test exception unless a defect requires a new regression test.
-- Green phase evidence: requested installs, 71 server tests, 120 client tests, lint, and production build passed.
-- Refactor phase evidence: fixed the discovered 390px Booking overflow and removed an unintended `file:..` install artifact.
-- Test commands run: requested matrix, browser route/reduced-motion/mobile checks, Fallow, and git audits.
+  - [x] Add failing CSS regression assertion first where practical.
+  - [x] Vertically center left/right controls.
+  - [x] Keep controls visible on desktop and touch-usable on mobile.
+  - [x] Preserve existing modal and reduced-motion styling.
+  - [x] Run focused and full verification.
+  - [x] Run browser review against the local backend.
+  - [x] Run final diff audit and prepare workflow closeout.
+- Iteration 1 Build:
+  - Goal: Add scoped desktop/mobile navigation styling.
+  - Changes made: Added vertically centered modal side controls, hover/focus states, desktop offsets, and mobile inset sizing.
+  - Test plan: CSS regression test and focused modal tests.
+  - Red phase evidence: The new `site-pages` assertion failed because `.gallery-modal-nav` did not exist.
+  - Green phase evidence: Site page suite passed, 29 tests, after scoped CSS was added.
+  - Refactor phase evidence: Modal and responsive selectors were reviewed against existing styling conventions; focused Gallery/service suites passed, 19 tests.
+  - Test commands run: focused `site-pages`, modal, query, and service suites.
+  - Verification command/result: passed.
+  - Review findings: Controls are centered with `top: 50%`/`translateY(-50%)`; mobile controls remain at least 44px and inset over the image.
+  - Acceptance status: met.
+  - Remaining issues: visual fixed-position behavior required browser verification.
+  - Next action: browser refinement.
+- Iteration 2 Refine:
+  - Goal: Verify responsive usability and GSAP/reduced-motion preservation.
+  - Changes made: Portaled the modal backdrop to `document.body` after browser verification exposed fixed-position containment inside the transformed GSAP route wrapper; added a portal regression assertion.
+  - Test plan: browser/code-surface review plus focused tests.
+  - Red phase evidence: Real-browser inspection showed the modal rendered roughly 5,857px below the viewport because a transformed ancestor captured fixed positioning.
+  - Green phase evidence: Portal rendering restored viewport-fixed behavior; desktop and 390px mobile screenshots show visible, usable side controls.
+  - Refactor phase evidence: Added a focused assertion that the modal backdrop is a direct child of `document.body`; modal suite passed, 7 tests, and focused lint passed.
+  - Test commands run: focused modal/query tests and lint; Playwright desktop/mobile smoke flows.
+  - Verification command/result: passed.
+  - Review findings: Next/previous click and arrow navigation wrap correctly, Escape closes, filter changes close the modal, and focus returns to the opening card.
+  - Acceptance status: met.
+  - Remaining issues: none.
+  - Next action: full verification.
+- Iteration 3 Polish:
+  - Goal: Complete all requested tests/build/lint and final quality gates.
+  - Changes made: Completed full checks, failure recovery, browser console review, final regression assertion, and temporary process/log cleanup.
+  - Test plan: complete repository verification.
+  - Red phase evidence: Verification-only exception. One unrelated Contact test timed out when all checks ran concurrently under load.
+  - Green phase evidence: The exact Contact suite passed 7/7, then the full client suite passed 127/127 when rerun alone.
+  - Refactor phase evidence: Final modal portal assertion passed; Fallow-driven modal-state/test-helper extraction cleared all introduced findings; full lint, build, server tests, and client tests remain green.
+  - Test commands run: client lint; client build; server tests; full client tests; focused Contact recovery; focused portal regression.
+  - Verification command/result: passed: 127 client tests, 71 server tests, lint, and production build.
+  - Review findings: Vite retains the existing non-blocking chunk-size warning; browser console recorded zero errors and zero warnings; Fallow verdict is `pass`.
+  - Acceptance status: met.
+  - Remaining issues: none in scope.
+  - Next action: review, Fallow Quality, release notes, summary, and health check.
+- Test plan: focused modal/CSS tests, full client suite, server suite, lint, build, browser smoke.
+- Red phase evidence: missing CSS selector and transformed-ancestor browser defect observed before fixes.
+- Green phase evidence: focused and full suites pass; browser behavior meets the approved spec.
+- Refactor phase evidence: portal regression, lint, build, and all tests pass.
+- Test commands run: focused Vitest suites; `npm run lint --prefix client`; `npm run build --prefix client`; `npm run test`; `npm run test --prefix client`.
 - Acceptance criteria:
-  - [x] Requested commands pass.
-  - [x] No console errors, broken routes, Admin animation, or mobile interaction regression.
-  - [x] All workflow artifacts and evidence are complete.
-- Acceptance result: all criteria met through Build, Refine, and Polish.
-- Verification commands: full requested matrix, browser automation, Fallow, git diff/status.
-- Stop condition: required verification cannot run or a blocking regression remains.
-- Out-of-scope items: unrelated cleanup.
+  - [x] Controls are centered at modal sides on desktop.
+  - [x] Controls are usable on mobile.
+  - [x] Existing modal visual design and GSAP/reduced-motion behavior remain.
+  - [x] Full client/server tests, lint, and build pass.
+  - [x] Final implementation and browser audits are complete.
+- Acceptance result: complete.
+- Verification commands:
+  - `npm run lint --prefix client`
+  - `npm run test --prefix client`
+  - `npm run build --prefix client`
+  - `npm run test`
+  - `git diff --stat`
+  - `git diff`
+- Stop condition: Required verification cannot prove the feature or reveals an in-scope regression that cannot be safely fixed.
+- Out-of-scope items: unrelated CSS cleanup, bundle optimization, backend changes.

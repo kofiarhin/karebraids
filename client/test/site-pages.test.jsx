@@ -245,6 +245,19 @@ describe('KareBraids pages', () => {
     expect(styles).toContain('.gallery-feature-card:nth-child(2),\n  .gallery-feature-card:nth-child(5) {\n    transform: none;')
   })
 
+  it('positions gallery modal navigation at the image sides with a mobile override', () => {
+    const styles = homeStyles()
+
+    expect(styles).toContain('.gallery-modal-nav {')
+    expect(styles).toContain('top: 50%;')
+    expect(styles).toContain('transform: translateY(-50%);')
+    expect(styles).toContain('.gallery-modal-nav-previous {')
+    expect(styles).toContain('.gallery-modal-nav-next {')
+    expect(styles).toContain('@media (max-width: 560px)')
+    expect(styles).toContain('.gallery-modal-nav-previous {\n    left: 0.5rem;')
+    expect(styles).toContain('.gallery-modal-nav-next {\n    right: 0.5rem;')
+  })
+
   it('keeps decorative homepage imagery quiet for assistive technology', () => {
     renderRoute('/')
 

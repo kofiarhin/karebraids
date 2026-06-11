@@ -1,7 +1,28 @@
 {
   "version": "1.0.0",
-  "updatedAt": "",
-  "conflicts": [],
+  "updatedAt": "2026-06-11T06:30:50+01:00",
+  "conflicts": [
+    {
+      "id": "conflict-gallery-filter-classification-20260611",
+      "status": "resolved",
+      "category": "technicalDecisions",
+      "existingItemIds": [
+        "decision-gallery-context-not-classification"
+      ],
+      "incomingItemId": "decision-gallery-backend-filtering",
+      "detectedAt": "2026-06-11T06:30:50+01:00",
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "summary": "Prior memory treated Gallery service choice as context-only; the current explicit request requires backend service-filtered results.",
+      "resolution": "Promoted the direct user correction, superseded the prior context-only decision, and retained representative-image wording as an active presentation constraint.",
+      "resolvedBy": "explicit user correction",
+      "resolvedAt": "2026-06-11T06:30:50+01:00",
+      "history": []
+    }
+  ],
   "conflictRecordSchema": {
     "id": "",
     "status": "open",

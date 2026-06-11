@@ -1,242 +1,224 @@
-# Detailed Spec: Reusable Public GSAP Animation System
+# Detailed Spec: Gallery Backend Filtering And Modal Navigation
 
 ## 1. Metadata
 - Spec filename: `_workflow/runs/dev/spec.md`
-- Date: 2026-06-10
-- Request ID / slug: `public-gsap-animation-system`
+- Date: 2026-06-11
+- Request ID / slug: `gallery-filter-modal-navigation`
 - Request source: direct user prompt
 - Execution mode: `complete-workflow`
-- Request classification: frontend animation architecture and UI polish
-- Scope level: cross-page client feature
+- Request classification: frontend data integration and accessible interaction fix
+- Scope level: focused client feature
 - Risk level: medium
 
 ## 2. Original Request
-- Raw user request: Implement a reusable GSAP animation system across all public KareBraids pages, excluding admin, with route transitions, scroll reveals, Gallery emphasis, Booking restraint, reduced-motion support, cleanup, and full verification.
-- Normalized request: Add GSAP dependencies and a centralized, reusable, scoped animation layer for all public routes while preserving behavior and excluding `/admin`.
+- Raw user request: Fix Gallery service filtering by using backend `GET /gallery?service=<slug>` and add cyclic previous/next modal navigation with mouse, keyboard, focus restoration, responsive controls, and preserved GSAP behavior.
+- Normalized request: Replace local Gallery item lookup with the existing backend Gallery contract, then make the Gallery modal index-driven and cyclic within the active filtered result set.
 - Source prompt / `<artifact-root>/request.md` reference: `_workflow/runs/dev/request.md`
 
 ## 3. Questions And Answers
-- Questions asked: none
-- Answers received: not applicable
-- Questions skipped: none; the request already defines the required decisions
-- Remaining open questions: none blocking
+- Questions asked: none.
+- Answers received: not applicable.
+- Questions skipped: none; the prompt, code, tests, and backend contract resolve the implementation decisions.
+- Remaining open questions: none blocking.
 
 ## 4. Problem Definition
-- Problem being solved: Public-page motion is inconsistent and currently limited to a homepage-only global IntersectionObserver hook.
-- Why it matters: A consistent motion language improves perceived polish, hierarchy, and continuity across the customer journey.
-- Current pain point: Reveal logic is not reusable across pages, uses global selectors, and cannot provide richer Gallery or route choreography.
-- Expected value: A maintainable animation system that delivers premium motion without harming accessibility, booking usability, mobile smoothness, or admin workflows.
+- Problem being solved: The Gallery filter updates URL/query state but `getGalleryItems()` ignores backend filtering and returns the local image library. The modal also has no previous/next navigation.
+- Why it matters: Customers cannot view service-specific backend images or browse an active result set without repeatedly closing the modal.
+- Current pain point: `contextServiceId` is added locally without filtering; modal selection stores an object that cannot reliably navigate by position.
+- Expected value: Correct service-aware Gallery results and accessible cyclic modal browsing.
 
 ## 5. Current State Analysis
-- Existing behavior: `Home` calls `useRevealOnScroll`, which globally queries `[data-reveal]`; CSS controls opacity/translation. Other public pages do not use the same reveal lifecycle.
-- Existing architecture/components: Shared `Layout` renders header, main outlet, footer, and includes `/admin`; `App.jsx` defines all public and admin routes together.
-- Existing files/modules likely involved: `client/src/App.jsx`, `client/src/hooks/useRevealOnScroll.js`, public pages/components, `GalleryModal.jsx`, `index.css`, client tests, and `client/package.json`.
-- Existing data flow: Services, Gallery, Booking, and Contact include asynchronous query/mutation states that must remain unchanged.
-- Existing API/UI/CLI/workflow behavior: Public route navigation uses React Router; `RouteScrollManager` handles scroll restoration; Gallery modal restores focus; Booking is a multi-step form.
-- Existing tests or verification coverage: Vitest/RTL coverage exists for pages, Gallery modal, Gallery query behavior, Booking, Contact, service detail, route behavior, theme tokens, and Admin.
+- Existing behavior: `Gallery.jsx` resolves service id/slug from URL state, invokes `useGalleryItems({ service })`, opens a selected object in `GalleryModal`, and restores focus after close.
+- Existing architecture/components: React 19, React Router search params, TanStack Query, shared Axios `api`, Phosphor icons, GSAP `useGSAP`, and CSS in `client/src/index.css`.
+- Existing files/modules likely involved: `galleryService.js`, `useGalleryItems.js`, `Gallery.jsx`, `GalleryModal.jsx`, `index.css`, and Gallery/service tests.
+- Existing data flow: `useGalleryItems()` already normalizes options and includes `limit`/`service` in its query key; only the service implementation bypasses the backend.
+- Existing API/UI/CLI/workflow behavior: Express mounts Gallery at `/api/gallery`; the shared client base uses `/api`, so `api.get('/gallery')` is correct.
+- Existing tests or verification coverage: Backend tests prove service filtering and limits. Client tests cover URL-driven query calls, modal close/Escape/backdrop/focus, Gallery rendering, lint, and build.
 
 ## 6. Desired End State
-- Expected final behavior: Every listed public page uses consistent GSAP-powered entry and scroll motion through reusable components/hooks.
-- User-facing outcome: Smooth fades, slide-ups, grouped text reveals, image mask reveals, staggered lists, and shallow parallax, with Gallery receiving richer choreography.
-- Developer-facing outcome: Central plugin setup, shared motion defaults, scoped refs, predictable cleanup, and minimal page-local animation logic.
-- System/workflow outcome: Public routes are animated; `/admin` is structurally excluded; reduced-motion users receive immediate static content.
-- Backward compatibility expectations: Existing routes, search params, API calls, forms, loading/error/empty states, modal behavior, focus restoration, and copy remain compatible.
+- Expected final behavior: Gallery items always come from backend `/gallery`; filtering returns only selected-service items; modal navigation cycles through the current filtered array.
+- User-facing outcome: Filtered cards are correct, previous/next controls appear for multiple results, wrapping works, arrow keys navigate, Escape closes, and focus returns to the opening card.
+- Developer-facing outcome: Service code follows the backend contract and modal state uses one stable index plus a trigger ref.
+- System/workflow outcome: No backend/schema change; existing query caching, GSAP entry motion, and reduced-motion behavior remain intact.
+- Backward compatibility expectations: Existing service filter UI, URL state, representative-image copy, close button, backdrop click, modal semantics, and home Gallery queries remain compatible.
 
 ## 7. Scope
 - In scope:
-  - Install `gsap` and `@gsap/react` in `client`.
-  - Add centralized GSAP/ScrollTrigger setup.
-  - Add `useReducedMotion` and reusable reveal/transition primitives.
-  - Apply the system to `/`, `/about`, `/gallery`, `/services`, `/services/:slug`, `/booking`, and `/contact`.
-  - Enhance existing Gallery grid and modal motion.
-  - Retire or replace the legacy IntersectionObserver reveal system.
-  - Add/update focused tests and run requested verification.
+  - Backend-powered `getGalleryItems({ limit, service })`.
+  - Focused service/query tests for normalized parameters and fallback array.
+  - Index-based Gallery modal selection and cyclic navigation.
+  - Filter-change modal reset.
+  - Previous/next controls, keyboard behavior, count accessibility text, and scoped responsive CSS.
+  - Focused Gallery/page/modal tests plus full client verification.
 - Out of scope:
-  - Admin animation.
-  - Backend/API/database/auth/deployment changes.
-  - New copy, routes, business logic, Gallery data, or Booking flow.
-  - Scroll hijacking, blocking intros, paid plugins, complex 3D, bounce/spin effects.
-- Non-goals: Full visual redesign, animation framework abstraction beyond GSAP, or introducing Framer Motion.
-- Explicit boundaries: Animation must use transform/opacity-oriented techniques, remain scoped, and never delay interaction.
+  - Backend controller, routes, serializer, schema, seed data, or API response changes.
+  - Full modal or Gallery redesign.
+  - Swipe gestures, thumbnails, autoplay, history entries per image, or focus-trap redesign.
+  - Changes to Gallery service filter copy or representative-image semantics.
+- Non-goals: Replacing TanStack Query, changing image ownership, or altering unrelated public-page animation.
+- Explicit boundaries: Navigation operates only on the current `galleryItems`; single-image navigation is not actionable.
 
 ## 8. Users And Use Cases
-- Primary users: Prospective and returning KareBraids customers browsing services, inspiration, booking, and contact information.
-- Secondary users: Staff using `/admin`, who must see no new decorative GSAP behavior.
-- Main use cases: Browse public pages, compare services, open Gallery images, book an appointment, submit contact enquiries.
-- Edge use cases: Reduced-motion preference, slow images/API responses, back/forward navigation, mobile touch devices, direct deep links, and query-string Gallery filtering.
+- Primary users: Customers browsing Gallery inspiration by service.
+- Secondary users: Keyboard and reduced-motion users.
+- Main use cases: Select service, open an image, browse next/previous, close, and continue from the opening card.
+- Edge use cases: One result, zero results, last-to-first wrap, first-to-last wrap, filter changed while modal is open, backend query rerender, and missing item after result replacement.
 
 ## 9. Functional Requirements
 - Required behaviors:
-  - Register GSAP, `useGSAP`, and ScrollTrigger centrally.
-  - Animate incoming public route content with a subtle fade/slide.
-  - Reveal public sections on scroll.
-  - Stagger repeated cards/list items.
-  - Reveal images through overflow-hidden mask wrappers with slight scale normalization.
-  - Support restrained text-block reveals without paid text-splitting plugins.
-  - Add shallow parallax only to selected visual layers.
-  - Animate Gallery cards more distinctly and animate the existing modal surface/image.
-  - Disable all GSAP motion when reduced motion is preferred.
-  - Exclude `/admin` from route transitions and decorative reveal wrappers.
-- Inputs: Route location, component refs, animation props, media preference, async rendered content.
-- Outputs: Scoped GSAP tweens/timelines and ScrollTriggers.
-- State changes: No business state changes; animation state remains internal to GSAP/component lifecycle.
-- Error states: Content remains visible and usable if GSAP setup, media APIs, or ScrollTrigger behavior cannot initialize.
-- Permissions/auth expectations: No auth changes; Admin remains functionally unchanged.
+  - `getGalleryItems()` calls `api.get('/gallery', { params: { limit, service } })` using existing normalization.
+  - It returns `response.data.galleryItems || []`.
+  - `getGalleryServices()` remains unchanged.
+  - `Gallery` stores `selectedIndex` and derives the item from `galleryItems`.
+  - Card click stores the clicked index and trigger element.
+  - Previous/next wrap with modulo arithmetic within current filtered results.
+  - Filter changes reset selected index and close the modal.
+  - `GalleryModal` receives item, navigation availability, callbacks, current index, and total count.
+  - `Escape` closes; `ArrowLeft` and `ArrowRight` invoke navigation only when available.
+  - Side controls have required aria labels and do not bubble to the backdrop.
+- Inputs: Optional limit/service, URL service query, card index, keyboard events.
+- Outputs: Backend Gallery item array and updated modal image.
+- State changes: Selected index changes; filter change resets it to closed state.
+- Error states: Existing query error behavior remains; malformed/missing backend `galleryItems` becomes `[]`.
+- Permissions/auth expectations: Public, unchanged.
 
 ## 10. Non-Functional Requirements
-- Performance expectations: Animate transform and opacity, use shallow distances, avoid scroll listeners, avoid unnecessary `will-change`, and keep mobile parallax minimal.
-- Reliability expectations: StrictMode-safe registration and cleanup; no stale ScrollTriggers after route or modal unmount.
-- Security/privacy expectations: Not applicable beyond no new external services or data collection.
-- Accessibility expectations: Respect `prefers-reduced-motion`; never hide content permanently; preserve focus order, modal semantics, keyboard behavior, and readable states.
-- Maintainability expectations: Animation logic stays in `animations/`, hooks, and reusable components rather than duplicated page effects.
-- DX expectations: Clear component props, centralized defaults, predictable tests, and no global query selectors outside a component-scoped context.
+- Performance expectations: Constant-time index navigation; no additional request per modal step.
+- Reliability expectations: Derived selection cannot retain a stale object across filter changes.
+- Security/privacy expectations: No new data or credentials.
+- Accessibility expectations: Dialog semantics retained, required control labels present, arrow/Escape keyboard support, opening-card focus restoration retained, and image position exposed to assistive technology.
+- Maintainability expectations: Reuse existing query normalization and stylesheet; avoid duplicate Gallery arrays in state.
+- DX expectations: Focused tests make backend query shape and navigation wrapping explicit.
 
 ## 11. Affected Surfaces
 - Files likely affected:
-  - `client/package.json`
-  - `client/package-lock.json`
-  - `client/src/App.jsx`
-  - `client/src/animations/gsapSetup.js`
-  - `client/src/hooks/useReducedMotion.js`
-  - `client/src/hooks/useScrollReveal.js`
-  - `client/src/hooks/useRevealOnScroll.js`
-  - `client/src/components/animations/*.jsx`
-  - Public pages and selected public subcomponents
+  - `client/src/services/galleryService.js`
+  - `client/src/hooks/queries/useGalleryItems.js` only if a test proves adjustment is required
+  - `client/src/pages/Gallery.jsx`
   - `client/src/components/GalleryModal.jsx`
   - `client/src/index.css`
-  - Client tests
-- Directories likely affected: `client/src/animations`, `client/src/hooks`, `client/src/components/animations`, `client/src/pages`, `client/src/components`, `client/test`.
-- UI surfaces: All public pages and existing Gallery modal.
-- API routes: none.
-- Components: Route wrapper, reveal primitives, Gallery modal, public page sections/cards/images.
-- Services: none.
+  - `client/test/service-api.test.js`
+  - `client/test/gallery-query.test.jsx`
+  - `client/test/gallery-modal.test.jsx`
+  - `client/src/pages/Gallery.test.jsx` if needed
+- Directories likely affected: `client/src/services`, `client/src/pages`, `client/src/components`, `client/test`.
+- UI surfaces: `/gallery` filter, Gallery grid, Gallery modal.
+- API routes: Existing `GET /api/gallery`; no server change.
+- Components: `Gallery`, `GalleryModal`.
+- Services: `galleryService`.
 - Database/schema: none.
 - Config/env vars: none.
-- Tests: animation primitives, route exclusion, reduced motion, existing public route suites, Admin regression.
-- Docs: run-scoped workflow artifacts and quality evidence.
-- Workflow artifacts: `_workflow/runs/dev/*`, `.workflow/fallow-audit.md`, optional polish evidence.
+- Tests: service, query integration, modal interaction, full client suite.
+- Docs: run-scoped workflow artifacts and Fallow report.
+- Workflow artifacts: `_workflow/runs/dev/*`, `_workflow/project-brain/*`, `.workflow/fallow-audit.md`.
 
 ## 12. Dependency And Integration Map
-- Internal dependencies: React Router location/outlet, existing `RouteScrollManager`, public page/component trees, Gallery modal lifecycle, async query hooks.
-- External packages/services: `gsap`, `@gsap/react`; no external service.
-- Integration points:
-  - `App.jsx` public route structure.
-  - `useGSAP` for lifecycle-scoped animation.
-  - ScrollTrigger for scroll reveals/parallax.
-  - `window.matchMedia` for reduced motion.
-  - Existing CSS transitions and modal behavior.
-- Ordering constraints: Install dependencies, add setup/hooks/primitives, integrate public route boundary, migrate pages, then Gallery enhancement and verification.
-- Migration/setup requirements: Remove or stop invoking the legacy reveal hook once equivalent GSAP coverage is active.
+- Internal dependencies: Shared `api`, TanStack Query hook/query key, React Router search params, Gallery card DOM refs, GSAP setup, reduced-motion hook.
+- External packages/services: Existing `@phosphor-icons/react`; no new dependency.
+- Integration points: `/api/gallery` response `{ galleryItems, selectedService, reviews }`, Gallery URL filter, modal callback props.
+- Ordering constraints: Test service contract first, implement service; test index/navigation behavior, implement page/modal; add CSS and regression verification.
+- Migration/setup requirements: none.
 
 ## 13. Data And State Impact
 - Data models: none.
 - Database changes: none.
-- State management changes: none; no Redux or TanStack Query contract changes.
-- Cache/session/local storage impact: none.
-- Backward compatibility impact: Animation wrappers must preserve DOM semantics and query-driven rerenders.
+- State management changes: Replace selected object state with nullable selected index.
+- Cache/session/local storage impact: TanStack Query cache remains keyed by normalized limit/service.
+- Backward compatibility impact: Home callers using `{ limit }` now receive backend data rather than local data, matching the canonical API architecture.
 
 ## 14. UX / API / Workflow Expectations
-- UX expectations:
-  - Route entry: approximately 250-450ms subtle fade and small upward shift.
-  - Section reveal: approximately 450-700ms with restrained easing and once-only triggers.
-  - Staggers: short 50-100ms spacing, capped to avoid long waits.
-  - Images: mask/scale reveal without layout shift.
-  - Gallery: stronger stagger, gentle image hover zoom, shallow parallax, and smooth modal surface/image entry/exit.
-  - Booking: brief initial/step reveals only; fields and controls are available immediately.
-- API contract expectations: unchanged.
-- CLI/workflow behavior: approval-gated plan and complete workflow after approval.
-- Error handling expectations: no animation failure may blank or block content.
-- Empty/loading/success/failure states: Existing states remain visible; optional reveal applies when they render but never delays them.
+- UX expectations: Controls are vertically centered at image/modal sides, visible on desktop, touch-usable on mobile, and visually consistent with the existing close control.
+- API contract expectations: `GET /gallery` through shared `/api` base; normalized undefined params are allowed as in existing `getGallery()`.
+- CLI/workflow behavior: Save spec, stop for approval, then create plan and execute complete workflow.
+- Error handling expectations: Existing Gallery loading/error/empty behavior remains; modal cannot render without a valid derived item.
+- Empty/loading/success/failure states: No modal for empty results; navigation hidden/disabled for one item; existing service and item states preserved.
 
 ## 15. Execution Strategy
 - Recommended implementation approach:
-  - Add `gsapSetup.js` with guarded one-time plugin registration and shared easing/duration constants.
-  - Implement `useReducedMotion` with reactive `matchMedia` subscription and SSR/test guards.
-  - Implement reusable `PageTransition`, `Reveal`, `StaggerReveal`, `ImageReveal`, and `ParallaxLayer` components plus `useScrollReveal` where hook-level use is more appropriate.
-  - Create a public route shell or route element boundary keyed by pathname; keep `/admin` as a sibling route outside it.
-  - Migrate existing `data-reveal` usage to wrappers or a scoped compatibility hook, avoiding global document queries.
-  - Apply primitives page-by-page with conservative defaults and Gallery/Booking variants.
-  - Enhance Gallery modal with a scoped timeline while preserving immediate close semantics and focus restoration.
-- Suggested sequencing: dependencies/setup -> primitives/tests -> route boundary -> public-page adoption -> Gallery/Booking hardening -> full verification.
-- Safe rollout/migration approach: Keep CSS fallback content visible by default and let GSAP set initial states only when motion is enabled and the component is mounted.
-- Files to inspect before editing: current public pages/components, tests, existing reveal CSS, Gallery modal, App routing, package files.
-- Decisions to avoid until more evidence exists: Do not add text-splitting plugins, global ScrollTrigger listeners, or route-exit navigation delays.
+  - Add failing service tests for API call parameters, normalized invalid inputs, and missing `galleryItems`.
+  - Replace local image-library logic with the existing API pattern.
+  - Add failing Gallery/modal tests for controls, wrapping, arrows, Escape, focus, and filter reset.
+  - Store `selectedIndex`, derive `selectedItem`, and provide modulo-based callbacks.
+  - Extend `GalleryModal` props and keydown handler while preserving current GSAP timeline and close focus.
+  - Add narrow `.gallery-modal-nav` styles and responsive offsets/sizes.
+- Suggested sequencing: service contract -> page state/callbacks -> modal controls/keyboard -> styles -> full verification.
+- Safe rollout/migration approach: Keep existing modal open/close path and animation container; change only selection identity and navigation additions.
+- Files to inspect before editing: files listed in section 11 plus existing Gallery tests.
+- Decisions to avoid until more evidence exists: Do not add a focus trap, swipe library, backend fallback logic, or new modal animation model.
 
 ## 16. Verification Strategy
 - Required automated checks:
-  - `npm install`
-  - `npm install --prefix client`
-  - `npm run test`
+  - Focused service API tests.
+  - Focused Gallery query tests.
+  - Focused Gallery modal tests.
+  - `npm run lint --prefix client`
   - `npm run test --prefix client`
   - `npm run build --prefix client`
-  - Client lint if available: `npm run lint --prefix client`
+  - `npm run test` to ensure backend scripts remain passing.
 - Required manual checks:
-  - Open each public route and `/admin`.
-  - Navigate between public routes and verify subtle transitions.
-  - Scroll pages to verify once-only reveals and no hidden content.
-  - Test Gallery filter, card hover, modal open/close, Escape, backdrop, close button, and focus restoration.
-  - Complete representative Booking steps without animation delay.
-  - Emulate reduced motion and confirm instant content.
-  - Check mobile viewport smoothness and browser console.
-- Test types needed: Hook/component unit tests, route integration tests, existing regression suites, browser smoke checks.
-- Build/lint/typecheck expectations: Build and lint pass; no dedicated typecheck script exists.
-- Acceptance evidence required: Commands/results, route screenshots or browser observations where practical, console status, reduced-motion proof, Admin exclusion proof.
-- Proof of completion: Passing requested commands plus completed acceptance checklist and final diff audit.
+  - Service filter changes visible cards using backend data.
+  - Next wraps last to first; previous wraps first to last.
+  - Arrow keys and Escape work.
+  - Focus returns to opening card.
+  - Filter change closes an open modal.
+  - Controls remain usable at desktop and mobile widths.
+- Test types needed: Service unit tests, React integration tests, keyboard/focus interaction tests, build/lint regression.
+- Build/lint/typecheck expectations: Client lint/build pass; no dedicated typecheck script exists.
+- Acceptance evidence required: Red/Green/Refactor commands per task iteration, full command results, and browser/code-surface review.
+- Proof of completion: All acceptance criteria checked, final diff audit clean, review and Fallow artifacts complete.
 
 ## 17. Acceptance Criteria
-- [ ] `gsap` and `@gsap/react` are installed in the client and ScrollTrigger is registered centrally.
-- [ ] Reusable scoped animation hooks/components exist for route, scroll, stagger, image, text, and parallax behavior.
-- [ ] Every listed public route uses the centralized system consistently.
-- [ ] `/admin` has no added decorative GSAP animation and remains outside the public transition boundary.
-- [ ] Route changes use a subtle non-blocking fade/slide.
-- [ ] Public sections reveal on scroll and repeated cards/lists stagger without duplicated page-local timelines.
-- [ ] Gallery has staggered image reveals, hover zoom, shallow parallax, and smooth existing-modal motion.
-- [ ] Booking remains immediately usable and receives only restrained, brief motion.
-- [ ] Reduced-motion users receive immediately visible content with no GSAP motion.
-- [ ] GSAP contexts and ScrollTriggers clean up on unmount with no console errors or leaks.
-- [ ] Existing routes, UI, copy, APIs, forms, modal accessibility, and behavior remain intact.
-- [ ] Mobile remains smooth with no layout shift or broken interaction.
-- [ ] Requested tests and build pass.
-- [ ] Applied skill: design-taste-frontend is recorded in task evidence and downstream artifacts.
+- [ ] Selecting a service shows only backend gallery images for that service.
+- [ ] `getGalleryItems()` sends normalized `limit` and `service` to `/gallery` and returns `galleryItems || []`.
+- [ ] Existing service filter UI and `?service=<slug>` state remain intact.
+- [ ] Modal previous/next controls appear when multiple images exist.
+- [ ] Next on the last image wraps to the first.
+- [ ] Previous on the first image wraps to the last.
+- [ ] `ArrowLeft` and `ArrowRight` navigate while open.
+- [ ] `Escape`, close button, and backdrop close the modal.
+- [ ] Closing restores focus to the card that opened the modal.
+- [ ] Filtering while open closes/resets the modal.
+- [ ] Single-image modal navigation is hidden or disabled.
+- [ ] Existing GSAP/reduced-motion behavior and dialog accessibility remain intact.
+- [ ] Existing build/test scripts pass.
+- [ ] Applied skill: design-taste-frontend is recorded.
 
 ## 18. Edge Cases And Failure Modes
-- Edge cases: Async lists appearing after initial mount, zero-item states, lazy-loaded images, query-only URL updates, browser back/forward, StrictMode double invocation, reduced-motion changes while open, and modal close during entry.
-- Failure modes: Duplicate ScrollTriggers, permanently hidden content, competing transforms, stale matchMedia listeners, route animation on Admin, delayed form interaction, or jsdom crashes.
-- Regression risks: Existing homepage reveal tests/CSS, Gallery modal focus restoration, scroll restoration, CSS hover transforms, and Admin route rendering.
-- Recovery expectations: Disable or simplify the affected animation while keeping content visible and behavior functional; stop with human review if route or interaction verification cannot be proven.
+- Edge cases: Invalid/blank service, invalid/non-positive limit, missing response data, one image, empty array, repeated arrow key presses, async filter response, and stale selected index.
+- Failure modes: Modal displays an item from a prior filter, modulo by zero, key listener using stale callbacks, button click reaching backdrop, focus returning to the wrong card, or GSAP replay breaking navigation.
+- Regression risks: Home Gallery queries now depend on backend availability; test mocks based on local data may need explicit adjustment.
+- Recovery expectations: Preserve empty state and close invalid selection; stop with human review if browser/backend integration cannot be verified.
 
 ## 19. Risks And Mitigations
-- Technical risks: GSAP/ScrollTrigger in jsdom and React StrictMode.
-- Product/UX risks: Over-animation, delayed booking, visual inconsistency between dark and light public pages.
+- Technical risks: Existing tests mock local Gallery data and may conceal the service call contract.
+- Product/UX risks: Side controls can overlap the close button or become too small on mobile.
 - Security risks: none material.
-- Scope risks: One-off page timelines or accidental admin wrapping.
-- Mitigation plan: Central defaults, public-only route structure, conservative variants, reduced-motion-first fallback, focused tests, browser verification, and scoped contexts.
+- Scope risks: Reworking the modal design or backend despite an existing contract.
+- Mitigation plan: Focused API mocks, interaction tests, scoped CSS, mobile review, and strict no-backend-change boundary.
 
 ## 20. Assumptions
 - Explicit assumptions:
-  - Incoming-only route transitions satisfy the requirement without delaying navigation.
-  - Existing Gallery modal is the modal to animate.
-  - No paid GSAP plugins are required.
-  - Existing Tailwind/CSS styling remains the visual source of truth.
+  - Shared `api` base path makes `api.get('/gallery')` resolve to `/api/gallery`.
+  - Backend item ids are stable enough for React keys.
+  - Hiding navigation for one image is preferable to disabled redundant controls.
+  - Arrow navigation may keep focus on the close button or clicked navigation control; only close must restore card focus.
 - Confidence level: high.
-- What to revisit if assumptions are wrong: Route transition orchestration, Gallery modal ownership, or text reveal implementation.
+- What to revisit if assumptions are wrong: API base configuration, key strategy, or modal focus-management scope.
 
 ## 21. Open Questions
 - Blocking questions: none.
-- Non-blocking questions: Exact per-section animation variants may be tuned during browser review.
+- Non-blocking questions: Exact side-control offset may be tuned during responsive browser review.
 - Execution impact: none before planning.
 
 ## 22. Task Extraction Notes
 - Suggested vertical task boundaries:
-  - Add dependencies, centralized setup, reduced-motion handling, and tested reusable primitives.
-  - Integrate public-only route transitions and migrate common public reveal behavior.
-  - Apply consistent motion across public pages with restrained Booking behavior.
-  - Deliver Gallery-specific image/parallax/modal polish.
-  - Run complete verification, review, Fallow Quality, and workflow closeout.
-- Suggested first task: Add the central GSAP foundation and prove reduced-motion/scoped cleanup behavior.
-- Suggested task ordering: foundation -> routing/common adoption -> page adoption -> Gallery showcase -> verification.
-- Areas that should not become separate tasks: Backend, database, API, copy, or Admin redesign.
+  - Make Gallery items backend-powered and prove normalized query behavior.
+  - Add index-driven cyclic modal navigation with keyboard/focus/filter-reset tests.
+  - Add scoped responsive control styling and complete regression verification.
+- Suggested first task: Replace local Gallery item lookup with tested backend response extraction.
+- Suggested task ordering: data contract -> modal behavior -> responsive polish/final verification.
+- Areas that should not become separate tasks: Backend/schema changes, broad modal redesign, or unrelated Gallery copy.
 - How the 3-pass Build -> Refine -> Polish loop should apply:
-  - Build: test-first minimal behavior and integration.
-  - Refine: async/render lifecycle, mobile, reduced motion, and cleanup hardening.
-  - Polish: browser tuning, console checks, final regression verification, and design-taste review.
+  - Build: failing focused behavior test, smallest implementation, passing rerun.
+  - Refine: edge cases and stale-state/accessibility hardening with new failing test first.
+  - Polish: responsive/GSAP regression proof, full checks, and final taste review.

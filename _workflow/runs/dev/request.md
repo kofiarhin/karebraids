@@ -1,30 +1,27 @@
 # Active Work Request
 
-Implement a reusable GSAP animation system across all public KareBraids pages in the React + Vite client.
+Fix Gallery service filtering and add previous/next modal image navigation.
 
-Public routes:
+## Required Behavior
 
-- `/`
-- `/about`
-- `/gallery`
-- `/services`
-- `/services/:slug`
-- `/booking`
-- `/contact`
+- Change `client/src/services/galleryService.js#getGalleryItems()` to call backend `GET /gallery` through the shared API client.
+- Send normalized `limit` and `service` query parameters and return `response.data.galleryItems || []`.
+- Keep `getGalleryServices()` unchanged and do not use local `getGalleryImageItems()` for filtered Gallery results.
+- Preserve the Gallery service filter UI and `?service=<slug>` URL state.
+- Track the selected Gallery image by index so previous/next navigation cycles through the currently filtered `galleryItems`.
+- Close/reset the modal when the filter changes and restore focus to the opening Gallery card when the modal closes.
+- Add modal previous/next side controls using installed Phosphor icons.
+- Support `Escape`, `ArrowLeft`, and `ArrowRight` while the modal is open.
+- Hide or disable navigation for a single image, preserve backdrop click-to-close, prevent modal control clicks from closing the backdrop, and retain dialog accessibility.
+- Preserve existing GSAP and reduced-motion behavior.
+- Add only scoped CSS in the existing Gallery/modal stylesheet location; do not redesign the modal.
+- Add/update focused tests and keep existing test/build scripts passing.
 
-Exclude `/admin` from decorative GSAP animation.
+## Boundaries
 
-Use GSAP, `@gsap/react`, and ScrollTrigger. Install `gsap` and `@gsap/react` if missing.
-
-Create a centralized setup and reusable hooks/components for route transitions, scroll reveals, staggered content, text reveals, image mask reveals, and gentle parallax. Keep motion subtle and premium, make Gallery the strongest showcase, keep Booking fast and immediately interactive, respect `prefers-reduced-motion`, scope selectors to refs/contexts, clean up animations and ScrollTriggers, avoid layout shift and memory leaks, and preserve all existing UI, copy, routes, APIs, and behavior.
-
-Required verification:
-
-- `npm install`
-- `npm install --prefix client`
-- `npm run test`
-- `npm run test --prefix client`
-- `npm run build --prefix client`
+- Do not change the backend schema or endpoint contract.
+- Keep representative-image wording and existing Gallery filter presentation.
+- Backend `GET /gallery?service=<serviceSlugOrId>` is the authoritative filtered data source.
 
 Execution mode: `complete-workflow`.
 

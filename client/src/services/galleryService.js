@@ -1,4 +1,3 @@
-import { getGalleryImageItems } from '../data/imageLibrary.js'
 import { api } from '../lib/api.js'
 
 function normalizeLimit(limit) {
@@ -21,13 +20,14 @@ export async function getGallery({ limit, service } = {}) {
 }
 
 export async function getGalleryItems({ limit, service } = {}) {
-  const normalizedService = normalizeService(service)
-  const items = getGalleryImageItems().map((item) => (
-    normalizedService ? { ...item, contextServiceId: normalizedService } : item
-  ))
-  const normalizedLimit = normalizeLimit(limit)
+  const response = await api.get('/gallery', {
+    params: {
+      limit: normalizeLimit(limit),
+      service: normalizeService(service),
+    },
+  })
 
-  return normalizedLimit ? items.slice(0, normalizedLimit) : items
+  return response.data.galleryItems || []
 }
 
 export async function getGalleryServices() {

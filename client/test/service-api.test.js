@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { api } from '../src/lib/api.js'
-import { getGallery, getGalleryServices } from '../src/services/galleryService.js'
+import { getGallery, getGalleryItems, getGalleryServices } from '../src/services/galleryService.js'
 import { getService, getServiceGallery, getServices } from '../src/services/serviceService.js'
 
 vi.mock('../src/lib/api.js', () => ({ api: { get: vi.fn() } }))
@@ -28,5 +28,32 @@ describe('service and gallery API clients', () => {
     await getGalleryServices()
     expect(api.get).toHaveBeenNthCalledWith(1, '/gallery', { params: { limit: 4, service: 'knotless-braids' } })
     expect(api.get).toHaveBeenNthCalledWith(2, '/gallery/services')
+  })
+
+  it('loads gallery items from the backend with normalized query parameters', async () => {
+    const galleryItems = [{ id: 'knotless-braids-01' }]
+    api.get.mockResolvedValue({ data: { galleryItems } })
+
+    await expect(getGalleryItems({ limit: 3, service: ' knotless-braids ' })).resolves.toEqual(galleryItems)
+
+    expect(api.get).toHaveBeenCalledWith('/gallery', {
+      params: {
+        limit: 3,
+        service: 'knotless-braids',
+      },
+    })
+  })
+
+  it('normalizes invalid gallery item options and falls back to an empty array', async () => {
+    api.get.mockResolvedValue({ data: {} })
+
+    await expect(getGalleryItems({ limit: 0, service: '   ' })).resolves.toEqual([])
+
+    expect(api.get).toHaveBeenCalledWith('/gallery', {
+      params: {
+        limit: undefined,
+        service: undefined,
+      },
+    })
   })
 })

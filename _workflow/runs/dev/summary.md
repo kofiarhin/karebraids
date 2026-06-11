@@ -241,3 +241,23 @@ Release notes: `_workflow/runs/dev/release-notes.md`
 Fallow: `.workflow/fallow-audit.md` (`PARTIAL` due unrelated branch findings; feature scope clean)
 
 Applied skill: design-taste-frontend
+
+## 2026-06-11 - Gallery Backend Filtering And Modal Navigation
+
+- Request: Fix Gallery backend filtering and add cyclic modal previous/next navigation.
+- Spec used: `_workflow/runs/dev/spec.md`.
+- Task plan used: `_workflow/runs/dev/tasks.md`.
+- Review used: `_workflow/runs/dev/review.md`.
+- Release notes used: `_workflow/runs/dev/release-notes.md`.
+- Tasks completed: TASK-001 backend retrieval, TASK-002 modal navigation, TASK-003 responsive controls and verification.
+- Iteration evidence: Service Red proved local data bypassed the API; modal Red proved controls were absent; CSS Red proved side-control styles were absent; browser Red exposed transformed-ancestor fixed positioning; Fallow findings were refactored and cleared.
+- Files changed: Gallery service, page, modal, CSS, four focused test files, verification screenshots, and run workflow artifacts.
+- Verification: 127 client tests, 71 server tests, client lint, production build, desktop/mobile browser flows, zero browser console errors/warnings, and Fallow `pass`.
+- Acceptance: Backend filtering, URL state, cyclic controls, arrows, Escape, filter reset, focus restoration, accessibility, responsive use, and existing motion behavior all pass.
+- Failure recovery: Corrected one mistaken root test command; isolated and cleared an unrelated parallel-load Contact timeout; portaled the modal after browser positioning failure; refactored Fallow-introduced complexity/duplication findings.
+- Final diff audit: completed with no backend schema, dependency, secret, configuration, or unrelated product changes.
+- Unresolved issues: none blocking; existing Vite chunk warning remains.
+- Next recommended work: commit the verified change with `fix gallery filtering and modal navigation`.
+- Fallow: `.workflow/fallow-audit.md` (`PASSED`).
+
+Applied skill: design-taste-frontend

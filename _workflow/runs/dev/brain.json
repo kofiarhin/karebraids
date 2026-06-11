@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-06-10T23:40:00+01:00",
+  "updatedAt": "2026-06-11T07:20:15+01:00",
   "runId": "dev",
   "workflow": {
     "currentStage": "complete",
@@ -31,6 +31,21 @@
       },
       "createdAt": "2026-06-10T22:41:12+01:00",
       "updatedAt": "2026-06-10T23:40:00+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "goal-gallery-filter-navigation",
+      "text": "Make Gallery service filtering use backend data and add accessible cyclic previous/next modal navigation within the active filtered result set.",
+      "status": "complete",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-11T06:30:50+01:00",
+      "updatedAt": "2026-06-11T07:20:15+01:00",
       "supersedes": [],
       "history": []
     }
@@ -65,6 +80,36 @@
       "updatedAt": "2026-06-10T22:41:12+01:00",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "req-gallery-backend-filter",
+      "text": "Gallery items are fetched from GET /gallery with normalized limit and service parameters, and service selection shows only backend items for that service.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-11T06:30:50+01:00",
+      "updatedAt": "2026-06-11T06:30:50+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-gallery-modal-navigation",
+      "text": "Gallery modal navigation cycles through current filtered items with side controls, ArrowLeft/ArrowRight, Escape close, filter reset, and opening-card focus restoration.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-11T06:30:50+01:00",
+      "updatedAt": "2026-06-11T06:30:50+01:00",
+      "supersedes": [],
+      "history": []
     }
   ],
   "constraints": [
@@ -95,6 +140,21 @@
       },
       "createdAt": "2026-06-10T22:41:12+01:00",
       "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "constraint-gallery-no-backend-redesign",
+      "text": "Do not change the backend schema or Gallery endpoint contract and do not redesign the full modal.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-11T06:30:50+01:00",
+      "updatedAt": "2026-06-11T06:30:50+01:00",
       "supersedes": [],
       "history": []
     }
@@ -131,6 +191,23 @@
       "updatedAt": "2026-06-10T22:41:12+01:00",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "tech-gallery-backend-index-navigation",
+      "text": "Use the existing Gallery API through TanStack Query and represent open modal selection as an index into the current galleryItems array.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-11T06:30:50+01:00",
+      "updatedAt": "2026-06-11T06:30:50+01:00",
+      "supersedes": [
+        "decision-gallery-context-not-classification"
+      ],
+      "history": []
     }
   ],
   "domainKnowledge": [
@@ -166,6 +243,21 @@
       "updatedAt": "2026-06-10T22:41:12+01:00",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "risk-gallery-test-mock-drift",
+      "text": "Existing Gallery tests that mock local image data may hide or conflict with the backend service contract and must be updated carefully.",
+      "status": "active",
+      "confidence": 0.95,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-11T06:30:50+01:00",
+      "updatedAt": "2026-06-11T06:30:50+01:00",
+      "supersedes": [],
+      "history": []
     }
   ],
   "artifacts": [
@@ -196,6 +288,36 @@
       },
       "createdAt": "2026-06-10T22:41:12+01:00",
       "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-gallery-filter-navigation-spec",
+      "text": "Active Gallery filtering and modal navigation spec: _workflow/runs/dev/spec.md.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-11T06:30:50+01:00",
+      "updatedAt": "2026-06-11T06:30:50+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-gallery-filter-navigation-tasks",
+      "text": "Approved Gallery filtering and modal navigation task plan: _workflow/runs/dev/tasks.md.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/tasks.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-11T06:38:02+01:00",
+      "updatedAt": "2026-06-11T06:38:02+01:00",
       "supersedes": [],
       "history": []
     }
@@ -230,6 +352,36 @@
       "updatedAt": "2026-06-10T22:41:12+01:00",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "workflow-gallery-filter-navigation-spec-saved-20260611",
+      "text": "Gallery backend filtering and modal navigation intake completed and detailed spec saved for explicit approval.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-11T06:30:50+01:00",
+      "updatedAt": "2026-06-11T06:30:50+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "workflow-gallery-filter-navigation-complete-20260611",
+      "text": "Gallery backend filtering and cyclic modal navigation completed with automated, browser, review, and Fallow verification.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-11T07:20:15+01:00",
+      "updatedAt": "2026-06-11T07:20:15+01:00",
+      "supersedes": [],
+      "history": []
     }
   ],
   "custom": {},
@@ -253,6 +405,39 @@
       "source": {
         "runId": "dev",
         "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      }
+    },
+    {
+      "id": "run-change-gallery-filter-navigation-spec-20260611",
+      "timestamp": "2026-06-11T06:30:50+01:00",
+      "type": "spec-saved",
+      "summary": "Recorded backend-powered Gallery filtering, cyclic modal navigation, accessibility, focus, and verification requirements.",
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      }
+    },
+    {
+      "id": "run-change-gallery-filter-navigation-plan-20260611",
+      "timestamp": "2026-06-11T06:38:02+01:00",
+      "type": "task-plan-saved",
+      "summary": "Recorded explicit spec approval and created three sequential Gallery implementation tasks.",
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/tasks.md",
+        "conversation": "workflow"
+      }
+    },
+    {
+      "id": "run-change-gallery-filter-navigation-complete-20260611",
+      "timestamp": "2026-06-11T07:20:15+01:00",
+      "type": "workflow-complete",
+      "summary": "Completed backend Gallery filtering, cyclic modal navigation, responsive controls, full verification, and Fallow remediation.",
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/summary.md",
         "conversation": "workflow"
       }
     }

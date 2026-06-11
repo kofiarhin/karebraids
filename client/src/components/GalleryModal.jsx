@@ -1,5 +1,6 @@
-import { X } from '@phosphor-icons/react'
+import { CaretLeft, CaretRight, X } from '@phosphor-icons/react'
 import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { animationDefaults, gsap, useGSAP } from '../animations/gsapSetup.js'
 import { useReducedMotion } from '../hooks/useReducedMotion.js'
 
@@ -44,7 +45,15 @@ const hiddenCopyStyle = {
   whiteSpace: 'nowrap',
 }
 
-export function GalleryModal({ item, onClose }) {
+export function GalleryModal({
+  currentIndex,
+  hasNavigation,
+  item,
+  onClose,
+  onNext,
+  onPrevious,
+  totalCount,
+}) {
   const backdropRef = useRef(null)
   const closeButtonRef = useRef(null)
   const modalRef = useRef(null)
@@ -81,6 +90,12 @@ export function GalleryModal({ item, onClose }) {
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         onClose()
+      } else if (hasNavigation && event.key === 'ArrowLeft') {
+        event.preventDefault()
+        onPrevious()
+      } else if (hasNavigation && event.key === 'ArrowRight') {
+        event.preventDefault()
+        onNext()
       }
     }
 
@@ -92,16 +107,16 @@ export function GalleryModal({ item, onClose }) {
       document.removeEventListener('keydown', handleKeyDown)
       document.body.classList.remove('modal-open')
     }
-  }, [item, onClose])
+  }, [hasNavigation, item, onClose, onNext, onPrevious])
 
   if (!item) {
     return null
   }
 
-  return (
+  return createPortal(
     <div className="modal-backdrop" onClick={onClose} ref={backdropRef} role="presentation">
       <section
-        aria-describedby="gallery-modal-description"
+        aria-describedby="gallery-modal-description gallery-modal-position"
         aria-modal="true"
         aria-labelledby="gallery-modal-title"
         className="gallery-modal dark-gallery-modal"
@@ -121,13 +136,37 @@ export function GalleryModal({ item, onClose }) {
         >
           <X aria-hidden="true" size={20} weight="bold" />
         </button>
+        {hasNavigation ? (
+          <>
+            <button
+              aria-label="Previous gallery image"
+              className="gallery-modal-nav gallery-modal-nav-previous"
+              onClick={onPrevious}
+              type="button"
+            >
+              <CaretLeft aria-hidden="true" size={24} weight="bold" />
+            </button>
+            <button
+              aria-label="Next gallery image"
+              className="gallery-modal-nav gallery-modal-nav-next"
+              onClick={onNext}
+              type="button"
+            >
+              <CaretRight aria-hidden="true" size={24} weight="bold" />
+            </button>
+          </>
+        ) : null}
         <img alt={item.alt || item.title} src={item.src || item.image} style={imageStyle} />
+        <p id="gallery-modal-position" style={hiddenCopyStyle}>
+          Image {currentIndex + 1} of {totalCount}
+        </p>
         <div className="modal-copy" style={hiddenCopyStyle}>
           <p className="eyebrow">Style Inspiration Gallery</p>
           <h2 id="gallery-modal-title">{item.title}</h2>
           <p id="gallery-modal-description">{item.description}</p>
         </div>
       </section>
-    </div>
+    </div>,
+    document.body,
   )
 }

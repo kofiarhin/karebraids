@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '../src/App.jsx'
-import { getGalleryItems, getGalleryItemsByServiceId, getGalleryServices } from '../src/data/services.js'
+import { getGalleryItems, getGalleryServices } from '../src/data/services.js'
 import * as galleryService from '../src/services/galleryService.js'
 
 vi.mock('../src/services/galleryService.js', () => ({
@@ -33,11 +33,21 @@ function renderRoute(route) {
   )
 }
 
+async function selectFirstGalleryService(user) {
+  const service = getGalleryServices()[0]
+  renderRoute('/gallery')
+  await screen.findByRole('option', { name: service.name })
+  await user.selectOptions(screen.getByLabelText(/filter gallery by service/i), service.id)
+  return service
+}
+
 describe('service-driven gallery surfaces', () => {
+  const filteredGalleryItems = getGalleryItems().slice(0, 2)
+
   beforeEach(() => {
     galleryService.getGalleryServices.mockResolvedValue(getGalleryServices())
     galleryService.getGalleryItems.mockImplementation(({ service } = {}) =>
-      Promise.resolve(service ? getGalleryItemsByServiceId(service) : getGalleryItems()),
+      Promise.resolve(service ? filteredGalleryItems : getGalleryItems()),
     )
   })
 
@@ -63,18 +73,13 @@ describe('service-driven gallery surfaces', () => {
 
   it('changes the URL and API query when a service is selected', async () => {
     const user = userEvent.setup()
-    const service = getGalleryServices().find((item) => getGalleryItemsByServiceId(item.id).length > 0)
-    const serviceItems = getGalleryItemsByServiceId(service.id)
-    renderRoute('/gallery')
-
-    await screen.findByRole('option', { name: service.name })
-    await user.selectOptions(await screen.findByLabelText(/filter gallery by service/i), service.id)
+    const service = await selectFirstGalleryService(user)
 
     expect(screen.getByTestId('location-probe')).toHaveTextContent(`/gallery?service=${service.id}`)
     await waitFor(() => expect(galleryService.getGalleryItems).toHaveBeenCalledWith({ limit: undefined, service: service.id }))
     expect(screen.getByRole('heading', { name: service.name })).toBeInTheDocument()
-    expect(within(await screen.findByRole('region', { name: /gallery image wall/i })).getAllByRole('button')).toHaveLength(serviceItems.length)
-    serviceItems.forEach((item, index) => expect(screen.getByRole('button', { name: new RegExp(`^${item.title}, representative image ${index + 1}$`, 'i') })).toBeInTheDocument())
+    expect(within(await screen.findByRole('region', { name: /gallery image wall/i })).getAllByRole('button')).toHaveLength(filteredGalleryItems.length)
+    filteredGalleryItems.forEach((item, index) => expect(screen.getByRole('button', { name: new RegExp(`^${item.title}, representative image ${index + 1}$`, 'i') })).toBeInTheDocument())
   })
 
   it('clears the URL when all services is selected', async () => {
@@ -95,15 +100,24 @@ describe('service-driven gallery surfaces', () => {
     })
   })
 
-  it('keeps the full representative gallery when a service is selected as UI context', async () => {
+  it('renders only the backend-filtered result set when a service is selected', async () => {
+    const user = userEvent.setup()
+    const service = await selectFirstGalleryService(user)
+
+    expect(await screen.findByText(`Viewing inspiration while considering ${service.name}`)).toBeInTheDocument()
+    expect(within(screen.getByRole('region', { name: /gallery image wall/i })).getAllByRole('button')).toHaveLength(filteredGalleryItems.length)
+  })
+
+  it('closes an open modal when the service filter changes', async () => {
     const user = userEvent.setup()
     const service = getGalleryServices()[0]
     renderRoute('/gallery')
 
-    await screen.findByRole('option', { name: service.name })
-    await user.selectOptions(await screen.findByLabelText(/filter gallery by service/i), service.id)
+    await user.click(await screen.findByRole('button', { name: /representative image 1$/i }))
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
 
-    expect(await screen.findByText(`Viewing inspiration while considering ${service.name}`)).toBeInTheDocument()
-    expect(within(screen.getByRole('region', { name: /gallery image wall/i })).getAllByRole('button')).toHaveLength(getGalleryItems().length)
+    await user.selectOptions(screen.getByLabelText(/filter gallery by service/i), service.id)
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 })

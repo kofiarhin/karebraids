@@ -43,10 +43,57 @@ function SafeGalleryImage({ item }) {
   )
 }
 
-export function Gallery() {
-  const [selectedItem, setSelectedItem] = useState(null)
-  const [searchParams, setSearchParams] = useSearchParams()
+function useGalleryModal(galleryItems) {
+  const [selectedIndex, setSelectedIndex] = useState(null)
   const activeTriggerRef = useRef(null)
+  const selectedItem = selectedIndex === null ? null : galleryItems[selectedIndex] || null
+  const hasNavigation = galleryItems.length > 1
+
+  const openModal = (index, trigger) => {
+    activeTriggerRef.current = trigger
+    setSelectedIndex(index)
+  }
+
+  const closeModal = () => {
+    setSelectedIndex(null)
+    window.requestAnimationFrame(() => {
+      activeTriggerRef.current?.focus()
+    })
+  }
+
+  const resetModal = () => {
+    setSelectedIndex(null)
+    activeTriggerRef.current = null
+  }
+
+  const showPreviousItem = () => {
+    if (!hasNavigation) return
+    setSelectedIndex((currentIndex) => (
+      currentIndex === null ? null : (currentIndex - 1 + galleryItems.length) % galleryItems.length
+    ))
+  }
+
+  const showNextItem = () => {
+    if (!hasNavigation) return
+    setSelectedIndex((currentIndex) => (
+      currentIndex === null ? null : (currentIndex + 1) % galleryItems.length
+    ))
+  }
+
+  return {
+    closeModal,
+    hasNavigation,
+    openModal,
+    resetModal,
+    selectedIndex,
+    selectedItem,
+    showNextItem,
+    showPreviousItem,
+  }
+}
+
+export function Gallery() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const galleryServicesQuery = useGalleryServices()
   const galleryServices = galleryServicesQuery.data || []
   const requestedService = searchParams.get('service')
@@ -55,26 +102,11 @@ export function Gallery() {
   const selectedService = requestedMatch || null
   const galleryItemsQuery = useGalleryItems(selectedServiceId === 'all' ? {} : { service: selectedServiceId })
   const galleryItems = galleryItemsQuery.data || []
+  const modal = useGalleryModal(galleryItems)
 
   const updateSelectedService = (serviceId) => {
-    setSelectedItem(null)
-    if (serviceId === 'all') {
-      setSearchParams({})
-      return
-    }
-    setSearchParams({ service: serviceId })
-  }
-
-  const openModal = (item, trigger) => {
-    activeTriggerRef.current = trigger
-    setSelectedItem(item)
-  }
-
-  const closeModal = () => {
-    setSelectedItem(null)
-    window.requestAnimationFrame(() => {
-      activeTriggerRef.current?.focus()
-    })
+    modal.resetModal()
+    setSearchParams(serviceId === 'all' ? {} : { service: serviceId })
   }
 
   return (
@@ -138,7 +170,7 @@ export function Gallery() {
               aria-label={`${item.title}, representative image ${index + 1}`}
               className={`gallery-card ${item.aspect}`}
               key={item.id}
-              onClick={(event) => openModal(item, event.currentTarget)}
+              onClick={(event) => modal.openModal(index, event.currentTarget)}
               style={{ '--index': index }}
               type="button"
             >
@@ -156,7 +188,15 @@ export function Gallery() {
         </StaggerReveal>
       ) : null}
 
-      <GalleryModal item={selectedItem} onClose={closeModal} />
+      <GalleryModal
+        currentIndex={modal.selectedIndex}
+        hasNavigation={modal.hasNavigation}
+        item={modal.selectedItem}
+        onClose={modal.closeModal}
+        onNext={modal.showNextItem}
+        onPrevious={modal.showPreviousItem}
+        totalCount={galleryItems.length}
+      />
     </section>
   )
 }

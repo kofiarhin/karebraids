@@ -1,5 +1,80 @@
 # Progress
 
+## 2026-06-11 - TASK-002 Done: Cyclic Modal Navigation
+
+- Status: Done.
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files changed: `client/src/pages/Gallery.jsx`, `client/src/components/GalleryModal.jsx`, `client/test/gallery-modal.test.jsx`, `client/test/gallery-query.test.jsx`.
+- Build Red: modal test failed because previous/next controls were absent.
+- Build Green: index state, cyclic callbacks, controls, count text, and keyboard listener implemented; click wraparound passed.
+- Refine: arrow keys and single-image behavior covered; 7 modal tests passed. Missing Red exception recorded because minimal Build already included the requested keyboard branch.
+- Polish: stale context-only query test replaced with backend-filtered behavior; filter-change modal reset covered; 7 query tests and focused lint passed.
+- Commands:
+  - `npm run test --prefix client -- test/gallery-modal.test.jsx` -> passed, 7 tests.
+  - `npm run test --prefix client -- test/gallery-query.test.jsx` -> passed, 7 tests; non-fatal jsdom `scrollTo` notices.
+  - focused client lint -> passed.
+- Acceptance: all modal navigation, keyboard, close, focus, filter-reset, single-image, and dialog criteria met.
+- Applied skill: design-taste-frontend
+- Next: TASK-003 Iteration 1 Build.
+
+## 2026-06-11 - TASK-001 Done: Fetch Gallery Items From The Backend
+
+- Status: Done.
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files changed: `client/src/services/galleryService.js`, `client/test/service-api.test.js`.
+- Iteration 1 Build: Added test first; observed local-data failure; implemented `/gallery` request; 4 focused tests passed.
+- Iteration 2 Refine: Added invalid-option and empty-array coverage; 5 focused tests passed. Missing Red exception: minimal Build change already satisfied these edge cases.
+- Iteration 3 Polish: Reviewed imports/API conventions; focused tests and lint passed. Verification-only Red exception recorded.
+- Commands:
+  - `npm run test --prefix client -- test/service-api.test.js` -> passed, 5 tests.
+  - `npm run lint --prefix client -- src/services/galleryService.js test/service-api.test.js` -> passed.
+- Acceptance:
+  - [x] Normalized limit/service sent to backend.
+  - [x] Backend items returned with empty fallback.
+  - [x] Local Gallery image retrieval removed from filtered results.
+  - [x] `getGalleryServices()` unchanged.
+- Applied skill: design-taste-frontend
+- Next: TASK-002 Iteration 1 Build.
+
+## 2026-06-11 - Spec Approval And Task Planning: Gallery Filtering And Modal Navigation
+
+- User approval received: `approve spec`.
+- Approved spec: `_workflow/runs/dev/spec.md`.
+- Task plan created: `_workflow/runs/dev/tasks.md`.
+- Detailed spec completeness: all 22 required sections present.
+- Planned tasks:
+  - `TASK-001: Fetch Gallery items from the backend`
+  - `TASK-002: Add cyclic modal navigation within filtered results`
+  - `TASK-003: Polish controls and complete verification`
+- Dirty worktree contains only active workflow and Project Brain artifacts created for this request.
+- No implementation-file overlap risk exists.
+- Applied skill: design-taste-frontend
+- Current phase: TASK-001 Ready, Iteration 1 Build.
+
+## 2026-06-11 - Intake And Spec Setup: Gallery Filtering And Modal Navigation
+
+- Request: Use backend Gallery filtering and add cyclic modal previous/next navigation.
+- Branch: `dev`.
+- Worktree: `C:/Users/laura.bolas/projects/karebraids/dev`.
+- Artifact root: `_workflow/runs/dev/`.
+- Workflow path: default workflow with conditional frontend taste routing.
+- Execution mode: `complete-workflow`.
+- Dirty worktree before intake: `git status --short` returned no output.
+- Intake questions asked: none; the prompt and repository inspection fully define behavior, boundaries, accessibility, backend contract, and acceptance criteria.
+- Shared understanding:
+  - `getGalleryItems()` must call backend `/gallery` and return `galleryItems || []`.
+  - Existing URL service filter remains and backend results become authoritative.
+  - Modal selection becomes index-based and cycles only within current filtered items.
+  - Arrow keys, Escape, backdrop, close button, focus restoration, filter reset, GSAP, reduced motion, and responsive usability are required.
+  - Backend/schema redesign and full modal redesign are out of scope.
+- Project Brain conflict: explicit user correction supersedes the prior context-only Gallery filtering decision while preserving representative-image semantics.
+- Applied skill: design-taste-frontend
+- Request synced: `_workflow/runs/dev/request.md`.
+- Spec saved: `_workflow/runs/dev/spec.md`.
+- Task plan status: not generated; pending explicit spec approval.
+- Implementation status: not started.
+- Current phase: spec approval gate.
+
 ## 2026-06-10 - Spec Approval and Task Planning: Reusable Public GSAP Animation System
 
 - User approval received: `approve spec`.
@@ -2344,3 +2419,66 @@
 ### Final Result
 
 All five tasks are Done. Fallow verdict is PARTIAL only because unrelated branch-wide findings remain; the new animation layer has no reported unused dependency, cycle, boundary violation, or remaining test duplication.
+
+## 2026-06-11 - TASK-003 Done: Gallery Controls And Verification
+
+- Task ID: TASK-003
+- Status: Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Files changed: `client/src/index.css`, `client/src/components/GalleryModal.jsx`, `client/test/site-pages.test.jsx`, `client/test/gallery-modal.test.jsx`
+- Applied skill: design-taste-frontend
+
+### Iteration 1 Build Evidence
+
+- Goal: Add scoped desktop/mobile modal navigation styling.
+- Test plan: CSS source regression plus focused Gallery suites.
+- Red phase evidence: The CSS regression failed because `.gallery-modal-nav` was absent.
+- Green phase evidence: Site page suite passed 29 tests after adding centered side controls and responsive sizing.
+- Refactor phase evidence: Focused Gallery/service tests passed 19 tests after selector and interaction review.
+- Verification: Passed.
+- Review findings: Controls use existing modal tokens, clear focus states, and mobile touch sizing without redesigning the modal.
+
+### Iteration 2 Refine Evidence
+
+- Goal: Verify visual placement, responsive usability, and animation compatibility.
+- Test plan: Playwright desktop/mobile smoke plus focused modal/query tests.
+- Red phase evidence: Browser inspection showed the fixed modal roughly 5,857px below the viewport because the GSAP route wrapper was transformed.
+- Green phase evidence: Portaling the backdrop to `document.body` restored viewport-fixed rendering; controls, navigation, Escape, filter reset, and focus return worked.
+- Refactor phase evidence: A regression assertion now verifies the backdrop is attached to `document.body`; the modal suite passed 7 tests and focused lint passed.
+- Verification: Passed with screenshots under `output/playwright/`.
+- Review findings: Desktop and 390px mobile layouts retain the established design and usable controls.
+
+### Iteration 3 Polish Evidence
+
+- Goal: Complete repository-wide verification and failure recovery.
+- Test plan: client lint/build/tests, server tests, browser console checks.
+- Red phase evidence: Verification-only exception. One unrelated Contact test timed out during a parallel full-check run.
+- Green phase evidence: The exact Contact suite passed 7/7 and the full client suite then passed 127/127 alone.
+- Refactor phase evidence: Final portal assertion passed; client lint/build and 71 server tests passed.
+- Verification: Passed.
+- Review findings: Browser console had zero errors/warnings; Vite emitted only the existing non-blocking chunk-size warning.
+
+### Acceptance Result
+
+- [x] Controls are centered at the modal sides on desktop.
+- [x] Controls are touch-usable on mobile.
+- [x] Existing modal design and GSAP/reduced-motion behavior remain.
+- [x] Client 127/127 and server 71/71 tests pass.
+- [x] Client lint and production build pass.
+- [x] Browser filtering, wraparound, keyboard, Escape, filter reset, and focus restoration pass.
+
+### Failure Recovery Notes
+
+- An initial focused rerun accidentally used the root server-test script and reported no matching tests; reran through `npm run test --prefix client -- test/gallery-modal.test.jsx`, which passed 7/7.
+- The parallel-load Contact timeout was classified as unrelated after its exact suite and the full client suite passed on isolated reruns.
+
+### Next Step
+
+- Save final verification and review artifacts, run Fallow Quality, then complete release notes, summary, Project Brain, and workflow health.
+
+### Fallow Quality Follow-up
+
+- Initial audit: failed on one introduced moderate `Gallery` complexity finding and two introduced test clone groups.
+- Remediation: extracted `useGalleryModal` and shared test setup helpers.
+- Verification: focused 14 tests and lint passed; full client 127/127, server 71/71, lint, and build passed.
+- Final audit: `pass`, with zero introduced dead-code, complexity, or duplication findings.

@@ -1,30 +1,42 @@
 # Fallow Audit
 
-Date: 2026-06-10
-Verdict: PARTIAL
+## Command Run
 
-## Commands
+`fallow audit --format json --quiet --explain 2>/dev/null || true`
 
-Fallow 2.92.1 ran with JSON, `--quiet`, `--explain`, stderr suppression, and non-blocking issue exits:
+Fallow version: 2.92.1. Parsed root `kind`: `audit`.
 
-- `fallow audit --base main`
-- `fallow dead-code`
-- `fallow health --score`
-- `fallow dupes`
+## Summary
 
-## Results
+- Final verdict from Fallow: `pass`.
+- Introduced dead-code issues: 0.
+- Introduced complexity findings: 0.
+- Introduced duplication groups: 0.
+- Dead code, unused/unlisted dependencies, unresolved imports, cycles, re-export cycles, and boundary violations: 0.
 
-- Health score: 84.6, grade B.
-- Full repository: 26 dead-code findings, 31 duplicate groups, 6.78% duplicated lines.
-- No unused dependencies, unlisted dependencies, unresolved imports, circular dependencies, re-export cycles, or boundary violations.
-- The changed-code audit reports `fail`, but its introduced dead-code, complexity, and remaining duplicate findings are in unrelated existing `api/` and `server/` branch changes.
-- Fallow initially found repeated reduced-motion setup in the new animation tests. That duplication was refactored and no longer appears.
-- No new animation-system file or GSAP dependency is reported unused.
+## Findings
 
-## Interpretation
+The first audit reported one introduced moderate `Gallery` complexity finding and two introduced test clone groups. Ten clone groups remain in the final report, all inherited and non-blocking.
 
-The animation implementation passes the scoped Fallow review. The overall verdict is `PARTIAL` because branch-wide findings outside this approved frontend scope remain and were not modified.
+## Fixes Applied
 
-## Security And Architecture
+- Extracted modal-selection mechanics into `useGalleryModal`.
+- Consolidated repeated modal and filter test setup.
 
-Fallow is not treated as SAST or dependency vulnerability scanning. No cycles or architecture boundary violations were reported. Root npm audit findings are documented separately in verification.
+No automated Fallow fix command was used.
+
+## Remaining Exceptions
+
+Ten inherited test duplication groups remain outside this request. No blocking maintainability findings remain.
+
+## Verification
+
+- Focused Gallery tests: 14 passed.
+- Client tests: 127 passed.
+- Server tests: 71 passed.
+- Client lint and production build: passed.
+- Final Fallow audit: `pass`, zero introduced findings.
+
+## Verdict
+
+PASSED

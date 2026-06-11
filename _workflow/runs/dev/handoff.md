@@ -6,53 +6,52 @@
 - Worktree: `C:/Users/laura.bolas/projects/karebraids/dev`
 - Run id: `dev`
 - Artifact root: `_workflow/runs/dev/`
-- Request: reusable GSAP animation system across public KareBraids pages
+- Request: Fix Gallery backend filtering and add cyclic modal previous/next navigation.
 - Status: Complete
-- Current phase: Final health check complete
-- Last completed task: TASK-005
-- Current task: none
-- Current iteration: none
+- Current phase: Complete
+- Last completed task: TASK-003
+- Current task: None
+- Current iteration: Not applicable
+- Current lifecycle status: Workflow complete
 - Blockers: none
 - Workflow health: Passed
-- Fallow verdict: PARTIAL due unrelated branch-wide findings
 - Applied skill: design-taste-frontend
 
-## Completed Scope
+## Approved Artifacts
 
-- Central GSAP, `@gsap/react`, ScrollTrigger registration and restrained defaults.
-- Reduced-motion hook and scoped reusable PageTransition, Reveal, StaggerReveal, ImageReveal, ParallaxLayer, and scroll-reveal hook.
-- Public-only keyed route transition/reveal boundary.
-- Shared section and async-content reveals on `/`, `/about`, `/gallery`, `/services`, `/services/:slug`, `/booking`, and `/contact`.
-- `/admin` excluded from decorative animation.
-- Gallery stagger, image reveal, shallow parallax, hover composition, and modal entry motion.
-- Booking gentle motion and 390px overflow regression fix.
-- Legacy global homepage reveal hook removed.
-
-## Verification
-
-- `npm install`: passed; root audit reports 2 critical vulnerabilities.
-- `npm install --prefix client`: passed; client audit reports 0 vulnerabilities.
-- `npm run lint --prefix client`: passed.
-- `npm run test`: 11 suites, 71 tests passed.
-- `npm run test --prefix client`: 22 files, 120 tests passed.
-- `npm run build --prefix client`: passed with non-blocking chunk-size warning.
-- Browser routes, Admin exclusion, reduced motion, 390px mobile overflow, and console checks passed.
-- Browser console errors: 0.
-
-## Artifacts
-
+- Request: `_workflow/runs/dev/request.md`
 - Spec: `_workflow/runs/dev/spec.md`
-- Tasks: `_workflow/runs/dev/tasks.md`
-- Progress: `_workflow/runs/dev/progress.md`
-- Verification: `_workflow/runs/dev/verification.md`
-- Review: `_workflow/runs/dev/review.md`
-- Fallow: `.workflow/fallow-audit.md`
-- Release notes: `_workflow/runs/dev/release-notes.md`
+- Task plan: `_workflow/runs/dev/tasks.md`
+- Explicit approval: `approve spec`
+
+## Current Scope
+
+- Backend-powered `getGalleryItems()` is complete and verified.
+- Index-driven cyclic modal navigation and responsive controls are complete and verified.
+- Browser verification confirms filtering, wrapping, keyboard navigation, Escape, filter reset, focus restoration, and mobile usability.
+- Review, Fallow Quality, release notes, summary, and Project Brain reconciliation are complete.
+- Backend/schema changes and full modal redesign remain out of scope.
+
+## Dirty Worktree Protection
+
+- Existing dirty files are active workflow/Project Brain artifacts from this request.
+- Planned implementation files were clean at approval.
+- Overlap risk: none.
+
+## Token / Resume State
+
+- Current phase: complete
+- Current task: none
+- Current iteration: not applicable
+- Last completed safe checkpoint: TASK-003 Done
+- Files already changed: Gallery service, page, modal, CSS, focused tests, workflow artifacts, verification screenshots
+- Files planned next: none
+- Tests already run: client 127 passed; server 71 passed; lint passed; build passed; browser smoke passed; Fallow passed
 - Summary: `_workflow/runs/dev/summary.md`
-- Screenshots: `output/playwright/gallery-motion.png`, `output/playwright/booking-mobile.png`
-
-## Residual Notes
-
-- Service-detail browser content was empty because local API data was unavailable, but the route and public motion boundary rendered without console errors.
-- The production bundle is 591.54 kB minified (185.93 kB gzip); code splitting is outside this request.
-- No required work remains.
+- Review: `_workflow/runs/dev/review.md`
+- Release notes: `_workflow/runs/dev/release-notes.md`
+- Fallow: `.workflow/fallow-audit.md` (`PASSED`)
+- Unresolved issues: none blocking
+- Suggested next prompt: commit the verified Gallery filtering and modal navigation changes
+- Exact next action: final response
+- Safe to continue automatically: no; workflow is complete
