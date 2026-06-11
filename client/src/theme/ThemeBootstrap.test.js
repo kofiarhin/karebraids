@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 
 const clientRoot = resolve(import.meta.dirname, '../..')
 const indexHtml = readFileSync(resolve(clientRoot, 'index.html'), 'utf8')
-const indexCss = readFileSync(resolve(clientRoot, 'src/index.css'), 'utf8')
+const indexCss = readFileSync(resolve(clientRoot, 'src/index.css'), 'utf8').replace(/\r\n/g, '\n')
 const layoutSource = readFileSync(resolve(clientRoot, 'src/components/Layout.jsx'), 'utf8')
 
 describe('theme bootstrap', () => {

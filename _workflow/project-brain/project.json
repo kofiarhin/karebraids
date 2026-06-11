@@ -1,26 +1,37 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-06-09T23:30:00Z",
+  "updatedAt": "2026-06-10T23:40:00+01:00",
   "workflow": {
     "currentStage": "complete",
     "completedStages": [
       "intake",
       "spec",
-      "spec-approval",
       "planning",
       "implementation",
       "verification",
       "review",
       "fallow-quality",
-      "handoff",
-      "release-notes",
-      "summary",
-      "health-check"
+      "release"
     ],
-    "nextStage": "commit-and-pr",
+    "nextStage": null,
     "status": "complete"
   },
   "goals": [
+    {
+      "id": "goal-public-gsap-system",
+      "text": "Implement a reusable GSAP animation system across every public KareBraids route while leaving the admin route untouched.",
+      "status": "complete",
+      "confidence": 1.0,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T23:40:00+01:00",
+      "supersedes": [],
+      "history": []
+    },
     {
       "id": "goal-service-canonical",
       "text": "Make MongoDB Service documents and Express APIs the canonical source for all public service and gallery data.",
@@ -220,6 +231,21 @@
     }
   ],
   "constraints": [
+    {
+      "id": "constraint-public-gsap-admin-exclusion",
+      "text": "Decorative GSAP route and scroll animation must apply only to public pages; /admin remains outside the animation boundary.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    },
     {
       "id": "constraint-no-binaries",
       "text": "MongoDB stores image URLs and metadata only, never image binaries.",
@@ -759,6 +785,21 @@
   ],
   "workflowHistory": [
     {
+      "id": "workflow-complete-public-gsap-20260610",
+      "text": "Reusable public GSAP animation workflow completed with centralized motion, Admin exclusion, reduced motion, Gallery polish, tests, build, and browser verification.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-10T23:40:00+01:00",
+      "updatedAt": "2026-06-10T23:40:00+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
       "id": "workflow-spec-saved-20260607",
       "text": "Backend-driven service/gallery request completed intake and is paused for explicit spec approval.",
       "status": "active",
@@ -821,6 +862,28 @@
   ],
   "custom": {},
   "changeLog": [
+    {
+      "id": "change-complete-public-gsap-20260610",
+      "timestamp": "2026-06-10T23:40:00+01:00",
+      "type": "workflow-complete",
+      "summary": "Completed centralized reusable GSAP animation for all public routes while excluding Admin.",
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/summary.md",
+        "conversation": "workflow"
+      }
+    },
+    {
+      "id": "change-public-gsap-spec-20260610",
+      "timestamp": "2026-06-10T22:41:12+01:00",
+      "type": "spec-saved",
+      "summary": "Saved the reusable public GSAP animation system spec at the explicit approval gate.",
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      }
+    },
     {
       "id": "project-change-20260607-spec",
       "timestamp": "2026-06-07T01:18:00Z",

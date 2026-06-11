@@ -65,7 +65,8 @@ vi.mock('../src/hooks/queries/useServices.js', async () => {
 
 const originalMatchMedia = window.matchMedia
 const testDirectory = path.dirname(fileURLToPath(import.meta.url))
-const homeStyles = () => fs.readFileSync(path.join(testDirectory, '../src/index.css'), 'utf8')
+const homeStyles = () =>
+  fs.readFileSync(path.join(testDirectory, '../src/index.css'), 'utf8').replace(/\r\n/g, '\n')
 
 afterEach(() => {
   vi.useRealTimers()
@@ -89,6 +90,7 @@ describe('KareBraids pages', () => {
   it('renders the redesigned homepage with dark luxury header navigation', () => {
     const { container } = renderRoute('/')
 
+    expect(container.querySelector('[data-public-route-transition]')).toBeInTheDocument()
     expect(container.querySelector('.site-shell')).toHaveClass('theme-brand-shell')
     expect(screen.getByRole('banner')).toHaveClass('site-header')
     expect(screen.getByRole('link', { name: /karebraids home/i })).toBeInTheDocument()

@@ -2,43 +2,57 @@
 
 Generated projection of `_workflow/project-brain/project.json`. JSON remains authoritative.
 
-## Current workflow
-- Run: `work`
+## Current Workflow
+
+- Run: `dev`
 - Stage: Complete
-- Status: Repository work complete; external deployment verification required
-- Next stage: Commit and PR, then operator deployment
+- Status: Completed and verified
+- Next stage: None
 
-## Completed goal
-The KareBraids services and booking flow is configured for one repository-root Vercel project with same-origin client API routing, an Express serverless entrypoint, Mongo-backed booking eligibility, duplicate protection, and documented MongoDB seeding/deployment operations.
+## Active Goal
 
-## Architecture
-- Browser requests default to `/api`; `VITE_API_URL` is an optional complete-prefix override.
-- Vite proxies `/api` to local Express during development.
-- Root `vercel.json` builds `client/dist`, routes `/api/*` to `api/index.js`, and sends remaining paths to the SPA.
-- `api/index.js` initializes MongoDB and forwards to `server/app.js`; `server/server.js` remains the local listener.
-- Public booking/availability service eligibility comes from MongoDB Service records, not a hard-coded name list.
+Implement a reusable GSAP and ScrollTrigger animation system across every public KareBraids route while leaving `/admin` outside the decorative animation boundary.
+
+## Active Constraints
+
+- Preserve existing public UI, copy, routes, API behavior, booking behavior, Gallery accessibility, and responsive usability.
+- Respect `prefers-reduced-motion` by showing content immediately with no GSAP motion.
+- Keep Booking motion brief and non-blocking.
+- Give Gallery the richest restrained treatment without adding a new modal or navigation model.
+- Use scoped refs/GSAP contexts and clean up animations and ScrollTriggers.
+
+## Implemented Architecture
+
+- GSAP, `useGSAP`, and ScrollTrigger are registered centrally.
+- Reusable route, reveal, stagger, image, and parallax primitives are available.
+- Public routes use a public-only transition boundary; `/admin` remains a sibling route.
+- The homepage-only global IntersectionObserver reveal implementation was removed.
 
 ## Verification
-- Server: 71/71 tests passed.
-- Client: 116/116 tests passed.
-- Client build and lint passed.
-- Production dependency audit reports zero vulnerabilities.
-- Fallow: 74.4/B, PARTIAL for static entrypoint/coverage and duplication findings; no dependency/import/circular/boundary blocker.
 
-## Deployment requirements
-- Vercel Root Directory: repository root.
-- Required env: `MONGODB_URI`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `JWT_SECRET`.
-- Leave `VITE_API_URL` unset for same-origin production.
-- Permit Vercel access in MongoDB Atlas.
-- Seed services if the filtered services endpoint returns an empty array.
+- 71 server tests and 120 client tests passed.
+- Client lint and production build passed.
+- Browser route, Admin exclusion, reduced-motion, mobile overflow, and console checks passed.
+- Fallow verdict is `PARTIAL` due unrelated branch-wide findings; the animation scope has no unused dependency, cycle, or boundary finding.
 
-## Open operational risk
-This environment cannot access the Vercel account, production MongoDB, or live endpoint through its outbound proxy. Deploy and run the README checks before declaring live production healthy.
+## Existing Durable Architecture
 
-## Final artifacts
-- Review: `_workflow/runs/work/review.md`
-- Verification: `_workflow/runs/work/verification.md`
-- Release notes: `_workflow/runs/work/release-notes.md`
-- Summary: `_workflow/runs/work/summary.md`
-- Handoff: `_workflow/runs/work/handoff.md`
-- Fallow: `.workflow/fallow-audit.md`
+- Browser API requests default to `/api`; `VITE_API_URL` is an optional complete-prefix override.
+- Vite proxies `/api` to local Express during development.
+- Root `vercel.json` builds `client/dist`, routes `/api/*` to `api/index.js`, and sends remaining paths to the SPA.
+- Public service and booking data is sourced through Express, MongoDB Service records, TanStack Query, and the shared client API.
+- Curated representative visuals are served from the frontend local image library.
+
+## Open Questions
+
+None blocking.
+
+## Active Artifacts
+
+- Request: `_workflow/runs/dev/request.md`
+- Spec: `_workflow/runs/dev/spec.md`
+- Tasks: `_workflow/runs/dev/tasks.md`
+- Review: `_workflow/runs/dev/review.md`
+- Summary: `_workflow/runs/dev/summary.md`
+- Handoff: `_workflow/runs/dev/handoff.md`
+- Run memory: `_workflow/runs/dev/brain.json`

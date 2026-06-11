@@ -3,7 +3,7 @@ import { resolveApiBaseUrl } from '../src/lib/api.js'
 
 describe('API base URL configuration', () => {
   it('uses same-origin /api when VITE_API_URL is missing or blank', () => {
-    expect(resolveApiBaseUrl()).toBe('/api')
+    expect(resolveApiBaseUrl(null)).toBe('/api')
     expect(resolveApiBaseUrl('')).toBe('/api')
     expect(resolveApiBaseUrl('   ')).toBe('/api')
   })

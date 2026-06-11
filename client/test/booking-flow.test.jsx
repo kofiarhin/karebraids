@@ -9,7 +9,7 @@ import * as bookingService from '../src/services/bookingService.js'
 import { getBookableServices } from '../src/data/services.js'
 import { useBookableServices } from '../src/hooks/queries/useServices.js'
 
-const bookingStyles = () => readFileSync('src/index.css', 'utf8')
+const bookingStyles = () => readFileSync('src/index.css', 'utf8').replace(/\r\n/g, '\n')
 
 vi.mock('../src/services/bookingService.js', () => ({
   createBooking: vi.fn(),
@@ -105,6 +105,7 @@ describe('booking flow', () => {
     expect(styles).toContain('--booking-border-glass: rgba(255, 255, 255, 0.08);')
     expect(styles).toContain('border: 1px solid var(--booking-border-glass);')
     expect(styles).toContain('.booking-step-list {\n    order: 1;')
+    expect(styles).toContain('width: 100%;\n    min-width: 0;\n    max-width: 100%;')
     expect(styles).toContain('.booking-panel {\n    order: 2;')
     expect(styles).toContain('.booking-live-card {\n    order: 3;')
   })

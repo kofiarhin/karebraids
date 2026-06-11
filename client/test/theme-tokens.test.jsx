@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 
-const styles = readFileSync('src/index.css', 'utf8')
+const styles = readFileSync('src/index.css', 'utf8').replace(/\r\n/g, '\n')
 const rootMatch = styles.match(/:root\s*\{([\s\S]*?)\n\}/)
 const rootTokens = rootMatch?.[1] || ''
 const darkRootMatch = styles.match(/:root\[data-theme="dark"\]\s*\{([\s\S]*?)\n\}/)

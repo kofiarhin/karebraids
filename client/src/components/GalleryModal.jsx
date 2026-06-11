@@ -1,5 +1,7 @@
 import { X } from '@phosphor-icons/react'
 import { useEffect, useRef } from 'react'
+import { animationDefaults, gsap, useGSAP } from '../animations/gsapSetup.js'
+import { useReducedMotion } from '../hooks/useReducedMotion.js'
 
 const modalStyle = {
   display: 'block',
@@ -43,7 +45,35 @@ const hiddenCopyStyle = {
 }
 
 export function GalleryModal({ item, onClose }) {
+  const backdropRef = useRef(null)
   const closeButtonRef = useRef(null)
+  const modalRef = useRef(null)
+  const reducedMotion = useReducedMotion()
+
+  useGSAP(
+    () => {
+      if (!item || reducedMotion || !backdropRef.current || !modalRef.current) return
+
+      const image = modalRef.current.querySelector('img')
+      const timeline = gsap.timeline({
+        defaults: { ease: animationDefaults.ease },
+      })
+
+      timeline
+        .fromTo(backdropRef.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.24 })
+        .fromTo(
+          modalRef.current,
+          { autoAlpha: 0, scale: 0.985, y: 18 },
+          { autoAlpha: 1, scale: 1, y: 0, duration: 0.42 },
+          0.04,
+        )
+
+      if (image) {
+        timeline.fromTo(image, { scale: 1.025 }, { scale: 1, duration: 0.5 }, 0.08)
+      }
+    },
+    { dependencies: [item, reducedMotion], scope: backdropRef, revertOnUpdate: true },
+  )
 
   useEffect(() => {
     if (!item) return undefined
@@ -69,13 +99,15 @@ export function GalleryModal({ item, onClose }) {
   }
 
   return (
-    <div className="modal-backdrop" onClick={onClose} role="presentation">
+    <div className="modal-backdrop" onClick={onClose} ref={backdropRef} role="presentation">
       <section
         aria-describedby="gallery-modal-description"
         aria-modal="true"
         aria-labelledby="gallery-modal-title"
         className="gallery-modal dark-gallery-modal"
+        data-gallery-modal-motion
         onClick={(event) => event.stopPropagation()}
+        ref={modalRef}
         role="dialog"
         style={modalStyle}
       >

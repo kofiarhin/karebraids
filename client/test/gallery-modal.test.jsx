@@ -23,7 +23,7 @@ function renderGallery() {
 describe('gallery modal', () => {
   it('opens an image modal and closes with the close button', async () => {
     const user = userEvent.setup()
-    renderGallery()
+    const { container } = renderGallery()
 
     await user.click(screen.getByRole('button', { name: /^braiding inspiration, representative image 1$/i }))
 
@@ -31,8 +31,12 @@ describe('gallery modal', () => {
     const description = within(dialog).getByText(/representative styling image used for inspiration/i)
 
     expect(dialog).toHaveClass('dark-gallery-modal')
+    expect(dialog).toHaveAttribute('data-gallery-modal-motion')
     expect(dialog).toHaveAttribute('aria-describedby', 'gallery-modal-description')
     expect(description).toHaveAttribute('id', 'gallery-modal-description')
+    expect(container.querySelector('[data-stagger-reveal].gallery-grid')).toBeInTheDocument()
+    expect(container.querySelectorAll('[data-image-reveal]').length).toBeGreaterThan(0)
+    expect(container.querySelectorAll('[data-parallax-layer]').length).toBeGreaterThan(0)
     expect(screen.getByRole('button', { name: /close gallery image/i })).toHaveFocus()
 
     await user.click(screen.getByRole('button', { name: /close gallery image/i }))

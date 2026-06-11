@@ -67,11 +67,12 @@ describe('admin dashboard', () => {
   })
 
   it('shows admin login before booking data is available', () => {
-    renderAdmin()
+    const { container } = renderAdmin()
 
     expect(screen.getByRole('heading', { name: /admin login/i })).toBeInTheDocument()
     expect(screen.getByLabelText(/username/i)).toBeInTheDocument()
     expect(screen.queryByText(/amara okafor/i)).not.toBeInTheDocument()
+    expect(container.querySelector('[data-public-route-transition]')).not.toBeInTheDocument()
   })
 
   it('logs in and lists bookings', async () => {

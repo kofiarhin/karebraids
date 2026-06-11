@@ -3974,6 +3974,17 @@ button:disabled,
   object-fit: cover;
 }
 
+.gallery-card-media,
+.gallery-card-parallax {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.gallery-card-parallax {
+  transform: scale(1.04);
+}
+
 .gallery-card:hover img {
   transform: scale(1.025);
 }
@@ -4017,6 +4028,13 @@ button:disabled,
 
 .modal-copy {
   display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-card-parallax,
+  .gallery-card:hover img {
+    transform: none;
+  }
 }
 
 .modal-close,
@@ -4405,6 +4423,9 @@ button:disabled,
     order: 1;
     display: flex;
     gap: 0.55rem;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     overflow-x: auto;
     padding-bottom: 0.2rem;
     scrollbar-width: thin;

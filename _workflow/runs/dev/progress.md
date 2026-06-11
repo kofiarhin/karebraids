@@ -1,5 +1,60 @@
 # Progress
 
+## 2026-06-10 - Spec Approval and Task Planning: Reusable Public GSAP Animation System
+
+- User approval received: `approve spec`.
+- Approved spec: `_workflow/runs/dev/spec.md`.
+- Task plan created: `_workflow/runs/dev/tasks.md`.
+- Detailed spec completeness: all 22 required sections present.
+- Planned tasks:
+  - `TASK-001: Add the reusable GSAP animation foundation`
+  - `TASK-002: Add public-only route transitions and common section reveals`
+  - `TASK-003: Apply consistent motion to every public page`
+  - `TASK-004: Make Gallery the strongest motion showcase`
+  - `TASK-005: Verify the complete animation system and close the workflow`
+- Dirty worktree before implementation contains only active workflow/Project Brain artifacts created for this request.
+- No client implementation-file overlap risk exists.
+- Applied skill: design-taste-frontend
+- Current phase: TASK-001 Ready, Iteration 1 Build.
+
+## 2026-06-10 - Intake and Spec Setup: Reusable Public GSAP Animation System
+
+- Request: Implement centralized, reusable GSAP/ScrollTrigger animation across all public routes while excluding `/admin`.
+- Branch: `dev`.
+- Worktree: `C:/Users/laura.bolas/projects/karebraids/dev`.
+- Artifact root: `_workflow/runs/dev/`.
+- Workflow path: `polish-ui`.
+- Execution mode: `complete-workflow`.
+- Dirty worktree before intake: `git status --short` returned no output.
+- Repo context inspected:
+  - `.agents/skills/grill-me/SKILL.md`
+  - `.agents/skills/design-taste-frontend/SKILL.md`
+  - `RUN_WORKFLOW.md`
+  - Project Brain files
+  - Existing run handoff/progress/summary
+  - `client/package.json`
+  - `client/src/App.jsx`
+  - `client/src/components/Layout.jsx`
+  - `client/src/components/RouteScrollManager.jsx`
+  - `client/src/hooks/useRevealOnScroll.js`
+  - Public pages and Gallery modal
+  - Existing public/client tests
+- Intake questions asked: none; the request fully defines goal, scope, route list, exclusions, expected motion, quality constraints, and verification.
+- Shared understanding:
+  - Add `gsap` and `@gsap/react`.
+  - Use a public-only route boundary so `/admin` remains untouched.
+  - Replace the homepage-only global reveal query with scoped reusable GSAP primitives.
+  - Give Gallery the strongest restrained motion and keep Booking immediately interactive.
+  - Preserve all existing UI, copy, routes, API behavior, forms, modal accessibility, and focus restoration.
+  - Respect reduced motion with instant visible content and no GSAP motion.
+- Applied skill: design-taste-frontend
+- Run-scoped Project Brain initialized at `_workflow/runs/dev/brain.json`.
+- Request synced: `_workflow/runs/dev/request.md`.
+- Spec saved: `_workflow/runs/dev/spec.md`.
+- Task plan status: not generated; pending explicit spec approval.
+- Implementation status: not started.
+- Current phase: spec approval gate.
+
 ## 2026-05-28 - Intake and Spec Setup: Gallery Figma Redesign
 
 - Request: Redesign the KareBraids gallery page to match the supplied Figma-style dark premium reference with centered `GALLERY` title, clean square grid, and light centered modal overlay.
@@ -2227,3 +2282,65 @@
 - Spec file created: `_workflow/runs/dev/spec.md`
 - Task plan status: Not generated; pending explicit spec approval.
 - Implementation status: Not started.
+## 2026-06-10 - Reusable Public GSAP Animation System Complete
+
+- Tasks: TASK-001 through TASK-005
+- Status: Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done
+- Applied skill: design-taste-frontend
+
+### TASK-001 Build -> Refine -> Polish
+
+- Build Red: focused tests were added before the centralized setup and primitives existed.
+- Build Green: GSAP registration, defaults, reduced-motion hook, scroll hook, and reusable components passed.
+- Refine: refs, scoped `useGSAP` contexts, dependencies, and cleanup behavior were reviewed.
+- Polish: Fallow-identified reduced-motion test duplication was extracted.
+- Verification: focused animation tests and lint passed.
+- Acceptance: [x] foundation, [x] reduced motion, [x] semantic scoped primitives.
+
+### TASK-002 Build -> Refine -> Polish
+
+- Build Red: route tests lacked a public transition boundary and Admin exclusion.
+- Build Green: public routes were nested under keyed transition/reveal components.
+- Refine: `/admin` remained a sibling route; pathname variants were verified.
+- Polish: removed the legacy global IntersectionObserver reveal hook.
+- Verification: route, page, Admin, animation tests, lint, and browser checks passed.
+- Acceptance: [x] public transitions, [x] Admin excluded, [x] no global reveal query.
+
+### TASK-003 Build -> Refine -> Polish
+
+- Build Red: public pages lacked shared section/dynamic-item motion coverage.
+- Build Green: shared scoped reveals cover every public route and async additions.
+- Refine: Services, Booking, and Contact use declarative item markers without page-local timelines.
+- Polish: Booking durations/distances remain short and interaction is immediate.
+- Verification: full client suite, focused Booking suite, lint, and browser routes passed.
+- Acceptance: [x] all public routes, [x] Booking usable, [x] behavior preserved.
+
+### TASK-004 Build -> Refine -> Polish
+
+- Build Red: Gallery tests lacked stagger, image reveal, parallax, and modal motion assertions.
+- Build Green: Gallery cards and modal gained scoped GSAP choreography.
+- Refine: existing close, Escape, focus restoration, body lock, and backdrop behavior stayed intact.
+- Polish: hover/parallax transforms were composed and reduced-motion CSS disables movement.
+- Verification: Gallery tests, full client suite, lint, and visual screenshots passed.
+- Acceptance: [x] strongest showcase, [x] modal accessible, [x] mobile/reduced motion restrained.
+
+### TASK-005 Build -> Refine -> Polish
+
+- Build: requested install, test, lint, and build commands passed.
+- Refine Red: browser testing found Booking horizontal overflow at 390px.
+- Refine Green: a focused CSS assertion failed first, then passed after constraining the scroller.
+- Polish: removed an unintended `file:..` install artifact, ran final diff/design/Fallow review, and cleaned temporary browser state.
+- Verification: 71 server tests, 120 client tests, lint, build, zero browser console errors, public/Admin route checks, reduced motion, and mobile overflow checks passed.
+- Acceptance: [x] requested commands, [x] routes/console/mobile, [x] workflow artifacts.
+
+### Failure Recovery
+
+- A focused Vitest path was initially passed relative to the repository instead of the client; reran with `test/...`.
+- Browser CLI was unavailable globally; used the required bundled wrapper.
+- Root `npm install` reports two existing critical audit vulnerabilities; client audit is clean.
+- Vite emits a non-blocking >500 kB chunk warning.
+
+### Final Result
+
+All five tasks are Done. Fallow verdict is PARTIAL only because unrelated branch-wide findings remain; the new animation layer has no reported unused dependency, cycle, boundary violation, or remaining test duplication.

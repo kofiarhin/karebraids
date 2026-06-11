@@ -1,0 +1,260 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-06-10T23:40:00+01:00",
+  "runId": "dev",
+  "workflow": {
+    "currentStage": "complete",
+    "completedStages": [
+      "intake",
+      "spec",
+      "spec-approval",
+      "planning",
+      "implementation",
+      "verification",
+      "review",
+      "fallow-quality",
+      "release"
+    ],
+    "nextStage": null,
+    "status": "complete"
+  },
+  "goals": [
+    {
+      "id": "goal-public-gsap-system",
+      "text": "Implement a reusable GSAP animation system across every public KareBraids route while leaving the admin route untouched.",
+      "status": "complete",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T23:40:00+01:00",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "req-gsap-public-routes",
+      "text": "Public routes use consistent route, section, stagger, image, text, and parallax animation primitives with Gallery receiving the strongest treatment.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "req-gsap-reduced-motion",
+      "text": "Reduced-motion users see content immediately with no GSAP motion.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "constraints": [
+    {
+      "id": "constraint-admin-no-gsap",
+      "text": "Do not add decorative GSAP animation to /admin.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "constraint-preserve-public-behavior",
+      "text": "Preserve existing UI, copy, routes, API logic, booking behavior, gallery accessibility, and responsive usability.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "architectureDecisions": [
+    {
+      "id": "arch-central-public-animation-layer",
+      "text": "Use centralized GSAP registration plus reusable scoped React animation components/hooks, with a public-only route transition boundary.",
+      "status": "active",
+      "confidence": 0.98,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "technicalDecisions": [
+    {
+      "id": "tech-gsap-context-cleanup",
+      "text": "Use @gsap/react useGSAP, component refs, gsap.context scoping, and ScrollTrigger cleanup on unmount.",
+      "status": "active",
+      "confidence": 0.98,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "domainKnowledge": [
+    {
+      "id": "domain-existing-reveal-hook",
+      "text": "The homepage currently uses useRevealOnScroll with global data-reveal querying and IntersectionObserver; other public pages do not share that system.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "client/src/hooks/useRevealOnScroll.js",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "openQuestions": [],
+  "risks": [
+    {
+      "id": "risk-animation-test-environment",
+      "text": "GSAP and ScrollTrigger require browser API guards or mocks in jsdom tests, especially for matchMedia and layout-dependent behavior.",
+      "status": "active",
+      "confidence": 0.95,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-gsap-task-plan",
+      "text": "Active GSAP animation task plan: _workflow/runs/dev/tasks.md.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/tasks.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-10T22:55:00+01:00",
+      "updatedAt": "2026-06-10T22:55:00+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "artifact-gsap-spec",
+      "text": "Active GSAP animation system spec: _workflow/runs/dev/spec.md.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "workflowHistory": [
+    {
+      "id": "workflow-gsap-complete-20260610",
+      "text": "Reusable public GSAP animation workflow completed all five tasks with tests, build, browser verification, review, and Fallow Quality.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/summary.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-10T23:40:00+01:00",
+      "updatedAt": "2026-06-10T23:40:00+01:00",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "workflow-gsap-spec-saved-20260610",
+      "text": "Reusable public GSAP animation intake completed and detailed spec saved for explicit approval.",
+      "status": "active",
+      "confidence": 1,
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      },
+      "createdAt": "2026-06-10T22:41:12+01:00",
+      "updatedAt": "2026-06-10T22:41:12+01:00",
+      "supersedes": [],
+      "history": []
+    }
+  ],
+  "custom": {},
+  "changeLog": [
+    {
+      "id": "run-change-gsap-complete-20260610",
+      "timestamp": "2026-06-10T23:40:00+01:00",
+      "type": "workflow-complete",
+      "summary": "Completed reusable public GSAP animation architecture, route/page integration, Gallery polish, reduced motion, verification, and release artifacts.",
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/summary.md",
+        "conversation": "workflow"
+      }
+    },
+    {
+      "id": "run-change-gsap-spec-20260610",
+      "timestamp": "2026-06-10T22:41:12+01:00",
+      "type": "spec-saved",
+      "summary": "Recorded the reusable public GSAP animation system request and approval-gated spec.",
+      "source": {
+        "runId": "dev",
+        "artifact": "_workflow/runs/dev/spec.md",
+        "conversation": "workflow"
+      }
+    }
+  ]
+}

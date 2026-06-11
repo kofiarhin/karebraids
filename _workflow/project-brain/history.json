@@ -1,7 +1,34 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-06-09T23:30:00Z",
+  "updatedAt": "2026-06-10T23:40:00+01:00",
   "events": [
+    {
+      "id": "history-complete-public-gsap-20260610",
+      "timestamp": "2026-06-10T23:40:00+01:00",
+      "runId": "dev",
+      "type": "workflow-complete",
+      "summary": "Reusable public GSAP animation system completed with tests, build, browser verification, review, and Fallow Quality.",
+      "artifacts": [
+        "_workflow/runs/dev/review.md",
+        "_workflow/runs/dev/verification.md",
+        "_workflow/runs/dev/release-notes.md",
+        "_workflow/runs/dev/summary.md",
+        ".workflow/fallow-audit.md"
+      ]
+    },
+    {
+      "id": "history-public-gsap-spec-20260610",
+      "timestamp": "2026-06-10T22:41:12+01:00",
+      "runId": "dev",
+      "type": "spec-saved",
+      "summary": "Reusable public GSAP animation system intake completed and detailed spec saved for explicit approval.",
+      "artifacts": [
+        "_workflow/runs/dev/request.md",
+        "_workflow/runs/dev/spec.md",
+        "_workflow/runs/dev/handoff.md",
+        "_workflow/runs/dev/brain.json"
+      ]
+    },
     {
       "id": "history-20260607-spec",
       "timestamp": "2026-06-07T01:18:00Z",

@@ -1,51 +1,36 @@
-# Verification: Gallery Figma Redesign
+# Verification: Reusable Public GSAP Animation System
 
-- Request: Redesign the KareBraids gallery page to match the supplied Figma-style dark premium gallery reference.
-- Spec: `_workflow/runs/dev/spec.md`
-- Task plan: `_workflow/runs/dev/tasks.md`
-- Status: Needs Human Review
-- Applied skill: design-taste-frontend
+Date: 2026-06-10
 
-## Commands Run
+## Automated
 
-- `npm run test --prefix client -- site-pages.test.jsx`
-  - Result: Failed as expected for Red evidence.
-  - Failure: new `.gallery-title-wrap` and square-grid CSS expectations were absent before implementation.
-- `npm run test --prefix client -- site-pages.test.jsx`
-  - Result: Failed after implementation on one stale old-heading assertion expecting `/braid gallery/i`.
-  - Recovery: assertion updated to expect `GALLERY`.
-- `npm run test --prefix client -- site-pages.test.jsx`
-  - Result: Timed out after 120 seconds.
-- `npm run test --prefix client -- site-pages.test.jsx`
-  - Result: Timed out after 240 seconds.
-- `Get-Date`
-  - Result: Timed out, confirming terminal executor was unavailable.
+- `npm install`: passed; root audit reports 2 critical vulnerabilities.
+- `npm install --prefix client`: passed; client audit reports 0 vulnerabilities.
+- `npm run lint --prefix client`: passed.
+- `npm run test`: passed, 11 suites and 71 tests.
+- `npm run test --prefix client`: passed, 22 files and 120 tests.
+- `npm run build --prefix client`: passed.
+- Focused animation test: 4 passed.
+- Focused Booking test: 9 passed.
 
-## Commands Not Completed
+The client test run prints jsdom `window.scrollTo` not-implemented notices from existing route behavior; tests pass and browser console verification found zero errors.
 
-- `npm run test --prefix client -- gallery-modal.test.jsx`
-- `npm run lint --prefix client`
-- `npm run test --prefix client`
-- `npm run build --prefix client`
-- `git diff --stat`
-- `git diff`
-- `git status --short`
+## Browser
 
-## Verification Verdict
+Playwright CLI verified:
 
-Needs Human Review. Code and focused tests were updated, and expected Red evidence was captured, but final automated verification could not complete because terminal command execution became unavailable.
+- `/`, `/about`, `/gallery`, `/services`, `/services/knotless-braids`, `/booking`, and `/contact` render in the public transition/reveal boundary.
+- `/admin` has neither public motion boundary.
+- Gallery uses the `gallery` motion variant; Booking uses `booking`; other public routes use `standard`.
+- Reduced-motion media preference is detected, route/Booking elements have no GSAP inline motion state, and content is visible.
+- Mobile Booking at 390x844 has no horizontal document overflow after the regression fix.
+- Browser console errors: 0.
 
-## Next Commands
+Screenshots:
 
-Run these when terminal execution is healthy:
+- `output/playwright/gallery-motion.png`
+- `output/playwright/booking-mobile.png`
 
-```bash
-npm run test --prefix client -- site-pages.test.jsx
-npm run test --prefix client -- gallery-modal.test.jsx
-npm run lint --prefix client
-npm run test --prefix client
-npm run build --prefix client
-git diff --stat
-git diff
-git status --short
-```
+## Build
+
+Vite 8.0.14 built successfully. Main JS: 591.54 kB minified, 185.93 kB gzip. The >500 kB warning is non-blocking.

@@ -1,6 +1,9 @@
 import { useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { GalleryModal } from '../components/GalleryModal.jsx'
+import { ImageReveal } from '../components/animations/ImageReveal.jsx'
+import { ParallaxLayer } from '../components/animations/ParallaxLayer.jsx'
+import { StaggerReveal } from '../components/animations/StaggerReveal.jsx'
 import { SERVICE_PREVIEW_FALLBACK_IMAGE } from '../utils/servicePreview.js'
 import { useGalleryItems, useGalleryServices } from '../hooks/queries/useGalleryItems.js'
 
@@ -123,7 +126,13 @@ export function Gallery() {
         </p>
       ) : null}
       {galleryItems.length > 0 ? (
-        <div aria-label="Gallery image wall" className="gallery-grid" role="region">
+        <StaggerReveal
+          aria-label="Gallery image wall"
+          as="div"
+          className="gallery-grid"
+          role="region"
+          stagger={0.065}
+        >
           {galleryItems.map((item, index) => (
             <button
               aria-label={`${item.title}, representative image ${index + 1}`}
@@ -133,14 +142,18 @@ export function Gallery() {
               style={{ '--index': index }}
               type="button"
             >
-              <SafeGalleryImage item={item} />
+              <ImageReveal className="gallery-card-media">
+                <ParallaxLayer className="gallery-card-parallax" distance={16}>
+                  <SafeGalleryImage item={item} />
+                </ParallaxLayer>
+              </ImageReveal>
               <span>
                 <strong>{item.title}</strong>
                 <small>Representative image</small>
               </span>
             </button>
           ))}
-        </div>
+        </StaggerReveal>
       ) : null}
 
       <GalleryModal item={selectedItem} onClose={closeModal} />

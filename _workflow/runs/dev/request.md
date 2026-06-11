@@ -1,56 +1,31 @@
-# Request: Redesign KareBraids Gallery Page
+# Active Work Request
 
-Redesign the KareBraids gallery page to match the Figma reference: dark premium page, centered `GALLERY` title, clean 3-column square image grid, and centered light modal overlay.
+Implement a reusable GSAP animation system across all public KareBraids pages in the React + Vite client.
 
-Repo context:
-- React + Vite app in `client/`
-- Current route is already wired in `client/src/App.jsx`
-- Current page: `client/src/pages/Gallery.jsx`
-- Current modal: `client/src/components/GalleryModal.jsx`
-- Gallery data: `client/src/constants/content.js`
-- Global styles: `client/src/index.css`
+Public routes:
 
-Requested implementation:
+- `/`
+- `/about`
+- `/gallery`
+- `/services`
+- `/services/:slug`
+- `/booking`
+- `/contact`
 
-1. Update `client/src/pages/Gallery.jsx`:
-   - Keep existing `selectedItem` state, `activeTriggerRef`, `openModal`, and `closeModal` behavior.
-   - Replace the current page hero copy with:
+Exclude `/admin` from decorative GSAP animation.
 
-     ```jsx
-     <div className="gallery-title-wrap">
-       <h1>GALLERY</h1>
-     </div>
-     ```
+Use GSAP, `@gsap/react`, and ScrollTrigger. Install `gsap` and `@gsap/react` if missing.
 
-   - Keep rendering `galleryItems` as buttons.
-   - Keep `GalleryModal` usage.
-   - Remove visible card caption text from markup only if CSS hiding is not enough; prefer CSS hiding.
+Create a centralized setup and reusable hooks/components for route transitions, scroll reveals, staggered content, text reveals, image mask reveals, and gentle parallax. Keep motion subtle and premium, make Gallery the strongest showcase, keep Booking fast and immediately interactive, respect `prefers-reduced-motion`, scope selectors to refs/contexts, clean up animations and ScrollTriggers, avoid layout shift and memory leaks, and preserve all existing UI, copy, routes, APIs, and behavior.
 
-2. Update `client/src/index.css`:
-   - Override the existing gallery styles so the page resembles the Figma:
-     - dark canvas
-     - centered title
-     - 3-column grid on desktop
-     - square image tiles
-     - no masonry spans
-     - no visible captions
-     - responsive 2 columns on tablet, 1 column on mobile
-   - Replace/override current `.gallery-grid`, `.gallery-card`, `.gallery-card.feature`, `.gallery-card.tall`, `.gallery-card.wide`, `.gallery-card.medium`, `.gallery-card.compact` styles.
-   - Modal should match the Figma overlay:
-     - dark translucent backdrop
-     - centered large light/cream rectangle
-     - image contained inside
-     - close button remains accessible
-     - hide modal copy for this design.
+Required verification:
 
-3. Preserve accessibility:
-   - Buttons must keep `aria-label`.
-   - Modal must still close on Escape/backdrop/close button.
-   - Focus should return to clicked gallery item after closing.
+- `npm install`
+- `npm install --prefix client`
+- `npm run test`
+- `npm run test --prefix client`
+- `npm run build --prefix client`
 
-4. Run:
-   - `npm run lint --prefix client`
-   - `npm run test --prefix client`
-   - `npm run build --prefix client`
+Execution mode: `complete-workflow`.
 
-Return the changed files and summarize exactly what changed.
+Applied skill: design-taste-frontend

@@ -84,7 +84,7 @@ export function Contact() {
 
   return (
     <section className="contact-page dark-contact-page mx-auto grid w-[min(100%_-_2rem,1180px)] gap-8 py-12 sm:py-16 lg:grid-cols-[minmax(0,1.08fr)_minmax(18rem,0.72fr)] lg:gap-12 lg:py-20">
-      <div className="grid content-start gap-7">
+      <div className="grid content-start gap-7" data-motion-item>
         <div className="page-hero-copy grid justify-items-start gap-5">
           <p className="eyebrow">Contact KareBraids</p>
           <h1>Let's talk about your next style</h1>
@@ -166,7 +166,7 @@ export function Contact() {
           </form>
         )}
       </div>
-      <aside className="contact-info-card grid content-start gap-7 self-start rounded-[1.5rem] border border-[var(--theme-cream-muted-a014)] bg-[var(--theme-espresso-panel-a072)] p-6 shadow-[0_22px_64px_var(--theme-shadow-black-a028)] sm:p-8 lg:sticky lg:top-28">
+      <aside className="contact-info-card grid content-start gap-7 self-start rounded-[1.5rem] border border-[var(--theme-cream-muted-a014)] bg-[var(--theme-espresso-panel-a072)] p-6 shadow-[0_22px_64px_var(--theme-shadow-black-a028)] sm:p-8 lg:sticky lg:top-28" data-motion-item>
         <div className="grid gap-3">
           <p className="eyebrow">Contact details</p>
           <h2 className="text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">Start with a conversation</h2>

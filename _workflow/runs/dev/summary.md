@@ -229,3 +229,15 @@
 ## Next Recommended Work
 
 - User review, then commit with `redesign KareBraids homepage with dark luxury layout`.
+## 2026-06-10 - Reusable Public GSAP Animation System
+
+Implemented a centralized GSAP/ScrollTrigger layer for every public KareBraids page. Public routes now use subtle incoming transitions and scoped section reveals, reusable primitives handle stagger/image/parallax effects, Gallery has the richest treatment, Booking stays fast, reduced-motion content is immediate, and `/admin` remains outside decorative animation.
+
+Verification passed: 71 server tests, 120 client tests, client lint, production build, browser route/Admin/reduced-motion/mobile checks, and zero browser console errors. A 390px Booking overflow found during browser review was fixed and regression-tested.
+
+Review: `_workflow/runs/dev/review.md`
+Verification: `_workflow/runs/dev/verification.md`
+Release notes: `_workflow/runs/dev/release-notes.md`
+Fallow: `.workflow/fallow-audit.md` (`PARTIAL` due unrelated branch findings; feature scope clean)
+
+Applied skill: design-taste-frontend

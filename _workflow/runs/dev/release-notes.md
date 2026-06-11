@@ -1,55 +1,14 @@
-# Release Notes: Gallery Figma Redesign
+# Release Notes: Public GSAP Motion System
 
-- Request: Redesign the KareBraids gallery page to match the supplied Figma-style dark premium gallery reference.
-- Status: Needs Human Review pending verification.
-- Applied skill: design-taste-frontend
+Date: 2026-06-10
 
-## User-Facing Changes
+- Added centralized GSAP, `@gsap/react`, and ScrollTrigger setup.
+- Added reusable page transition, reveal, stagger, image reveal, parallax, and reduced-motion utilities.
+- Applied consistent incoming route and scroll-triggered motion to all public pages.
+- Kept `/admin` outside decorative animation.
+- Upgraded Gallery with staggered image reveals, shallow parallax, hover composition, and modal entry motion.
+- Kept Booking motion short and non-blocking, with a mobile overflow regression fix.
+- Removed the legacy homepage-only global IntersectionObserver reveal hook.
+- Added animation, route exclusion, Gallery, reduced-motion, and mobile regression coverage.
 
-- Gallery page title changed to centered uppercase `GALLERY`.
-- Gallery image wall changed to a clean responsive square grid.
-- Gallery card captions are visually hidden.
-- Gallery modal styling changed to a dark translucent backdrop with a centered light/cream image panel.
-- Modal copy is visually hidden for the new design.
-
-## Developer Changes
-
-- Updated `Gallery.jsx` page hero markup.
-- Added final cascade-safe gallery/grid/modal CSS overrides in `index.css`.
-- Updated focused page tests for the new gallery design.
-- Added modal backdrop-click focus-restoration test.
-
-## New Routes/APIs
-
-none
-
-## New Env Vars
-
-none
-
-## Database/Schema Changes
-
-none
-
-## Dependencies Added/Removed
-
-none
-
-## Test Commands Run
-
-- `npm run test --prefix client -- site-pages.test.jsx`: failed first for expected Red evidence.
-- `npm run test --prefix client -- site-pages.test.jsx`: failed on stale old-heading assertion, then assertion was updated.
-- Subsequent command runs timed out due terminal executor issue.
-
-## Known Limitations
-
-- `npm run lint --prefix client`, `npm run test --prefix client`, and `npm run build --prefix client` have not been completed yet in this run.
-- Final diff audit has not been completed yet because terminal commands timed out.
-
-## Follow-Up Work
-
-- Rerun focused tests, lint, full tests, build, and git diff audit when terminal execution is healthy.
-
-## Suggested Commit Message
-
-`redesign gallery page with square grid and light modal`
+All server/client tests, client lint, and the client production build pass.

@@ -1,42 +1,30 @@
 # Fallow Audit
 
-## Metadata
-- Date: 2026-06-09
-- Scope: booking/services production repair
-- Commands:
-  - `FALLOW_AGENT_SOURCE=codex npx fallow audit --base HEAD --format json --quiet --explain 2>/dev/null || true`
-  - `FALLOW_AGENT_SOURCE=codex npx fallow health --format json --quiet --explain 2>/dev/null || true`
-- Fallow version: 2.91.0
-- Schema version: 7
+Date: 2026-06-10
+Verdict: PARTIAL
 
-## Result
-- Verdict: PARTIAL
-- Changed-code audit verdict: `fail`
-- Health score: 74.4 / 100 (B)
-- Files analyzed: 129
-- Average maintainability: 89.9
-- Circular dependencies: 0
-- Boundary violations: 0
-- Unresolved imports/unlisted dependencies: 0
+## Commands
 
-## Cleanup And Dependency Findings
-- Fallow reported `api/index.js` and Jest test files as unused because Vercel/Jest entrypoints are outside its static import graph. They are required and directly exercised by deployment/serverless tests.
-- No unused dependency, unresolved import, unlisted dependency, circular dependency, re-export cycle, or boundary violation was reported.
+Fallow 2.92.1 ran with JSON, `--quiet`, `--explain`, stderr suppression, and non-blocking issue exits:
 
-## Complexity And Duplication
-- One introduced moderate static complexity/CRAP finding was reported for `getAvailability`; the function is covered by booking API tests, but Fallow's static estimated coverage does not recognize the Jest mock path.
-- Two introduced duplication groups are test/config assertion repetition. Existing controller/test duplication was also reported. No extraction is warranted within this minimal production fix.
-- Existing Booking UI and service-validation hotspots remain outside scope.
+- `fallow audit --base main`
+- `fallow dead-code`
+- `fallow health --score`
+- `fallow dupes`
 
-## Changed-Code Risk
-- Server 71/71 and client 116/116 tests pass.
-- Client build and lint pass.
-- Production dependency audit reports zero vulnerabilities.
-- Root config, function entrypoint, API JSON behavior, Mongo-backed service eligibility, and duplicate protection have focused tests.
+## Results
 
-## Recommended Follow-Up
-- Optionally configure Fallow entrypoints for `api/index.js` and Jest files.
-- Address existing complexity hotspots only in separately scoped refactors.
+- Health score: 84.6, grade B.
+- Full repository: 26 dead-code findings, 31 duplicate groups, 6.78% duplicated lines.
+- No unused dependencies, unlisted dependencies, unresolved imports, circular dependencies, re-export cycles, or boundary violations.
+- The changed-code audit reports `fail`, but its introduced dead-code, complexity, and remaining duplicate findings are in unrelated existing `api/` and `server/` branch changes.
+- Fallow initially found repeated reduced-motion setup in the new animation tests. That duplication was refactored and no longer appears.
+- No new animation-system file or GSAP dependency is reported unused.
 
-## Final Verdict
-PARTIAL — static entrypoint/coverage/duplication findings remain, but no correctness, dependency, circular, boundary, import, build, lint, or tested changed-code blocker was found.
+## Interpretation
+
+The animation implementation passes the scoped Fallow review. The overall verdict is `PARTIAL` because branch-wide findings outside this approved frontend scope remain and were not modified.
+
+## Security And Architecture
+
+Fallow is not treated as SAST or dependency vulnerability scanning. No cycles or architecture boundary violations were reported. Root npm audit findings are documented separately in verification.

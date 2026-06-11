@@ -231,7 +231,7 @@ function BookingWizard({ bookableServices, bookableServicesQuery, initialService
 
   return (
     <section className="booking-page dark-booking-page">
-      <div className="booking-hero">
+      <div className="booking-hero" data-motion-item>
         <div className="page-hero-copy narrow">
           <p className="eyebrow">Booking concierge</p>
           <h1>Book your braid appointment</h1>
@@ -247,7 +247,7 @@ function BookingWizard({ bookableServices, bookableServicesQuery, initialService
       </div>
 
       <div className="booking-workspace">
-        <aside className="booking-summary" aria-label="Booking progress and summary">
+        <aside className="booking-summary" data-motion-item aria-label="Booking progress and summary">
           <div className="booking-step-list">
             {workflowSteps.map((item, index) => (
               <div
@@ -290,7 +290,7 @@ function BookingWizard({ bookableServices, bookableServicesQuery, initialService
           </div>
         </aside>
 
-        <div className="booking-panel">
+        <div className="booking-panel" data-motion-item>
           {formError ? (
             <p className="form-alert" role="alert">
               <WarningCircle aria-hidden="true" size={20} weight="duotone" />

@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout.jsx'
+import { PublicRouteTransition } from './components/animations/PublicRouteTransition.jsx'
 import { RouteScrollManager } from './components/RouteScrollManager.jsx'
 import { StyleRedirect } from './components/StyleRedirect.jsx'
 import { About } from './pages/About.jsx'
@@ -18,14 +19,16 @@ const App = () => {
 
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="gallery" element={<Gallery />} />
-          <Route path="services" element={<Services />} />
-          <Route path="services/:slug" element={<ServiceDetail />} />
-          <Route path="styles/:slug" element={<StyleRedirect />} />
-          <Route path="booking" element={<Booking />} />
-          <Route path="contact" element={<Contact />} />
+          <Route element={<PublicRouteTransition />}>
+            <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
+            <Route path="gallery" element={<Gallery />} />
+            <Route path="services" element={<Services />} />
+            <Route path="services/:slug" element={<ServiceDetail />} />
+            <Route path="styles/:slug" element={<StyleRedirect />} />
+            <Route path="booking" element={<Booking />} />
+            <Route path="contact" element={<Contact />} />
+          </Route>
           <Route path="admin" element={<Admin />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Route>
