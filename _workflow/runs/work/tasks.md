@@ -107,8 +107,6 @@
 - Verification commands: `npm test`, `npm test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, Fallow commands, `git diff --check`.
 - Stop condition: In-scope regression cannot be fixed or verified.
 - Out-of-scope items: Baseline unrelated cleanup.
-<<<<<<< HEAD
-=======
 
 ## TASK-006: Enforce the local gallery image source of truth
 - Status: Done
@@ -128,4 +126,3 @@
 - Verification result: Passed. Screenshot attempt was blocked because no Playwright browser executable is installed.
 - Stop condition: None reached.
 - Out-of-scope items: Removing remote URLs from backend seed/API, since the frontend contract now intentionally ignores them for rendering.
->>>>>>> pr-25

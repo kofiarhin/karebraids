@@ -48,8 +48,6 @@
 PASSED with environment warnings for screenshots and remote-host verification.
 
 Applied skill: design-taste-frontend
-<<<<<<< HEAD
-=======
 
 ## Review Remediation — Gallery Image Source Of Truth
 - Finding confirmed: API `galleryItems` previously flowed into live cards/modals with remote seed URLs.
@@ -57,4 +55,3 @@ Applied skill: design-taste-frontend
 - Defense in depth: `getGalleryImageSrc` permits only `/images/` paths and falls back locally for remote/malformed inputs across Gallery, GalleryModal, GalleryFeature, and ServiceDetail.
 - Tests: Every gallery-enabled service ID/slug filter returns local paths; remote component fixtures render local card/modal paths.
 - Verdict: Resolved; no direct API-provided image source can reach a gallery renderer.
->>>>>>> pr-25

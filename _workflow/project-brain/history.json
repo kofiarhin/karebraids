@@ -1,10 +1,6 @@
 {
   "version": "1.0.0",
-<<<<<<< HEAD
-  "updatedAt": "2026-06-12T01:38:14Z",
-=======
   "updatedAt": "2026-06-12T02:02:08Z",
->>>>>>> pr-25
   "events": [
     {
       "id": "history-complete-gallery-filter-navigation-20260611",
@@ -169,8 +165,6 @@
         "_workflow/runs/work/release-notes.md",
         "_workflow/runs/work/summary.md"
       ]
-<<<<<<< HEAD
-=======
     },
     {
       "timestamp": "2026-06-12T02:02:08Z",
@@ -182,7 +176,6 @@
         "client/src/data/imageLibrary.js",
         "_workflow/runs/work/progress.md"
       ]
->>>>>>> pr-25
     }
   ]
 }

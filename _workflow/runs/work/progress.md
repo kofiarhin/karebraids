@@ -794,8 +794,6 @@
 - Warnings: Vite reports an existing >500 kB chunk; jsdom logs unsupported `scrollTo`; screenshots unavailable because Playwright Chromium download is domain-blocked; remote Pexels checks are proxy-blocked.
 - Next action: Commit and create PR.
 - Applied skill: design-taste-frontend
-<<<<<<< HEAD
-=======
 
 ## 2026-06-12 — TASK-006: Local gallery image source remediation — Done
 - Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
@@ -807,4 +805,3 @@
 - Screenshot: Attempted `npx playwright screenshot ...`; unavailable because the Chromium executable is not installed and browser downloads are environment-blocked.
 - Acceptance: [x] local source of truth; [x] no remote live rendering; [x] all filters covered; [x] service filtering/context preserved; [x] cards and modals guarded.
 - Applied skill: design-taste-frontend
->>>>>>> pr-25

@@ -1,10 +1,6 @@
 {
   "version": "1.0.0",
-<<<<<<< HEAD
-  "updatedAt": "2026-06-12T01:38:14Z",
-=======
   "updatedAt": "2026-06-12T02:02:08Z",
->>>>>>> pr-25
   "runId": "work",
   "workflow": {
     "currentStage": "complete",
@@ -709,8 +705,6 @@
       "updatedAt": "2026-06-12T01:19:08Z",
       "supersedes": [],
       "history": []
-<<<<<<< HEAD
-=======
     },
     {
       "id": "decision-gallery-local-render-source",
@@ -726,7 +720,6 @@
       "updatedAt": "2026-06-12T02:02:08Z",
       "supersedes": [],
       "history": []
->>>>>>> pr-25
     }
   ],
   "domainKnowledge": [
@@ -1152,14 +1145,11 @@
       "timestamp": "2026-06-12T01:38:14Z",
       "stage": "complete",
       "summary": "Pre-launch pricing, image, Karen profile, and dormant product work completed and verified."
-<<<<<<< HEAD
-=======
     },
     {
       "timestamp": "2026-06-12T02:02:08Z",
       "stage": "complete",
       "summary": "Resolved gallery source-of-truth audit: API filtering retained while local representative images exclusively drive rendering."
->>>>>>> pr-25
     }
   ],
   "custom": {},
@@ -1260,8 +1250,6 @@
         "artifact": "_workflow/runs/work/summary.md",
         "conversation": "user"
       }
-<<<<<<< HEAD
-=======
     },
     {
       "timestamp": "2026-06-12T02:02:08Z",
@@ -1272,7 +1260,6 @@
         "artifact": "_workflow/runs/work/progress.md",
         "conversation": "user"
       }
->>>>>>> pr-25
     }
   ]
 }
