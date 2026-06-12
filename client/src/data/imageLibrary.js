@@ -72,13 +72,9 @@ export function getGalleryImageAlt(item, service) {
   if (service?.name) return `${service.name} styling inspiration — representative image`
   return item?.alt || REPRESENTATIVE_ALT
 }
-<<<<<<< HEAD
-=======
-
 export function getGalleryImageSrc(item) {
   const source = item?.src || item?.image
   return typeof source === 'string' && source.startsWith('/images/')
     ? source
     : SERVICE_IMAGE_FALLBACK
 }
->>>>>>> pr-25

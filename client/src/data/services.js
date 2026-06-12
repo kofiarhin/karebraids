@@ -7,11 +7,7 @@ import {
 // The API remains canonical; this copy is used only when the API is unavailable.
 const serviceCatalog = [
   { id: 'knotless-braids', slug: 'knotless-braids', name: 'Knotless Braids', category: 'Braids', shortDescription: 'Lightweight knotless braids with a natural root finish, gentle tension, and flexible everyday styling.', startingPrice: 80, duration: '4–6 hours', featured: true },
-<<<<<<< HEAD
-  { id: 'boho-knotless-braids', slug: 'boho-knotless-braids', name: 'Boho Knotless Braids', category: 'Braids', shortDescription: 'Knotless braids finished with soft loose curls for a textured bohemian look.', startingPrice: 95, duration: '5–7 hours', featured: true },
-=======
   { id: 'boho-knotless-braids', slug: 'boho-braids', name: 'Boho Knotless Braids', category: 'Braids', shortDescription: 'Knotless braids finished with soft loose curls for a textured bohemian look.', startingPrice: 95, duration: '5–7 hours', featured: true },
->>>>>>> pr-25
   { id: 'fulani-braids', slug: 'fulani-braids', name: 'Fulani Braids', category: 'Braids', shortDescription: 'Face-framing cornrow detail combined with flowing braids for a refined Fulani-inspired finish.', startingPrice: 85, duration: '4–6 hours', featured: true },
   { id: 'stitch-braids', slug: 'stitch-braids', name: 'Stitch Braids', category: 'Cornrows', shortDescription: 'Crisp stitch braids with defined sections, smooth feed-in detail, and a polished finish.', startingPrice: 45, duration: '2–4 hours', featured: true },
   { id: 'cornrows', slug: 'cornrows', name: 'Cornrows', category: 'Cornrows', shortDescription: 'Neat cornrows for everyday protective styling, from simple straight backs to custom patterns.', startingPrice: 35, duration: '1.5–3 hours', featured: false },
