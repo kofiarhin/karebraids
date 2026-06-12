@@ -8,7 +8,6 @@
     "shortDescription": "Lightweight knotless braids with a natural root finish, gentle tension, and flexible everyday styling.",
     "description": "Lightweight knotless braids with a natural root finish, gentle tension, and flexible everyday styling.",
     "startingPrice": 80,
-    "priceFrom": 80,
     "currency": "GBP",
     "duration": {
       "minHours": 4,
@@ -150,7 +149,6 @@
     "shortDescription": "Knotless braids finished with soft textured pieces for relaxed movement and a polished boho shape.",
     "description": "Knotless braids finished with soft textured pieces for relaxed movement and a polished boho shape.",
     "startingPrice": 95,
-    "priceFrom": 95,
     "currency": "GBP",
     "duration": {
       "minHours": 5,
@@ -292,7 +290,6 @@
     "shortDescription": "Face-framing braids with refined parting, optional bead accents, and a clean protective finish.",
     "description": "Face-framing braids with refined parting, optional bead accents, and a clean protective finish.",
     "startingPrice": 85,
-    "priceFrom": 85,
     "currency": "GBP",
     "duration": {
       "minHours": 4,
@@ -434,7 +431,6 @@
     "shortDescription": "Defined stitch rows with crisp parting, sleek polish, and a structured camera-ready result.",
     "description": "Defined stitch rows with crisp parting, sleek polish, and a structured camera-ready result.",
     "startingPrice": 45,
-    "priceFrom": 45,
     "currency": "GBP",
     "duration": {
       "minHours": 2,
@@ -576,7 +572,6 @@
     "shortDescription": "Classic cornrow styling with balanced tension, neat sections, and practical long-wear protection.",
     "description": "Classic cornrow styling with balanced tension, neat sections, and practical long-wear protection.",
     "startingPrice": 35,
-    "priceFrom": 35,
     "currency": "GBP",
     "duration": {
       "minHours": 1.5,
@@ -718,7 +713,6 @@
     "shortDescription": "Pattern-led tribal braids combining statement parting, length, and protective styling detail.",
     "description": "Pattern-led tribal braids combining statement parting, length, and protective styling detail.",
     "startingPrice": 90,
-    "priceFrom": 90,
     "currency": "GBP",
     "duration": {
       "minHours": 4,
@@ -860,7 +854,6 @@
     "shortDescription": "Sleek feed-in braids built gradually for a flat natural base and a polished finish.",
     "description": "Sleek feed-in braids built gradually for a flat natural base and a polished finish.",
     "startingPrice": 55,
-    "priceFrom": 55,
     "currency": "GBP",
     "duration": {
       "minHours": 2,
@@ -1002,7 +995,6 @@
     "shortDescription": "Soft goddess braids with curled accents, smooth parting, and occasion-ready movement.",
     "description": "Soft goddess braids with curled accents, smooth parting, and occasion-ready movement.",
     "startingPrice": 100,
-    "priceFrom": 100,
     "currency": "GBP",
     "duration": {
       "minHours": 5,
@@ -1144,7 +1136,6 @@
     "shortDescription": "Gentle, age-appropriate styling with comfort as the priority.",
     "description": "Gentle, age-appropriate braided styles completed with patient sectioning, comfortable tension, and easy maintenance in mind.",
     "startingPrice": 30,
-    "priceFrom": 30,
     "currency": "GBP",
     "duration": {
       "minHours": 1.5,
@@ -1195,7 +1186,6 @@
     "shortDescription": "Box Braids with clean parting, comfortable tension, and a polished finish.",
     "description": "Box Braids tailored with clean parting, balanced tension, and a polished protective finish for comfortable everyday wear.",
     "startingPrice": 70,
-    "priceFrom": 70,
     "currency": "GBP",
     "duration": {
       "minHours": 4,
@@ -1246,7 +1236,6 @@
     "shortDescription": "Twists with clean parting, comfortable tension, and a polished finish.",
     "description": "Twists tailored with clean parting, balanced tension, and a polished protective finish for comfortable everyday wear.",
     "startingPrice": 65,
-    "priceFrom": 65,
     "currency": "GBP",
     "duration": {
       "minHours": 3,

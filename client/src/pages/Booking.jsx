@@ -13,6 +13,7 @@ import { useSearchParams } from 'react-router-dom'
 import { Button } from '../components/Button.jsx'
 import { useBookableServices } from '../hooks/queries/useServices.js'
 import { getServicePreviewImage } from '../utils/servicePreview.js'
+import { formatServicePrice } from '../utils/formatServicePrice.js'
 import { useCreateBooking } from '../hooks/mutations/useCreateBooking.js'
 import { useAvailability } from '../hooks/queries/useAvailability.js'
 import { getApiErrorMessage } from '../lib/api.js'
@@ -311,7 +312,7 @@ function BookingWizard({ bookableServices, bookableServicesQuery, initialService
               <div className="booking-service-grid">
                 {bookableServices.map((service) => (
                   <button
-                    aria-label={`${service.name}, from ${new Intl.NumberFormat('en-GB', { style: 'currency', currency: service.currency || 'GBP', maximumFractionDigits: 0 }).format(service.startingPrice ?? service.priceFrom ?? 0)}, ${service.durationLabel}`}
+                    aria-label={`${service.name}, from ${formatServicePrice(service)}, ${service.durationLabel}`}
                     className="booking-service"
                     key={service.id}
                     onClick={() => selectService(service)}
@@ -320,7 +321,7 @@ function BookingWizard({ bookableServices, bookableServicesQuery, initialService
                     <img alt="" aria-hidden="true" loading="lazy" src={getServicePreviewImage(service)} />
                     <span className="booking-service-copy">
                       <strong>{service.name}</strong>
-                      <small>From {new Intl.NumberFormat('en-GB', { style: 'currency', currency: service.currency || 'GBP', maximumFractionDigits: 0 }).format(service.startingPrice ?? service.priceFrom ?? 0)}</small>
+                      <small>From {formatServicePrice(service)}</small>
                       <span>{service.durationLabel}</span>
                     </span>
                   </button>

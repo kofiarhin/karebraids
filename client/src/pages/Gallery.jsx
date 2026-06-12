@@ -6,15 +6,9 @@ import { ParallaxLayer } from '../components/animations/ParallaxLayer.jsx'
 import { StaggerReveal } from '../components/animations/StaggerReveal.jsx'
 import { SERVICE_PREVIEW_FALLBACK_IMAGE } from '../utils/servicePreview.js'
 import { useGalleryItems, useGalleryServices } from '../hooks/queries/useGalleryItems.js'
+import { formatServicePrice } from '../utils/formatServicePrice.js'
+import { getGalleryImageAlt } from '../data/imageLibrary.js'
 
-function formatPrice(service) {
-  if (!service) return ''
-  return new Intl.NumberFormat('en-GB', {
-    style: 'currency',
-    currency: service.currency,
-    maximumFractionDigits: 0,
-  }).format(service.startingPrice)
-}
 
 function SafeGalleryImage({ item }) {
   const [hasError, setHasError] = useState(false)
@@ -101,7 +95,10 @@ export function Gallery() {
   const selectedServiceId = requestedMatch ? requestedMatch.slug || requestedMatch.id : 'all'
   const selectedService = requestedMatch || null
   const galleryItemsQuery = useGalleryItems(selectedServiceId === 'all' ? {} : { service: selectedServiceId })
-  const galleryItems = galleryItemsQuery.data || []
+  const galleryItems = (galleryItemsQuery.data || []).map((item) => ({
+    ...item,
+    alt: getGalleryImageAlt(item, selectedService),
+  }))
   const modal = useGalleryModal(galleryItems)
 
   const updateSelectedService = (serviceId) => {
@@ -145,7 +142,7 @@ export function Gallery() {
             <p>{selectedService.shortDescription}</p>
           </div>
           <dl>
-            <div><dt>Starting price</dt><dd>{formatPrice(selectedService)}</dd></div>
+            <div><dt>Starting price</dt><dd>{formatServicePrice(selectedService)}</dd></div>
             <div><dt>Duration</dt><dd>{selectedService.durationLabel}</dd></div>
           </dl>
           <Link className="btn btn-primary" to={`/booking?service=${selectedService.slug || selectedService.id}`}>Book This Style</Link>

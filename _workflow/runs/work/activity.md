@@ -98,3 +98,27 @@ Append compact, timestamped workflow and memory updates. Do not rewrite prior en
 - Artifact: Updated progress, verification, review, Fallow audit, release notes, summary, handoff, tasks, and Project Brain.
 - Checkpoint: Saved.
 - Next: Commit, create PR, deploy from repository root, and run documented production checks.
+
+## 2026-06-12T01:19:08Z — Pre-launch intake and spec saved
+- Stage: Complete -> Spec approval gate
+- Memory: Added active pre-launch goal, requirements, constraints, risks, assumptions, and unresolved client-content questions.
+- Artifact: Updated `_workflow/runs/work/request.md`, `_workflow/runs/work/spec.md`, `_workflow/runs/work/handoff.md`, and `_workflow/runs/work/progress.md`.
+- Checkpoint: Saved.
+- Next: Await explicit spec approval before task planning or code edits.
+- Applied skill: design-taste-frontend
+
+## 2026-06-12 — Spec approved and task plan saved
+- Stage: Spec approval gate -> Planning complete
+- Memory: Recorded explicit user approval and five sequential vertical tasks.
+- Artifact: Updated `_workflow/runs/work/tasks.md` and `_workflow/runs/work/handoff.md`.
+- Checkpoint: Saved.
+- Next: Execute TASK-001 Iteration 1 Build, Red phase.
+- Applied skill: design-taste-frontend
+
+## 2026-06-12T01:38:14Z — Pre-launch workflow complete
+- Stage: Implementation -> Verification -> Review -> Fallow Quality -> Release -> Complete
+- Memory: Completed pricing, imagery, Karen profile, and dormant product requirements; retained non-blocking owner-content placeholders.
+- Artifact: Updated application/tests plus tasks, progress, review, Fallow audit, release notes, summary, and handoff.
+- Checkpoint: Saved.
+- Next: Commit and create PR; owner replaces marked content before launch.
+- Applied skill: design-taste-frontend

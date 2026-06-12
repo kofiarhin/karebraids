@@ -1,30 +1,41 @@
-import { SERVICE_IMAGE_FALLBACK, services } from './services.js'
+import { getDisplayImage } from './imageLibrary.js'
 
-function findServiceImage(serviceId, imageIndex = 0) {
-  return services.find((service) => service.id === serviceId)?.galleryImages?.[imageIndex]
+function representativeServiceImage(serviceId, styleName) {
+  const image = getDisplayImage(serviceId)
+  return {
+    src: image.src,
+    alt: `${styleName} representative styling inspiration`,
+  }
 }
 
-const knotlessImage = findServiceImage('knotless-braids')
-const braidDetailImage = findServiceImage('knotless-braids', 1)
-const boxBraidsImage = findServiceImage('box-braids')
-const cornrowsImage = findServiceImage('cornrows')
-const stitchImage = findServiceImage('stitch-braids')
-const twistsImage = findServiceImage('twists')
-const kidsBraidsImage = findServiceImage('kids-braids')
+const knotlessImage = representativeServiceImage('knotless-braids', 'Knotless Braids')
+const boxBraidsImage = representativeServiceImage('box-braids', 'Box Braids')
+const cornrowsImage = representativeServiceImage('cornrows', 'Cornrows')
+const stitchImage = representativeServiceImage('stitch-braids', 'Protective Styling')
+const twistsImage = representativeServiceImage('twists', 'Twists')
+const kidsBraidsImage = representativeServiceImage('kids-braids', 'Kids Braids')
+const karenProfilePlaceholder = getDisplayImage('karen-profile-placeholder')
+
+// TODO(pre-launch): Replace this representative image with Karen's approved profile photo.
+// TODO(pre-launch): Replace the draft statement with Karen's approved personal statement.
+export const karenProfile = {
+  image: {
+    src: karenProfilePlaceholder.src,
+    alt: "Representative placeholder for Karen's profile photo",
+    isPlaceholder: true,
+  },
+  statement: 'KareBraids was built on a simple belief: every client deserves beautiful braids and a comfortable experience.',
+  statementIsPlaceholder: true,
+  biography: [
+    'Karen works with a variety of hair textures and styles, helping clients choose looks that are both beautiful and protective.',
+    'Whether you are booking knotless braids, box braids, twists, or cornrows, the focus is always on quality, comfort, and lasting results.',
+  ],
+}
 
 export const aboutImages = {
-  hero: {
-    src: knotlessImage?.src || SERVICE_IMAGE_FALLBACK,
-    alt: knotlessImage?.alt || 'Polished knotless braids styled with a premium finish',
-  },
-  founder: {
-    src: stitchImage?.src || braidDetailImage?.src || SERVICE_IMAGE_FALLBACK,
-    alt: stitchImage?.alt || 'Karen creating detailed protective braids with careful hand placement',
-  },
-  experience: {
-    src: boxBraidsImage?.src || cornrowsImage?.src || SERVICE_IMAGE_FALLBACK,
-    alt: boxBraidsImage?.alt || 'Beautiful long braids with a polished protective finish',
-  },
+  hero: knotlessImage,
+  founder: karenProfile.image,
+  experience: boxBraidsImage,
 }
 
 export const whyChooseCards = [
@@ -47,36 +58,12 @@ export const whyChooseCards = [
 ]
 
 export const specialties = [
-  {
-    title: 'Knotless Braids',
-    image: knotlessImage?.src,
-    alt: knotlessImage?.alt || 'Knotless braids styled with a clean middle part',
-  },
-  {
-    title: 'Box Braids',
-    image: boxBraidsImage?.src,
-    alt: boxBraidsImage?.alt || 'Long box braids with polished movement',
-  },
-  {
-    title: 'Cornrows',
-    image: cornrowsImage?.src,
-    alt: cornrowsImage?.alt || 'Precision cornrows with defined rows',
-  },
-  {
-    title: 'Kids Braids',
-    image: kidsBraidsImage?.src,
-    alt: kidsBraidsImage?.alt || 'Child-friendly braided protective style',
-  },
-  {
-    title: 'Twists',
-    image: twistsImage?.src,
-    alt: twistsImage?.alt || 'Soft protective twist texture',
-  },
-  {
-    title: 'Protective Styling',
-    image: braidDetailImage?.src || stitchImage?.src,
-    alt: braidDetailImage?.alt || 'Detailed protective braid styling focused on comfort',
-  },
+  { title: 'Knotless Braids', image: knotlessImage.src, alt: knotlessImage.alt },
+  { title: 'Box Braids', image: boxBraidsImage.src, alt: boxBraidsImage.alt },
+  { title: 'Cornrows', image: cornrowsImage.src, alt: cornrowsImage.alt },
+  { title: 'Kids Braids', image: kidsBraidsImage.src, alt: kidsBraidsImage.alt },
+  { title: 'Twists', image: twistsImage.src, alt: twistsImage.alt },
+  { title: 'Protective Styling', image: stitchImage.src, alt: stitchImage.alt },
 ]
 
 export const testimonials = [

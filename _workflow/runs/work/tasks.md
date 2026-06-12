@@ -1,73 +1,109 @@
-# Booking and Services Production Repair Task Plan
+# KareBraids Pre-Launch Updates Task Plan
 
 - Spec file used: `_workflow/runs/work/spec.md`
-- Planning date: 2026-06-09
+- Planning date: 2026-06-12
 - Execution mode: `complete-workflow`
 - Progress read: `_workflow/runs/work/progress.md`
 - Summary read: `_workflow/runs/work/summary.md`
 - Handoff read: `_workflow/runs/work/handoff.md`
-- Project Brain read: project/run JSON, categories, and conflicts
-- Spec basis: Sections 5–22, especially affected surfaces, integration map, runtime expectations, verification, acceptance criteria, risks, and task extraction notes.
-- Frontend Taste Application: Not applicable; no JSX/CSS/Tailwind/UI generation is planned.
+- Detailed spec sections used: Current State Analysis, Desired End State, Scope, Functional/Non-Functional Requirements, Affected Surfaces, Dependency Map, Data Impact, UX/API Expectations, Execution Strategy, Verification Strategy, Acceptance Criteria, Edge Cases, Risks, Assumptions, Open Questions, and Task Extraction Notes.
+- Applied skill: design-taste-frontend
 
-## TASK-001: Route browser API calls through the same-origin `/api` contract
-
+## TASK-001: Make starting prices consistent from canonical data to every card
 - Status: Done
-- Objective: Make all existing service, booking, contact, gallery, and admin adapters use `/api` by default while preserving a normalized explicit override and local development.
-- Files likely affected: `client/src/lib/api.js`, `client/vite.config.js`, `client/test/api-config.test.js`.
+- Objective: Retain all current backend prices, remove redundant editable seed aliases, align the offline fallback catalogue, and make every public price label use one shared formatter.
+- Files likely affected: `server/data/services.json`, serializer/seed tests, `client/src/data/services.js`, `client/src/services/serviceService.js`, new pricing utility/tests, Services/Gallery/Booking/ServiceDetail/home components.
 - Checklist:
-  - [x] Add failing Vitest coverage for missing, blank, explicit, and trailing-slash API bases.
-  - [x] Default Axios to `/api`.
-  - [x] Add local Vite `/api` proxy to Express.
-  - [x] Verify existing client service contracts.
-- Iteration 1 Build: Red test default/override behavior; implement resolver and proxy; focused tests.
-- Iteration 2 Refine: Red edge-case test for whitespace/trailing slashes; normalize; client service regression.
-- Iteration 3 Polish: Audit all adapters for shared Axios use; full client test/build/lint.
-- Test plan: Vitest focused API/deployment/service tests, full client suite, build, lint.
-- Red/Green/Refactor evidence: To be recorded in progress.
-- Acceptance criteria: Same-origin fallback, safe override, local proxy, no API logic moved into components.
-- Verification commands: `npm run test --prefix client -- --run client/test/api-config.test.js`; relevant existing suites; client build/lint.
-- Stop condition: API base cannot be made compatible without changing public adapter contracts.
-- Out of scope: UI changes and server route changes.
+  - [ ] Add failing tests for canonical seed prices, compatibility aliases, fallback alignment, shared formatting, and missing-price behavior.
+  - [ ] Keep one editable `startingPrice` per backend seed service and preserve API aliases.
+  - [ ] Make the frontend fallback catalogue derive from one client catalogue with values matching backend truth.
+  - [ ] Replace component-local money formatting.
+- Iteration 1 Build: Red tests for price invariants/formatter; Green minimal canonicalization; Refactor shared imports.
+- Iteration 2 Refine: Red edge cases for legacy alias/missing price; Green safe fallback labels; Refactor naming.
+- Iteration 3 Polish: Red regression assertions for all renderers; Green complete migration; Refactor duplicate code audit.
+- Test plan: Jest seed/serializer tests; Vitest formatter/service data and affected component tests.
+- Red phase evidence: To record in progress.
+- Green phase evidence: To record in progress.
+- Refactor phase evidence: To record in progress.
+- Test commands run: To record in progress.
+- Acceptance criteria: Current values unchanged; one seed price field; API aliases equal; all UI consumers shared; no fabricated `£0`.
+- Acceptance result: [x] Complete; see `_workflow/runs/work/progress.md`.
+- Verification commands: Focused Jest/Vitest, `rg` duplicate formatter audit.
+- Stop condition: Any current service price cannot be reconciled without guessing.
+- Out-of-scope items: Client-approved replacement pricing and admin price redesign.
 
-## TASK-002: Serve the SPA and every Express namespace from one root Vercel project
-
+## TASK-002: Harden representative style and gallery image mappings
 - Status: Done
-- Objective: Add a tested Vercel function and root routing/build configuration that sends `/api/*` to Express before SPA fallback.
-- Files likely affected: `api/index.js`, `vercel.json`, `client/vercel.json`, `client/test/deployment.test.js`, `server/tests/serverless.test.js`.
+- Objective: Validate image IDs/paths, preserve uncertain semantic assignments, and make style-context alt text accurate and accessible across cards, detail, gallery, and modal.
+- Files likely affected: `client/src/data/imageLibrary.js`, `client/src/utils/servicePreview.js`, Gallery/ServiceDetail/home/service cards, related tests, optional audit test/script.
 - Checklist:
-  - [x] Add failing config tests for root build/output and ordered API/SPA rewrites.
-  - [x] Add failing Jest serverless tests for database initialization and Express health/404 behavior.
-  - [x] Add root `api/index.js` without `listen()`.
-  - [x] Remove conflicting client-only Vercel config.
-  - [x] Verify services/bookings/contact/gallery/admin namespaces remain Express routes.
-- Iteration 1 Build: Red deployment config tests; implement root Vercel config/function; focused tests.
-- Iteration 2 Refine: Red warm-invocation/failure-retry tests; harden connection caching; serverless tests.
-- Iteration 3 Polish: Audit rewrite precedence, API JSON 404, function imports, and full server/client regressions.
-- Test plan: Vitest deployment tests; Jest serverless/app/API suites; build and config parse.
-- Red/Green/Refactor evidence: To be recorded in progress.
-- Acceptance criteria: Root project builds `client/dist`; API rewrites reach `api/index`; SPA deep links reach `index.html`; no persistent listener in the function.
-- Verification commands: Focused Vitest/Jest, `npm test`, client build.
-- Stop condition: Vercel config requires an unverified legacy builder or incompatible project-root assumption.
-- Out of scope: Separate backend deployment.
+  - [ ] Add failing invariants for local file existence, unique IDs/src values, and style-aware alt text.
+  - [ ] Add a shared service preview descriptor instead of returning only a path.
+  - [ ] Pass selected style context into gallery card/modal alt text without claiming ownership.
+  - [ ] Preserve undocumented remote cross-service mappings and document uncertainty.
+- Iteration 1 Build: Red image invariant/alt tests; Green descriptor/context implementation; Refactor shared helper.
+- Iteration 2 Refine: Red fallback/broken-path tests; Green deterministic fallback; Refactor accessibility copy.
+- Iteration 3 Polish: Red modal/detail regression tests; Green all consumers migrated; Refactor duplicate alt literals.
+- Test plan: Vitest image-library, service-preview, Gallery, ServiceDetail, About data; filesystem audit command.
+- Red/Green/Refactor evidence: To record in progress.
+- Test commands run: To record in progress.
+- Acceptance criteria: Valid unique local mapping; meaningful style-name alt; selected gallery context preserved; uncertainties documented.
+- Acceptance result: [x] Complete; see `_workflow/runs/work/progress.md`.
+- Verification commands: Focused Vitest plus Node path/hash/invariant script.
+- Stop condition: A proposed remap depends on visual guesswork.
+- Out-of-scope items: Reclassifying unlabeled photographs or replacing assets.
 
-## TASK-003: Prove booking/service behavior and document production database/deployment operations
-
+## TASK-003: Add configurable Karen profile content to About Me
 - Status: Done
-- Objective: Verify the complete API flow, seed behavior, duplicate protection, and provide operator-ready Vercel/MongoDB instructions and root-cause analysis.
-- Files likely affected: `README.md`, `.env.example`, relevant tests, workflow artifacts.
+- Objective: Render a centralized profile image and personal statement with explicit source TODOs and honest placeholder semantics.
+- Files likely affected: `client/src/data/aboutPageData.js`, `client/src/components/about/MeetKaren.jsx`, `client/src/pages/About.jsx`, About tests, existing Tailwind classes only.
 - Checklist:
-  - [x] Verify health, all services, filtered services, availability, booking creation, and duplicate conflict.
-  - [x] Confirm contact/gallery/admin route reachability via existing/new tests.
-  - [x] Validate seed data and idempotent upsert workflow.
-  - [x] Document root project settings, env vars, Atlas network access, service count/seed checks, and post-deploy curl commands.
-  - [x] Record inability or success of live production probes without claiming unavailable access.
-- Iteration 1 Build: Add any missing endpoint/seed documentation tests first; update docs; focused checks.
-- Iteration 2 Refine: Run endpoint contract suite and local smoke server with controlled mocks/test process; correct gaps.
-- Iteration 3 Polish: Full tests/build/lint/diff/security audit, review, Fallow, final artifacts.
-- Test plan: Full Jest and Vitest, client build/lint, seed validation, local HTTP smoke, diff check.
-- Red/Green/Refactor evidence: Documentation-only portions use explicit TDD exception; behavioral tests remain test-first.
-- Acceptance criteria: Every spec criterion is met or an external production-access limitation is explicitly documented with exact operator verification steps.
-- Verification commands: `npm test`; `npm run test --prefix client`; `npm run build --prefix client`; `npm run lint --prefix client`; local curl; seed tests; `git diff --check`.
-- Stop condition: Repository tests expose an in-scope production blocker that cannot be safely fixed.
-- Out of scope: Supplying secrets, deploying, or mutating production data from this environment.
+  - [ ] Add failing component/data tests for profile image and personal statement.
+  - [ ] Add `karenProfile` configuration with TODO markers for final photo and approved copy.
+  - [ ] Render responsive photo/statement content without claiming the placeholder is Karen.
+  - [ ] Preserve existing useful About content and CTA behavior.
+- Iteration 1 Build: Red profile config/render test; Green data-driven content; Refactor component props.
+- Iteration 2 Refine: Red accessibility/responsive structure test; Green semantic figure/blockquote; Refactor copy hierarchy.
+- Iteration 3 Polish: Red regression tests; Green final Tailwind polish; Refactor no unrelated styling.
+- Test plan: About Vitest and client build; browser screenshot at mobile/desktop if available.
+- Acceptance criteria: Photo area and statement visible, centralized, honest placeholder, mobile-friendly.
+- Acceptance result: [x] Complete; see `_workflow/runs/work/progress.md`.
+- Stop condition: Placeholder would be represented as verified client content.
+- Out-of-scope items: Inventing biography or commissioning a photo.
+
+## TASK-004: Add dormant product catalogue architecture
+- Status: Done
+- Objective: Define future hair-extension and hair-product/oil domain vocabulary and an empty catalogue without exposing ecommerce.
+- Files likely affected: `server/constants/products.js`, `server/tests/product-catalog.test.js`, durable architecture documentation if warranted.
+- Checklist:
+  - [ ] Add failing tests for immutable categories/types/statuses and empty default catalogue.
+  - [ ] Add a small internal constants/data module with TODO guidance.
+  - [ ] Prove no product route/component/API is introduced.
+- Iteration 1 Build: Red domain-shape test; Green constants module; Refactor exports.
+- Iteration 2 Refine: Red mutation/invalid-entry validation test; Green freeze/validator; Refactor messages.
+- Iteration 3 Polish: Red no-public-exposure audit; Green docs/TODO; Refactor scope.
+- Test plan: Focused Jest and route/import audit.
+- Acceptance criteria: Supports extensions and oils structurally; no commerce behavior/UI/API.
+- Acceptance result: [x] Complete; see `_workflow/runs/work/progress.md`.
+- Stop condition: Implementation starts requiring provider, inventory, checkout, or schema decisions.
+- Out-of-scope items: All ecommerce functionality.
+
+## TASK-005: Verify and release the complete pre-launch update
+- Status: Done
+- Objective: Run integrated tests/lint/build/manual UI review, final diff audit, Fallow Quality, review, release notes, summary, handoff, and health check.
+- Files likely affected: Tests as needed and workflow artifacts only.
+- Checklist:
+  - [ ] Run server/client tests, lint, build, data/path audits.
+  - [ ] Capture screenshots for perceptible About/gallery/card changes when browser automation is available.
+  - [ ] Run design-taste-frontend final code/UI review.
+  - [ ] Run final diff audit and mandatory Fallow JSON audit.
+  - [ ] Complete review/release/summary/handoff/health artifacts.
+- Iteration 1 Build: Integrated verification and targeted recovery.
+- Iteration 2 Refine: Review findings and regression fixes.
+- Iteration 3 Polish: Final audits, screenshots, artifacts, and acceptance reconciliation.
+- Test plan: All package scripts and manual/browser checks described by the spec.
+- Acceptance criteria: Full request proven or explicit environment limitations documented.
+- Acceptance result: [x] Complete with documented environment warnings; see `_workflow/runs/work/progress.md`.
+- Verification commands: `npm test`, `npm test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, Fallow commands, `git diff --check`.
+- Stop condition: In-scope regression cannot be fixed or verified.
+- Out-of-scope items: Baseline unrelated cleanup.

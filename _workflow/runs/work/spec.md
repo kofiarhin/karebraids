@@ -1,217 +1,228 @@
-# KareBraids Booking and Services Production Repair Spec
+# KareBraids Pre-Launch Content and Commerce-Readiness Spec
 
 ## 1. Metadata
 - Spec filename: `_workflow/runs/work/spec.md`
-- Date: 2026-06-09
-- Request ID / slug: `booking-services-production-repair`
-- Request source: Direct user prompts on 2026-06-09
+- Date: 2026-06-12
+- Request ID / slug: `prelaunch-content-commerce-readiness`
+- Request source: Direct user prompts on 2026-06-12
 - Execution mode: `complete-workflow`
-- Request classification: Full-stack production defect audit and repair
-- Scope level: Cross-cutting client, API, database workflow, deployment, tests, and docs
-- Risk level: Medium-high because routing and serverless database initialization affect all production API traffic
+- Request classification: Full-stack data consistency, frontend content, asset audit, and architecture preparation
+- Scope level: Medium; canonical service data, shared frontend formatting, gallery behavior, About page content, tests, and a dormant product-domain scaffold
+- Risk level: Medium because seeded MongoDB service records and public service/gallery surfaces must remain backward compatible
 
 ## 2. Original Request
-- Raw user request: Audit and fix the broken KareBraids booking/services flow, confirm production API reachability, audit Vercel assumptions, fix same-origin routing and API configuration, verify service/availability/booking endpoints, inspect MongoDB seeding, and document root causes/deployment requirements.
-- Normalized request: Repair the complete service discovery and booking request path for a root-level single-project Vercel deployment while retaining local development and existing UI behavior.
+- Raw user request: Implement client-requested pre-launch updates for style starting prices, correct style gallery imagery, Karen’s About Me photo and personal statement, and clean future ecommerce preparation without building ecommerce.
+- Normalized request: Centralize price ownership and formatting, audit image mappings without inventing semantic certainty, add configurable Karen profile content with marked placeholders, and introduce a non-routed/non-rendered product catalogue shape for extensions and hair products.
 - Source prompt / request reference: `_workflow/runs/work/request.md`
 
 ## 3. Questions And Answers
-- Questions asked: Whether production should use one root-level Vercel project serving both the React app and Express API.
-- Answers received: User instructed the agent to proceed with the full audit and implementation after the recommended single-project architecture was proposed.
-- Questions skipped: No further questions; route behavior, acceptance checks, and boundaries are explicit or discoverable in the repository.
-- Remaining open questions: Actual Vercel project settings and production MongoDB contents cannot be directly inspected without deployment/account credentials. Public endpoint probes from this environment are also currently blocked by an outbound proxy returning HTTP 403.
+- Questions asked: Whether client-approved final prices, Karen photo/statement, and labeled style imagery were available.
+- Answers received: Proceed using the repository as source of truth; retain current prices; preserve uncertain mappings; use placeholders/TODOs; do not block on missing content.
+- Questions skipped: No additional content questions because the user explicitly instructed implementation to continue with safe placeholders.
+- Remaining open questions: Which existing photograph is actually Karen; Karen’s approved first-person statement; client-approved replacement price list; authoritative labels tying each photograph to a hairstyle.
 
 ## 4. Problem Definition
-- Problem being solved: The production booking page cannot load services and displays “Services could not be loaded. Please try again.”
-- Why it matters: Service data is the first dependency for the booking wizard, service catalogue, and service detail routes.
-- Current pain point: The frontend may emit incorrect relative requests when `VITE_API_URL` is absent, while the only Vercel config is client-scoped and rewrites all paths to the SPA rather than routing `/api/*` to Express.
-- Expected value: Production users can browse services, retrieve availability, and submit conflict-safe bookings on the same Vercel origin.
+- Problem being solved: Pricing is represented with duplicated fields and repeated formatting logic, style imagery has multiple competing data paths and uncertain semantics, About copy does not expose a dedicated personal-statement field or honest Karen-photo placeholder, and there is no explicit product-domain boundary for later commerce.
+- Why it matters: Pre-launch content must be consistent and maintainable without presenting fabricated client claims or silently coupling future products to service records.
+- Current pain point: `server/data/services.json` duplicates `startingPrice` and `priceFrom`; several React surfaces independently format money; public previews use a representative image library while seed records retain remote per-service galleries; About data derives the founder image from a style image; no dormant product schema/config exists.
+- Expected value: One editable service price per seed record, one shared client money formatter, validated image references and accessible style-aware alt text, an honest Karen profile-content seam, and a clean future product catalogue boundary.
 
 ## 5. Current State Analysis
 - Existing behavior:
-  - `client/src/lib/api.js` uses `import.meta.env.VITE_API_URL` directly with no default `/api` base.
-  - Client service modules call `/services`, `/bookings/availability`, and `/bookings`, assuming the Axios base already contains `/api`.
-  - `client/vercel.json` rewrites every path to `/`, including any `/api/*` request if the client directory is deployed as the Vercel root.
-  - No root `vercel.json` or Vercel serverless API entrypoint exists.
-  - Express defines `/api/health`, `/api/services`, `/api/bookings`, `/api/contact`, `/api/gallery`, and `/api/admin` in `server/app.js`.
-  - `server/server.js` connects to MongoDB and listens persistently, which is appropriate locally but not itself a Vercel serverless handler.
-  - Service APIs read MongoDB only; an empty/unseeded database returns an empty service list.
-  - `npm run seed:services` performs stable-ID upserts from `server/data/services.json` after loading `.env` and validating `MONGODB_URI` plus production admin credentials through `getEnv()`.
-- Existing architecture/components: React/Vite/TanStack Query client; Axios API adapter; Express/Mongoose backend; MongoDB-backed Service and Booking models.
-- Existing files/modules likely involved: `client/src/lib/api.js`, client API tests, `server/app.js`, `server/server.js`, a new root serverless entrypoint, Vercel config(s), env/seed tests, README, and package scripts only if deployment/build orchestration requires it.
-- Existing data flow: Booking page -> `useBookableServices` -> `getServices` -> Axios -> `/services`; availability and creation use the same adapter with booking routes.
-- Existing API/UI/CLI/workflow behavior: Local dev runs Vite and persistent Express separately; Vite currently has no `/api` proxy; production deployment appears client-only based on `client/vercel.json`.
-- Existing tests or verification coverage: Jest/Supertest covers service filters, booking availability, booking creation, and duplicate protection. Vitest has a deployment test that currently expects only the client SPA rewrite.
-- Production probe evidence: Requests to the live URL were attempted on 2026-06-09, but this execution environment’s outbound CONNECT proxy returned HTTP 403 before reaching Vercel. Reachability is therefore unconfirmed rather than assumed.
-- Dirty worktree: Clean before intake; no overlap risk.
+  - MongoDB `Service` documents and Express service APIs are the canonical public service source.
+  - Seed records contain both `startingPrice` and `priceFrom` with equal values for all 11 services.
+  - The serializer already aliases missing `startingPrice`/`priceFrom` values for compatibility.
+  - Services, homepage cards, browse-by-style cards, service detail, and booking each render API pricing; formatting logic is repeated in multiple components.
+  - The frontend deliberately uses `client/src/data/imageLibrary.js` local imagery as representative styling inspiration; `getDisplayImage(service.id)` picks a stable representative preview.
+  - Gallery filtering is contextual, not a claim that representative images belong to the selected service.
+  - Seed service records also contain remote `primaryImage` and `images` arrays. Duplicate URLs exist across some records, but the repository provides no authoritative semantic labels proving those cross-service reuses are wrong.
+  - All 18 local image files have distinct hashes; 15 are currently curated and 3 are unreferenced.
+  - `aboutPageData.js` derives a founder image from style imagery, and `MeetKaren.jsx` hardcodes generic third-person paragraphs.
+  - No product model, product data contract, route, or public sales UI exists.
+- Existing architecture/components:
+  - Backend: `server/data/services.json`, `server/models/Service.js`, seed script, serializers/controllers/routes.
+  - Frontend: TanStack Query service hooks, service/gallery pages, booking page, homepage components, shared local image library, About data/components.
+- Existing files/modules likely involved:
+  - `server/data/services.json`
+  - `server/models/Service.js`
+  - `server/utils/serviceSerializer.js`
+  - `server/scripts/seedServices.js`
+  - `client/src/utils/formatPrice.js` or equivalent new shared utility
+  - pricing consumers under `client/src/pages/` and `client/src/components/home/`
+  - `client/src/data/imageLibrary.js`, `client/src/utils/servicePreview.js`, gallery/modal components and tests
+  - `client/src/data/aboutPageData.js`, `client/src/components/about/MeetKaren.jsx`, `client/src/pages/About.test.jsx`
+  - a dormant product domain file under `server/constants/` or `server/data/`, with tests/documentation
+- Existing data flow: JSON service seed -> Mongoose Service -> Express serializer/API -> TanStack Query hooks -> React public surfaces.
+- Existing API/UI/CLI/workflow behavior: Public service/gallery API behavior and existing routes must remain stable; seed command upserts by service ID.
+- Existing tests or verification coverage: Jest backend model/seed/API tests and Vitest frontend data/page/component tests; client lint/build scripts are available.
 
 ## 6. Desired End State
-- Expected final behavior: One root-level Vercel deployment builds/serves the Vite client and invokes Express for `/api/*`; client requests use same-origin `/api` when no override is configured.
-- User-facing outcome: Services and service detail pages load; booking service selection loads; availability appears after service/date selection; valid bookings submit; duplicate slots return a conflict.
-- Developer-facing outcome: Local `npm run dev`, frontend tests/build/lint, backend tests, and documented seed/deployment procedures are coherent.
-- System/workflow outcome: Express initialization is safe for serverless reuse, MongoDB configuration is explicit, and service seed requirements are documented.
-- Backward compatibility expectations: A configured absolute `VITE_API_URL` continues to work, whether it points to an API origin or an `/api` prefix according to the finalized normalized-base contract. Existing API response shapes and UI are preserved.
+- Expected final behavior:
+  - Each service’s editable seed price is declared once, while API compatibility can continue returning both aliases.
+  - Every relevant UI surface uses one shared price resolution/formatting utility.
+  - Image references are programmatically valid, local files exist, duplicate IDs are rejected, selected-style context remains accurate, and user-facing style previews have meaningful alt text based on the style name without falsely claiming representative images are client work.
+  - About displays a configurable Karen profile image and configurable personal statement; unavailable final content is clearly marked in source with launch TODOs and honest placeholder copy.
+  - Future product categories/types for hair extensions and hair-care products exist in an internal, tested domain scaffold but are not routed, fetched, or rendered publicly.
+- User-facing outcome: Consistent prices, accessible style imagery, and a more personal mobile-friendly About section, with no unfinished shop experience.
+- Developer-facing outcome: Clear single update points for prices, Karen content, representative images, and future product catalogue definitions.
+- System/workflow outcome: Existing API and booking behavior remains compatible.
+- Backward compatibility expectations: API consumers may continue receiving both `startingPrice` and `priceFrom`; existing routes and query-string gallery navigation remain unchanged.
 
 ## 7. Scope
 - In scope:
-  - Audit all Vercel configuration and deployment assumptions.
-  - Confirm route registration for services, bookings, contact, gallery, and admin.
-  - Add root deployment routing/build configuration and serverless Express entrypoint as required.
-  - Add safe client API base normalization/fallback.
-  - Preserve local Vite + Express development, adding a development proxy if needed for same-origin-style calls.
-  - Verify service, availability, booking, and duplicate-slot contracts.
-  - Audit env validation, MongoDB connection behavior, service seed command/data, and docs.
-  - Add/update Vitest and Jest tests first where behavior changes.
+  - Remove duplicate editable price declarations from canonical seed records where serializer/model compatibility permits.
+  - Add shared frontend price formatting/resolution and migrate all public price renderers.
+  - Add tests proving consistency and compatibility.
+  - Audit local paths, remote URL shape/reachability where environment permits, duplicate IDs/URLs, alt text, and selected-style behavior.
+  - Fix objective asset/path/alt/mapping defects only.
+  - Add centralized Karen profile content with explicit TODO markers and render it in Meet Karen.
+  - Add internal product type/category/status constants and empty catalogue placeholder for hair extensions and hair oils/products.
+  - Document unresolved content uncertainties.
 - Out of scope:
-  - UI redesign or copy overhaul.
-  - Admin feature redesign.
-  - Changing booking business rules, service schema, or public API response shapes unless a proven blocker requires a minimal compatible change.
-  - Provisioning Vercel/MongoDB accounts or adding secrets.
-- Non-goals: Multi-project frontend/backend deployment, replacing Axios/TanStack Query, introducing Redux, or changing databases.
-- Explicit boundaries: Never commit credentials; preserve current routes and minimal patch size.
+  - New client-approved prices, real Karen photography, or final personal statement not present in the repository.
+  - Checkout, cart, payments, shipping, tax, inventory, variants, orders, product admin, product API, public shop route, or coming-soon sales UI.
+  - Replacing all representative stock images or claiming they depict specific completed services.
+  - Unrelated visual redesign, backend refactor, authentication work, or new styling system.
+- Non-goals: Semantic classification of unlabeled photos by visual guesswork.
+- Explicit boundaries: No public ecommerce exposure and no destructive removal of uncertain existing assets.
 
 ## 8. Users And Use Cases
-- Primary users: Prospective KareBraids clients browsing services and booking appointments.
-- Secondary users: Site administrator and deployer maintaining service inventory and bookings.
-- Main use cases: Browse services, open service details, select a bookable service, view open slots, submit booking.
-- Edge use cases: Empty service database, missing env vars, malformed availability query, duplicate slot race, direct SPA deep links, serverless cold starts.
+- Primary users: Prospective KareBraids clients comparing styles and learning about Karen.
+- Secondary users: Karen/site maintainers updating prices, profile content, images, and future product definitions.
+- Main use cases: Browse consistent starting prices; view style-related/representative imagery; read Karen’s statement; safely update content from centralized files.
+- Edge use cases: API record includes only one legacy price alias; missing Karen image; missing gallery image; unavailable service; empty product catalogue.
 
 ## 9. Functional Requirements
 - Required behaviors:
-  - `/api/health` responds through the production deployment.
-  - Public and protected Express route namespaces are not swallowed by the SPA rewrite.
-  - Service list/filter/detail requests reach Express and MongoDB.
-  - Availability validates service/date and excludes booked slots.
-  - Booking creation validates input and rejects duplicate service/date/time with HTTP 409, including database unique-index races.
-  - Client defaults to same-origin `/api` when `VITE_API_URL` is missing or blank.
-  - Local development resolves `/api/*` to Express.
-- Inputs: Existing query parameters and booking JSON payload.
-- Outputs: Existing API JSON contracts and HTTP status codes.
-- State changes: Booking POST creates one MongoDB Booking document; seed command upserts Service documents.
-- Error states: Missing env, failed database connection, empty service collection, invalid booking/availability input, duplicate booking, unknown API path.
-- Permissions/auth expectations: Existing admin authentication remains unchanged; public routes remain public.
+  - Resolve price from canonical `startingPrice` with `priceFrom` fallback for backward compatibility.
+  - Format GBP consistently with no fabricated zero-price display when data is absent.
+  - Keep all current numeric prices unchanged.
+  - Preserve representative-gallery disclosure and selected-service context.
+  - Generate meaningful alt text containing the style name on style-specific cards/previews.
+  - Render Karen profile image config and statement config from About data.
+  - Keep product catalogue unavailable/non-rendered by default.
+- Inputs: Service API records, local representative image config, About profile config, dormant product constants.
+- Outputs: Consistent UI labels, accessible images, About profile content, tested internal product-domain structure.
+- State changes: Seeded service documents may drop redundant persisted `priceFrom` on reseed while serializer continues emitting compatibility aliases.
+- Error states: Missing price yields a neutral unavailable label or omitted price rather than `£0`; missing image uses the existing fallback; missing product data exposes nothing publicly.
+- Permissions/auth expectations: Not applicable; no new admin or product endpoint.
 
 ## 10. Non-Functional Requirements
-- Performance expectations: Reuse cached Mongoose/serverless connection state where practical; avoid reconnect storms.
-- Reliability expectations: Correct routing precedence; deterministic base URL normalization; idempotent service seeding.
-- Security/privacy expectations: Secrets only in Vercel env or local `.env`; no credential logging; preserve admin route protection.
-- Accessibility expectations: Not applicable; no UI redesign planned.
-- Maintainability expectations: One documented API base contract and one root deployment configuration.
-- DX expectations: Root scripts remain authoritative; local development and production instructions are copy-paste ready.
+- Performance expectations: No new network requests or material bundle overhead; local About placeholder image should use an existing optimized asset.
+- Reliability expectations: Deterministic image fallback and price formatting; tests cover aliases and missing values.
+- Security/privacy expectations: No secrets, payments, personal contact details, or fabricated owner claims.
+- Accessibility expectations: Descriptive alt text, semantic heading/blockquote structure where appropriate, readable contrast, and responsive image/copy layout.
+- Maintainability expectations: Centralized content/config, no repeated `Intl.NumberFormat` instances in components, explicit ecommerce boundary.
+- DX expectations: TODOs explain exactly which pre-launch client content must be replaced.
 
 ## 11. Affected Surfaces
-- Files likely affected: `client/src/lib/api.js`, `client/vite.config.js`, deployment/API tests, `server/app.js` and/or a new `api/index.js`, `vercel.json`, removal or narrowing of `client/vercel.json`, `.env.example`, `README.md`, potentially `server/config/env.js`, `server/config/db.js`, and seed tests/docs.
-- Directories likely affected: `client/`, `server/`, root `api/`, root deployment/docs/workflow artifacts.
-- UI surfaces: No markup/styling changes expected; only data loading behavior.
-- API routes: `/api/health`, `/api/services`, `/api/services/:id`, `/api/bookings/availability`, `/api/bookings`, plus reachability preservation for contact/gallery/admin.
-- Components: Booking, Services, and ServiceDetail are audit surfaces but should not need API logic changes.
-- Services: Axios adapter and existing service/booking service modules.
-- Database/schema: No planned schema migration; verify Service seed and Booking uniqueness.
-- Config/env vars: `MONGODB_URI`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `JWT_SECRET`, optional `VITE_API_URL`, and local `PORT`.
-- Tests: Vitest deployment/API-base behavior; Jest/Supertest route and serverless compatibility where practical.
-- Docs: Vercel project root/build/output/env/seed/deploy instructions and troubleshooting.
-- Workflow artifacts: Active run request/spec/tasks/progress/handoff/review/verification/release/summary and Fallow audit.
-- Frontend Taste Application: Not applicable. No frontend markup, CSS, Tailwind, redesign, or UI polish is in scope.
+- Files likely affected: service seed JSON/model/serializer tests, frontend pricing utility and consumers/tests, image utilities/tests, About data/component/tests, dormant product data/constants/tests, workflow artifacts.
+- Directories likely affected: `server/data`, `server/constants`, `server/tests`, `client/src/data`, `client/src/utils`, `client/src/components`, `client/src/pages`.
+- UI surfaces: Home featured services, browse-by-style, Services, Service Detail, Booking, Gallery cards/modal, About Meet Karen.
+- API routes: No route additions; existing service responses remain compatible.
+- Components: Pricing consumers, `MeetKaren`, potentially gallery modal/card alt handling.
+- Services: Existing service query layer only; no new API calls.
+- Database/schema: No required migration; optional redundant alias removal is handled by seed upsert/serializer compatibility.
+- Config/env vars: None.
+- Tests: Vitest and Jest additions/updates.
+- Docs: Workflow artifacts and release notes; durable architecture docs only if a lasting product-domain boundary is added.
+- Workflow artifacts: Active run files and Fallow audit.
 
 ## 12. Dependency And Integration Map
-- Internal dependencies: Axios adapter -> client service modules -> TanStack Query hooks -> pages; Vercel rewrite -> serverless Express app -> Mongoose -> MongoDB.
-- External packages/services: Vercel, MongoDB Atlas or compatible MongoDB, Axios, Express, Mongoose.
-- Integration points: Vercel build output, `/api` function routing, environment injection, MongoDB network access/IP policy.
-- Ordering constraints: Tests first; establish API base contract; establish serverless handler; configure route precedence; then docs and end-to-end verification.
-- Migration/setup requirements: Configure root Vercel project and required env vars; seed services once against production MongoDB if empty.
+- Internal dependencies: Seed JSON -> Mongoose -> serializer -> API -> TanStack Query -> UI; image library -> preview/gallery/About; About data -> About components.
+- External packages/services: Existing React/Vite/Tailwind, Express/Mongoose, Pexels-hosted seed URLs; no new dependencies.
+- Integration points: Service serializer compatibility aliases, booking/service cards, gallery query selection.
+- Ordering constraints: Price tests/config first; image audit/tests next; About content tests/UI next; product scaffold last; full verification afterward.
+- Migration/setup requirements: Existing `npm run seed:services` updates database records when run with `MONGODB_URI`; no migration required for code verification.
 
 ## 13. Data And State Impact
-- Data models: Existing Service and Booking models retained.
-- Database changes: No planned destructive changes. Production may require initial Service upserts.
-- State management changes: None; TanStack Query remains server-state owner.
-- Cache/session/local storage impact: None expected.
-- Backward compatibility impact: Existing records and endpoint contracts remain valid.
+- Data models: Service continues to support both price aliases for compatibility, with one canonical editable seed field. Product scaffold defines future domain vocabulary only.
+- Database changes: Reseeding may normalize price storage; no destructive migration or live database access in this environment.
+- State management changes: None.
+- Cache/session/local storage impact: None.
+- Backward compatibility impact: Existing response fields and routes retained.
 
 ## 14. UX / API / Workflow Expectations
-- UX expectations: Existing loading/error/success states remain; successful routing removes false service-load errors.
-- API contract expectations: Preserve JSON structures and status codes tested by current Supertest suites.
-- CLI/workflow behavior: `npm run dev` starts local client/server; `npm run seed:services` seeds the selected MongoDB URI.
-- Error handling expectations: API failures remain JSON; SPA fallback must never respond to `/api/*`; empty service data is documented distinctly from routing failure.
-- Empty/loading/success/failure states: Empty seeded state yields an empty list rather than routing HTML; connection errors reach Express error handling/logs; UI existing error state remains for genuine failures.
+- UX expectations: Existing design language and Tailwind About styling retained; Karen statement receives clear visual hierarchy without a redesign.
+- API contract expectations: Existing service payload price fields remain available and equivalent.
+- CLI/workflow behavior: Seed validation continues to pass; no new product command.
+- Error handling expectations: Missing price/image content degrades safely.
+- Empty/loading/success/failure states: Existing service/gallery states remain; dormant empty product catalogue has no public state.
+- Applied skill: design-taste-frontend
 
 ## 15. Execution Strategy
 - Recommended implementation approach:
-  1. Add failing Vitest tests for same-origin API default, override normalization, root Vercel API precedence, and SPA fallback.
-  2. Add/adjust Jest tests for route reachability/serverless entry behavior and retain booking duplicate tests.
-  3. Implement an Axios base resolver defaulting to `/api`, with whitespace/trailing-slash safety.
-  4. Add a Vite development proxy for `/api` to the local Express port if required by the selected fallback.
-  5. Export/use Express in a Vercel-compatible serverless entrypoint without calling `listen`; preserve `server/server.js` for local runtime.
-  6. Add root `vercel.json` with explicit API route precedence and SPA fallback, plus correct client build/output settings.
-  7. Remove or revise conflicting client-only Vercel configuration.
-  8. Audit env/connection/seed behavior and document production setup and empty-database recovery.
-  9. Run endpoint contract tests, client tests/build/lint, server tests, local smoke checks, diff audit, review, Fallow, and workflow health check.
-- Suggested sequencing: Deployment contract -> client base -> serverless handler -> route verification -> Mongo/seed docs -> full regression.
-- Safe rollout/migration approach: Deploy config/code first with env vars configured, invoke health/services, seed only if services are empty, then verify availability and a controlled booking payload.
-- Files to inspect before editing: All likely files plus schemas, validation, current deployment tests, package scripts, and Vite config.
-- Decisions to avoid until more evidence exists: Do not alter service/booking schema or UI; do not loosen auth/env validation merely to make health pass without understanding the serverless initialization path.
+  1. Write failing backend/frontend tests for canonical price ownership and shared formatting, then make seed/UI changes.
+  2. Add asset/mapping invariants and style-aware alt helpers; repair only objectively proven defects.
+  3. Add a `karenProfile` content object with explicit TODO markers, use a clearly described representative placeholder image, and render statement content in `MeetKaren`.
+  4. Add a small frozen/validated product-domain constants module and empty catalogue placeholder with no imports from public routes/components.
+  5. Run focused tests after each Red/Green/Refactor pass, then full tests/lint/build and UI review.
+- Suggested sequencing: Pricing -> imagery -> About -> commerce scaffold -> final verification/review/Fallow.
+- Safe rollout/migration approach: Preserve API aliases and routes; avoid database migration; document reseed requirement.
+- Files to inspect before editing: Current tests for service serialization/seeding, gallery pages/modal, About tests, package scripts, Fallow instructions.
+- Decisions to avoid until more evidence exists: Assigning stock images to exact hairstyles, asserting an image depicts Karen, writing a first-person biography as approved client copy, adding product endpoints.
 
 ## 16. Verification Strategy
 - Required automated checks:
-  - Focused Vitest tests for API base and Vercel config.
-  - Relevant Jest/Supertest service and booking suites.
-  - Full `npm test`.
-  - Full `npm run test --prefix client`.
-  - `npm run build --prefix client`.
+  - Focused Jest seed/model/serializer/API tests.
+  - Focused Vitest pricing, image-library/gallery, About, booking/service surface tests.
+  - Root `npm test`.
+  - `npm test --prefix client`.
   - `npm run lint --prefix client`.
-  - `git diff --check`.
-- Required manual checks: Inspect generated Vercel route/build semantics; local server/client smoke test where environment permits; probe deployed endpoints if outbound access permits.
-- Test types needed: Unit/config tests, API integration tests, duplicate race protection regression, build validation.
-- Build/lint/typecheck expectations: Client build and lint pass; no TypeScript check applies.
-- Acceptance evidence required: Exact commands/results, HTTP statuses/bodies from Supertest/local curl, production probe result or explicit access limitation, seed dry/test evidence.
-- Proof of completion: All in-scope automated checks pass and deployment/env steps are documented; inability to inspect actual production DB or deploy is recorded as a remaining operational action, not hidden.
+  - `npm run build --prefix client`.
+  - Scripted local-image existence/hash and service price/image invariant audit.
+- Required manual checks: Review generated pages at mobile and desktop widths; verify no public product UI/route; inspect style card/gallery/modal alt text and pricing.
+- Test types needed: Unit, component, API regression, data invariants.
+- Build/lint/typecheck expectations: Client lint and build pass; no separate TypeScript command exists.
+- Acceptance evidence required: Red/Green/Refactor logs in all three iterations per task, screenshots for perceptible web changes if browser automation is available, diff audit, Fallow JSON audit.
+- Proof of completion: All acceptance criteria checked, no broken local paths, unchanged price values, passing relevant checks, documented remote/semantic uncertainties.
 
 ## 17. Acceptance Criteria
-- [ ] Root-level Vercel routing sends `/api/*` to Express and non-API deep links to the Vite SPA without conflict.
-- [ ] The client uses same-origin `/api` when `VITE_API_URL` is missing/blank and safely supports an explicit override.
-- [ ] Services page, booking service selection, and service detail API flows retain working contracts.
-- [ ] Availability loads for a valid selected service/date and excludes already-booked slots.
-- [ ] Booking submission succeeds for a free slot and returns 409 for duplicate slots, including unique-index conflict handling.
-- [ ] `/api/health`, `/api/services`, filtered `/api/services`, `/api/bookings/availability`, and POST `/api/bookings` are verified through automated/local HTTP checks.
-- [ ] `/api/contact`, `/api/gallery`, and `/api/admin` route namespaces remain reachable by Express and are not rewritten to the SPA.
-- [ ] `npm run dev` remains valid for local development, with same-origin-style API calls reaching the local server.
-- [ ] Client tests/build/lint and server tests pass.
-- [ ] Required Vercel env vars, root/project settings, MongoDB network requirements, service presence check, and idempotent seed workflow are documented.
-- [ ] Root cause analysis, changed files, deployment actions, and remaining risks are captured in final workflow artifacts and response.
+- [x] Every current service retains its existing numeric starting price, with one canonical editable seed price and backward-compatible API aliases.
+- [x] All public price renderers use one shared formatter/resolver and display consistent values without defaulting missing data to `£0`.
+- [x] Local image paths resolve; image IDs are unique; objective duplicate/mapping defects are fixed; unresolved semantic and remote-host uncertainties are documented.
+- [x] Style-specific cards/previews/modal content use meaningful alt text including the selected/service style name while representative imagery remains disclosed honestly.
+- [x] About Me reads Karen profile image and personal statement from centralized config, visibly renders both, remains responsive, and contains explicit pre-launch TODOs for replacement content.
+- [x] A tested internal product-domain scaffold supports future `hair-extension` and `hair-product` categories (including oils) without adding public UI, API routes, checkout, cart, payments, inventory, or admin management.
+- [x] Existing public routes, service/gallery queries, booking preselection, tests, lint, and build remain functional or any baseline/environment limitation is documented.
+- [x] Final review, Fallow audit, release notes, summary, handoff, health check, commit, and PR are complete.
 
 ## 18. Edge Cases And Failure Modes
-- Edge cases: Blank/trailing-slash `VITE_API_URL`; deep links; `/api` 404; empty Services collection; serverless cold start/concurrent connection; existing booking race; Sunday/past/invalid date validation; protected admin routes.
-- Failure modes: SPA HTML returned for API calls; requests sent to `/services` instead of `/api/services`; function starts a listener; missing Mongo/admin/JWT env; Atlas network rejection; unseeded database; deployment rooted at `client/` despite root config.
-- Regression risks: Breaking local dev, double `/api/api`, swallowing API routes with SPA rewrite, changing admin auth initialization, or creating duplicate connections.
-- Recovery expectations: Clear JSON/API errors, documented Vercel logs/env checks, idempotent reseed command, rollback-safe config changes.
+- Edge cases: Zero is a legitimate numeric value but should not be invented; service with only `priceFrom`; unknown currency; service ID with no dedicated representative image; Karen image unavailable; product catalogue intentionally empty.
+- Failure modes: Removing an alias breaks tests/consumers; alt helper falsely describes stock imagery as completed client work; remote Pexels URL unavailable; TODO placeholder accidentally appears as fake personal quotation; dormant product module gets imported into UI.
+- Regression risks: Booking labels, accessibility queries, snapshot/text tests, seed validation, gallery modal navigation.
+- Recovery expectations: Restore compatibility alias at serializer boundary, retain fallback image, and mark uncertain records rather than deleting them.
 
 ## 19. Risks And Mitigations
-- Technical risks: Vercel routing syntax/build output mismatch. Mitigation: config tests plus official config semantics and local build inspection.
-- Product/UX risks: Empty database appears as no services. Mitigation: explicit production verification and seed procedure.
-- Security risks: Exposing credentials in config/docs or weakening admin env checks. Mitigation: variable names/examples only; no secrets; preserve auth.
-- Scope risks: Expanding into UI or data redesign. Mitigation: constrain changes to adapters, runtime/config, tests, and docs.
-- Access risk: No Vercel/Mongo credentials and outbound live probe blocked by proxy. Mitigation: verify locally/in tests and provide exact post-deploy checks; clearly label production reachability as requiring operator confirmation.
+- Technical risks: Live MongoDB may retain old duplicated fields until reseeded. Mitigation: serializer normalizes both and release notes include reseed guidance.
+- Product/UX risks: Placeholder profile content may be mistaken for final. Mitigation: neutral non-first-person copy plus prominent source TODOs and documentation.
+- Security risks: Premature commerce could imply payments or collect sensitive data. Mitigation: no route, controller, database model, forms, or UI.
+- Scope risks: Image “correction” can become subjective redesign. Mitigation: fix only broken paths, duplicate IDs, invalid URLs, accessibility defects, and mappings supported by repository evidence.
+- Mitigation plan: TDD-first, narrow files, compatibility tests, diff audit, explicit uncertainty log.
 
 ## 20. Assumptions
 - Explicit assumptions:
-  - Vercel project should be rooted at the repository root.
-  - One domain should serve frontend and API.
-  - Existing MongoDB schemas and API payloads are correct.
-  - Production secrets will be supplied by the deployer.
-  - Current `server/data/services.json` is the intended seed source despite image-content evolution elsewhere.
-- Confidence level: High for repository root causes; medium for live platform/database state due unavailable account/network access.
-- What to revisit if assumptions are wrong: If frontend/backend must remain separate Vercel projects, retain override support and document CORS/origin configuration rather than using root rewrites.
+  - Current 11 service prices are the latest available values.
+  - Existing local images are licensed/approved for continued representative use.
+  - No available asset is verified as Karen’s portrait.
+  - Existing per-service remote image labels are provisional and cannot be semantically verified from filenames/data alone.
+  - Future products need category/domain preparation only.
+- Confidence level: High for architecture/data-flow findings; low for real-world image identity and final client content.
+- What to revisit if assumptions are wrong: Replace values in canonical service seed data, replace `karenProfile` image/statement, and update explicit service image maps with client-labeled assets.
 
 ## 21. Open Questions
-- Blocking questions: None for implementation after spec approval.
-- Non-blocking questions: Whether the production MongoDB currently contains Service records; whether Vercel project root is presently `client`; whether all env vars are configured; whether Atlas permits Vercel egress.
-- Execution impact: These affect post-deployment operator steps and final reachability evidence, not the repository patch.
+- Blocking questions: None.
+- Non-blocking questions: Final approved prices, verified Karen portrait, approved personal statement, client-labeled hairstyle photography, desired future commerce provider.
+- Execution impact: Placeholders and compatibility structures are implemented now; final content can be swapped centrally later.
 
 ## 22. Task Extraction Notes
 - Suggested vertical task boundaries:
-  - TASK-001: Make the browser and local Vite runtime resolve API calls through a tested `/api` contract.
-  - TASK-002: Add a tested root Vercel/Express serverless deployment path preserving every API namespace and SPA deep links.
-  - TASK-003: Verify services/availability/booking behavior, Mongo/service seeding, and complete deployment documentation and quality gates.
-- Suggested first task: API base contract and development proxy because it defines request URLs consumed by all pages.
-- Suggested task ordering: Client contract -> deployment/serverless route -> database/endpoint/docs/full verification.
-- Areas that should not become separate tasks: UI redesign, schema refactor, or unrelated lint cleanup.
-- How the 3-pass Build -> Refine -> Polish loop should apply: Each code task starts with focused failing tests, implements the smallest behavior, then hardens edge cases/config semantics and runs regression checks in each iteration.
+  - TASK-001: Canonicalize service pricing end-to-end and migrate every price renderer.
+  - TASK-002: Validate and harden service/gallery image mapping and accessible style context.
+  - TASK-003: Add configurable Karen profile photo and personal statement to About Me.
+  - TASK-004: Add a dormant future-product domain scaffold without public exposure.
+  - TASK-005: Complete integrated verification, UI review, Fallow, and release artifacts.
+- Suggested first task: Canonicalize service price ownership because it affects data, API compatibility, and multiple UI surfaces.
+- Suggested task ordering: Pricing before imagery; imagery before About because About consumes image config; product scaffold after user-facing work.
+- Areas that should not become separate tasks: Unrelated design polishing, replacing stock imagery, product UI/API, database migration.
+- How the 3-pass Build -> Refine -> Polish loop should apply: Each task uses TDD-first Red -> Green -> Refactor in Build, repeats targeted regression/edge-case hardening in Refine, and completes accessibility/maintainability/final focused verification in Polish.

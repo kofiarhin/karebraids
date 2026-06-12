@@ -1,65 +1,50 @@
-# Booking and Services Production Repair Review
+# Pre-Launch Updates Review
 
-## Request
-Repair the complete production services/booking flow, Vercel routing, API base configuration, Express serverless runtime, MongoDB seeding workflow, endpoint behavior, and deployment documentation.
-
-## Basis
+- Request: Centralize prices, harden gallery/style images, add Karen profile content, and prepare dormant product architecture.
 - Spec: `_workflow/runs/work/spec.md`
 - Task plan: `_workflow/runs/work/tasks.md`
-- Tasks reviewed: TASK-001, TASK-002, TASK-003
+- Tasks reviewed: TASK-001 through TASK-005; all Done.
 
-## Root cause analysis
-1. `client/src/lib/api.js` had no fallback, so absent `VITE_API_URL` produced requests without the required `/api` prefix.
-2. The only Vercel config lived under `client/` and rewrote every path to the SPA, leaving no production Express function or safe `/api/*` route.
-3. `server/server.js` called `listen()` and was not a Vercel function entrypoint.
-4. Booking validation used a stale hard-coded service list; most Mongo-seeded bookable services were rejected by availability/submission.
-5. The seed command called full runtime env validation and unnecessarily required admin/JWT settings.
-6. `npm run dev` referenced undeclared `nodemon`.
-7. An empty production Service collection would correctly return an empty array but leave all service-dependent pages unusable; deployment docs did not explain detection/seeding.
+## Bugs Found And Fixed
+- Offline fallback catalogue had stale prices, missing services, and mismatched IDs compared with canonical seed data.
+- Six UI surfaces duplicated money formatting and defaulted missing values to `£0`.
+- About specialties attempted to read nonexistent `galleryImages`, leaving cards without images.
+- Hash-based service previews accidentally reused two images across different styles.
+- Style cards/detail/gallery used generic alt text without selected-style context.
+- About founder imagery was described as Karen despite no verified portrait.
 
-## Bugs found and fixed
-- Same-origin API fallback and override normalization.
-- Local `/api` proxy.
-- Root Vercel build/output/API/SPA routing.
-- Serverless Express Mongo initialization/retry/reuse.
-- Mongo-backed public booking eligibility.
-- Duplicate unique-index race test.
-- Database-only seed env access.
-- Missing local dev dependency.
-- Missing deployment/env/seed/troubleshooting documentation.
+## Scope Creep Check
+- No unrelated routes, styling systems, payment logic, product UI, database product model, or admin functionality added.
+- Existing service/gallery APIs and booking flow preserved.
 
-## Scope creep check
-No UI markup, styling, service schema, booking payload, response shape, admin auth behavior, or unrelated feature was changed.
-
-## Final diff audit
+## Final Diff Audit
 - `git diff --stat` and `git diff` reviewed.
-- Changed files match the approved spec and task plan.
-- Tests were added before each new runtime behavior where practical.
-- No generated junk, credentials, private keys, or unrelated files found.
-- Placeholder credentials in examples are explicit non-secrets.
+- Changes match the approved spec and affect canonical seed data, frontend content/helpers/consumers/tests, dormant product constants/tests, and workflow artifacts.
+- No secrets, temporary source files, generated browser binaries, or unrelated cleanup added.
+- Tests were written/updated before each behavior change where possible.
 
-## Failure recovery
-- Captured expected test failures for missing resolver/config/function, stale service validation, and missing DB-only env accessor.
-- Fixed and reran exact commands.
-- Fixed client lint failure by explicitly importing Node env.
-- Fixed `npm run dev` missing nodemon dependency; remaining Mongo refusal is environmental.
+## Failure Recovery
+- Full client suite initially failed because canonical fallback expansion made `/knotless braids/i` ambiguous and a legacy mock expected string `fromPrice`; compatibility shape and exact test matching were corrected.
+- About image invariant exposed undefined specialty images and was fixed through explicit local descriptors.
+- Fallow initially failed on intentional dormant exports and an unnecessary validator; validator removed and scoped suppressions added.
 
-## Missing tests
-No material repository-controlled behavior is missing focused coverage. Actual Vercel deployment and production Mongo contents cannot be tested without external credentials/redeployment.
+## Missing Tests
+- None for changed behavior. Browser visual regression is unavailable because Chromium download is blocked.
 
-## Security concerns
-- Production dependency audit: zero vulnerabilities.
-- Full dev audit reports two critical development-chain findings; no production dependency exposure was reported. Breaking-force updates were not applied outside scope.
-- Atlas network policy and secret handling are documented.
+## Security Concerns
+- None identified. No credentials, payment handling, personal data, or commerce endpoints added.
 
-## Architecture concerns
-- Booking identity remains service-name based rather than stable service ID; preserved for compatibility. A future migration could store service ID plus display-name snapshot.
-- Serverless initialization validates all runtime secrets before public routes, matching current server startup behavior.
+## Architecture Concerns
+- Backend seed records still contain remote Pexels galleries whose reachability/semantic labels cannot be verified in this environment. Public UI continues to disclose representative imagery; owner-supplied labeled assets remain the correct long-term replacement.
+- Client offline service data necessarily mirrors backend values; tests pin the values to make drift visible.
 
-## Follow-up tasks
-- Deploy from repository root and run README post-deploy checks.
-- Seed production services if the filtered endpoint returns an empty array.
-- Optionally migrate bookings to stable service IDs in a separate backward-compatible project.
+## Follow-Up Tasks
+- Replace all 11 prices if/when Karen supplies an approved list.
+- Replace `karenProfile.image` and `karenProfile.statement` before launch.
+- Replace representative imagery with owner-labeled portfolio photography.
+- Specify commerce provider, products, variants, inventory, fulfilment, tax, and admin requirements before activating the product domain.
 
-## Final review verdict
-PASSED for code/config/docs with an explicit external deployment verification requirement.
+## Final Review Verdict
+PASSED with environment warnings for screenshots and remote-host verification.
+
+Applied skill: design-taste-frontend

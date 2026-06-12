@@ -32,7 +32,8 @@ describe('ServiceDetail representative images', () => {
     )
 
     expect(screen.getByRole('heading', { name: 'Style inspiration' })).toBeInTheDocument()
-    expect(screen.getAllByAltText('Representative protective styling image').length).toBeGreaterThan(1)
+    expect(screen.getAllByAltText('Knotless Braids representative protective styling inspiration').length).toBeGreaterThan(0)
+    expect(screen.getAllByAltText('Knotless Braids styling inspiration — representative image').length).toBeGreaterThan(1)
     expect(screen.queryByAltText('Exact knotless braids example')).not.toBeInTheDocument()
     expect(screen.queryByAltText('Knotless example')).not.toBeInTheDocument()
   })

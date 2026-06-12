@@ -30,6 +30,22 @@ export const imageLibrary = curatedImages.map(([filename, title, aspect], index)
 
 export const SERVICE_IMAGE_FALLBACK = imageLibrary[0].src
 
+// Explicit representative preview assignments prevent accidental cross-style
+// duplicates. These are inspiration images, not claims of completed client work.
+const servicePreviewIndexes = Object.freeze({
+  'knotless-braids': 12,
+  'boho-knotless-braids': 1,
+  'fulani-braids': 8,
+  'stitch-braids': 9,
+  cornrows: 2,
+  'tribal-braids': 7,
+  'feed-in-braids': 3,
+  'goddess-braids': 4,
+  'kids-braids': 6,
+  'box-braids': 13,
+  twists: 11,
+})
+
 function getStableIndex(seed, length) {
   if (!length) return 0
 
@@ -39,7 +55,9 @@ function getStableIndex(seed, length) {
 }
 
 export function getDisplayImage(seed) {
-  return imageLibrary[getStableIndex(seed, imageLibrary.length)] || imageLibrary[0]
+  const configuredIndex = servicePreviewIndexes[seed]
+  const index = Number.isInteger(configuredIndex) ? configuredIndex : getStableIndex(seed, imageLibrary.length)
+  return imageLibrary[index] || imageLibrary[0]
 }
 
 export function getGalleryImageItems() {
@@ -48,4 +66,9 @@ export function getGalleryImageItems() {
     image: image.src,
     isRepresentativeImage: true,
   }))
+}
+
+export function getGalleryImageAlt(item, service) {
+  if (service?.name) return `${service.name} styling inspiration — representative image`
+  return item?.alt || REPRESENTATIVE_ALT
 }

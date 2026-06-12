@@ -5,6 +5,7 @@ import { cwd } from 'node:process'
 import {
   SERVICE_IMAGE_FALLBACK,
   getDisplayImage,
+  getGalleryImageAlt,
   getGalleryImageItems,
   imageLibrary,
 } from './imageLibrary.js'
@@ -14,6 +15,9 @@ const requiredFields = ['id', 'src', 'alt', 'title', 'description', 'aspect', 'u
 describe('imageLibrary', () => {
   it('contains only existing local representative public images with the required metadata', () => {
     expect(imageLibrary.length).toBeGreaterThan(0)
+
+    expect(new Set(imageLibrary.map(({ id }) => id)).size).toBe(imageLibrary.length)
+    expect(new Set(imageLibrary.map(({ src }) => src)).size).toBe(imageLibrary.length)
 
     imageLibrary.forEach((image) => {
       expect(Object.keys(image)).toEqual(expect.arrayContaining(requiredFields))
@@ -29,6 +33,15 @@ describe('imageLibrary', () => {
     expect(getDisplayImage('knotless-braids')).toBe(getDisplayImage('knotless-braids'))
     expect(getDisplayImage()).toEqual(expect.objectContaining({ usage: 'representative' }))
     expect(SERVICE_IMAGE_FALLBACK).toBe(imageLibrary[0].src)
+  })
+
+
+  it('adds selected-style context without claiming representative images belong to that service', () => {
+    const item = imageLibrary[0]
+    expect(getGalleryImageAlt(item, { name: 'Knotless Braids' })).toBe(
+      'Knotless Braids styling inspiration — representative image',
+    )
+    expect(getGalleryImageAlt(item)).toBe(item.alt)
   })
 
   it('returns gallery items without service or hairstyle classification', () => {

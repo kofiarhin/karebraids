@@ -50,6 +50,23 @@ describe("service seed script", () => {
 
     await expect(Promise.all(services.map((service) => new Service(service).validate()))).resolves.toBeDefined();
     expect(JSON.stringify(services)).not.toMatch(/data:image|base64,/i);
+
+    const expectedPrices = {
+      "knotless-braids": 80,
+      "boho-knotless-braids": 95,
+      "fulani-braids": 85,
+      "stitch-braids": 45,
+      cornrows: 35,
+      "tribal-braids": 90,
+      "feed-in-braids": 55,
+      "goddess-braids": 100,
+      "kids-braids": 30,
+      "box-braids": 70,
+      twists: 65,
+    };
+
+    expect(Object.fromEntries(services.map(({ id, startingPrice }) => [id, startingPrice]))).toEqual(expectedPrices);
+    services.forEach((service) => expect(service).not.toHaveProperty("priceFrom"));
   });
 
   it("upserts every service by stable id so reruns update existing records", async () => {

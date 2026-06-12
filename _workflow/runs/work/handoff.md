@@ -1,22 +1,25 @@
 # Workflow Handoff
 
-- Updated: 2026-06-09T23:30:00Z
+- Updated: 2026-06-12T01:38:14Z
 - Run ID: `work`
 - Artifact root: `_workflow/runs/work/`
 - Execution mode: `complete-workflow`
 - Current stage: Workflow complete
-- Workflow status: Complete with external deployment verification required
-- Active request: Production booking/services repair.
+- Workflow status: Complete
+- Active request: KareBraids pre-launch pricing, gallery mapping, About Me, and future-product architecture updates.
 - Request: `_workflow/runs/work/request.md`
 - Spec: `_workflow/runs/work/spec.md`
 - Task plan: `_workflow/runs/work/tasks.md`
-- Last completed task: TASK-003
+- Last completed task: TASK-005
 - Current task/iteration/phase: None; Build -> Refine -> Polish completed for all tasks.
-- Blockers: None for repository work.
-- Dirty worktree: Expected implementation and workflow files pending commit.
-- Verification: Server 71/71; client 116/116; build/lint/diff passed; production dependency audit clean.
-- Acceptance: Repository-controlled criteria met. Live Vercel reachability and production Service count require deployment/operator access.
-- Fallow: PARTIAL, 74.4/B; no blocking dependency/import/circular/boundary issue.
-- Frontend Taste Application: Not applicable; no UI code/styling changed.
-- Deployment next step: Root Vercel project, required env vars, redeploy, run README endpoint checks, seed if services array is empty.
-- Workflow health: Passed with explicit external verification requirement.
+- Blockers: None for repository-controlled work.
+- Dirty worktree: Expected implementation/workflow changes pending commit.
+- Verification: Server 72/72; client 134/134; lint, build, data/path, route exposure, and diff checks passed.
+- Acceptance: All approved criteria met.
+- Known content placeholders: Karen photo and statement, current price list, and representative style imagery require owner-approved replacements when available.
+- Remote verification: Pexels probes blocked by CONNECT 403; mappings preserved rather than guessed.
+- Screenshot verification: Playwright Chromium download blocked by domain 403; code-surface responsive review and component tests passed.
+- Fallow: PARTIAL/warn; no introduced dead code or complexity, two test-only clone groups.
+- Frontend Taste Application: Applied skill: design-taste-frontend
+- Next step: Commit and create PR; before launch replace marked owner content and run `npm run seed:services` in the configured deployment environment.
+- Workflow health: Passed with documented environment warnings.

@@ -43,7 +43,7 @@ describe('Gallery representative image semantics', () => {
     expect(screen.getByText('Representative styling images used for inspiration. Final results depend on your chosen service, hair type, length, and consultation.')).toBeInTheDocument()
     expect(screen.getByText('Viewing inspiration while considering Knotless Braids')).toBeInTheDocument()
     expect(screen.getByText('Representative image')).toBeInTheDocument()
-    expect(screen.getByAltText('Representative protective styling image')).toHaveAttribute('src', item.src)
+    expect(screen.getByAltText('Knotless Braids styling inspiration — representative image')).toHaveAttribute('src', item.src)
     expect(screen.queryByText('Showing Knotless Braids')).not.toBeInTheDocument()
   })
 })
