@@ -1,14 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useGalleryEnabledServices } from '../hooks/queries/useServices.js'
-import { getServicePreviewImage } from '../utils/servicePreview.js'
+import { getServicePreview } from '../utils/servicePreview.js'
+import { formatServicePrice } from '../utils/formatServicePrice.js'
 
-function formatPrice(service) {
-  return new Intl.NumberFormat('en-GB', {
-    style: 'currency',
-    currency: service.currency || 'GBP',
-    maximumFractionDigits: 0,
-  }).format(service.startingPrice ?? service.priceFrom ?? 0)
-}
 
 export function Services() {
   const servicesQuery = useGalleryEnabledServices()
@@ -47,9 +41,9 @@ export function Services() {
           <div className="service-grid">
             {services.map((service) => (
               <article className="service-card" data-motion-item key={service.id}>
-                <div className="service-card-image"><img alt="Representative protective styling image" loading="lazy" src={getServicePreviewImage(service)} /><span className="representative-image-caption">Representative image</span></div>
+                <div className="service-card-image"><img alt={getServicePreview(service).alt} loading="lazy" src={getServicePreview(service).src} /><span className="representative-image-caption">Representative image</span></div>
                 <div className="service-card-copy">
-                  <div className="service-card-heading"><h3>{service.name}</h3><p>From {formatPrice(service)}</p></div>
+                  <div className="service-card-heading"><h3>{service.name}</h3><p>From {formatServicePrice(service)}</p></div>
                   <p>{service.shortDescription}</p>
                   <div className="service-card-footer"><span>{service.durationLabel}</span><Link className="text-link" to={`/gallery?service=${service.slug || service.id}`}>View Gallery</Link></div>
                 </div>

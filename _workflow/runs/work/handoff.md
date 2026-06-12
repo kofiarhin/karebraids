@@ -1,22 +1,23 @@
 # Workflow Handoff
 
-- Updated: 2026-06-09T23:30:00Z
+- Updated: 2026-06-12T02:02:08Z
 - Run ID: `work`
 - Artifact root: `_workflow/runs/work/`
 - Execution mode: `complete-workflow`
-- Current stage: Workflow complete
-- Workflow status: Complete with external deployment verification required
-- Active request: Production booking/services repair.
+- Current stage: Workflow complete after review remediation
+- Workflow status: Complete
+- Active request: KareBraids pre-launch updates plus gallery local-source audit remediation.
 - Request: `_workflow/runs/work/request.md`
 - Spec: `_workflow/runs/work/spec.md`
 - Task plan: `_workflow/runs/work/tasks.md`
-- Last completed task: TASK-003
-- Current task/iteration/phase: None; Build -> Refine -> Polish completed for all tasks.
-- Blockers: None for repository work.
-- Dirty worktree: Expected implementation and workflow files pending commit.
-- Verification: Server 71/71; client 116/116; build/lint/diff passed; production dependency audit clean.
-- Acceptance: Repository-controlled criteria met. Live Vercel reachability and production Service count require deployment/operator access.
-- Fallow: PARTIAL, 74.4/B; no blocking dependency/import/circular/boundary issue.
-- Frontend Taste Application: Not applicable; no UI code/styling changed.
-- Deployment next step: Root Vercel project, required env vars, redeploy, run README endpoint checks, seed if services array is empty.
-- Workflow health: Passed with explicit external verification requirement.
+- Last completed task: TASK-006
+- Current task/iteration/phase: None; all remediation iterations complete.
+- Blockers: None for repository-controlled work.
+- Dirty worktree: Expected remediation/workflow changes pending commit.
+- Verification: Server 72/72; client 147/147; focused gallery 31/31; lint, build, local-source, direct-render, diff, and Fallow checks passed.
+- Acceptance: Gallery cards, previews, detail images, and modals cannot render API Pexels URLs; all service filters return local representative paths with context retained.
+- Screenshot verification: Attempted but unavailable because Playwright Chromium is not installed in the environment.
+- Fallow: Passed; zero introduced dead code, complexity, or duplication.
+- Frontend Taste Application: Applied skill: design-taste-frontend
+- Next step: Commit and update PR.
+- Workflow health: Passed with screenshot environment warning.

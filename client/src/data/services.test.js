@@ -3,7 +3,7 @@ import { getDisplayImage, getGalleryImageItems } from './imageLibrary.js'
 import { getGalleryItems, getGalleryItemsByServiceId, services } from './services.js'
 
 const businessFields = [
-  'id', 'slug', 'name', 'category', 'shortDescription', 'priceFrom', 'duration',
+  'id', 'slug', 'name', 'category', 'shortDescription', 'startingPrice', 'duration',
   'featured', 'bookingEnabled', 'galleryEnabled', 'status',
 ]
 
@@ -17,6 +17,27 @@ describe('local service compatibility data', () => {
       expect(service.image).toBe(getDisplayImage(service.id).src)
       expect(service.previewImage).toEqual(getDisplayImage(service.id))
       expect(service.isRepresentativeImage).toBe(true)
+    })
+  })
+
+
+  it('does not accidentally reuse a preview mapping across different services', () => {
+    expect(new Set(services.map(({ image }) => image)).size).toBe(services.length)
+  })
+
+  it('keeps offline prices aligned with the canonical service seed values', () => {
+    expect(Object.fromEntries(services.map(({ id, startingPrice }) => [id, startingPrice]))).toEqual({
+      'knotless-braids': 80,
+      'boho-knotless-braids': 95,
+      'fulani-braids': 85,
+      'stitch-braids': 45,
+      cornrows: 35,
+      'tribal-braids': 90,
+      'feed-in-braids': 55,
+      'goddess-braids': 100,
+      'kids-braids': 30,
+      'box-braids': 70,
+      twists: 65,
     })
   })
 

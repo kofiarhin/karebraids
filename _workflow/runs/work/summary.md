@@ -119,3 +119,21 @@
 - Production: live endpoint access remains unconfirmed because outbound CONNECT was blocked and deployment credentials are unavailable. Exact deployment and curl checks are documented.
 - Fallow: 74.4/B, PARTIAL due static entrypoint/coverage and duplication findings; no dependency, import, circular, or boundary blocker.
 - Workflow health: Passed for repository-controlled work; external production verification required after deploy.
+
+## 2026-06-12 — KareBraids Pre-Launch Content Updates
+- Completed canonical service pricing, shared frontend money formatting, and offline catalogue alignment for all 11 services.
+- Fixed undefined About specialty imagery and accidental duplicate service preview assignments; added style-aware representative alt text.
+- Added centralized Karen profile image/statement/biography with explicit pre-launch TODOs and honest placeholder labels.
+- Added an immutable, empty future product catalogue vocabulary for extensions and hair products/oils with no public commerce exposure.
+- Applied skill: design-taste-frontend
+- Verification: server 72/72, client 134/134, lint/build/data audits passed.
+- Fallow: PARTIAL/warn; zero introduced dead code or complexity, two test-only duplicate assertion groups.
+- Environment warnings: remote Pexels and Playwright browser downloads blocked by outbound 403, so semantic remote verification and screenshots were unavailable.
+- Workflow health: Passed with documented environment warnings.
+
+## 2026-06-12 — Gallery Source-Of-Truth Remediation
+- Resolved the PR audit finding that remote backend image URLs could reach Gallery cards/modals.
+- Both gallery API client methods now return centralized local representative items for all service filters while preserving query/context metadata.
+- All gallery rendering boundaries reject remote inputs.
+- Verification: server 72/72, client 147/147, focused gallery 31/31, lint/build and Fallow passed.
+- Screenshot unavailable because the environment has no Playwright Chromium executable.

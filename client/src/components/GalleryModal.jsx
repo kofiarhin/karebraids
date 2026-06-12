@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { animationDefaults, gsap, useGSAP } from '../animations/gsapSetup.js'
 import { useReducedMotion } from '../hooks/useReducedMotion.js'
+import { getGalleryImageSrc } from '../data/imageLibrary.js'
 
 const modalStyle = {
   display: 'block',
@@ -156,7 +157,7 @@ export function GalleryModal({
             </button>
           </>
         ) : null}
-        <img alt={item.alt || item.title} src={item.src || item.image} style={imageStyle} />
+        <img alt={item.alt || item.title} src={getGalleryImageSrc(item)} style={imageStyle} />
         <p id="gallery-modal-position" style={hiddenCopyStyle}>
           Image {currentIndex + 1} of {totalCount}
         </p>

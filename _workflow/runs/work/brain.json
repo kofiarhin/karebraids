@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-06-09T23:30:00Z",
+  "updatedAt": "2026-06-12T02:02:08Z",
   "runId": "work",
   "workflow": {
     "currentStage": "complete",
@@ -16,7 +16,8 @@
       "handoff",
       "release-notes",
       "summary",
-      "health-check"
+      "health-check",
+      "review-remediation"
     ],
     "nextStage": "commit-and-pr",
     "status": "complete"
@@ -66,6 +67,27 @@
       "updatedAt": "2026-06-09T22:45:00Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "goal-prelaunch-content-commerce",
+      "text": "Complete KareBraids pre-launch price consistency, image mapping hardening, Karen profile content support, and dormant future-product architecture without exposing ecommerce.",
+      "status": "complete",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:38:14Z",
+      "supersedes": [],
+      "history": [
+        {
+          "timestamp": "2026-06-12T01:38:14Z",
+          "status": "complete",
+          "note": "Implemented and verified in the 2026-06-12 pre-launch workflow."
+        }
+      ]
     }
   ],
   "requirements": [
@@ -248,6 +270,90 @@
       "updatedAt": "2026-06-09T22:45:00Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "req-prelaunch-price-single-source",
+      "text": "Keep every current service price while making one canonical seed value and one shared frontend formatter the owner of displayed starting prices.",
+      "status": "complete",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:38:14Z",
+      "supersedes": [],
+      "history": [
+        {
+          "timestamp": "2026-06-12T01:38:14Z",
+          "status": "complete",
+          "note": "Implemented and verified in the 2026-06-12 pre-launch workflow."
+        }
+      ]
+    },
+    {
+      "id": "req-prelaunch-image-audit",
+      "text": "Fix objectively broken image paths, IDs, mappings, thumbnails, and alt text while preserving mappings whose semantic correctness cannot be proven from repository evidence.",
+      "status": "complete",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:38:14Z",
+      "supersedes": [],
+      "history": [
+        {
+          "timestamp": "2026-06-12T01:38:14Z",
+          "status": "complete",
+          "note": "Implemented and verified in the 2026-06-12 pre-launch workflow."
+        }
+      ]
+    },
+    {
+      "id": "req-prelaunch-karen-profile",
+      "text": "Render a centrally configured Karen profile image and personal statement using explicit pre-launch placeholders when final client content is unavailable.",
+      "status": "complete",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:38:14Z",
+      "supersedes": [],
+      "history": [
+        {
+          "timestamp": "2026-06-12T01:38:14Z",
+          "status": "complete",
+          "note": "Implemented and verified in the 2026-06-12 pre-launch workflow."
+        }
+      ]
+    },
+    {
+      "id": "req-prelaunch-product-scaffold",
+      "text": "Define internal future product categories for hair extensions and hair products such as oils without adding public routes, APIs, cart, checkout, payments, inventory, or admin UI.",
+      "status": "complete",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:38:14Z",
+      "supersedes": [],
+      "history": [
+        {
+          "timestamp": "2026-06-12T01:38:14Z",
+          "status": "complete",
+          "note": "Implemented and verified in the 2026-06-12 pre-launch workflow."
+        }
+      ]
     }
   ],
   "constraints": [
@@ -353,6 +459,36 @@
       },
       "createdAt": "2026-06-09T22:45:00Z",
       "updatedAt": "2026-06-09T22:45:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "constraint-prelaunch-source-truth",
+      "text": "Use repository data as the source of truth and do not fabricate prices, image identities, Karen content, or product sales capability.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:19:08Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "constraint-prelaunch-minimal-ui",
+      "text": "Follow existing React/Tailwind conventions, keep changes minimal, and do not introduce a styling system or unrelated redesign.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:19:08Z",
       "supersedes": [],
       "history": []
     }
@@ -539,6 +675,51 @@
       "updatedAt": "2026-06-09T23:30:00Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "decision-prelaunch-api-price-compat",
+      "text": "Retain both startingPrice and priceFrom at the API compatibility boundary while reducing canonical editable seed data to one price value where tests prove safety.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:19:08Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "decision-prelaunch-no-commerce-exposure",
+      "text": "Future product preparation is a dormant domain scaffold only and must not be imported by public routes or components.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:19:08Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "decision-gallery-local-render-source",
+      "text": "All frontend gallery arrays and final image render sources must come from client/src/data/imageLibrary.js; API gallery image URLs are metadata only and must never be rendered.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/progress.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T02:02:08Z",
+      "updatedAt": "2026-06-12T02:02:08Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "domainKnowledge": [
@@ -618,7 +799,23 @@
       "history": []
     }
   ],
-  "openQuestions": [],
+  "openQuestions": [
+    {
+      "id": "question-prelaunch-final-content",
+      "text": "Final approved prices, Karen portrait, Karen personal statement, and authoritative hairstyle-photo labels remain unavailable but are non-blocking placeholders.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:38:14Z",
+      "supersedes": [],
+      "history": []
+    }
+  ],
   "risks": [
     {
       "id": "risk-async-compat",
@@ -677,6 +874,36 @@
       },
       "createdAt": "2026-06-09T23:30:00Z",
       "updatedAt": "2026-06-09T23:30:00Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "risk-prelaunch-image-semantics",
+      "text": "Repository filenames and metadata do not prove that remote or representative photographs depict the named hairstyles; semantic reassignment would be guesswork.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:19:08Z",
+      "supersedes": [],
+      "history": []
+    },
+    {
+      "id": "risk-prelaunch-placeholder-content",
+      "text": "A style image and generic copy must not be represented as Karen's verified portrait or approved personal statement.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:19:08Z",
       "supersedes": [],
       "history": []
     }
@@ -831,6 +1058,21 @@
       "updatedAt": "2026-06-08T23:17:15Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "id": "artifact-prelaunch-spec",
+      "text": "Detailed pre-launch implementation spec saved at _workflow/runs/work/spec.md.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T01:19:08Z",
+      "updatedAt": "2026-06-12T01:19:08Z",
+      "supersedes": [],
+      "history": []
     }
   ],
   "workflowHistory": [
@@ -893,6 +1135,21 @@
       "updatedAt": "2026-06-08T23:17:15Z",
       "supersedes": [],
       "history": []
+    },
+    {
+      "timestamp": "2026-06-12T01:19:08Z",
+      "stage": "spec-approval",
+      "summary": "Pre-launch request intake complete and detailed spec saved; awaiting explicit approval."
+    },
+    {
+      "timestamp": "2026-06-12T01:38:14Z",
+      "stage": "complete",
+      "summary": "Pre-launch pricing, image, Karen profile, and dormant product work completed and verified."
+    },
+    {
+      "timestamp": "2026-06-12T02:02:08Z",
+      "stage": "complete",
+      "summary": "Resolved gallery source-of-truth audit: API filtering retained while local representative images exclusively drive rendering."
     }
   ],
   "custom": {},
@@ -972,6 +1229,36 @@
         "runId": "work",
         "artifact": "_workflow/runs/work/summary.md",
         "conversation": "workflow"
+      }
+    },
+    {
+      "timestamp": "2026-06-12T01:19:08Z",
+      "type": "spec-saved",
+      "summary": "Pre-launch request intake complete and detailed spec saved; awaiting explicit approval.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/spec.md",
+        "conversation": "user"
+      }
+    },
+    {
+      "timestamp": "2026-06-12T01:38:14Z",
+      "type": "workflow-complete",
+      "summary": "All approved pre-launch tasks completed; owner content replacements remain non-blocking follow-up.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/summary.md",
+        "conversation": "user"
+      }
+    },
+    {
+      "timestamp": "2026-06-12T02:02:08Z",
+      "type": "review-remediation",
+      "summary": "Gallery cards and modals now reject remote API image URLs and use the local image library for every filter.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/progress.md",
+        "conversation": "user"
       }
     }
   ]

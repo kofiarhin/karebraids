@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-06-11T07:20:15+01:00",
+  "updatedAt": "2026-06-12T02:02:08Z",
   "events": [
     {
       "id": "history-complete-gallery-filter-navigation-20260611",
@@ -141,6 +141,40 @@
         "_workflow/runs/work/release-notes.md",
         "_workflow/runs/work/summary.md",
         ".workflow/fallow-audit.md"
+      ]
+    },
+    {
+      "timestamp": "2026-06-12T01:19:08Z",
+      "type": "spec-saved",
+      "runId": "work",
+      "summary": "Captured pre-launch pricing, imagery, Karen profile, and dormant product architecture requirements at the spec approval gate.",
+      "artifacts": [
+        "_workflow/runs/work/request.md",
+        "_workflow/runs/work/spec.md",
+        "_workflow/runs/work/handoff.md"
+      ]
+    },
+    {
+      "timestamp": "2026-06-12T01:38:14Z",
+      "type": "workflow-complete",
+      "runId": "work",
+      "summary": "Completed and verified KareBraids pre-launch pricing, imagery, Karen profile, and dormant product architecture.",
+      "artifacts": [
+        "_workflow/runs/work/review.md",
+        ".workflow/fallow-audit.md",
+        "_workflow/runs/work/release-notes.md",
+        "_workflow/runs/work/summary.md"
+      ]
+    },
+    {
+      "timestamp": "2026-06-12T02:02:08Z",
+      "type": "review-remediation",
+      "runId": "work",
+      "summary": "Enforced the local frontend image library as the only gallery rendering source while preserving API filters/context.",
+      "artifacts": [
+        "client/src/services/galleryService.js",
+        "client/src/data/imageLibrary.js",
+        "_workflow/runs/work/progress.md"
       ]
     }
   ]

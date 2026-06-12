@@ -25,6 +25,10 @@ describe('About', () => {
     renderAbout()
 
     expect(screen.getByRole('heading', { name: /meet karen/i })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /placeholder for karen's profile photo/i })).toBeInTheDocument()
+    expect(screen.getByText(/a note from karen/i)).toBeInTheDocument()
+    expect(screen.getByText(/every client deserves beautiful braids and a comfortable experience/i)).toBeInTheDocument()
+    expect(screen.getByText(/final photo and statement pending/i)).toBeInTheDocument()
     expect(screen.getByText(/founder of karebraids/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /why clients choose karebraids/i })).toBeInTheDocument()
     expect(screen.getByText(/more than a hairstyle/i)).toBeInTheDocument()
@@ -33,6 +37,7 @@ describe('About', () => {
     expect(screen.getByText(/200\+/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /ready for your next style/i })).toBeInTheDocument()
   })
+
 
   it('keeps booking and gallery actions wired as internal links', () => {
     renderAbout()

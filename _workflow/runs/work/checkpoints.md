@@ -110,3 +110,35 @@ Append a checkpoint at intake completion, spec save, task-plan save, each comple
 - Artifacts changed: Runtime/config/tests/docs plus all final workflow artifacts.
 - Open questions: Actual post-deploy endpoint responses and production Service document count.
 - Next action: Commit and PR, then deploy and execute README verification commands.
+
+## 2026-06-12T01:19:08Z — Intake complete and spec saved
+- Stage: Spec approval gate
+- Memory summary: Repository data is authoritative; current prices remain; ambiguous images are preserved/documented; Karen content uses explicit placeholders; commerce preparation remains internal and non-user-facing.
+- Artifacts changed: `_workflow/runs/work/request.md`, `_workflow/runs/work/spec.md`, `_workflow/runs/work/handoff.md`, `_workflow/runs/work/progress.md`, `_workflow/runs/work/activity.md`, Project Brain files.
+- Open questions: Final approved prices, verified Karen portrait, approved personal statement, and authoritative hairstyle-photo labels are non-blocking.
+- Next action: Await explicit approval of `_workflow/runs/work/spec.md`, then create the task plan.
+- Applied skill: design-taste-frontend
+
+## 2026-06-12 — Task plan saved
+- Stage: Planning complete
+- Memory summary: Approved spec decomposed into pricing, imagery, About, dormant products, and final verification tasks.
+- Artifacts changed: `_workflow/runs/work/tasks.md`, `_workflow/runs/work/handoff.md`, `_workflow/runs/work/activity.md`.
+- Open questions: Final client content remains non-blocking.
+- Next action: Execute TASK-001 TDD-first.
+- Applied skill: design-taste-frontend
+
+## 2026-06-12T01:38:14Z — Workflow complete
+- Stage: Final health check complete
+- Memory summary: All five tasks are Done; current prices are canonical and consistent, representative image mappings are explicit/accessible, Karen content is configurable, and future products remain dormant.
+- Artifacts changed: Application code/tests, `.workflow/fallow-audit.md`, and all final run artifacts.
+- Open questions: Final owner-approved prices, Karen photo/statement, labeled portfolio images, and future commerce requirements remain non-blocking follow-up content.
+- Next action: Commit and PR, then replace owner content and reseed production before launch.
+- Applied skill: design-taste-frontend
+
+## 2026-06-12T02:02:08Z — TASK-006 done
+- Stage: Review remediation complete
+- Memory summary: API gallery requests remain service-aware, but all UI gallery image arrays and final render sources now come from the centralized local representative library.
+- Artifacts changed: Gallery service/image consumers/tests and final workflow artifacts.
+- Open questions: None blocking.
+- Next action: Commit and update PR.
+- Applied skill: design-taste-frontend

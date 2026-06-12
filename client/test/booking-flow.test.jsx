@@ -38,7 +38,7 @@ function renderBooking(route = '/booking') {
 }
 
 async function chooseService(user) {
-  await user.click(screen.getByRole('button', { name: /knotless braids/i }))
+  await user.click(screen.getByRole('button', { name: /^knotless braids,/i }))
 }
 
 async function chooseAvailableAppointmentDate(user) {
@@ -68,7 +68,7 @@ describe('booking flow', () => {
 
     expect(useBookableServices).toHaveBeenCalled()
     services.forEach((service) => {
-      const option = screen.getByRole('button', { name: new RegExp(service.name, 'i') })
+      const option = screen.getByRole('button', { name: new RegExp(`^${service.name},`, 'i') })
       expect(option).toBeInTheDocument()
       expect(option.querySelector('img')).toHaveAttribute('src', expect.stringMatching(/^\/images\//))
       expect(option).toHaveTextContent(/from £/i)

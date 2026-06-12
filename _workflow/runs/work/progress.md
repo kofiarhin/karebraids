@@ -724,3 +724,84 @@
 - Acceptance: [x] repository implementation criteria; [~] live production reachability requires deploying this commit and running documented checks.
 - Remaining issues: Operator must configure/redeploy Vercel and seed the production database if the filtered service list is empty.
 - Next action: Final review, Fallow, handoff, release notes, summary, health check.
+
+## 2026-06-12 — Pre-launch updates intake and spec
+- Status: Awaiting spec approval.
+- Lifecycle transition reached: Intake -> Spec -> Spec approval gate.
+- Files changed: Active request, detailed spec, handoff, activity/checkpoint, and Project Brain workflow memory only.
+- Repository inspection: Canonical services/API data flow, repeated price formatters, local representative image library, remote seeded galleries, About data/components, routes, tests, and absence of ecommerce surfaces reviewed.
+- Data audit: 11 service prices have matching `startingPrice`/`priceFrom`; local image hashes are unique; several remote URLs are reused across services but lack authoritative semantic evidence for reassignment.
+- Applied skill: design-taste-frontend
+- Verification result: No implementation verification yet; no application code changed.
+- Blockers: Explicit saved-spec approval.
+- Next step: Approve spec, then generate a vertical TDD-first task plan.
+
+## 2026-06-12 — TASK-001: Canonical service pricing — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files changed: `server/data/services.json`, `server/tests/seed-services.test.js`, `client/src/data/services.js`, `client/src/services/serviceService.js`, `client/src/utils/formatServicePrice.js`, pricing consumers/tests.
+- Iteration 1 Build — Red: New formatter test failed because the module did not exist; seed test failed because every record still had `priceFrom`. Green: Added the shared formatter, removed redundant seed aliases, and retained serializer compatibility. Refactor: Replaced six local formatter implementations.
+- Iteration 2 Refine — Red: Existing site/booking tests exposed offline-catalogue incompatibility and ambiguous service matching. Green: Aligned all 11 fallback prices/IDs with canonical seed data and preserved legacy `fromPrice` display shape. Refactor: `serviceService` now derives fallbacks from one client catalogue rather than duplicating records.
+- Iteration 3 Polish — Red: Added complete expected-price maps and missing-price behavior. Green: All UI labels resolve canonical `startingPrice` with legacy fallback and never invent `£0`. Refactor: `rg` confirms one production `Intl.NumberFormat` owner.
+- Verification: Focused Jest/Vitest passed; full server 72/72 and client 134/134 passed; lint/build passed.
+- Review: API aliases remain backward compatible through serializer/model; reseeding normalizes persisted records.
+- Acceptance: [x] Existing values retained; [x] one seed price; [x] shared UI formatter; [x] fallback aligned; [x] no fabricated zero.
+- Remaining issues: Live MongoDB requires the normal seed command to remove historical redundant fields.
+- Next action: TASK-002.
+
+## 2026-06-12 — TASK-002: Representative image mapping hardening — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files changed: `client/src/data/imageLibrary.js`, image/service preview helpers and tests, Gallery, ServiceDetail, Services/home cards.
+- Iteration 1 Build — Red: New descriptor/context tests failed because style-aware helpers did not exist. Green: Added `getServicePreview` and `getGalleryImageAlt`; selected-style cards/detail/gallery now include the style name while retaining representative language. Refactor: Centralized repeated alt construction.
+- Iteration 2 Refine — Red: About image invariant test exposed undefined specialty images; service preview uniqueness test exposed two accidental duplicate mappings. Green: About and service previews now use explicit local representative mappings with unique service preview images. Refactor: Replaced unreachable `galleryImages` lookup with local descriptors.
+- Iteration 3 Polish — Red: Gallery and ServiceDetail regression tests required contextual alt text. Green: Card, detail, gallery, and modal imagery carries accurate selected-style context; fallback remains deterministic. Refactor: Preserved remote seed mappings because their semantic correctness cannot be established.
+- Verification: 18 local files present; curated IDs/src unique; 11 service preview assignments unique; embedded IDs unique; focused and full client tests passed.
+- Review: Remote Pexels reachability could not be verified because outbound CONNECT returned 403 for all probes; no speculative remapping was performed.
+- Acceptance: [x] local paths valid; [x] accidental preview duplicates fixed; [x] meaningful alt text; [x] selected style context; [x] uncertainty documented.
+- Remaining issues: Client-labeled style photography is still required to replace representative imagery definitively.
+- Next action: TASK-003.
+
+## 2026-06-12 — TASK-003: Karen profile content — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files changed: `client/src/data/aboutPageData.js`, `client/src/components/about/MeetKaren.jsx`, `client/src/pages/About.jsx`, About data/page tests.
+- Iteration 1 Build — Red: About test could not find a Karen profile placeholder or statement. Green: Added centralized `karenProfile` and data-driven rendering. Refactor: `MeetKaren` consumes one profile object.
+- Iteration 2 Refine — Red: About image audit found missing specialty image paths. Green: Every specialty uses an existing local representative path and descriptive alt text. Refactor: Shared representative descriptor helper.
+- Iteration 3 Polish — Red: Accessibility assertions required an identifiable photo and statement. Green: Responsive figure/figcaption, statement blockquote, and explicit pending-content label added with existing Tailwind conventions. Refactor: Existing useful biography and CTAs preserved.
+- Verification: About/data tests passed; full client tests, lint, and build passed; design-taste code-surface review passed.
+- Review: No image is falsely identified as Karen; source TODOs identify both required replacements.
+- Acceptance: [x] photo area; [x] personal statement field; [x] explicit placeholders/TODOs; [x] responsive existing layout; [x] no fabricated final content.
+- Remaining issues: Replace the photo and statement centrally before launch.
+- Next action: TASK-004.
+
+## 2026-06-12 — TASK-004: Dormant future product architecture — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Files changed: `server/constants/products.js`, `server/tests/product-catalog.test.js`.
+- Iteration 1 Build — Red: Jest failed because the future product module did not exist. Green: Added immutable categories, types, statuses, and an empty catalogue. Refactor: Kept the module independent of service/booking domains.
+- Iteration 2 Refine — Red: Quality review flagged an unnecessary unused validator/complexity. Green: Removed premature validation behavior and retained only vocabulary needed now. Refactor: Added explicit TODO boundaries.
+- Iteration 3 Polish — Red: Route/navigation audit checked for public product exposure. Green: No product route, API, component, cart, checkout, payment, inventory, or admin surface exists. Refactor: Intentional dormant exports include scoped Fallow suppressions.
+- Verification: Product Jest test passed; public route/import audit passed; full server suite passed.
+- Review: Hair extensions, braiding hair, extension bundles, oils, and hair-care product types are represented without committing to commerce infrastructure.
+- Acceptance: [x] extensions; [x] hair products/oils; [x] empty catalogue; [x] no public exposure; [x] no ecommerce behavior.
+- Remaining issues: Product/provider/inventory requirements intentionally deferred.
+- Next action: TASK-005.
+
+## 2026-06-12 — TASK-005: Integrated verification and release — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Iteration 1 Build: Full server/client tests, lint, build, price/image/route audits, and diff check passed. Targeted recovery updated two legacy tests for the expanded canonical fallback catalogue.
+- Iteration 2 Refine: Final design-taste review found no new styling system, mobile grid remains one column before `lg`, and semantic figure/blockquote structure is sound. Remote image probes and Playwright browser download were attempted and blocked by environment 403 responses.
+- Iteration 3 Polish: Final Fallow audit completed with `warn`; no introduced dead code or complexity, two test-only duplication groups, and inherited repository findings remain. Final diff is scoped and contains no secrets or generated browser binaries.
+- Verification commands: `npm test`; `npm test --prefix client`; `npm run lint --prefix client`; `npm run build --prefix client`; data/path audit; route exposure audit; `git diff --check`; Fallow JSON audit.
+- Acceptance: [x] server 72/72; [x] client 134/134; [x] lint; [x] build; [x] local asset audit; [x] no ecommerce exposure; [x] review/Fallow/release artifacts.
+- Warnings: Vite reports an existing >500 kB chunk; jsdom logs unsupported `scrollTo`; screenshots unavailable because Playwright Chromium download is domain-blocked; remote Pexels checks are proxy-blocked.
+- Next action: Commit and create PR.
+- Applied skill: design-taste-frontend
+
+## 2026-06-12 — TASK-006: Local gallery image source remediation — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Review trigger: The PR audit found that successful API responses still supplied remote Pexels `src`/`image` values directly to Gallery cards and modals.
+- Iteration 1 Build — Red: `client/test/service-api.test.js` failed for `getGallery`, all filtered `getGalleryItems` calls, and all-services results because remote API arrays passed through unchanged. Green: `galleryService` now preserves the API request/metadata but replaces gallery arrays with `getGalleryImageItems()` from the local library, applying limit and `contextServiceId`. Refactor: Shared parameter and representative-item helpers.
+- Iteration 2 Refine — Red: Added a Gallery component test with remote hook data. Green: `getGalleryImageSrc` rejects any non-local source and is used by Gallery cards, GalleryModal, homepage GalleryFeature, and ServiceDetail inspiration. Refactor: One final source guard for every gallery renderer.
+- Iteration 3 Polish — Red: Parameterized service tests cover every gallery-enabled service ID and slug, including the backend-compatible `boho-braids` slug. Green: All return local `/images/*.jpg`, preserve selected service context, and never contain HTTP URLs. Refactor: Direct-source audit confirms no `item.src`/`item.image` rendering remains.
+- Verification: Server 72/72; client 147/147; focused gallery 31/31; lint/build passed; 15-item local contract audit passed; Fallow passed with zero introduced findings.
+- Screenshot: Attempted `npx playwright screenshot ...`; unavailable because the Chromium executable is not installed and browser downloads are environment-blocked.
+- Acceptance: [x] local source of truth; [x] no remote live rendering; [x] all filters covered; [x] service filtering/context preserved; [x] cards and modals guarded.
+- Applied skill: design-taste-frontend

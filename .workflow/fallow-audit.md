@@ -1,42 +1,33 @@
 # Fallow Audit
 
 ## Command Run
-
-`fallow audit --format json --quiet --explain 2>/dev/null || true`
-
-Fallow version: 2.92.1. Parsed root `kind`: `audit`.
+`npx -y fallow audit --base HEAD --format json --quiet --explain 2>/dev/null || true`
 
 ## Summary
-
-- Final verdict from Fallow: `pass`.
-- Introduced dead-code issues: 0.
-- Introduced complexity findings: 0.
-- Introduced duplication groups: 0.
-- Dead code, unused/unlisted dependencies, unresolved imports, cycles, re-export cycles, and boundary violations: 0.
+- Verdict: `pass`.
+- Changed-code dead-code findings: 0.
+- Changed-code complexity findings: 0.
+- Changed-code duplication findings: 0.
+- Repository report included three inherited/static-entry-point dead-code findings, none introduced by this remediation.
 
 ## Findings
-
-The first audit reported one introduced moderate `Gallery` complexity finding and two introduced test clone groups. Ten clone groups remain in the final report, all inherited and non-blocking.
+No introduced cleanup, dependency, import, circular, boundary, complexity, or duplication blocker was reported.
 
 ## Fixes Applied
-
-- Extracted modal-selection mechanics into `useGalleryModal`.
-- Consolidated repeated modal and filter test setup.
-
-No automated Fallow fix command was used.
+- Centralized API gallery normalization in the gallery service.
+- Centralized final local-path enforcement in `getGalleryImageSrc`.
+- Removed direct gallery-item source rendering from all affected UI surfaces.
 
 ## Remaining Exceptions
-
-Ten inherited test duplication groups remain outside this request. No blocking maintainability findings remain.
+None for changed production code.
 
 ## Verification
-
-- Focused Gallery tests: 14 passed.
-- Client tests: 127 passed.
-- Server tests: 71 passed.
-- Client lint and production build: passed.
-- Final Fallow audit: `pass`, zero introduced findings.
+- Server tests: 72 passed.
+- Client tests: 147 passed.
+- Focused gallery tests: 31 passed.
+- Client lint/build: passed.
+- Direct remote-source rendering audit: passed.
+- Local source contract: 15 centralized items; remote input rejected.
 
 ## Verdict
-
 PASSED

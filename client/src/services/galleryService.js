@@ -1,3 +1,4 @@
+import { getGalleryImageItems } from '../data/imageLibrary.js'
 import { api } from '../lib/api.js'
 
 function normalizeLimit(limit) {
@@ -8,26 +9,37 @@ function normalizeService(service) {
   return typeof service === 'string' && service.trim() ? service.trim() : undefined
 }
 
-export async function getGallery({ limit, service } = {}) {
-  const response = await api.get('/gallery', {
-    params: {
-      limit: normalizeLimit(limit),
-      service: normalizeService(service),
-    },
-  })
+function getLocalRepresentativeItems({ limit, service } = {}) {
+  const normalizedLimit = normalizeLimit(limit)
+  const normalizedService = normalizeService(service)
+  const items = getGalleryImageItems().map((item) => (
+    normalizedService ? { ...item, contextServiceId: normalizedService } : item
+  ))
 
-  return response.data
+  return normalizedLimit ? items.slice(0, normalizedLimit) : items
 }
 
-export async function getGalleryItems({ limit, service } = {}) {
-  const response = await api.get('/gallery', {
-    params: {
-      limit: normalizeLimit(limit),
-      service: normalizeService(service),
-    },
-  })
+function getGalleryParams({ limit, service } = {}) {
+  return {
+    limit: normalizeLimit(limit),
+    service: normalizeService(service),
+  }
+}
 
-  return response.data.galleryItems || []
+export async function getGallery(options = {}) {
+  const params = getGalleryParams(options)
+  const response = await api.get('/gallery', { params })
+
+  return {
+    ...response.data,
+    galleryItems: getLocalRepresentativeItems(params),
+  }
+}
+
+export async function getGalleryItems(options = {}) {
+  const params = getGalleryParams(options)
+  await api.get('/gallery', { params })
+  return getLocalRepresentativeItems(params)
 }
 
 export async function getGalleryServices() {

@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useGalleryServices } from '../../hooks/queries/useGalleryItems.js'
-import { getServicePreviewImage } from '../../utils/servicePreview.js'
+import { getServicePreview } from '../../utils/servicePreview.js'
+import { formatServicePrice } from '../../utils/formatServicePrice.js'
 
-function formatPrice(service) {
-  return new Intl.NumberFormat('en-GB', { style: 'currency', currency: service.currency || 'GBP', maximumFractionDigits: 0 }).format(service.startingPrice ?? service.priceFrom ?? 0)
-}
 
 export function BrowseByStyle() {
   const servicesQuery = useGalleryServices()
@@ -15,7 +13,7 @@ export function BrowseByStyle() {
       {servicesQuery.isLoading ? <p className="gallery-query-state" role="status">Loading service styles…</p> : null}
       {servicesQuery.isError ? <p className="gallery-query-state" role="alert">Service styles could not be loaded.</p> : null}
       {!servicesQuery.isLoading && !servicesQuery.isError && services.length === 0 ? <p className="gallery-query-state" role="status">Service styles are coming soon.</p> : null}
-      {services.length > 0 ? <div className="browse-style-grid">{services.map((service, index) => <Link aria-label={`${service.name}, starting at ${formatPrice(service)}`} className="browse-style-card" data-reveal key={service.id} style={{ '--index': index }} to={`/gallery?service=${service.slug || service.id}`}><img alt="Representative protective styling image" loading="lazy" src={getServicePreviewImage(service)} /><span><strong>{service.name}</strong><small>Representative image</small><small>From {formatPrice(service)}</small></span></Link>)}</div> : null}
+      {services.length > 0 ? <div className="browse-style-grid">{services.map((service, index) => <Link aria-label={`${service.name}, starting at ${formatServicePrice(service)}`} className="browse-style-card" data-reveal key={service.id} style={{ '--index': index }} to={`/gallery?service=${service.slug || service.id}`}><img alt={getServicePreview(service).alt} loading="lazy" src={getServicePreview(service).src} /><span><strong>{service.name}</strong><small>Representative image</small><small>From {formatServicePrice(service)}</small></span></Link>)}</div> : null}
     </section>
   )
 }

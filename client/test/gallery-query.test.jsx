@@ -59,7 +59,7 @@ describe('service-driven gallery surfaces', () => {
     expect(within(filter).getByRole('option', { name: /all services/i })).toHaveValue('all')
     await screen.findByRole('option', { name: getGalleryServices()[0].name })
     getGalleryServices().forEach((service) => {
-      expect(within(filter).getByRole('option', { name: service.name })).toHaveValue(service.id)
+      expect(within(filter).getByRole('option', { name: service.name })).toHaveValue(service.slug || service.id)
     })
   })
 
