@@ -794,3 +794,17 @@
 - Warnings: Vite reports an existing >500 kB chunk; jsdom logs unsupported `scrollTo`; screenshots unavailable because Playwright Chromium download is domain-blocked; remote Pexels checks are proxy-blocked.
 - Next action: Commit and create PR.
 - Applied skill: design-taste-frontend
+<<<<<<< HEAD
+=======
+
+## 2026-06-12 — TASK-006: Local gallery image source remediation — Done
+- Lifecycle: Planned -> Ready -> In Progress -> Verified -> Reviewed -> Done.
+- Review trigger: The PR audit found that successful API responses still supplied remote Pexels `src`/`image` values directly to Gallery cards and modals.
+- Iteration 1 Build — Red: `client/test/service-api.test.js` failed for `getGallery`, all filtered `getGalleryItems` calls, and all-services results because remote API arrays passed through unchanged. Green: `galleryService` now preserves the API request/metadata but replaces gallery arrays with `getGalleryImageItems()` from the local library, applying limit and `contextServiceId`. Refactor: Shared parameter and representative-item helpers.
+- Iteration 2 Refine — Red: Added a Gallery component test with remote hook data. Green: `getGalleryImageSrc` rejects any non-local source and is used by Gallery cards, GalleryModal, homepage GalleryFeature, and ServiceDetail inspiration. Refactor: One final source guard for every gallery renderer.
+- Iteration 3 Polish — Red: Parameterized service tests cover every gallery-enabled service ID and slug, including the backend-compatible `boho-braids` slug. Green: All return local `/images/*.jpg`, preserve selected service context, and never contain HTTP URLs. Refactor: Direct-source audit confirms no `item.src`/`item.image` rendering remains.
+- Verification: Server 72/72; client 147/147; focused gallery 31/31; lint/build passed; 15-item local contract audit passed; Fallow passed with zero introduced findings.
+- Screenshot: Attempted `npx playwright screenshot ...`; unavailable because the Chromium executable is not installed and browser downloads are environment-blocked.
+- Acceptance: [x] local source of truth; [x] no remote live rendering; [x] all filters covered; [x] service filtering/context preserved; [x] cards and modals guarded.
+- Applied skill: design-taste-frontend
+>>>>>>> pr-25

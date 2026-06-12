@@ -122,3 +122,14 @@ Append compact, timestamped workflow and memory updates. Do not rewrite prior en
 - Checkpoint: Saved.
 - Next: Commit and create PR; owner replaces marked content before launch.
 - Applied skill: design-taste-frontend
+<<<<<<< HEAD
+=======
+
+## 2026-06-12T02:02:08Z — Gallery source-of-truth remediation complete
+- Stage: Review remediation -> Verification -> Complete
+- Memory: Resolved gallery source conflict in favor of the centralized local image library.
+- Artifact: Updated gallery service, image rendering boundaries, tests, review/release/summary/handoff, and Fallow audit.
+- Checkpoint: Saved.
+- Next: Commit and update PR.
+- Applied skill: design-taste-frontend
+>>>>>>> pr-25

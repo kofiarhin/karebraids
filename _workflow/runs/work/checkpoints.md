@@ -134,3 +134,14 @@ Append a checkpoint at intake completion, spec save, task-plan save, each comple
 - Open questions: Final owner-approved prices, Karen photo/statement, labeled portfolio images, and future commerce requirements remain non-blocking follow-up content.
 - Next action: Commit and PR, then replace owner content and reseed production before launch.
 - Applied skill: design-taste-frontend
+<<<<<<< HEAD
+=======
+
+## 2026-06-12T02:02:08Z — TASK-006 done
+- Stage: Review remediation complete
+- Memory summary: API gallery requests remain service-aware, but all UI gallery image arrays and final render sources now come from the centralized local representative library.
+- Artifacts changed: Gallery service/image consumers/tests and final workflow artifacts.
+- Open questions: None blocking.
+- Next action: Commit and update PR.
+- Applied skill: design-taste-frontend
+>>>>>>> pr-25

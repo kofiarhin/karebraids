@@ -1,6 +1,10 @@
 {
   "version": "1.0.0",
+<<<<<<< HEAD
   "updatedAt": "2026-06-12T01:38:14Z",
+=======
+  "updatedAt": "2026-06-12T02:02:08Z",
+>>>>>>> pr-25
   "workflow": {
     "currentStage": "complete",
     "completedStages": [
@@ -15,7 +19,12 @@
       "handoff",
       "release-notes",
       "summary",
+<<<<<<< HEAD
       "health-check"
+=======
+      "health-check",
+      "review-remediation"
+>>>>>>> pr-25
     ],
     "nextStage": "commit-and-pr",
     "status": "complete"
@@ -726,6 +735,24 @@
       "updatedAt": "2026-06-12T01:19:08Z",
       "supersedes": [],
       "history": []
+<<<<<<< HEAD
+=======
+    },
+    {
+      "id": "decision-gallery-local-render-source",
+      "text": "All frontend gallery arrays and final image render sources must come from client/src/data/imageLibrary.js; API gallery image URLs are metadata only and must never be rendered.",
+      "status": "active",
+      "confidence": 1.0,
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/progress.md",
+        "conversation": "user"
+      },
+      "createdAt": "2026-06-12T02:02:08Z",
+      "updatedAt": "2026-06-12T02:02:08Z",
+      "supersedes": [],
+      "history": []
+>>>>>>> pr-25
     }
   ],
   "domainKnowledge": [
@@ -1151,6 +1178,14 @@
       "timestamp": "2026-06-12T01:38:14Z",
       "stage": "complete",
       "summary": "Pre-launch pricing, image, Karen profile, and dormant product work completed and verified."
+<<<<<<< HEAD
+=======
+    },
+    {
+      "timestamp": "2026-06-12T02:02:08Z",
+      "stage": "complete",
+      "summary": "Resolved gallery source-of-truth audit: API filtering retained while local representative images exclusively drive rendering."
+>>>>>>> pr-25
     }
   ],
   "custom": {},
@@ -1295,6 +1330,19 @@
         "artifact": "_workflow/runs/work/summary.md",
         "conversation": "user"
       }
+<<<<<<< HEAD
+=======
+    },
+    {
+      "timestamp": "2026-06-12T02:02:08Z",
+      "type": "review-remediation",
+      "summary": "Gallery cards and modals now reject remote API image URLs and use the local image library for every filter.",
+      "source": {
+        "runId": "work",
+        "artifact": "_workflow/runs/work/progress.md",
+        "conversation": "user"
+      }
+>>>>>>> pr-25
     }
   ]
 }

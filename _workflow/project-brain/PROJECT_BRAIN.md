@@ -1,6 +1,10 @@
 # Project Brain
 
+<<<<<<< HEAD
 Last updated: 2026-06-12T01:38:14Z
+=======
+Last updated: 2026-06-12T02:02:08Z
+>>>>>>> pr-25
 
 ## Workflow
 - Stage: `complete`
@@ -59,6 +63,10 @@ Last updated: 2026-06-12T01:38:14Z
 - `tech-seed-db-only-env` [active]: The service seed command reads only MONGODB_URI and performs idempotent stable-ID upserts.
 - `decision-prelaunch-api-price-compat` [active]: Retain both startingPrice and priceFrom at the API compatibility boundary while reducing canonical editable seed data to one price value where tests prove safety.
 - `decision-prelaunch-no-commerce-exposure` [active]: Future product preparation is a dormant domain scaffold only and must not be imported by public routes or components.
+<<<<<<< HEAD
+=======
+- `decision-gallery-local-render-source` [active]: All frontend gallery arrays and final image render sources must come from client/src/data/imageLibrary.js; API gallery image URLs are metadata only and must never be rendered.
+>>>>>>> pr-25
 
 ## Risks
 - `risk-async-compat` [active]: Catalog migration can regress deep-link selection, async states, or legacy response aliases.

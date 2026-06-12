@@ -107,3 +107,25 @@
 - Verification commands: `npm test`, `npm test --prefix client`, `npm run lint --prefix client`, `npm run build --prefix client`, Fallow commands, `git diff --check`.
 - Stop condition: In-scope regression cannot be fixed or verified.
 - Out-of-scope items: Baseline unrelated cleanup.
+<<<<<<< HEAD
+=======
+
+## TASK-006: Enforce the local gallery image source of truth
+- Status: Done
+- Objective: Prevent API-provided remote gallery URLs from reaching any gallery card, preview, detail image, or modal while retaining API service filtering and selected-service context.
+- Files affected: `client/src/services/galleryService.js`, `client/src/data/imageLibrary.js`, gallery image consumers, and gallery/service tests.
+- Checklist:
+  - [x] Add failing tests using remote API fixtures for every service ID/slug filter.
+  - [x] Normalize both `getGallery` and `getGalleryItems` through the local representative library.
+  - [x] Preserve API requests, limits, selected service context, and response metadata.
+  - [x] Add a final rendering-boundary guard that rejects non-`/images/` sources.
+  - [x] Verify cards and modals render local paths even when a hook supplies a remote URL.
+- Iteration 1 Build: Red service-client tests proved API URLs passed through; Green replaced response gallery arrays with centralized local items; Refactor extracted query/local mapping helpers.
+- Iteration 2 Refine: Red card/modal regression used remote hook data; Green added `getGalleryImageSrc` at every gallery rendering boundary; Refactor reused the helper in Gallery, modal, homepage preview, and detail inspiration.
+- Iteration 3 Polish: Red all-filter coverage included every local service ID and slug; Green preserved query parameters/context and corrected the boho fallback slug; Refactor completed direct-source audit.
+- Test commands run: Focused 31 gallery tests; server 72/72; client 147/147; lint; build; source-contract audit; Fallow audit.
+- Acceptance result: [x] No live gallery surface renders API Pexels URLs; [x] all filters use `/images/...`; [x] filtering/context retained; [x] modal protected.
+- Verification result: Passed. Screenshot attempt was blocked because no Playwright browser executable is installed.
+- Stop condition: None reached.
+- Out-of-scope items: Removing remote URLs from backend seed/API, since the frontend contract now intentionally ignores them for rendering.
+>>>>>>> pr-25

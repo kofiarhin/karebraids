@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { imageLibrary } from '../data/imageLibrary.js'
@@ -45,5 +46,24 @@ describe('Gallery representative image semantics', () => {
     expect(screen.getByText('Representative image')).toBeInTheDocument()
     expect(screen.getByAltText('Knotless Braids styling inspiration — representative image')).toHaveAttribute('src', item.src)
     expect(screen.queryByText('Showing Knotless Braids')).not.toBeInTheDocument()
+  })
+  it('never renders a remote API image in gallery cards or the modal', async () => {
+    const user = userEvent.setup()
+    mocks.useGalleryItems.mockReturnValue({
+      data: [{ ...item, src: 'https://images.pexels.com/remote.jpg', image: 'https://images.pexels.com/remote.jpg' }],
+      isLoading: false,
+      isError: false,
+    })
+
+    render(<MemoryRouter initialEntries={['/gallery?service=knotless-braids']}><Gallery /></MemoryRouter>)
+
+    const cardImage = screen.getByAltText('Knotless Braids styling inspiration — representative image')
+    expect(cardImage).toHaveAttribute('src', imageLibrary[0].src)
+    expect(cardImage.getAttribute('src')).toMatch(/^\/images\//)
+
+    await user.click(screen.getByRole('button', { name: /representative image 1$/i }))
+    const modalImage = screen.getByRole('dialog').querySelector('img')
+    expect(modalImage).toHaveAttribute('src', imageLibrary[0].src)
+    expect(modalImage.getAttribute('src')).toMatch(/^\/images\//)
   })
 })

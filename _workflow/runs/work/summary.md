@@ -130,3 +130,13 @@
 - Fallow: PARTIAL/warn; zero introduced dead code or complexity, two test-only duplicate assertion groups.
 - Environment warnings: remote Pexels and Playwright browser downloads blocked by outbound 403, so semantic remote verification and screenshots were unavailable.
 - Workflow health: Passed with documented environment warnings.
+<<<<<<< HEAD
+=======
+
+## 2026-06-12 — Gallery Source-Of-Truth Remediation
+- Resolved the PR audit finding that remote backend image URLs could reach Gallery cards/modals.
+- Both gallery API client methods now return centralized local representative items for all service filters while preserving query/context metadata.
+- All gallery rendering boundaries reject remote inputs.
+- Verification: server 72/72, client 147/147, focused gallery 31/31, lint/build and Fallow passed.
+- Screenshot unavailable because the environment has no Playwright Chromium executable.
+>>>>>>> pr-25

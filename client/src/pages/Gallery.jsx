@@ -7,7 +7,11 @@ import { StaggerReveal } from '../components/animations/StaggerReveal.jsx'
 import { SERVICE_PREVIEW_FALLBACK_IMAGE } from '../utils/servicePreview.js'
 import { useGalleryItems, useGalleryServices } from '../hooks/queries/useGalleryItems.js'
 import { formatServicePrice } from '../utils/formatServicePrice.js'
+<<<<<<< HEAD
 import { getGalleryImageAlt } from '../data/imageLibrary.js'
+=======
+import { getGalleryImageAlt, getGalleryImageSrc } from '../data/imageLibrary.js'
+>>>>>>> pr-25
 
 
 function SafeGalleryImage({ item }) {
@@ -32,7 +36,7 @@ function SafeGalleryImage({ item }) {
         }
         setHasError(true)
       }}
-      src={item.src || item.image}
+      src={getGalleryImageSrc(item)}
     />
   )
 }

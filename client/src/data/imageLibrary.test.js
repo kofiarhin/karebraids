@@ -6,6 +6,10 @@ import {
   SERVICE_IMAGE_FALLBACK,
   getDisplayImage,
   getGalleryImageAlt,
+<<<<<<< HEAD
+=======
+  getGalleryImageSrc,
+>>>>>>> pr-25
   getGalleryImageItems,
   imageLibrary,
 } from './imageLibrary.js'
@@ -36,6 +40,16 @@ describe('imageLibrary', () => {
   })
 
 
+<<<<<<< HEAD
+=======
+
+  it('rejects remote gallery sources at the final rendering boundary', () => {
+    expect(getGalleryImageSrc({ src: imageLibrary[1].src })).toBe(imageLibrary[1].src)
+    expect(getGalleryImageSrc({ src: 'https://images.pexels.com/remote.jpg' })).toBe(SERVICE_IMAGE_FALLBACK)
+    expect(getGalleryImageSrc({ image: 'https://images.pexels.com/remote.jpg' })).toBe(SERVICE_IMAGE_FALLBACK)
+  })
+
+>>>>>>> pr-25
   it('adds selected-style context without claiming representative images belong to that service', () => {
     const item = imageLibrary[0]
     expect(getGalleryImageAlt(item, { name: 'Knotless Braids' })).toBe(

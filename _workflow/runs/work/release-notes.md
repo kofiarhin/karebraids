@@ -21,3 +21,11 @@ Run `npm run seed:services` with the deployment `MONGODB_URI` to normalize live 
 
 ## Verification
 Server 72/72; client 134/134; lint passed; build passed; local image and route exposure audits passed.
+<<<<<<< HEAD
+=======
+
+## Gallery Source Remediation
+- Gallery API requests still preserve service filtering and selected-service context.
+- API-provided image URLs are no longer rendered. Cards, homepage previews, detail inspiration, and modals use the centralized local `/images/` representative library.
+- A final source guard converts any unexpected remote image input to the local fallback.
+>>>>>>> pr-25

@@ -1,6 +1,10 @@
 {
   "version": "1.0.0",
+<<<<<<< HEAD
   "updatedAt": "2026-06-12T01:38:14Z",
+=======
+  "updatedAt": "2026-06-12T02:02:08Z",
+>>>>>>> pr-25
   "events": [
     {
       "id": "history-complete-gallery-filter-navigation-20260611",
@@ -165,6 +169,20 @@
         "_workflow/runs/work/release-notes.md",
         "_workflow/runs/work/summary.md"
       ]
+<<<<<<< HEAD
+=======
+    },
+    {
+      "timestamp": "2026-06-12T02:02:08Z",
+      "type": "review-remediation",
+      "runId": "work",
+      "summary": "Enforced the local frontend image library as the only gallery rendering source while preserving API filters/context.",
+      "artifacts": [
+        "client/src/services/galleryService.js",
+        "client/src/data/imageLibrary.js",
+        "_workflow/runs/work/progress.md"
+      ]
+>>>>>>> pr-25
     }
   ]
 }
