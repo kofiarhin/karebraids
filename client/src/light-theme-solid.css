@@ -92,3 +92,52 @@ html[data-theme="light"] footer.site-footer.luxury-footer#contact .btn span,
 html[data-theme="light"] footer.site-footer.luxury-footer#contact .btn svg {
   background: transparent !important;
 }
+
+:root[data-theme="light"] .about-hero-section,
+:root[data-theme="light"] section[aria-labelledby="experience-title"],
+:root[data-theme="light"] section[aria-labelledby="about-cta-title"] {
+  background: var(--light-page-solid) !important;
+  background-image: none !important;
+  color: var(--light-text-solid) !important;
+}
+
+:root[data-theme="light"] .about-hero-image,
+:root[data-theme="light"] .about-hero-overlay,
+:root[data-theme="light"] section[aria-labelledby="experience-title"] > img,
+:root[data-theme="light"] section[aria-labelledby="experience-title"] > div[aria-hidden],
+:root[data-theme="light"] section[aria-labelledby="about-cta-title"] > img,
+:root[data-theme="light"] section[aria-labelledby="about-cta-title"] > .about-banner-overlay {
+  display: none !important;
+}
+
+:root[data-theme="light"] .about-section-title,
+:root[data-theme="light"] .about-section-subtitle,
+:root[data-theme="light"] .about-section-copy,
+:root[data-theme="light"] section[aria-labelledby="experience-title"] h2,
+:root[data-theme="light"] section[aria-labelledby="experience-title"] p,
+:root[data-theme="light"] section[aria-labelledby="about-cta-title"] h2,
+:root[data-theme="light"] section[aria-labelledby="about-cta-title"] p {
+  color: var(--light-text-solid) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] .about-section-eyebrow,
+:root[data-theme="light"] section[aria-labelledby="experience-title"] p:first-child,
+:root[data-theme="light"] section[aria-labelledby="about-cta-title"] p:first-child {
+  color: var(--color-accent-gold) !important;
+}
+
+:root[data-theme="light"] .about-hero-section .btn-primary,
+:root[data-theme="light"] section[aria-labelledby="about-cta-title"] .btn-primary,
+:root[data-theme="light"] .about-hero-section .btn-primary span,
+:root[data-theme="light"] section[aria-labelledby="about-cta-title"] .btn-primary span,
+:root[data-theme="light"] .about-hero-section .btn-primary svg,
+:root[data-theme="light"] section[aria-labelledby="about-cta-title"] .btn-primary svg {
+  color: #ffffff !important;
+}
+
+:root[data-theme="light"] .about-hero-section .btn-secondary,
+:root[data-theme="light"] section[aria-labelledby="experience-title"] .btn-secondary {
+  border-color: rgba(17, 17, 17, 0.2) !important;
+  color: var(--light-text-solid) !important;
+}
