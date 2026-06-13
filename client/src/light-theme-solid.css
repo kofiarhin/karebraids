@@ -1,17 +1,39 @@
-/* Light theme solid-page overrides.
-   Keeps dark theme unchanged while removing gradient/dark bleed in light mode. */
+/* Light theme white-page overrides.
+   Keeps dark theme unchanged while forcing a white light-mode canvas with black copy. */
 
 :root[data-theme="light"] {
-  --light-page-solid: #f7f1e8;
+  --light-page-solid: #ffffff;
+  --light-text-solid: #111111;
+
   --color-page-background: var(--light-page-solid);
   --gradient-shell: var(--light-page-solid);
   --gradient-shell-subtle: var(--light-page-solid);
+
+  --color-text-primary: var(--light-text-solid);
+  --color-text-secondary: var(--light-text-solid);
+  --color-text-muted: #333333;
+  --color-header-background: var(--light-page-solid);
+  --color-header-surface: var(--light-page-solid);
+  --color-header-surface-soft: var(--light-page-solid);
+  --color-header-text: var(--light-text-solid);
+  --color-header-link: var(--light-text-solid);
+  --color-header-link-hover: var(--light-text-solid);
+  --color-header-control-background: var(--light-page-solid);
+
   --theme-espresso-shell-start: var(--light-page-solid);
   --theme-espresso-shell-mid: var(--light-page-solid);
   --theme-cocoa-shell-highlight: var(--light-page-solid);
   --theme-espresso-shell-end: var(--light-page-solid);
+  --theme-espresso-ink-solid: var(--light-page-solid);
   --espresso-noir: var(--light-page-solid);
+  --smoked-cocoa: var(--light-page-solid);
+  --warm-ivory: var(--light-text-solid);
+  --muted-sand: #333333;
+  --charcoal: var(--light-text-solid);
+  --ink: var(--light-text-solid);
   --cream: var(--light-page-solid);
+  --white: var(--light-page-solid);
+
   background: var(--light-page-solid);
 }
 
@@ -25,14 +47,31 @@
 :root[data-theme="light"] .dark-booking-page,
 :root[data-theme="light"] .dark-about-page,
 :root[data-theme="light"] .dark-services-page,
-:root[data-theme="light"] .about-editorial-page {
+:root[data-theme="light"] .about-editorial-page,
+:root[data-theme="light"] .luxury-footer {
   background: var(--light-page-solid);
-}
-
-:root[data-theme="light"] .site-shell {
   background-image: none;
 }
 
-:root[data-theme="light"] .luxury-footer {
-  background: var(--light-page-solid);
+:root[data-theme="light"] .luxury-homepage,
+:root[data-theme="light"] .luxury-footer,
+:root[data-theme="light"] .luxury-homepage h1,
+:root[data-theme="light"] .luxury-homepage h2,
+:root[data-theme="light"] .luxury-homepage h3,
+:root[data-theme="light"] .luxury-footer h2,
+:root[data-theme="light"] .luxury-footer h3,
+:root[data-theme="light"] .luxury-footer a,
+:root[data-theme="light"] .footer-brand p,
+:root[data-theme="light"] .footer-column p,
+:root[data-theme="light"] .footer-contact p,
+:root[data-theme="light"] .services-page-header h1,
+:root[data-theme="light"] .services-page-header p,
+:root[data-theme="light"] .service-category-heading h2,
+:root[data-theme="light"] .service-card-heading h3,
+:root[data-theme="light"] .featured-services-intro h2,
+:root[data-theme="light"] .about-hero-copy h1,
+:root[data-theme="light"] .about-section-heading h2,
+:root[data-theme="light"] .about-location-panel h2,
+:root[data-theme="light"] .about-final-cta h2 {
+  color: var(--light-text-solid);
 }
