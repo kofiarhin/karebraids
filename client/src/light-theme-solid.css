@@ -25,6 +25,8 @@
   --theme-cocoa-shell-highlight: var(--light-page-solid);
   --theme-espresso-shell-end: var(--light-page-solid);
   --theme-espresso-ink-solid: var(--light-page-solid);
+  --theme-cocoa-a096: var(--light-page-solid);
+  --theme-espresso-a096: var(--light-page-solid);
   --espresso-noir: var(--light-page-solid);
   --smoked-cocoa: var(--light-page-solid);
   --warm-ivory: var(--light-text-solid);
@@ -34,7 +36,7 @@
   --cream: var(--light-page-solid);
   --white: var(--light-page-solid);
 
-  background: var(--light-page-solid);
+  background: var(--light-page-solid) !important;
 }
 
 :root[data-theme="light"],
@@ -48,30 +50,33 @@
 :root[data-theme="light"] .dark-about-page,
 :root[data-theme="light"] .dark-services-page,
 :root[data-theme="light"] .about-editorial-page,
-:root[data-theme="light"] .luxury-footer {
-  background: var(--light-page-solid);
-  background-image: none;
+:root[data-theme="light"] .luxury-footer,
+:root[data-theme="light"] footer.site-footer,
+:root[data-theme="light"] footer.luxury-footer,
+html[data-theme="light"] footer.site-footer.luxury-footer#contact {
+  background: var(--light-page-solid) !important;
+  background-image: none !important;
 }
 
-:root[data-theme="light"] .luxury-homepage,
 :root[data-theme="light"] .luxury-footer,
-:root[data-theme="light"] .luxury-homepage h1,
-:root[data-theme="light"] .luxury-homepage h2,
-:root[data-theme="light"] .luxury-homepage h3,
-:root[data-theme="light"] .luxury-footer h2,
-:root[data-theme="light"] .luxury-footer h3,
-:root[data-theme="light"] .luxury-footer a,
-:root[data-theme="light"] .footer-brand p,
-:root[data-theme="light"] .footer-column p,
-:root[data-theme="light"] .footer-contact p,
-:root[data-theme="light"] .services-page-header h1,
-:root[data-theme="light"] .services-page-header p,
-:root[data-theme="light"] .service-category-heading h2,
-:root[data-theme="light"] .service-card-heading h3,
-:root[data-theme="light"] .featured-services-intro h2,
-:root[data-theme="light"] .about-hero-copy h1,
-:root[data-theme="light"] .about-section-heading h2,
-:root[data-theme="light"] .about-location-panel h2,
-:root[data-theme="light"] .about-final-cta h2 {
-  color: var(--light-text-solid);
+:root[data-theme="light"] .luxury-footer *,
+html[data-theme="light"] footer.site-footer.luxury-footer#contact,
+html[data-theme="light"] footer.site-footer.luxury-footer#contact * {
+  color: var(--light-text-solid) !important;
+}
+
+:root[data-theme="light"] .luxury-footer {
+  border-top-color: rgba(17, 17, 17, 0.18) !important;
+}
+
+:root[data-theme="light"] .luxury-footer .footer-socials a {
+  border-color: rgba(17, 17, 17, 0.18) !important;
+  background: transparent !important;
+}
+
+:root[data-theme="light"] .luxury-footer .btn,
+:root[data-theme="light"] .luxury-footer .btn-primary {
+  background: var(--color-accent-gold) !important;
+  border-color: var(--color-accent-gold) !important;
+  color: #ffffff !important;
 }
