@@ -103,10 +103,12 @@ html[data-theme="light"] footer.site-footer.luxury-footer#contact .btn svg {
 
 :root[data-theme="light"] .about-hero-image,
 :root[data-theme="light"] .about-hero-overlay,
+:root[data-theme="light"] .about-banner-image,
+:root[data-theme="light"] .about-banner-overlay,
 :root[data-theme="light"] section[aria-labelledby="experience-title"] > img,
-:root[data-theme="light"] section[aria-labelledby="experience-title"] > div[aria-hidden],
+:root[data-theme="light"] section[aria-labelledby="experience-title"] > .absolute,
 :root[data-theme="light"] section[aria-labelledby="about-cta-title"] > img,
-:root[data-theme="light"] section[aria-labelledby="about-cta-title"] > .about-banner-overlay {
+:root[data-theme="light"] section[aria-labelledby="about-cta-title"] > .absolute {
   display: none !important;
 }
 
