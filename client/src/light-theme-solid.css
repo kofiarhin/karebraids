@@ -75,8 +75,20 @@ html[data-theme="light"] footer.site-footer.luxury-footer#contact * {
 }
 
 :root[data-theme="light"] .luxury-footer .btn,
-:root[data-theme="light"] .luxury-footer .btn-primary {
+:root[data-theme="light"] .luxury-footer .btn-primary,
+:root[data-theme="light"] .luxury-footer .btn span,
+:root[data-theme="light"] .luxury-footer .btn svg,
+html[data-theme="light"] footer.site-footer.luxury-footer#contact .btn,
+html[data-theme="light"] footer.site-footer.luxury-footer#contact .btn span,
+html[data-theme="light"] footer.site-footer.luxury-footer#contact .btn svg {
   background: var(--color-accent-gold) !important;
   border-color: var(--color-accent-gold) !important;
   color: #ffffff !important;
+}
+
+:root[data-theme="light"] .luxury-footer .btn span,
+:root[data-theme="light"] .luxury-footer .btn svg,
+html[data-theme="light"] footer.site-footer.luxury-footer#contact .btn span,
+html[data-theme="light"] footer.site-footer.luxury-footer#contact .btn svg {
+  background: transparent !important;
 }
