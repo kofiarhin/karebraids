@@ -1,0 +1,61 @@
+:root[data-theme="dark"] body,
+:root[data-theme="dark"] #root,
+:root[data-theme="dark"] .site-shell,
+:root[data-theme="dark"] .theme-brand-shell,
+:root[data-theme="dark"] main,
+:root[data-theme="dark"] main > div,
+:root[data-theme="dark"] section {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4,
+:root[data-theme="dark"] p,
+:root[data-theme="dark"] span,
+:root[data-theme="dark"] small,
+:root[data-theme="dark"] blockquote,
+:root[data-theme="dark"] cite,
+:root[data-theme="dark"] li,
+:root[data-theme="dark"] a,
+:root[data-theme="dark"] dd,
+:root[data-theme="dark"] dt,
+:root[data-theme="dark"] strong {
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] .site-header,
+:root[data-theme="dark"] .mobile-nav-drawer,
+:root[data-theme="dark"] .theme-menu-popover,
+:root[data-theme="dark"] .theme-submenu {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] .about-hero-section > img,
+:root[data-theme="dark"] section[aria-labelledby="experience-title"] > img,
+:root[data-theme="dark"] section[aria-labelledby="about-cta-title"] > img,
+:root[data-theme="dark"] .about-hero-section > .absolute,
+:root[data-theme="dark"] section[aria-labelledby="experience-title"] > .absolute,
+:root[data-theme="dark"] section[aria-labelledby="about-cta-title"] > .absolute {
+  display: none !important;
+}
+
+:root[data-theme="dark"] .btn-primary,
+:root[data-theme="dark"] .header-cta,
+:root[data-theme="dark"] .mobile-nav-link.primary {
+  background: var(--color-accent-gold) !important;
+  border-color: var(--color-accent-gold) !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] .btn-primary span,
+:root[data-theme="dark"] .btn-primary svg,
+:root[data-theme="dark"] .header-cta span,
+:root[data-theme="dark"] .header-cta svg {
+  color: #ffffff !important;
+}
