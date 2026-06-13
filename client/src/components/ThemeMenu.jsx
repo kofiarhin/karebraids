@@ -1,5 +1,5 @@
 import { useContext, useEffect, useId, useRef, useState } from 'react'
-import { Check, DotsThreeVertical, Monitor, Moon, Sun } from '@phosphor-icons/react'
+import { Check, DotsThreeVertical, Moon, Sun } from '@phosphor-icons/react'
 import { ThemeContext } from '../theme/ThemeContext.js'
 import {
   THEME_PREFERENCES,
@@ -10,7 +10,6 @@ import {
 } from '../theme/theme.js'
 
 const themeOptions = [
-  { icon: Monitor, label: 'System', value: THEME_PREFERENCES.SYSTEM },
   { icon: Sun, label: 'Light', value: THEME_PREFERENCES.LIGHT },
   { icon: Moon, label: 'Dark', value: THEME_PREFERENCES.DARK },
 ]
@@ -63,7 +62,7 @@ export function ThemeMenu({ className = '', onThemeSelected }) {
     if (isMenuOpen && focusMenuOnOpenRef.current) {
       focusMenuOnOpenRef.current = false
       const activeOption = optionRefs.current.get(theme)
-      ;(activeOption ?? optionRefs.current.get(THEME_PREFERENCES.SYSTEM))?.focus()
+      ;(activeOption ?? optionRefs.current.get(THEME_PREFERENCES.LIGHT))?.focus()
     }
   }, [isMenuOpen, theme])
 
