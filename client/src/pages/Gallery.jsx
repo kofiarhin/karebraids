@@ -1,12 +1,10 @@
 import { useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
 import { GalleryModal } from '../components/GalleryModal.jsx'
 import { ImageReveal } from '../components/animations/ImageReveal.jsx'
 import { ParallaxLayer } from '../components/animations/ParallaxLayer.jsx'
 import { StaggerReveal } from '../components/animations/StaggerReveal.jsx'
 import { SERVICE_PREVIEW_FALLBACK_IMAGE } from '../utils/servicePreview.js'
-import { useGalleryItems, useGalleryServices } from '../hooks/queries/useGalleryItems.js'
-import { formatServicePrice } from '../utils/formatServicePrice.js'
+import { useGalleryItems } from '../hooks/queries/useGalleryItems.js'
 import { getGalleryImageAlt, getGalleryImageSrc } from '../data/imageLibrary.js'
 
 
@@ -87,24 +85,12 @@ function useGalleryModal(galleryItems) {
 }
 
 export function Gallery() {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const galleryServicesQuery = useGalleryServices()
-  const galleryServices = galleryServicesQuery.data || []
-  const requestedService = searchParams.get('service')
-  const requestedMatch = galleryServices.find((service) => service.id === requestedService || service.slug === requestedService)
-  const selectedServiceId = requestedMatch ? requestedMatch.slug || requestedMatch.id : 'all'
-  const selectedService = requestedMatch || null
-  const galleryItemsQuery = useGalleryItems(selectedServiceId === 'all' ? {} : { service: selectedServiceId })
+  const galleryItemsQuery = useGalleryItems()
   const galleryItems = (galleryItemsQuery.data || []).map((item) => ({
     ...item,
-    alt: getGalleryImageAlt(item, selectedService),
+    alt: getGalleryImageAlt(item),
   }))
   const modal = useGalleryModal(galleryItems)
-
-  const updateSelectedService = (serviceId) => {
-    modal.resetModal()
-    setSearchParams(serviceId === 'all' ? {} : { service: serviceId })
-  }
 
   return (
     <section className="gallery-page dark-gallery-page">
@@ -112,46 +98,11 @@ export function Gallery() {
         <p className="eyebrow">Style Inspiration Gallery</p>
         <h1>GALLERY</h1>
         <p className="gallery-filter-note">Representative styling images used for inspiration. Final results depend on your chosen service, hair type, length, and consultation.</p>
-        {selectedService ? <p className="gallery-filter-note">Viewing inspiration while considering {selectedService.name}</p> : null}
       </div>
-
-      {galleryServicesQuery.isLoading ? <p className="gallery-query-state" role="status">Loading services…</p> : null}
-      {galleryServicesQuery.isError ? <p className="gallery-query-state" role="alert">Services could not be loaded. Please try again.</p> : null}
-
-      <div className="gallery-filter-panel">
-        <label htmlFor="gallery-service-filter">Filter gallery by service</label>
-        <select
-          id="gallery-service-filter"
-          onChange={(event) => updateSelectedService(event.target.value)}
-          value={selectedServiceId}
-        >
-          <option value="all">All Services</option>
-          {galleryServices.map((service) => (
-            <option key={service.id} value={service.slug || service.id}>
-              {service.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {selectedService ? (
-        <section className="gallery-service-intro" aria-labelledby="gallery-service-title">
-          <div>
-            <p className="eyebrow">Selected Service</p>
-            <h2 id="gallery-service-title">{selectedService.name}</h2>
-            <p>{selectedService.shortDescription}</p>
-          </div>
-          <dl>
-            <div><dt>Starting price</dt><dd>{formatServicePrice(selectedService)}</dd></div>
-            <div><dt>Duration</dt><dd>{selectedService.durationLabel}</dd></div>
-          </dl>
-          <Link className="btn btn-primary" to={`/booking?service=${selectedService.slug || selectedService.id}`}>Book This Style</Link>
-        </section>
-      ) : null}
 
       {galleryItems.length === 0 ? (
         <p className="gallery-query-state gallery-empty-state" role="status">
-          {selectedService ? 'Representative inspiration images are being prepared.' : 'New styling inspiration is being prepared. Please check back soon.'}
+          New styling inspiration is being prepared. Please check back soon.
         </p>
       ) : null}
       {galleryItems.length > 0 ? (
