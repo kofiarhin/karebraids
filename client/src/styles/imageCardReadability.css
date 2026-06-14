@@ -1,0 +1,123 @@
+/* Shared readability treatment for text that sits over image-heavy cards. */
+.featured-service-card,
+.browse-style-card,
+.gallery-card,
+.service-tile {
+  isolation: isolate;
+}
+
+.featured-service-card::after,
+.browse-style-card::after,
+.gallery-card::after,
+.service-tile::before {
+  pointer-events: none;
+}
+
+.featured-service-card img,
+.browse-style-card img,
+.gallery-card img,
+.service-tile img {
+  filter: saturate(0.95) contrast(1.08) brightness(0.78);
+}
+
+.featured-service-card:hover img,
+.browse-style-card:hover img,
+.gallery-card:hover img,
+.service-tile:hover img {
+  filter: saturate(0.98) contrast(1.1) brightness(0.74);
+}
+
+.featured-service-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--smoked-cocoa);
+}
+
+.featured-service-card::after,
+.browse-style-card::before,
+.gallery-card::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(18, 14, 12, 0.12) 0%, rgba(18, 14, 12, 0.48) 54%, rgba(18, 14, 12, 0.9) 100%),
+    linear-gradient(90deg, rgba(18, 14, 12, 0.42) 0%, rgba(18, 14, 12, 0.14) 48%, rgba(18, 14, 12, 0.34) 100%);
+  content: "";
+}
+
+.featured-service-card > div,
+.browse-style-card > span,
+.gallery-card > span,
+.service-tile-copy {
+  position: relative;
+  z-index: 2;
+  border: 1px solid rgba(255, 250, 246, 0.24);
+  background:
+    linear-gradient(135deg, rgba(18, 14, 12, 0.88), rgba(34, 28, 25, 0.76)),
+    rgba(18, 14, 12, 0.82);
+  box-shadow: 0 1rem 2.4rem rgba(0, 0, 0, 0.34);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(14px) saturate(1.12);
+}
+
+.featured-service-card > div {
+  margin: 0.75rem;
+  border-radius: 0.85rem;
+  padding: clamp(0.9rem, 2vw, 1.1rem);
+}
+
+.featured-service-card h3,
+.browse-style-card strong,
+.gallery-card strong,
+.service-tile-copy h3 {
+  color: #fffaf6;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.featured-service-card p,
+.featured-service-card .text-link,
+.browse-style-card small,
+.gallery-card small,
+.service-tile-copy span,
+.service-tile-copy p {
+  color: rgba(255, 250, 246, 0.92);
+}
+
+.featured-service-card .representative-image-caption {
+  z-index: 2;
+  background: rgba(18, 14, 12, 0.72);
+  color: rgba(255, 250, 246, 0.92);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+.featured-service-card .text-link {
+  width: max-content;
+  border-bottom: 1px solid rgba(183, 134, 82, 0.6);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
+}
+
+.browse-style-card > span,
+.gallery-card > span {
+  inset-inline: 0.85rem;
+  bottom: 0.85rem;
+  border-radius: 0.85rem;
+  padding: 0.95rem;
+}
+
+@media (max-width: 560px) {
+  .featured-service-card > div,
+  .browse-style-card > span,
+  .gallery-card > span,
+  .service-tile-copy {
+    margin: 0.6rem;
+    padding: 0.85rem;
+  }
+
+  .browse-style-card > span,
+  .gallery-card > span {
+    inset-inline: 0.6rem;
+    bottom: 0.6rem;
+  }
+}
