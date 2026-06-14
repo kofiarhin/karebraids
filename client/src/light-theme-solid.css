@@ -143,3 +143,43 @@ html[data-theme="light"] footer.site-footer.luxury-footer#contact .btn svg {
   border-color: rgba(17, 17, 17, 0.2) !important;
   color: var(--light-text-solid) !important;
 }
+
+:root[data-theme="light"] .gallery-theme-hero {
+  background: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(17, 17, 17, 0.1) !important;
+  color: #111111 !important;
+  box-shadow: 0 24px 70px rgba(17, 17, 17, 0.08) !important;
+}
+
+:root[data-theme="light"] .gallery-theme-orb-soft {
+  background: rgba(17, 17, 17, 0.05) !important;
+}
+
+:root[data-theme="light"] .gallery-theme-orb-gold {
+  background: rgba(138, 90, 43, 0.1) !important;
+}
+
+:root[data-theme="light"] .gallery-theme-title,
+:root[data-theme="light"] .gallery-theme-panel-title {
+  color: #111111 !important;
+}
+
+:root[data-theme="light"] .gallery-theme-copy,
+:root[data-theme="light"] .gallery-theme-panel-copy {
+  color: rgba(17, 17, 17, 0.72) !important;
+}
+
+:root[data-theme="light"] .gallery-theme-eyebrow {
+  color: #8a5a2b !important;
+}
+
+:root[data-theme="light"] .gallery-theme-panel {
+  background: rgba(17, 17, 17, 0.03) !important;
+  border-color: rgba(17, 17, 17, 0.1) !important;
+  color: #111111 !important;
+}
+
+:root[data-theme="light"] .gallery-theme-panel-eyebrow {
+  color: rgba(17, 17, 17, 0.5) !important;
+}
