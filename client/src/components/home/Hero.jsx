@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Star } from '@phosphor-icons/react'
 import { Button } from '../Button.jsx'
 import { homepageImages } from '../../constants/homepage.js'
 import { useGalleryItems } from '../../hooks/queries/useGalleryItems.js'
 
 const HERO_IMAGE_LIMIT = 5
+const HERO_INITIAL_CYCLE_MS = 1000
 const HERO_CYCLE_MS = 4000
 
 const carouselStyles = {
@@ -13,6 +15,7 @@ const carouselStyles = {
   height: '100%',
   minHeight: 'inherit',
   overflow: 'hidden',
+  cursor: 'pointer',
 }
 
 const slideStyles = {
@@ -74,6 +77,7 @@ function normalizeHeroImage(image, index) {
 }
 
 export function Hero() {
+  const navigate = useNavigate()
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const heroImagesQuery = useGalleryItems({ limit: HERO_IMAGE_LIMIT })
@@ -94,12 +98,34 @@ export function Hero() {
   useEffect(() => {
     if (isPaused || heroImages.length <= 1) return undefined
 
-    const intervalId = window.setInterval(() => {
+    let intervalId
+    const timeoutId = window.setTimeout(() => {
       setActiveIndex((currentIndex) => (currentIndex + 1) % heroImages.length)
-    }, HERO_CYCLE_MS)
+      intervalId = window.setInterval(() => {
+        setActiveIndex((currentIndex) => (currentIndex + 1) % heroImages.length)
+      }, HERO_CYCLE_MS)
+    }, HERO_INITIAL_CYCLE_MS)
 
-    return () => window.clearInterval(intervalId)
+    return () => {
+      window.clearTimeout(timeoutId)
+
+      if (intervalId) {
+        window.clearInterval(intervalId)
+      }
+    }
   }, [heroImages.length, isPaused])
+
+  function handleCarouselKeyDown(event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      navigate('/gallery')
+    }
+  }
+
+  function handleDotClick(event, index) {
+    event.stopPropagation()
+    setActiveIndex(index)
+  }
 
   return (
     <section className="luxury-hero" aria-labelledby="homepage-hero-title">
@@ -146,7 +172,14 @@ export function Hero() {
         onMouseLeave={() => setIsPaused(false)}
         style={{ '--index': 1 }}
       >
-        <div aria-label="Featured braid styles carousel" style={carouselStyles}>
+        <div
+          aria-label="View featured braid styles in the gallery"
+          onClick={() => navigate('/gallery')}
+          onKeyDown={handleCarouselKeyDown}
+          role="link"
+          style={carouselStyles}
+          tabIndex={0}
+        >
           {heroImages.map((image, index) => (
             <img
               alt={image.alt}
@@ -168,7 +201,7 @@ export function Hero() {
                   aria-label={`Show hero image ${index + 1}`}
                   aria-selected={index === visibleIndex}
                   key={`${image.id}-dot`}
-                  onClick={() => setActiveIndex(index)}
+                  onClick={(event) => handleDotClick(event, index)}
                   style={getDotStyles(index === visibleIndex)}
                   type="button"
                 />
