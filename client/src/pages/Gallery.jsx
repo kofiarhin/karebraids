@@ -95,29 +95,29 @@ export function Gallery() {
 
   return (
     <section className="gallery-page dark-gallery-page">
-      <header className="relative isolate mb-10 overflow-hidden rounded-[2rem] border border-black/10 bg-white px-6 py-10 text-black shadow-[0_24px_70px_rgba(17,17,17,0.08)] sm:px-10 lg:px-14 lg:py-14">
-        <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#8a5a2b]/10 blur-3xl" aria-hidden="true" />
-        <div className="absolute -bottom-28 left-10 h-72 w-72 rounded-full bg-black/5 blur-3xl" aria-hidden="true" />
+      <header className="relative isolate mb-10 overflow-hidden rounded-[2rem] border border-white/10 bg-black px-6 py-10 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] sm:px-10 lg:px-14 lg:py-14">
+        <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#b78652]/20 blur-3xl" aria-hidden="true" />
+        <div className="absolute -bottom-28 left-10 h-72 w-72 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
 
         <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-end">
           <div className="max-w-3xl">
-            <p className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#8a5a2b]">
+            <p className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#b78652]">
               Style Inspiration Gallery
             </p>
-            <h1 className="text-5xl font-black leading-none tracking-[-0.05em] text-black sm:text-6xl lg:text-7xl">
+            <h1 className="text-5xl font-black leading-none tracking-[-0.05em] text-white sm:text-6xl lg:text-7xl">
               Braids worth bookmarking.
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-black/72 sm:text-lg">
+            <p className="mt-5 max-w-2xl text-base leading-8 text-white/75 sm:text-lg">
               Browse real style inspiration before booking. Final results are shaped by your chosen service, hair type, length, and consultation.
             </p>
           </div>
 
-          <div className="grid gap-3 rounded-3xl border border-black/10 bg-black/[0.03] p-4 backdrop-blur-md">
+          <div className="grid gap-3 rounded-3xl border border-white/15 bg-white/[0.06] p-4 text-white backdrop-blur-md">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-black/50">Gallery</p>
-              <strong className="mt-1 block text-3xl text-black">All styles</strong>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-white/55">Gallery</p>
+              <strong className="mt-1 block text-3xl text-white">All styles</strong>
             </div>
-            <p className="text-sm leading-6 text-black/65">
+            <p className="text-sm leading-6 text-white/70">
               No filters. Just a clean wall of braid inspiration.
             </p>
             <Link className="btn btn-primary mt-1 w-full" to="/booking">
