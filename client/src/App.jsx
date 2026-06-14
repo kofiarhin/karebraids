@@ -11,6 +11,7 @@ import { Gallery } from './pages/Gallery.jsx'
 import { Home } from './pages/Home.jsx'
 import { Services } from './pages/Services.jsx'
 import { ServiceDetail } from './pages/ServiceDetail.jsx'
+import './styles/imageCardReadability.css'
 
 const App = () => {
   return (
