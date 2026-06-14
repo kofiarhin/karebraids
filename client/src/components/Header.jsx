@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { List, X } from '@phosphor-icons/react'
 import { NavLink } from 'react-router-dom'
 import { navItems } from '../constants/homepage.js'
 import { Button } from './Button.jsx'
 import { ThemeMenu } from './ThemeMenu.jsx'
+
+const DESKTOP_NAV_LABELS = new Set(['Services', 'Gallery', 'About', 'Contact'])
 
 function NavItem({ item, className, onClick }) {
   if (item.type === 'anchor') {
@@ -30,6 +32,10 @@ export function Header() {
   const mobileMenuButtonRef = useRef(null)
   const mobileNavCloseButtonRef = useRef(null)
   const wasMobileNavOpenRef = useRef(false)
+  const desktopNavItems = useMemo(
+    () => navItems.filter((item) => DESKTOP_NAV_LABELS.has(item.label)),
+    [],
+  )
 
   useEffect(() => {
     document.body.classList.toggle('mobile-nav-open', isMobileNavOpen)
@@ -64,7 +70,7 @@ export function Header() {
         <span>KareBraids</span>
       </NavLink>
       <nav className="site-nav" aria-label="Main navigation">
-        {navItems.map((item) => (
+        {desktopNavItems.map((item) => (
           <NavItem className="nav-link" item={item} key={item.label} />
         ))}
       </nav>
