@@ -227,10 +227,9 @@
   gap: 0.7rem;
   overflow-x: auto;
   margin-top: clamp(3rem, 7vw, 5rem);
-  margin-inline: calc(clamp(0rem, 1vw, 1rem) * -1);
-  padding: 0.8rem clamp(0rem, 1vw, 1rem);
-  background: linear-gradient(180deg, rgba(18, 15, 12, 0.94), rgba(18, 15, 12, 0.82));
-  backdrop-filter: blur(18px);
+  padding: 0.8rem 0;
+  background: transparent;
+  backdrop-filter: none;
   scrollbar-width: thin;
 }
 
@@ -422,8 +421,7 @@
 
   .services-category-nav {
     top: 4.85rem;
-    margin-inline: -0.5rem;
-    padding-inline: 0.5rem;
+    padding-inline: 0;
   }
 }
 
