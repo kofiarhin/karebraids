@@ -79,8 +79,8 @@
 
 .featured-styles-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(1rem, 2.5vw, 1.5rem);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.1rem, 2.5vw, 1.75rem);
 }
 
 .featured-style-card,
@@ -258,7 +258,6 @@
   color: var(--warm-ivory);
 }
 
-.services-menu-groups,
 .services-menu-category,
 .services-menu-list {
   display: grid;
