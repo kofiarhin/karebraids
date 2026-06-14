@@ -59,3 +59,43 @@
 :root[data-theme="dark"] .header-cta svg {
   color: #ffffff !important;
 }
+
+:root[data-theme="dark"] .gallery-theme-hero {
+  background: #000000 !important;
+  background-image: linear-gradient(90deg, #000000 0%, #000000 62%, rgba(183, 134, 82, 0.16) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45) !important;
+}
+
+:root[data-theme="dark"] .gallery-theme-orb-soft {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+:root[data-theme="dark"] .gallery-theme-orb-gold {
+  background: rgba(183, 134, 82, 0.2) !important;
+}
+
+:root[data-theme="dark"] .gallery-theme-title,
+:root[data-theme="dark"] .gallery-theme-panel-title {
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] .gallery-theme-copy,
+:root[data-theme="dark"] .gallery-theme-panel-copy {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+:root[data-theme="dark"] .gallery-theme-eyebrow {
+  color: var(--color-accent-gold) !important;
+}
+
+:root[data-theme="dark"] .gallery-theme-panel {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] .gallery-theme-panel-eyebrow {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
