@@ -1,26 +1,14 @@
-/* Shared readability treatment for text that sits over image-heavy cards.
-   Keep the image visible and only strengthen the text area. */
-.featured-service-card,
-.browse-style-card,
-.gallery-card,
-.service-tile {
-  isolation: isolate;
-}
-
+/* Image cards should stay image-first with no visible text overlay. */
 .featured-service-card::after,
 .browse-style-card::before,
-.gallery-card::before,
-.service-tile::before {
-  pointer-events: none;
+.gallery-card::before {
+  display: none;
 }
 
 .featured-service-card img,
 .browse-style-card img,
 .gallery-card img,
-.service-tile img {
-  filter: none;
-}
-
+.service-tile img,
 .featured-service-card:hover img,
 .browse-style-card:hover img,
 .gallery-card:hover img,
@@ -28,98 +16,11 @@
   filter: none;
 }
 
-.featured-service-card {
-  position: relative;
-  overflow: hidden;
-  background: var(--smoked-cocoa);
-}
-
-.featured-service-card::after,
-.browse-style-card::before,
-.gallery-card::before {
-  position: absolute;
-  inset: auto 0 0;
-  z-index: 1;
-  height: 48%;
-  background: linear-gradient(
-    180deg,
-    rgba(18, 14, 12, 0) 0%,
-    rgba(18, 14, 12, 0.36) 38%,
-    rgba(18, 14, 12, 0.72) 100%
-  );
-  content: "";
-}
-
 .featured-service-card > div,
+.featured-service-card .representative-image-caption,
 .browse-style-card > span,
 .gallery-card > span,
-.service-tile-copy {
-  position: relative;
-  z-index: 2;
-  border: 1px solid rgba(255, 250, 246, 0.18);
-  background: rgba(18, 14, 12, 0.58);
-  box-shadow: 0 0.75rem 1.8rem rgba(0, 0, 0, 0.24);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.74);
-  backdrop-filter: blur(8px);
-}
-
-.featured-service-card > div {
-  margin: 0.75rem;
-  border-radius: 0.75rem;
-  padding: clamp(0.85rem, 2vw, 1rem);
-}
-
-.featured-service-card h3,
-.browse-style-card strong,
-.gallery-card strong,
-.service-tile-copy h3 {
-  color: #fffaf6;
-  font-weight: 800;
-}
-
-.featured-service-card p,
-.featured-service-card .text-link,
-.browse-style-card small,
-.gallery-card small,
-.service-tile-copy span,
-.service-tile-copy p {
-  color: rgba(255, 250, 246, 0.94);
-}
-
-.featured-service-card .representative-image-caption {
-  z-index: 2;
-  background: rgba(18, 14, 12, 0.48);
-  color: rgba(255, 250, 246, 0.9);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(6px);
-}
-
-.featured-service-card .text-link {
-  width: max-content;
-  color: #fffaf6;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
-}
-
-.browse-style-card > span,
-.gallery-card > span {
-  inset-inline: 0.85rem;
-  bottom: 0.85rem;
-  border-radius: 0.75rem;
-  padding: 0.9rem;
-}
-
-@media (max-width: 560px) {
-  .featured-service-card > div,
-  .browse-style-card > span,
-  .gallery-card > span,
-  .service-tile-copy {
-    margin: 0.6rem;
-    padding: 0.85rem;
-  }
-
-  .browse-style-card > span,
-  .gallery-card > span {
-    inset-inline: 0.6rem;
-    bottom: 0.6rem;
-  }
+.service-tile-copy,
+.service-price-badge {
+  display: none;
 }
