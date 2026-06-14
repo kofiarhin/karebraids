@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { GalleryModal } from '../components/GalleryModal.jsx'
 import { ImageReveal } from '../components/animations/ImageReveal.jsx'
 import { ParallaxLayer } from '../components/animations/ParallaxLayer.jsx'
@@ -94,11 +95,37 @@ export function Gallery() {
 
   return (
     <section className="gallery-page dark-gallery-page">
-      <div className="gallery-title-wrap">
-        <p className="eyebrow">Style Inspiration Gallery</p>
-        <h1>GALLERY</h1>
-        <p className="gallery-filter-note">Representative styling images used for inspiration. Final results depend on your chosen service, hair type, length, and consultation.</p>
-      </div>
+      <header className="relative isolate mb-10 overflow-hidden rounded-[2rem] border border-[#8a5a2b]/20 bg-[#171311] px-6 py-10 text-white shadow-[0_28px_80px_rgba(75,54,40,0.16)] sm:px-10 lg:px-14 lg:py-14">
+        <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#8a5a2b]/25 blur-3xl" aria-hidden="true" />
+        <div className="absolute -bottom-28 left-10 h-72 w-72 rounded-full bg-[#a05c3f]/20 blur-3xl" aria-hidden="true" />
+
+        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-end">
+          <div className="max-w-3xl">
+            <p className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#d4a373]">
+              Style Inspiration Gallery
+            </p>
+            <h1 className="text-5xl font-black leading-none tracking-[-0.05em] text-white sm:text-6xl lg:text-7xl">
+              Braids worth bookmarking.
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-white/78 sm:text-lg">
+              Browse real style inspiration before booking. Final results are shaped by your chosen service, hair type, length, and consultation.
+            </p>
+          </div>
+
+          <div className="grid gap-3 rounded-3xl border border-white/15 bg-white/8 p-4 backdrop-blur-md">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-white/58">Gallery</p>
+              <strong className="mt-1 block text-3xl text-white">All styles</strong>
+            </div>
+            <p className="text-sm leading-6 text-white/70">
+              No filters. Just a clean wall of braid inspiration.
+            </p>
+            <Link className="btn btn-primary mt-1 w-full" to="/booking">
+              Book Appointment
+            </Link>
+          </div>
+        </div>
+      </header>
 
       {galleryItems.length === 0 ? (
         <p className="gallery-query-state gallery-empty-state" role="status">
