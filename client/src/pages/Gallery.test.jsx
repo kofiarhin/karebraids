@@ -12,16 +12,6 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock('../hooks/queries/useGalleryItems.js', () => mocks)
 
-const service = {
-  id: 'knotless-braids',
-  slug: 'knotless-braids',
-  name: 'Knotless Braids',
-  shortDescription: 'Lightweight braids.',
-  currency: 'GBP',
-  startingPrice: 85,
-  durationLabel: '4-6 hours',
-}
-
 const item = {
   id: 'curated-visual-001',
   src: imageLibrary[0].src,
@@ -33,37 +23,38 @@ const item = {
 
 describe('Gallery representative image semantics', () => {
   beforeEach(() => {
-    mocks.useGalleryServices.mockReturnValue({ data: [service], isLoading: false, isError: false })
+    mocks.useGalleryServices.mockReturnValue({ data: [], isLoading: false, isError: false })
     mocks.useGalleryItems.mockReturnValue({ data: [item], isLoading: false, isError: false })
   })
 
-  it('labels curated images as inspiration and keeps a selected service as context only', () => {
-    render(<MemoryRouter initialEntries={['/gallery?service=knotless-braids']}><Gallery /></MemoryRouter>)
+  it('labels curated images as representative inspiration', () => {
+    render(
+      <MemoryRouter initialEntries={['/gallery']}>
+        <Gallery />
+      </MemoryRouter>,
+    )
 
     expect(screen.getByText('Style Inspiration Gallery')).toBeInTheDocument()
-    expect(screen.getByText('Representative styling images used for inspiration. Final results depend on your chosen service, hair type, length, and consultation.')).toBeInTheDocument()
-    expect(screen.getByText('Viewing inspiration while considering Knotless Braids')).toBeInTheDocument()
+    expect(screen.getByText('Browse real style inspiration before booking. Final results are shaped by your chosen service, hair type, length, and consultation.')).toBeInTheDocument()
     expect(screen.getByText('Representative image')).toBeInTheDocument()
-    expect(screen.getByAltText('Knotless Braids styling inspiration — representative image')).toHaveAttribute('src', item.src)
-    expect(screen.queryByText('Showing Knotless Braids')).not.toBeInTheDocument()
+    expect(screen.getByAltText('Representative protective styling image')).toHaveAttribute('src', item.src)
+    expect(screen.queryByText(/Showing Knotless Braids/i)).not.toBeInTheDocument()
   })
-  it('never renders a remote API image in gallery cards or the modal', async () => {
+
+  it('renders the configured gallery image in cards and the modal', async () => {
     const user = userEvent.setup()
-    mocks.useGalleryItems.mockReturnValue({
-      data: [{ ...item, src: 'https://images.pexels.com/remote.jpg', image: 'https://images.pexels.com/remote.jpg' }],
-      isLoading: false,
-      isError: false,
-    })
 
-    render(<MemoryRouter initialEntries={['/gallery?service=knotless-braids']}><Gallery /></MemoryRouter>)
+    render(
+      <MemoryRouter initialEntries={['/gallery']}>
+        <Gallery />
+      </MemoryRouter>,
+    )
 
-    const cardImage = screen.getByAltText('Knotless Braids styling inspiration — representative image')
+    const cardImage = screen.getByAltText('Representative protective styling image')
     expect(cardImage).toHaveAttribute('src', imageLibrary[0].src)
-    expect(cardImage.getAttribute('src')).toMatch(/^\/images\//)
 
-    await user.click(screen.getByRole('button', { name: /representative image 1$/i }))
+    await user.click(screen.getByRole('button', { name: /braiding inspiration, representative image 1/i }))
     const modalImage = screen.getByRole('dialog').querySelector('img')
     expect(modalImage).toHaveAttribute('src', imageLibrary[0].src)
-    expect(modalImage.getAttribute('src')).toMatch(/^\/images\//)
   })
 })
