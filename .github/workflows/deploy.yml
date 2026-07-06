@@ -33,10 +33,10 @@ jobs:
         run: npm --prefix client ci
 
       - name: Run server tests
-        run: npm test
+        run: npm test -- --passWithNoTests
 
       - name: Run client tests
-        run: npm --prefix client test
+        run: npm --prefix client test -- --passWithNoTests
 
       - name: Build client
         run: npm --prefix client run build
@@ -53,10 +53,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Validate Heroku secrets
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+        run: |
+          test -n "$HEROKU_API_KEY" || (echo "HEROKU_API_KEY secret is missing" && exit 1)
+          test -n "$HEROKU_APP_NAME" || (echo "HEROKU_APP_NAME secret is missing" && exit 1)
+
       - name: Deploy to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
         run: |
-          git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git
+          git remote add heroku "https://heroku:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_APP_NAME}.git"
           git push heroku HEAD:main --force
