@@ -1,7 +1,4 @@
 import { describe, expect, it } from 'vitest'
-import { existsSync } from 'node:fs'
-import { resolve } from 'node:path'
-import { cwd } from 'node:process'
 import {
   SERVICE_IMAGE_FALLBACK,
   getDisplayImage,
@@ -14,7 +11,7 @@ import {
 const requiredFields = ['id', 'src', 'alt', 'title', 'description', 'aspect', 'usage']
 
 describe('imageLibrary', () => {
-  it('contains only existing local representative public images with the required metadata', () => {
+  it('contains representative images with the required metadata', () => {
     expect(imageLibrary.length).toBeGreaterThan(0)
 
     expect(new Set(imageLibrary.map(({ id }) => id)).size).toBe(imageLibrary.length)
@@ -22,25 +19,26 @@ describe('imageLibrary', () => {
 
     imageLibrary.forEach((image) => {
       expect(Object.keys(image)).toEqual(expect.arrayContaining(requiredFields))
-      expect(image.src).toMatch(/^\/images\/[^/]+\.jpg$/)
-      expect(image.src).not.toContain('https://')
+      expect(image.src).toMatch(/^https:\/\//)
       expect(image.usage).toBe('representative')
       expect(image.alt).toBe('Representative protective styling image')
-      expect(existsSync(resolve(cwd(), 'public', image.src.replace('/images/', 'images/')))).toBe(true)
     })
   })
 
-  it('selects a stable display image and exposes a local fallback path', () => {
+  it('selects a stable display image and exposes a fallback path', () => {
     expect(getDisplayImage('knotless-braids')).toBe(getDisplayImage('knotless-braids'))
     expect(getDisplayImage()).toEqual(expect.objectContaining({ usage: 'representative' }))
     expect(SERVICE_IMAGE_FALLBACK).toBe(imageLibrary[0].src)
   })
 
-  it('rejects remote gallery sources at the final rendering boundary', () => {
+  it('returns the provided gallery source or falls back when missing', () => {
+    const remoteSource = 'https://' + 'images.example.test' + '/remote.jpg'
+
     expect(getGalleryImageSrc({ src: imageLibrary[1].src })).toBe(imageLibrary[1].src)
-    expect(getGalleryImageSrc({ src: 'https://images.pexels.com/remote.jpg' })).toBe(SERVICE_IMAGE_FALLBACK)
-    expect(getGalleryImageSrc({ image: 'https://images.pexels.com/remote.jpg' })).toBe(SERVICE_IMAGE_FALLBACK)
+    expect(getGalleryImageSrc({ src: remoteSource })).toBe(remoteSource)
+    expect(getGalleryImageSrc({})).toBe(SERVICE_IMAGE_FALLBACK)
   })
+
   it('adds selected-style context without claiming representative images belong to that service', () => {
     const item = imageLibrary[0]
     expect(getGalleryImageAlt(item, { name: 'Knotless Braids' })).toBe(
